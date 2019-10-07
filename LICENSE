@@ -1,0 +1,9 @@
+Copyright (c) 2019 Hirokazu Chiba
+Released under the MIT license
+http://opensource.org/licenses/mit-license.php
+
+The PEG expression of SPARQL grammer was originally provided by:
+https://github.com/antoniogarrote/rdfstore-js/
+Copyright (c) 2011-2015 Antonio Garrote
+Licensed under the MIT License
+https://github.com/antoniogarrote/rdfstore-js/blob/master/LICENSE
