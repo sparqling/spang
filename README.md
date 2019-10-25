@@ -16,11 +16,18 @@ https://pegjs.org/online
 ## SPARQL formatter
 spfmt
 
-## SPARQL-doc extention
+## SPARQL-doc
 https://github.com/ldodds/sparql-doc
 ```
 # @title Get orthololog from MBGD
 # @author Hirokazu Chiba
 # @tag ortholog
 # @endpoint http://sparql.nibb.ac.jp/sparql
+```
+extension
+```
+# @prefixes https://
+# @input_class id:Taxon
+# @output_class up:Protein
+# @param gene=
 ```
