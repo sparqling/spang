@@ -16,8 +16,8 @@ https://pegjs.org/online
 ## SPARQL formatter
 spfmt
 
-## SPARQL-doc
-https://github.com/ldodds/sparql-doc
+## SPARQL medadata
+[sparql-doc](https://github.com/ldodds/sparql-doc)
 ```
 # @title Get orthololog from MBGD
 # @author Hirokazu Chiba
