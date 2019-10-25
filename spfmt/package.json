@@ -1,5 +1,9 @@
 {
   "name": "spfmt",
+  "engines": {
+    "node": ">=11.0.0",
+    "npm": ">=6.0.0"
+  },
   "version": "0.0.1",
   "description": "Formatter of SPARQL/SPANG",
   "dependencies": {
