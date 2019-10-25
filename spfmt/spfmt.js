@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 fs = require('fs');
-reformatter = require('reformatter.js');
+reformatter = require('./reformatter.js');
 
 var commander = require('commander').version(require("./package.json").version)
     .arguments('<src>');

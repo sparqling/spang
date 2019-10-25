@@ -12,7 +12,6 @@
         return acum;
     }
 
-
     var GlobalBlankNodeCounter = 0;
 
     var prefixes = {};
@@ -60,7 +59,7 @@ Query "[2] Query"
         token: 'query',
         kind: 'query',
         prologue: p,
-        units: [q],
+        body: q,
         inlineData: v
     }
 }
@@ -2915,7 +2914,8 @@ IRI_REF "[122] IRI_REF"
     NIL "[144] NIL"
     = '(' WS* ')' {
 
-    return  {token: "triplesnodecollection",
+    return  {
+    token: "triplesnodecollection",
     triplesContext:[],
     chainSubject:[{token:'uri', value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"}]};
     }
