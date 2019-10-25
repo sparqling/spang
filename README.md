@@ -17,3 +17,10 @@ https://pegjs.org/online
 spfmt
 
 ## SPARQL-doc extention
+https://github.com/ldodds/sparql-doc
+```
+# @title Get orthololog from MBGD
+# @author Hirokazu Chiba
+# @tag ortholog
+# @endpoint http://sparql.nibb.ac.jp/sparql
+```
