@@ -3,7 +3,7 @@ A reformatter of SPARQL written in JS
 
 ## Requirements
 - Node.js (>= 11.0.0)
-- npm (>=6.12.0)
+- npm (>= 6.12.0)
 
 ## Installation
 ```
