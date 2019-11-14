@@ -12,4 +12,21 @@ WHERE {
     ?s ?p ?o .
 }`)
   });
+
+  it('with comment', () => {
+    var src =
+`PREFIX foo: <http://bar>
+SELECT ?s     
+where { ?s a
+ foo:Human . # any human                                    
+                                                                                                    
+   }`;
+    assert.equal(reformatter.reformat(src),
+`PREFIX foo: <http://bar>
+
+SELECT ?s
+WHERE {
+    ?s a foo:Human . # any human
+}`)
+  });
 });

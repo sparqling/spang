@@ -2,20 +2,35 @@ debugPrint = (object) => {
   console.log(JSON.stringify(object, undefined, 2));
 };
 
+var Comments;
+
 exports.format = (parsedQuery) => {
+  Comments = parsedQuery.comments;
   var query = '';
+  query += forPrologue(parsedQuery.prologue);
   query += forBody(parsedQuery.body).join("\n");
   query += forInlineData(parsedQuery.inlineData).join("\n");
   return query;
 };
 
 indent = "    ";
+typeUri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
+/** @return string */
+forPrologue = (prologue) => {
+  // TODO: handle base
+  var text = prologue.prefixes.map((prefix) => `PREFIX ${prefix.prefix}: <${prefix.local}>`).join("\n");
+  if(text != "") text += "\n\n";
+  return text;
+};
+
+/** @return list of lines */
 forInlineData = (inline) => {
   // TODO
   return [''];
 };
 
+/** @return list of lines */
 forBody = (body) => {
   switch(body.kind) {
     case 'select':
@@ -23,6 +38,7 @@ forBody = (body) => {
   }
 };
 
+/** @return list of lines */
 forSelect = (select) => {
   // TODO: handle dataset
   var lines = [];
@@ -34,12 +50,13 @@ forSelect = (select) => {
   return lines;
 };
 
+/** @return string */
 forProjection = (projection) => {
   switch(projection.kind) {
     case '*':
     return '*';
     case 'var':
-    return '?' + projection.value;
+    return '?' + projection.value.value;
     case 'aliased':
     // TODO:
     default:
@@ -47,29 +64,37 @@ forProjection = (projection) => {
   }
 };
 
+/** @return list of lines */
 forPattern = (pattern) => {
   return pattern.patterns.map(forBasicPattern).flat();
 };
 
+/** @return list of lines */
 forBasicPattern = (pattern) => {
   return pattern.triplesContext.map(forTriple);
 };
 
+/** @return string */
 forTriple = (triple) => {
-  return forTripleElem(triple.subject) + ' ' + 
+  var result = forTripleElem(triple.subject) + ' ' + 
     forTripleElem(triple.predicate) + ' ' + 
-    forTripleElem(triple.object) + ' .';
+      forTripleElem(triple.object) + ' .';
+  if(triple.object.location.end.offset < parseInt(Object.keys(Comments)[0])) {
+    result += ' ' + Comments[Object.keys(Comments)[0]].text;
+  }
+  return result;
 };
 
-
+/** @return string */
 forTripleElem = (elem) => {
   switch(elem.token) {
-    case 'var':
+  case 'var':
     return '?' + elem.value;
-    case 'uri':
-    // TODO: handle uri without prefix
-    return elem.prefix + ":" + elem.suffix;
-    case 'literal':
+  case 'uri':
+    if(elem.prefix && elem.suffix) return elem.prefix + ":" + elem.suffix;
+    else if(elem.value == typeUri) return 'a';
+    else return elem.value;
+  case 'literal':
     var txt = '"' + elem.value + '"';
     if(elem.lang) txt += '@' + elem.lang;
     return txt;
