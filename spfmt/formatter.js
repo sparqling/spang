@@ -42,11 +42,15 @@ forBody = (body) => {
 forSelect = (select) => {
   // TODO: handle dataset
   var lines = [];
-  lines.push('SELECT ' + select.projection.map((proj) => forProjection(proj)).join(' '));
-  // TODO: handle modifier
+  var select_line = 'SELECT ';
+  if(select.modifier) select_line += `${select.modifier.toString()} `;
+  lines.push(select_line + select.projection.map((proj) => forProjection(proj)).join(' '));
   lines.push('WHERE {');
   lines.push(forPattern(select.pattern).map((pat) => indent + pat).join("\n"));
   lines.push('}');
+  if(select.limit) {
+    lines.push(`LIMIT ${select.limit}`);
+  }
   return lines;
 };
 
@@ -98,5 +102,7 @@ forTripleElem = (elem) => {
     var txt = '"' + elem.value + '"';
     if(elem.lang) txt += '@' + elem.lang;
     return txt;
+  case 'blank':
+    return '[]';
   }
 };
