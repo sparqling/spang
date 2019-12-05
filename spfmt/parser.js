@@ -150,7 +150,7 @@ function peg$parse(input, options) {
               kind: 'query',
               prologue: p,
               body: q,
-              comments: Comments,
+              comments: Object.entries(Comments).map(([k, v]) => { return {text: Comments[k], location: parseInt(k)} }),
               inlineData: v
           }
       },
@@ -187,6 +187,7 @@ function peg$parse(input, options) {
           var prefix = {};
           prefix.token = 'prefix';
           prefix.prefix = p;
+          prefix.location = location();
           prefix.local = l;
 
           return prefix;
@@ -2589,9 +2590,7 @@ function peg$parse(input, options) {
       peg$c715 = /^[^\n\r]/,
       peg$c716 = peg$classExpectation(["\n", "\r"], true, false),
       peg$c717 = function(comment) {
-            Comments[location().start.offset]= {
-              text: flattenString(comment).trim()
-            };
+            Comments[location().start.offset] = flattenString(comment).trim();
             return '';
           },
       peg$c718 = peg$otherExpectation("[146] ANON"),

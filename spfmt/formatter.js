@@ -3,6 +3,7 @@ debugPrint = (object) => {
 };
 
 var Comments;
+var CurrentLine = 0;
 
 exports.format = (parsedQuery) => {
   Comments = parsedQuery.comments;
@@ -16,10 +17,23 @@ exports.format = (parsedQuery) => {
 indent = "    ";
 typeUri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
+subsequentComment = (node, nextNode) => {
+  var comment = "";
+  console.log(Comments);
+  console.log(node);
+  if(Comments.length > 0 &&
+     node.location.end.offset < Comments[0].location &&
+     (!nextNode || nextNode.location.end.offset < Comments[0].location)) ) {
+    comment += ' ' + Comments[0].text;
+    delete Comments.shift();
+  }
+  return comment;
+}
+
 /** @return string */
 forPrologue = (prologue) => {
   // TODO: handle base
-  var text = prologue.prefixes.map((prefix) => `PREFIX ${prefix.prefix}: <${prefix.local}>`).join("\n");
+  var text = prologue.prefixes.map((prefix) => `PREFIX ${prefix.prefix}: <${prefix.local}>` + subsequentComment(prefix)).join("\n");
   if(text != "") text += "\n\n";
   return text;
 };
@@ -82,10 +96,8 @@ forBasicPattern = (pattern) => {
 forTriple = (triple) => {
   var result = forTripleElem(triple.subject) + ' ' + 
     forTripleElem(triple.predicate) + ' ' + 
-      forTripleElem(triple.object) + ' .';
-  if(triple.object.location.end.offset < parseInt(Object.keys(Comments)[0])) {
-    result += ' ' + Comments[Object.keys(Comments)[0]].text;
-  }
+      forTripleElem(triple.object) + ' .' + subsequentComment(triple.object);
+
   return result;
 };
 

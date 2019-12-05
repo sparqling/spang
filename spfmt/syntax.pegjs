@@ -63,7 +63,7 @@ Query "[2] Query"
         kind: 'query',
         prologue: p,
         body: q,
-        comments: Comments,
+        comments: Object.entries(Comments).map(([k, v]) => { return {text: Comments[k], location: parseInt(k)} }),
         inlineData: v
     }
 }
@@ -104,6 +104,7 @@ PrefixDecl "[5] PrefixDecl"
     var prefix = {};
     prefix.token = 'prefix';
     prefix.prefix = p;
+    prefix.location = location();
     prefix.local = l;
 
     return prefix;
@@ -2966,9 +2967,7 @@ IRI_REF "[122] IRI_REF"
     COMMENT " COMMENT"
     = comment:('#'([^\u000A\u000D])*)
     {
-      Comments[location().start.offset]= {
-        text: flattenString(comment).trim()
-      };
+      Comments[location().start.offset] = flattenString(comment).trim();
       return '';
     }
 

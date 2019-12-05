@@ -47,4 +47,37 @@ WHERE {
       }
     });
   });
+  
+  it('with many comments', () => {
+    var src =
+`PREFIX foo: <http://bar>    #first comment
+SELECT ?s     # second
+where { ?s a foo:Human . 
+#third                                                                                                   
+   } # last`;
+    assert.equal(reformatter.reformat(src),
+`PREFIX foo: <http://bar> #first comment
+
+SELECT ?s # second
+WHERE { 
+    ?s a foo:Human .
+#third
+} # last`);
+  });
+
+//   it('comment between subject and predicate', () => {
+//     var src =
+// `SELECT ?s
+// where {
+//  ?s #here
+//   a foo:Human . 
+// }`;
+//     assert.equal(reformatter.reformat(src),
+// `
+// SELECT ?s
+// WHERE { 
+//     ?s #here
+//         a foo:Human .
+// }`);
+//  });
 });
