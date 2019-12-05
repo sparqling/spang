@@ -10,7 +10,7 @@ exports.format = (parsedQuery) => {
   query += forPrologue(parsedQuery.prologue);
   query += forBody(parsedQuery.body).join("\n");
   query += forInlineData(parsedQuery.inlineData).join("\n");
-  return query;
+  return query + "\n";
 };
 
 indent = "    ";
