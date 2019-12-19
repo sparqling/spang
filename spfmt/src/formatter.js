@@ -3,69 +3,75 @@ debugPrint = (object) => {
 };
 
 var Comments;
-var CurrentLine = 0;
+var lines;
+var currentIndent;
 
 exports.format = (parsedQuery) => {
   Comments = parsedQuery.comments;
-  var query = '';
-  query += forPrologue(parsedQuery.prologue);
-  query += forBody(parsedQuery.body).join("\n");
-  query += forInlineData(parsedQuery.inlineData).join("\n");
-  return query + "\n";
+  lines = [];
+  currentIndent = '';
+  forPrologue(parsedQuery.prologue);
+  forBody(parsedQuery.body);
+  forInlineData(parsedQuery.inlineData);
+  handleComment();
+  return lines.join('\n') + '\n';
 };
 
-indent = "    ";
+indentUnit = "    ";
 typeUri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
-subsequentComment = (node, nextNode) => {
-  var comment = "";
+handleComment = (node) => {
   console.log(Comments);
   console.log(node);
   if(Comments.length > 0 &&
-     node.location.end.offset < Comments[0].location &&
-     (!nextNode || nextNode.location.end.offset < Comments[0].location)) ) {
-    comment += ' ' + Comments[0].text;
-    delete Comments.shift();
+     (!node || node.location.end.offset > Comments[0].location)) {
+    if(lines.length < 2) lines.unshift(Comments[0].text);
+    else lines[lines.length - 2] += ' ' + Comments[0].text;
+    Comments.shift();
   }
-  return comment;
+}
+
+addLine = (text) => {
+  lines.push(currentIndent + text);
 }
 
 /** @return string */
 forPrologue = (prologue) => {
   // TODO: handle base
-  var text = prologue.prefixes.map((prefix) => `PREFIX ${prefix.prefix}: <${prefix.local}>` + subsequentComment(prefix)).join("\n");
-  if(text != "") text += "\n\n";
-  return text;
+  prologue.prefixes.forEach((prefix) => {
+    addLine(`PREFIX ${prefix.prefix}: <${prefix.local}>`);
+    handleComment(prefix);
+  });
+  if(lines.length > 0) addLine("");
 };
 
 /** @return list of lines */
 forInlineData = (inline) => {
   // TODO
-  return [''];
 };
 
 /** @return list of lines */
 forBody = (body) => {
   switch(body.kind) {
     case 'select':
-    return forSelect(body);
+    forSelect(body);
   }
 };
 
 /** @return list of lines */
 forSelect = (select) => {
   // TODO: handle dataset
-  var lines = [];
   var select_line = 'SELECT ';
   if(select.modifier) select_line += `${select.modifier.toString()} `;
-  lines.push(select_line + select.projection.map((proj) => forProjection(proj)).join(' '));
-  lines.push('WHERE {');
-  lines.push(forPattern(select.pattern).map((pat) => indent + pat).join("\n"));
-  lines.push('}');
+  addLine(select_line + select.projection.map((proj) => forProjection(proj)).join(' '));
+  addLine('WHERE {');
+  currentIndent += indentUnit;
+  forPattern(select.pattern);
+  currentIndent = currentIndent.substr(0, currentIndent.Length - indentUnit.Length);
+  addLine('}');
   if(select.limit) {
-    lines.push(`LIMIT ${select.limit}`);
+    addLine(`LIMIT ${select.limit}`);
   }
-  return lines;
 };
 
 /** @return string */
@@ -84,21 +90,20 @@ forProjection = (projection) => {
 
 /** @return list of lines */
 forPattern = (pattern) => {
-  return pattern.patterns.map(forBasicPattern).flat();
+  pattern.patterns.forEach(forBasicPattern);
 };
 
 /** @return list of lines */
 forBasicPattern = (pattern) => {
-  return pattern.triplesContext.map(forTriple);
+  pattern.triplesContext.forEach(forTriple);
 };
 
 /** @return string */
 forTriple = (triple) => {
-  var result = forTripleElem(triple.subject) + ' ' + 
+  addLine(forTripleElem(triple.subject) + ' ' + 
     forTripleElem(triple.predicate) + ' ' + 
-      forTripleElem(triple.object) + ' .' + subsequentComment(triple.object);
-
-  return result;
+      forTripleElem(triple.object) + ' .');
+  handleComment(triple.object);
 };
 
 /** @return string */

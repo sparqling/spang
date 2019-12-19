@@ -1,0 +1,5 @@
+SELECT ?s
+WHERE { 
+    ?s #here
+        a foo:Human .
+}
