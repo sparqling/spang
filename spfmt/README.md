@@ -62,11 +62,17 @@ WHERE {
 ```
 
 ### Test
+If you have globally installed mocha
+
+```
+$ mocha
+```
+Otherwise,
 ```
 $ ./node_modules/mocha/bin/mocha
 ```
 
-### Update spfmt_bundled.js
+## Update spfmt_bundled.js
 Update the spfmt_bundled.js as follows after editing any other JS codes
 ```
 $ ./node_modules/browserify/bin/cmd.js src/spfmt_browser.js > src/spfmt_bundled.js 
