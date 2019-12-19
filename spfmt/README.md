@@ -49,7 +49,7 @@ WHERE {
 $ ./node_modules/mocha/bin/mocha
 ```
 
-### Create bundled js
+### bundled js
 Update bundled js after editing any other js code
 ```
 $ ./node_modules/browserify/bin/cmd.js src/spfmt_browser.js > src/spfmt_bundled.js 
