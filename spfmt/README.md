@@ -8,7 +8,7 @@ https://hchiba1.github.io/sparql-utils/
 
 ## Usage on a web site
 
-* Download spfmt_bundled.js and use it in your HTML.
+* Download `spfmt_bundled.js` and use it in your HTML.
 
 ```
 <script src="/js/spfmt_bundled.js"></script>
@@ -25,7 +25,7 @@ WHERE {
 */
 ```
 
-* You can also call spfmt_bundled.js through the jsDelivr service.
+* You can also call `spfmt_bundled.js` through the jsDelivr service.
 ```
     <textarea id="sparql-text" rows=5></textarea>
     <button id="reformat-button">Reformat</button>
@@ -78,7 +78,7 @@ $ ./node_modules/mocha/bin/mocha
 ```
 
 ## Update spfmt_bundled.js
-Update the spfmt_bundled.js as follows after editing any other JS codes
+Update the `spfmt_bundled.js` as follows after editing any other JS codes
 ```
 $ ./node_modules/browserify/bin/cmd.js src/spfmt_browser.js > src/spfmt_bundled.js 
 ```
