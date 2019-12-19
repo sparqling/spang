@@ -50,7 +50,7 @@ $ ./node_modules/mocha/bin/mocha
 ```
 
 ### bundled js
-Update bundled js after editing any other js code
+Update the bundled js as follows after editing any other js code
 ```
 $ ./node_modules/browserify/bin/cmd.js src/spfmt_browser.js > src/spfmt_bundled.js 
 ```
