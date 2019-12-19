@@ -5,44 +5,48 @@ debugPrint = (object) => {
 var Comments;
 var lines;
 var currentIndent;
+var prevOrigLine;
 
 exports.format = (parsedQuery) => {
   Comments = parsedQuery.comments;
   lines = [];
   currentIndent = '';
+  prevOrigLine = 0;
   forPrologue(parsedQuery.prologue);
   forBody(parsedQuery.body);
   forInlineData(parsedQuery.inlineData);
-  handleComment();
-  return lines.join('\n') + '\n';
+  addLine('', -1);
+  return lines.join('\n');
 };
 
 indentUnit = "    ";
 typeUri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
-handleComment = (node) => {
-  console.log(Comments);
-  console.log(node);
+addLine = (text, origLine = 0) => {
   if(Comments.length > 0 &&
-     (!node || node.location.end.offset > Comments[0].location)) {
-    if(lines.length < 2) lines.unshift(Comments[0].text);
-    else lines[lines.length - 2] += ' ' + Comments[0].text;
+     prevOrigLine != origLine && 
+     (origLine == -1 || origLine > Comments[0].line)) {
+    if(lines.length == 0) lines.unshift(Comments[0].text);
+    else if(origLine > prevOrigLine + 1) {
+      // for line where only comment exists
+      lines.push(Comments[0].text);
+    }
+    else lines[lines.length - 1] += ' ' + Comments[0].text;
     Comments.shift();
   }
-}
-
-addLine = (text) => {
   lines.push(currentIndent + text);
+  if(prevOrigLine < origLine) prevOrigLine = origLine;
 }
 
 /** @return string */
 forPrologue = (prologue) => {
   // TODO: handle base
   prologue.prefixes.forEach((prefix) => {
-    addLine(`PREFIX ${prefix.prefix}: <${prefix.local}>`);
-    handleComment(prefix);
+    addLine(`PREFIX ${prefix.prefix}: <${prefix.local}>`, prefix.location.end.line);
   });
-  if(lines.length > 0) addLine("");
+  if(prologue.prefixes.length > 0) {
+    addLine("", prologue.prefixes[prologue.prefixes.length - 1].location.end.line + 1);
+  }
 };
 
 /** @return list of lines */
@@ -63,14 +67,15 @@ forSelect = (select) => {
   // TODO: handle dataset
   var select_line = 'SELECT ';
   if(select.modifier) select_line += `${select.modifier.toString()} `;
-  addLine(select_line + select.projection.map((proj) => forProjection(proj)).join(' '));
-  addLine('WHERE {');
+  var lastLine = select.projection[select.projection.length - 1].value.location.start.line;
+  addLine(select_line + select.projection.map((proj) => forProjection(proj)).join(' '), lastLine);
+  addLine('WHERE {', lastLine + 1);
   currentIndent += indentUnit;
   forPattern(select.pattern);
   currentIndent = currentIndent.substr(0, currentIndent.Length - indentUnit.Length);
-  addLine('}');
+  addLine('}', select.pattern.location.end.line);
   if(select.limit) {
-    addLine(`LIMIT ${select.limit}`);
+    addLine(`LIMIT ${select.limit}`, select.location.end.line);
   }
 };
 
@@ -102,8 +107,7 @@ forBasicPattern = (pattern) => {
 forTriple = (triple) => {
   addLine(forTripleElem(triple.subject) + ' ' + 
     forTripleElem(triple.predicate) + ' ' + 
-      forTripleElem(triple.object) + ' .');
-  handleComment(triple.object);
+      forTripleElem(triple.object) + ' .', triple.object.location.end.line);
 };
 
 /** @return string */

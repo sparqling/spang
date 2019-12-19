@@ -1,7 +1,7 @@
 PREFIX foo: <http://bar> #first comment
 
 SELECT ?s # second
-WHERE { 
+WHERE {
     ?s a foo:Human .
 #third
 } # last

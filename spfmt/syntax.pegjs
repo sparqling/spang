@@ -63,7 +63,7 @@ Query "[2] Query"
         kind: 'query',
         prologue: p,
         body: q,
-        comments: Object.entries(Comments).map(([k, v]) => { return {text: Comments[k], location: parseInt(k)} }),
+        comments: Object.entries(Comments).map(([k, v]) => { return {text: Comments[k], line: parseInt(k)} }),
         inlineData: v
     }
 }
@@ -2967,7 +2967,7 @@ IRI_REF "[122] IRI_REF"
     COMMENT " COMMENT"
     = comment:('#'([^\u000A\u000D])*)
     {
-      Comments[location().start.offset] = flattenString(comment).trim();
+      Comments[location().start.line] = flattenString(comment).trim();
       return '';
     }
 
