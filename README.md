@@ -14,7 +14,7 @@ PEG can be tested at:<br>
 https://pegjs.org/online
 
 ## SPARQL formatter
-spfmt
+https://github.com/hchiba1/sparql-utils/tree/master/spfmt
 
 ## SPARQL medadata
 [sparql-doc](https://github.com/ldodds/sparql-doc)
