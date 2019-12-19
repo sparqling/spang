@@ -1,6 +1,9 @@
 # spfmt
 A reformatter of SPARQL written in JS
 
+Example web site:<br>
+https://hchiba1.github.io/sparql-utils/
+
 ## Usage on web browser
 
 * Download spfmt_bundled.js and load it in your HTML.
