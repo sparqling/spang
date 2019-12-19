@@ -1,5 +1,5 @@
 # spfmt
-spfmt is a reformatter of SPARQL written in JS.
+`spfmt` is a reformatter of SPARQL written in JS.
 
 It can be used in a web site or in the command line.
 
@@ -8,13 +8,13 @@ https://hchiba1.github.io/sparql-utils/
 
 ## Usage on a web site
 
-* Download spfmt_bundled.js and call it in your HTML.
+* Download spfmt_bundled.js and use it in your HTML.
 
 ```
 <script src="/js/spfmt_bundled.js"></script>
 ```
 
-* Then you can use `spfmt.reformat`
+* Then you can use `spfmt.reformat`.
 ```javascript
 spfmt.reformat("SELECT * WHERE {?s ?p ?o}");
 /*
@@ -25,7 +25,7 @@ WHERE {
 */
 ```
 
-* You can also call spfmt_bundled.js through the jsDelivr service
+* You can also call spfmt_bundled.js through the jsDelivr service.
 ```
     <textarea id="sparql-text" rows=5></textarea>
     <button id="reformat-button">Reformat</button>
