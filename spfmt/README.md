@@ -20,7 +20,7 @@ WHERE {
 */
 ```
 
-* You can also use spfmt via jsDelivr
+* You can also call spfmt through the jsDelivr service
 ```
     <head>
         <script src="https://cdn.jsdelivr.net/gh/hchiba1/sparql-utils@master/spfmt/src/spfmt_bundled.js"></script>  
