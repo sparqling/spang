@@ -1,10 +1,12 @@
 # spfmt
-spfmt: a reformatter of SPARQL written in JS
+spfmt is a reformatter of SPARQL written in JS.
 
-Example web site:<br>
+It can be used in a web site or in the command line.
+
+An example web site:<br>
 https://hchiba1.github.io/sparql-utils/
 
-## Usage on web browser
+## Usage on a web site
 
 * Download spfmt_bundled.js and load it in your HTML.
 
