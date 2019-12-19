@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>spfmt</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://cdn.jsdelivr.net/gh/hchiba1/sparql-utils@master/spfmt/src/spfmt_bundled.js"></script>  
+  </head>
+  <body>
+      <h1>spfmt</h1>
+      <textarea id="sparql-text" rows=5>
+        SELECT * WHERE{?s ?p  ?o}
+      </textarea>
+      <br>
+      <button id="reformat-button">reformat</button>
+      <br>
+      <textarea id="sparql-text-after" rows=5>
+      </textarea>
+  </body>
+  <script type="text/javascript">
+    window.onload = () => {
+      var textArea = 
+      document.querySelector("#reformat-button").addEventListener('click', (event) => {
+        document.querySelector("#sparql-text-after").value =
+          spfmt.reformat(document.querySelector("#sparql-text").value);
+      });
+    };
+  </script>
+</html>

@@ -3,7 +3,7 @@
 fs = require('fs');
 reformatter = require('./reformatter.js');
 
-var commander = require('commander').version(require("./package.json").version)
+var commander = require('commander').version(require("../package.json").version)
     .arguments('<src>');
 
 commander.parse(process.argv);

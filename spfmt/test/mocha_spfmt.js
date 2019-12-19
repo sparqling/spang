@@ -1,4 +1,4 @@
-var reformatter = require('../reformatter.js');
+var reformatter = require('../src/reformatter.js');
 var chai = require('chai');
 chai.use(require('chai-fs'));
 var assert = chai.assert;
