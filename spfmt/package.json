@@ -18,6 +18,6 @@
     "browserify": "^16.5.0"
   },
   "bin": {
-    "spfmt": "./spfmt.js"
+    "spfmt": "./src/spfmt.js"
   }
 }

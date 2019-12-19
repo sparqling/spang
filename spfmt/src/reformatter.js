@@ -1,4 +1,3 @@
-sparqljs = require('sparqljs');
 parser = require('./parser.js');
 formatter = require('./formatter.js');
 

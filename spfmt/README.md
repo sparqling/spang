@@ -51,5 +51,5 @@ $ ./node_modules/mocha/bin/mocha
 
 ### Create bundled js
 ```
-$ ./node_modules/browserify/bin/cmd.js spfmt_browser.js > spfmt_bundled.js 
+$ ./node_modules/browserify/bin/cmd.js src/spfmt_browser.js > src/spfmt_bundled.js 
 ```
