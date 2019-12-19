@@ -4,7 +4,7 @@
 Example web site:<br>
 https://hchiba1.github.io/sparql-utils/
 
-Documentation:<br>
+Document:<br>
 https://github.com/hchiba1/sparql-utils/tree/master/spfmt
 
 ## SPARQL medadata
