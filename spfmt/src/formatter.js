@@ -67,7 +67,7 @@ forSelect = (select) => {
   // TODO: handle dataset
   var select_line = 'SELECT ';
   if(select.modifier) select_line += `${select.modifier.toString()} `;
-  var lastLine = select.projection[select.projection.length - 1].value.location.start.line;
+  var lastLine = !select.projection[0].value ? select.projection[0].location.start.line : select.projection[0].value.location.start.line;
   addLine(select_line + select.projection.map((proj) => forProjection(proj)).join(' '), lastLine);
   addLine('WHERE {', lastLine + 1);
   currentIndent += indentUnit;
