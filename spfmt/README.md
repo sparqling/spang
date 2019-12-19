@@ -20,6 +20,27 @@ WHERE {
 */
 ```
 
+* You can also use spfmt via jsDelivr
+```
+    <head>
+        <script src="https://cdn.jsdelivr.net/gh/hchiba1/sparql-utils@master/spfmt/src/spfmt_bundled.js"></script>  
+    </head>
+    <body>
+        <textarea id="sparql-text" rows=5>
+        </textarea>
+        <button id="reformat-button">Reformat</button>
+        <textarea id="sparql-text-after" rows=5>
+    </body>
+    <script type="text/javascript">
+     window.onload = () => {
+         var textArea = 
+             document.querySelector("#reformat-button").addEventListener('click', (event) => {
+                 document.querySelector("#sparql-text-after").value =
+                     spfmt.reformat(document.querySelector("#sparql-text").value);
+             });
+     };
+    </script>
+```
 ## Usage from Command line
 
 ### Requirements
