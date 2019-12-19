@@ -66,8 +66,8 @@ WHERE {
 $ ./node_modules/mocha/bin/mocha
 ```
 
-### bundled js
-Update the bundled js as follows after editing any other js code
+### Update spfmt_bundled.js
+Update the spfmt_bundled.js as follows after editing any other JS codes
 ```
 $ ./node_modules/browserify/bin/cmd.js src/spfmt_browser.js > src/spfmt_bundled.js 
 ```
