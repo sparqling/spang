@@ -1,7 +1,7 @@
 # spfmt
 A reformatter of SPARQL written in JS
 
-## Usage from HTML
+## Usage for Web Browser
 
 * Download spfmt_bundled.js and load it in your HTML.
 
@@ -11,7 +11,7 @@ A reformatter of SPARQL written in JS
 
 * Then you can use `spfmt.reformat`
 ```javascript
-spfmt.reformat("SELECT * WHERE {?s ?p ?o});
+spfmt.reformat("SELECT * WHERE {?s ?p ?o}");
 /*
 SELECT *
 WHERE {
