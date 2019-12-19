@@ -1,0 +1,7 @@
+# comment
+PREFIX foo: <http://bar>
+
+SELECT ?s
+WHERE {
+    ?s a foo:Human . # any human
+}
