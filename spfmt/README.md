@@ -22,10 +22,9 @@ WHERE {
 
 * You can also call spfmt through the jsDelivr service
 ```
-    <textarea id="sparql-text" rows=5>
-    </textarea>
+    <textarea id="sparql-text" rows=5></textarea>
     <button id="reformat-button">Reformat</button>
-    <textarea id="sparql-text-after" rows=5>
+    <textarea id="sparql-text-after" rows=5></textarea>
     
     <script src="https://cdn.jsdelivr.net/gh/hchiba1/sparql-utils@master/spfmt/src/spfmt_bundled.js"></script>  
     <script type="text/javascript">
