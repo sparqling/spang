@@ -1,7 +1,7 @@
 # spfmt
 A reformatter of SPARQL written in JS
 
-## Usage for Web Browser
+## Usage on web browser
 
 * Download spfmt_bundled.js and load it in your HTML.
 
@@ -37,7 +37,7 @@ WHERE {
      };
     </script>
 ```
-## Usage from Command line
+## Usage in command line
 
 ### Requirements
 - Node.js (>= 11.0.0)
@@ -61,7 +61,7 @@ WHERE {
 }
 ```
 
-### Test
+### Test examples
 If you have globally installed mocha
 
 ```
