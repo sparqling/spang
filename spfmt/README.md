@@ -8,7 +8,7 @@ https://hchiba1.github.io/sparql-utils/
 
 ## Usage on a web site
 
-* Download spfmt_bundled.js and load it in your HTML.
+* Download spfmt_bundled.js and call it in your HTML.
 
 ```
 <script src="/js/spfmt_bundled.js"></script>
@@ -25,7 +25,7 @@ WHERE {
 */
 ```
 
-* You can also call spfmt through the jsDelivr service
+* You can also call spfmt_bundled.js through the jsDelivr service
 ```
     <textarea id="sparql-text" rows=5></textarea>
     <button id="reformat-button">Reformat</button>
