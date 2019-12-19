@@ -25,5 +25,5 @@ WHERE {
 
 ## Test
 ```
-$ mocha
+$ ./node_modules/mocha/bin/mocha
 ```
