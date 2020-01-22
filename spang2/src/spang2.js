@@ -2,13 +2,13 @@
 
 var version = require("../package.json").version;
 
-querySparql = (endpoint, query) => {
+querySparql = (endpoint, query, accept) => {
   var options = {
     uri: endpoint + '?timeout=0', // infinite 
     form: {query: query},
     headers:{ 
       "User-agent": `spang2/spang2_${version}`, 
-      "Accept": "text/tab-separated-values"
+      "Accept": accept
     }
   };
   request.post(options, function(error, response, body){
@@ -28,8 +28,8 @@ request = require('request')
 
 var db, sparqlTemplate;
 
-
 var commander = require('commander').version(version)
+    .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html; default tsv', 'tsv')
     .arguments('<DB> <SPARQL_TEMPLATE>').action((d, s) => {
       db = d;
       sparqlTemplate = s;
@@ -41,4 +41,24 @@ if(commander.args.length < 1) {
   commander.help();
 }
 
-querySparql(db, fs.readFileSync(sparqlTemplate, 'utf8'));
+var acceptHeaderMap = {
+  "xml"      : "application/sparql-results+xml",
+  "json"     : "application/sparql-results+json",
+  // TODO receive as json and format afterward
+  "tsv"      : "text/tab-separated-values",
+  "rdf/xml"  : "application/rdf+xml",
+  "rdfxml"   : "application/rdf+xml",
+  "turtle"   : "application/x-turtle",
+  "ttl"      : "application/x-turtle",
+  "n3"       : "text/rdf+n3",
+  "n-triples": "text/plain",
+  "nt"       : "text/plain",
+  "html"     : "text/html",
+  "rdfjson"  : "application/rdf+json",
+  "rdfbin"   : "application/x-binary-rdf",
+  "rdfbint"  : "application/x-binary-rdf-results-table",
+  "js"       : "application/javascript",
+  "bool"     : "text/boolean",
+};
+
+querySparql(db, fs.readFileSync(sparqlTemplate, 'utf8'), acceptHeaderMap[commander.format]);
