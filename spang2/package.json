@@ -1,0 +1,24 @@
+{
+  "name": "spang2",
+  "engines": {
+    "node": ">=11.0.0",
+    "npm": ">=6.0.0"
+  },
+  "version": "0.0.1",
+  "description": "Javascript Implementation of SPANG",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "sparqljs": "^3.0.0",
+    "commander": "^2.16.0",
+    "request": "^2.85.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-fs": "^2.0.0",
+    "mocha": "^5.2.0",
+    "browserify": "^16.5.0"
+  },
+  "bin": {
+    "spang2": "./src/spang2.js"
+  }
+}
