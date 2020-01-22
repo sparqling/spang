@@ -1,0 +1,12 @@
+"s"	"p"	"o"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCode"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#FunctionalProperty"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCodeMt"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#FunctionalProperty"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCodePt"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#FunctionalProperty"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/rank"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#FunctionalProperty"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/scientificName"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#FunctionalProperty"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/DummyTaxon"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#Class"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#Class"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/Rank"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#Class"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#Class"
+"http://ddbj.nig.ac.jp/ontologies/taxonomy/"	"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"	"http://www.w3.org/2002/07/owl#Ontology"
+
