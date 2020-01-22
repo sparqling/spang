@@ -30,8 +30,8 @@ var db, sparqlTemplate;
 
 var commander = require('commander').version(version)
     .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html; default tsv', 'tsv')
-    .arguments('<DB> <SPARQL_TEMPLATE>').action((d, s) => {
-      db = d;
+    .option('-e, --endpoint <ENDPOINT>', 'target endpoint')
+    .arguments('<SPARQL_TEMPLATE>').action((s) => {
       sparqlTemplate = s;
     });
 
@@ -39,6 +39,15 @@ commander.parse(process.argv);
 
 if(commander.args.length < 1) {
   commander.help();
+}
+
+if(commander.endpoint)
+{
+  db = commander.endpoint;
+} else {
+  // TODO: if endpoint is not specified, try to retrieve it from meta-data in templates
+  console.log('endpoint is required');
+  process.exit(-1);
 }
 
 var acceptHeaderMap = {
