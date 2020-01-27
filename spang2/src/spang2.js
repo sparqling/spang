@@ -25,8 +25,11 @@ querySparql = (endpoint, query, accept) => {
 
 fs = require('fs');
 request = require('request')
+child_process = require('child_process');
+search_db_name = require('./search_db_name');
 
-var db, sparqlTemplate;
+var db, sparqlTemplate, localMode;
+var retrieveByGet = false;
 
 var commander = require('commander').version(version)
     .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html; default tsv', 'tsv')
@@ -50,10 +53,26 @@ if(commander.endpoint)
   process.exit(-1);
 }
 
+
+if(/^\w/.test(db)) {
+  if (!(/^(http|https):\/\//.test(db))) {
+    [db, retrieveByGet] = search_db_name.searchDBName(db);
+  }
+} else {
+  localMode = true;
+  if (db == '-') {
+    db = fs.readFileSync(process.stdin.fd, "utf8");
+  } else if(!fs.existsSync(db)) {
+    console.log(`${db}: no such file`);
+    process.exit(-1);
+  }
+}
+
+
 var acceptHeaderMap = {
   "xml"      : "application/sparql-results+xml",
   "json"     : "application/sparql-results+json",
-  // TODO receive as json and format afterward
+  // TODO receive as json and format to tsv afterward
   "tsv"      : "text/tab-separated-values",
   "rdf/xml"  : "application/rdf+xml",
   "rdfxml"   : "application/rdf+xml",
@@ -70,4 +89,10 @@ var acceptHeaderMap = {
   "bool"     : "text/boolean",
 };
 
-querySparql(db, fs.readFileSync(sparqlTemplate, 'utf8'), acceptHeaderMap[commander.format]);
+sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
+
+if(localMode) {
+  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
+} else {
+  querySparql(db, sparqlTemplate, acceptHeaderMap[commander.format]);
+}
