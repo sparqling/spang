@@ -4,8 +4,10 @@ var version = require("../package.json").version;
 
 querySparql = (endpoint, query, accept) => {
   var options = {
-    uri: endpoint + '?timeout=0', // infinite 
+    uri: endpoint, 
     form: {query: query},
+    qs: {query: query},
+    followAllRedirects: true,
     headers:{ 
       "User-agent": `spang2/spang2_${version}`, 
       "Accept": accept
@@ -27,6 +29,7 @@ fs = require('fs');
 request = require('request')
 child_process = require('child_process');
 search_db_name = require('./search_db_name');
+search_prefix = require('./search_prefix');
 
 var db, sparqlTemplate, localMode;
 var retrieveByGet = false;
@@ -34,13 +37,17 @@ var retrieveByGet = false;
 var commander = require('commander').version(version)
     .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html; default tsv', 'tsv')
     .option('-e, --endpoint <ENDPOINT>', 'target endpoint')
+    .option('-S, --subject <SUBJECT>', 'shortcut')
+    .option('-P, --predicate <PREDICATE>', 'shortcut')
+    .option('-O, --object <OBJECT>', 'shortcut')
     .arguments('<SPARQL_TEMPLATE>').action((s) => {
       sparqlTemplate = s;
     });
 
 commander.parse(process.argv);
 
-if(commander.args.length < 1) {
+if(commander.args.length < 1 &&
+   (!commander.subject && !commander.predicate && !commander.object || !commander.endpoint)) {
   commander.help();
 }
 
@@ -89,7 +96,27 @@ var acceptHeaderMap = {
   "bool"     : "text/boolean",
 };
 
-sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
+if(commander.subject || commander.predicate || commander.object) {
+  var select_target = [], prefixes = [], pattern = [];
+  [[commander.subject, 's'], [commander.predicate, 'p'], [commander.object, 'o']].forEach( (pair) => {
+    var arg = pair[0];
+    var placeHolder = pair[1];
+    if(arg) {
+      pattern.push(arg);
+      const prefix = arg.match(/^(\w+):\w+$/)[1];
+      if(prefix) prefixes.push(prefix);
+    } else {
+      select_target.push('?' + placeHolder);
+      pattern.push('?' + placeHolder);
+    }
+  });
+  sparqlTemplate = prefixes.map(pre => search_prefix.searchPrefix(pre)).join("\n") + "\n" +
+    `SELECT ${select_target.join(' ')} WHERE {\n` +
+    '  ' + pattern.join(' ') + "\n" +
+    '}';
+} else {
+  sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
+}
 
 if(localMode) {
   console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
