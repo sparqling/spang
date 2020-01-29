@@ -23,15 +23,15 @@ querySparql = (endpoint, query, accept) => {
   });
 };
 
-
-
 fs = require('fs');
 request = require('request')
 child_process = require('child_process');
 search_db_name = require('./search_db_name');
 search_prefix = require('./search_prefix');
+embed_parameter = require('./embed_parameter.js');
 
 var db, sparqlTemplate, localMode;
+var parameterMap = {};
 var retrieveByGet = false;
 
 var commander = require('commander').version(version)
@@ -40,6 +40,7 @@ var commander = require('commander').version(version)
     .option('-S, --subject <SUBJECT>', 'shortcut')
     .option('-P, --predicate <PREDICATE>', 'shortcut')
     .option('-O, --object <OBJECT>', 'shortcut')
+    .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .arguments('<SPARQL_TEMPLATE>').action((s) => {
       sparqlTemplate = s;
     });
@@ -117,6 +118,16 @@ if(commander.subject || commander.predicate || commander.object) {
 } else {
   sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
 }
+
+if(commander.param) {
+  params = commander.param.split(',');
+  params.forEach((par) => {
+    [k, v] = par.split('=');
+    parameterMap[k] = v;
+  });
+}
+
+sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
 
 if(localMode) {
   console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
