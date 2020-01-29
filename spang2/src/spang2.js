@@ -27,7 +27,9 @@ fs = require('fs');
 request = require('request')
 child_process = require('child_process');
 search_db_name = require('./search_db_name');
-search_prefix = require('./search_prefix');
+const prefixModule = require('./prefix.js');
+const searchPrefix = prefixModule.searchPrefix;
+const retrievePrefixes = prefixModule.retrievePrefixes;
 embed_parameter = require('./embed_parameter.js');
 
 var db, sparqlTemplate, localMode;
@@ -120,15 +122,15 @@ if(commander.subject || commander.predicate || commander.object) {
       pattern.push('?' + placeHolder);
     }
   });
-  sparqlTemplate = prefixes.map(pre => search_prefix.searchPrefix(pre)).join("\n") + "\n" +
+  sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n" +
     `SELECT ${select_target.join(' ')} WHERE {\n` +
     '  ' + pattern.join(' ') + "\n" +
     '}';
 } else {
   sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
   sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
-  prefixes = search_prefix.retrievePrefixes(sparqlTemplate);
-  sparqlTemplate = prefixes.map(pre => search_prefix.searchPrefix(pre)).join("\n") + "\n" + sparqlTemplate;
+  prefixes = retrievePrefixes(sparqlTemplate);
+  sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n" + sparqlTemplate;
 }
 
 if(localMode) {
