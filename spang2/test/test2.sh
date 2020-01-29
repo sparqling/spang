@@ -1,2 +1,2 @@
 #!/bin/sh
-spang2 test/test1.rq
+spang2 -e test test/test1.rq
