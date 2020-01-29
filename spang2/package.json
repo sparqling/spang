@@ -10,7 +10,8 @@
     "fs": "0.0.1-security",
     "sparqljs": "^3.0.0",
     "commander": "^2.16.0",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "mustache": "4.0.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",

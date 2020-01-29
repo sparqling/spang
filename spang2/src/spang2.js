@@ -80,6 +80,7 @@ var commander = require('commander').version(version)
     .option('-S, --subject <SUBJECT>', 'shortcut')
     .option('-P, --predicate <PREDICATE>', 'shortcut')
     .option('-O, --object <OBJECT>', 'shortcut')
+    .option('-q, --show_query', 'show query and quit')
     .option('-L, --limit <LIMIT>', 'LIMIT output (use with -[SPOF])')
     .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .arguments('<SPARQL_TEMPLATE>').action((s) => {
@@ -133,7 +134,10 @@ if(commander.subject || commander.predicate || commander.object) {
   sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n" + sparqlTemplate;
 }
 
-if(localMode) {
+if(commander.show_query) {
+  console.log(sparqlTemplate);
+}
+else if(localMode) {
   console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
 } else {
   if(commander.endpoint)
@@ -159,6 +163,5 @@ if(localMode) {
       process.exit(-1);
     }
   }
-
   querySparql(db, sparqlTemplate, commander.format);
 }

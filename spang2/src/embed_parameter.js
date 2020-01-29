@@ -1,4 +1,5 @@
-parser = require('./parser.js');
+const parser = require('./parser.js');
+const mustache = require('mustache');
 
 var traverse = (o, fn) => {
   for (const i in o) {
@@ -19,6 +20,7 @@ String.prototype.remove = function(start, end){
 
 
 exports.embedParameter = (sparql, parameterMap) => {
+  sparql = mustache.render(sparql, parameterMap);
   var parsedQuery = new parser.parse(sparql);
   replacements = [];
   traverse(parsedQuery, (key, value) => {
