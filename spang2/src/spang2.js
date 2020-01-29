@@ -30,6 +30,7 @@ search_db_name = require('./search_db_name');
 const prefixModule = require('./prefix.js');
 const searchPrefix = prefixModule.searchPrefix;
 const retrievePrefixes = prefixModule.retrievePrefixes;
+const metadataModule = require('./metadata.js');
 embed_parameter = require('./embed_parameter.js');
 
 var db, sparqlTemplate, localMode;
@@ -53,31 +54,6 @@ if(commander.args.length < 1 &&
    (!commander.subject && !commander.predicate && !commander.object || !commander.endpoint)) {
   commander.help();
 }
-
-if(commander.endpoint)
-{
-  db = commander.endpoint;
-} else {
-  // TODO: if endpoint is not specified, try to retrieve it from meta-data in templates
-  console.log('endpoint is required');
-  process.exit(-1);
-}
-
-
-if(/^\w/.test(db)) {
-  if (!(/^(http|https):\/\//.test(db))) {
-    [db, retrieveByGet] = search_db_name.searchDBName(db);
-  }
-} else {
-  localMode = true;
-  if (db == '-') {
-    db = fs.readFileSync(process.stdin.fd, "utf8");
-  } else if(!fs.existsSync(db)) {
-    console.log(`${db}: no such file`);
-    process.exit(-1);
-  }
-}
-
 
 var acceptHeaderMap = {
   "xml"      : "application/sparql-results+xml",
@@ -126,8 +102,10 @@ if(commander.subject || commander.predicate || commander.object) {
     `SELECT ${select_target.join(' ')} WHERE {\n` +
     '  ' + pattern.join(' ') + "\n" +
     '}';
+  metadata = {};
 } else {
   sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
+  metadata = metadataModule.retrieveMetadata(sparqlTemplate);
   sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
   prefixes = retrievePrefixes(sparqlTemplate);
   sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n" + sparqlTemplate;
@@ -136,5 +114,29 @@ if(commander.subject || commander.predicate || commander.object) {
 if(localMode) {
   console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
 } else {
+  if(commander.endpoint)
+  {
+    db = commander.endpoint;
+  } else if(metadata.endpoint) {
+    db = metadata.endpoint;
+  } else {
+    console.log('endpoint is required');
+    process.exit(-1);
+  }
+
+  if(/^\w/.test(db)) {
+    if (!(/^(http|https):\/\//.test(db))) {
+      [db, retrieveByGet] = search_db_name.searchDBName(db);
+    }
+  } else {
+    localMode = true;
+    if (db == '-') {
+      db = fs.readFileSync(process.stdin.fd, "utf8");
+    } else if(!fs.existsSync(db)) {
+      console.log(`${db}: no such file`);
+      process.exit(-1);
+    }
+  }
+
   querySparql(db, sparqlTemplate, acceptHeaderMap[commander.format]);
 }
