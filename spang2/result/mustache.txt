@@ -1,0 +1,8 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+# @endpoint https://sparql-test.spang.dbcls.jp/sparql
+SELECT *
+WHERE {
+    ?s rdf:type ?o .
+}
+LIMIT 10
+
