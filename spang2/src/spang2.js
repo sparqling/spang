@@ -2,7 +2,36 @@
 
 var version = require("../package.json").version;
 
-querySparql = (endpoint, query, accept) => {
+const acceptHeaderMap = {
+  "xml"      : "application/sparql-results+xml",
+  "json"     : "application/sparql-results+json",
+  // TODO receive as json and format to tsv afterward
+  "tsv"      : "application/sparql-results+json",
+  "rdf/xml"  : "application/rdf+xml",
+  "rdfxml"   : "application/rdf+xml",
+  "turtle"   : "application/x-turtle",
+  "ttl"      : "application/x-turtle",
+  "n3"       : "text/rdf+n3",
+  "n-triples": "text/plain",
+  "nt"       : "text/plain",
+  "html"     : "text/html",
+  "rdfjson"  : "application/rdf+json",
+  "rdfbin"   : "application/x-binary-rdf",
+  "rdfbint"  : "application/x-binary-rdf-results-table",
+  "js"       : "application/javascript",
+  "bool"     : "text/boolean",
+};
+
+toString = (resource) => {
+  if(resource.type == 'uri') {
+    return `<${resource.value}>`;
+  } else {
+    return `"${resource.value}"`;
+  }
+}
+
+querySparql = (endpoint, query, format) => {
+  const accept = acceptHeaderMap[format];
   var options = {
     uri: endpoint, 
     form: {query: query},
@@ -15,7 +44,15 @@ querySparql = (endpoint, query, accept) => {
   };
   request.post(options, function(error, response, body){
     if (!error && response.statusCode == 200) {
-      console.log(body);
+      if(format == 'tsv') {
+        const obj = JSON.parse(body);
+        const vars = obj.head.vars;
+        obj.results.bindings.forEach(b => {
+          console.log(vars.map(v => toString(b[v])).join("\t"));
+        });
+      } else {
+        console.log(body);
+      }
     } else {
       console.log('error: '+ response.statusCode);
       console.log(body);
@@ -43,6 +80,7 @@ var commander = require('commander').version(version)
     .option('-S, --subject <SUBJECT>', 'shortcut')
     .option('-P, --predicate <PREDICATE>', 'shortcut')
     .option('-O, --object <OBJECT>', 'shortcut')
+    .option('-L, --limit <LIMIT>', 'LIMIT output (use with -[SPOF])')
     .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .arguments('<SPARQL_TEMPLATE>').action((s) => {
       sparqlTemplate = s;
@@ -55,25 +93,6 @@ if(commander.args.length < 1 &&
   commander.help();
 }
 
-var acceptHeaderMap = {
-  "xml"      : "application/sparql-results+xml",
-  "json"     : "application/sparql-results+json",
-  // TODO receive as json and format to tsv afterward
-  "tsv"      : "text/tab-separated-values",
-  "rdf/xml"  : "application/rdf+xml",
-  "rdfxml"   : "application/rdf+xml",
-  "turtle"   : "application/x-turtle",
-  "ttl"      : "application/x-turtle",
-  "n3"       : "text/rdf+n3",
-  "n-triples": "text/plain",
-  "nt"       : "text/plain",
-  "html"     : "text/html",
-  "rdfjson"  : "application/rdf+json",
-  "rdfbin"   : "application/x-binary-rdf",
-  "rdfbint"  : "application/x-binary-rdf-results-table",
-  "js"       : "application/javascript",
-  "bool"     : "text/boolean",
-};
 
 if(commander.param) {
   params = commander.param.split(',');
@@ -102,6 +121,9 @@ if(commander.subject || commander.predicate || commander.object) {
     `SELECT ${select_target.join(' ')} WHERE {\n` +
     '  ' + pattern.join(' ') + "\n" +
     '}';
+  if(commander.limit) {
+    sparqlTemplate += ` LIMIT ${commander.limit}`;
+  }
   metadata = {};
 } else {
   sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
@@ -138,5 +160,5 @@ if(localMode) {
     }
   }
 
-  querySparql(db, sparqlTemplate, acceptHeaderMap[commander.format]);
+  querySparql(db, sparqlTemplate, commander.format);
 }
