@@ -11,3 +11,4 @@ cyano http://genome.microbedb.jp/sparql/
 nibb http://sparql.nibb.ac.jp/sparql
 mbgd http://sparql.nibb.ac.jp/sparql
 disgenet http://rdf.disgenet.org/sparql/
+test https://sparql-test.spang.dbcls.jp/sparql
