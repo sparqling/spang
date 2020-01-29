@@ -1,0 +1,6 @@
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+
+SELECT ?p ?o
+WHERE {
+    taxid:{{taxid}} ?p ?o
+}
