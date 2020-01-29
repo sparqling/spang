@@ -97,6 +97,15 @@ var acceptHeaderMap = {
   "bool"     : "text/boolean",
 };
 
+if(commander.param) {
+  params = commander.param.split(',');
+  params.forEach((par) => {
+    [k, v] = par.split('=');
+    parameterMap[k] = v;
+  });
+}
+
+
 if(commander.subject || commander.predicate || commander.object) {
   var select_target = [], prefixes = [], pattern = [];
   [[commander.subject, 's'], [commander.predicate, 'p'], [commander.object, 'o']].forEach( (pair) => {
@@ -117,17 +126,10 @@ if(commander.subject || commander.predicate || commander.object) {
     '}';
 } else {
   sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
+  sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
+  prefixes = search_prefix.retrievePrefixes(sparqlTemplate);
+  sparqlTemplate = prefixes.map(pre => search_prefix.searchPrefix(pre)).join("\n") + "\n" + sparqlTemplate;
 }
-
-if(commander.param) {
-  params = commander.param.split(',');
-  params.forEach((par) => {
-    [k, v] = par.split('=');
-    parameterMap[k] = v;
-  });
-}
-
-sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
 
 if(localMode) {
   console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());

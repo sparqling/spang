@@ -1,4 +1,14 @@
+parser = require('./parser.js');
 fs = require('fs');
+
+var traverse = (o, fn) => {
+  for (const i in o) {
+    fn.apply(this,[i,o[i]]);  
+    if (o[i] !== null && typeof(o[i])=="object") {
+      traverse(o[i], fn);
+    }
+  }
+}
 
 var prefixPath = `${__dirname}/../etc/prefix`;
 var prefixMap;
@@ -23,4 +33,15 @@ exports.searchPrefix = (prefixName) => {
     if(!prefixMap) readPrefixFile();
     return prefixMap[prefixName];
   }
+};
+
+exports.retrievePrefixes = (sparql) => {
+  var parsedQuery = new parser.parse(sparql);
+  prefixes = [];
+  traverse(parsedQuery, (key, value) => {
+    if(value && value.token == 'uri' && value.prefix) {
+      prefixes.push(value.prefix);
+    }
+  });
+  return prefixes;
 };
