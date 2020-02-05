@@ -1,5 +1,5 @@
 # SPARQL formatter
-`spfmt` is a SPARQL formatter written in JS.
+`spfmt` is a SPARQL formatter written in JavaScript.
 
 It can be used in a web site or in the command line.
 
