@@ -80,7 +80,8 @@ var commander = require('commander').version(version)
     .option('-S, --subject <SUBJECT>', 'shortcut')
     .option('-P, --predicate <PREDICATE>', 'shortcut')
     .option('-O, --object <OBJECT>', 'shortcut')
-    .option('-N, --number', 'shortcut of COUNT query, this can be used alone or with [SPO]')
+    .option('-N, --number', 'shortcut of COUNT query, which can be used alone or with [SPO]')
+    .option('-G, --graph', 'shortcut to search Graph names, which can be used alone or with [SPO]')
     .option('-q, --show_query', 'show query and quit')
     .option('-L, --limit <LIMIT>', 'LIMIT output (use with -[SPOF])')
     .option('-l, --list_nick_name', 'list up available nicknames and quit')
@@ -117,7 +118,7 @@ if(commander.param) {
 }
 
 
-if(commander.subject || commander.predicate || commander.object || commander.number) {
+if(commander.subject || commander.predicate || commander.object || commander.number || commander.grpah) {
   var select_target = [], prefixes = [], pattern = [];
   [[commander.subject, 's'], [commander.predicate, 'p'], [commander.object, 'o']].forEach( (pair) => {
     var arg = pair[0];
@@ -133,11 +134,12 @@ if(commander.subject || commander.predicate || commander.object || commander.num
   });
   sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n";
   if(commander.number) {
-    sparqlTemplate += `SELECT COUNT(*) WHERE {\n`;
-  } else {
-    sparqlTemplate += `SELECT ${select_target.join(' ')} WHERE {\n`;
+    sparqlTemplate += `SELECT COUNT(*) WHERE {\n  ${pattern.join(' ')}\n}`;
+  } else if(commander.graph) {
+    sparqlTemplate += `SELECT ?graph\nWHERE {\n  GRAPH ?graph {\n    ${pattern.join(' ')}\n  }\n}\nGROUP BY ?grpah\nORDER BY ?graph`;
+  }else {
+    sparqlTemplate += `SELECT ${select_target.join(' ')} WHERE {\n ${pattern.join(' ')}\n}`;
   }
-  sparqlTemplate +=  '  ' + pattern.join(' ') + "\n }";
   if(commander.limit) {
     sparqlTemplate += ` LIMIT ${commander.limit}`;
   }
