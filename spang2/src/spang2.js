@@ -82,12 +82,24 @@ var commander = require('commander').version(version)
     .option('-O, --object <OBJECT>', 'shortcut')
     .option('-q, --show_query', 'show query and quit')
     .option('-L, --limit <LIMIT>', 'LIMIT output (use with -[SPOF])')
+    .option('-l, --list_nick_name', 'list up available nicknames and quit')
     .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .arguments('<SPARQL_TEMPLATE>').action((s) => {
       sparqlTemplate = s;
     });
 
 commander.parse(process.argv);
+
+
+if(commander.list_nick_name) {
+  console.log('SPARQL endpoints');
+  const dbMap = search_db_name.listup();
+  const maxLen = Object.keys(dbMap).map(key => key.length).reduce((a, b) => Math.max(a, b));
+  for(const entry in dbMap) {
+    console.log(` ${entry.padEnd(maxLen, ' ')} ${dbMap[entry].url}`);
+  }
+  process.exit(0);
+}
 
 if(commander.args.length < 1 &&
    (!commander.subject && !commander.predicate && !commander.object || !commander.endpoint)) {
