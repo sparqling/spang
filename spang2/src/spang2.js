@@ -80,6 +80,7 @@ var commander = require('commander').version(version)
     .option('-S, --subject <SUBJECT>', 'shortcut')
     .option('-P, --predicate <PREDICATE>', 'shortcut')
     .option('-O, --object <OBJECT>', 'shortcut')
+    .option('-N, --number', 'shortcut of COUNT query, this can be used alone or with [SPO]')
     .option('-q, --show_query', 'show query and quit')
     .option('-L, --limit <LIMIT>', 'LIMIT output (use with -[SPOF])')
     .option('-l, --list_nick_name', 'list up available nicknames and quit')
@@ -102,7 +103,7 @@ if(commander.list_nick_name) {
 }
 
 if(commander.args.length < 1 &&
-   (!commander.subject && !commander.predicate && !commander.object || !commander.endpoint)) {
+   (!commander.subject && !commander.predicate && !commander.object && !commander.number || !commander.endpoint)) {
   commander.help();
 }
 
@@ -116,24 +117,27 @@ if(commander.param) {
 }
 
 
-if(commander.subject || commander.predicate || commander.object) {
+if(commander.subject || commander.predicate || commander.object || commander.number) {
   var select_target = [], prefixes = [], pattern = [];
   [[commander.subject, 's'], [commander.predicate, 'p'], [commander.object, 'o']].forEach( (pair) => {
     var arg = pair[0];
     var placeHolder = pair[1];
     if(arg) {
       pattern.push(arg);
-      const prefix = arg.match(/^(\w+):\w+$/)[1];
-      if(prefix) prefixes.push(prefix);
+      const prefixMatched = arg.match(/^(\w+):\w+$/);
+      if(prefixMatched) prefixes.push(prefixMatched[1]);
     } else {
       select_target.push('?' + placeHolder);
       pattern.push('?' + placeHolder);
     }
   });
-  sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n" +
-    `SELECT ${select_target.join(' ')} WHERE {\n` +
-    '  ' + pattern.join(' ') + "\n" +
-    '}';
+  sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n";
+  if(commander.number) {
+    sparqlTemplate += `SELECT COUNT(*) WHERE {\n`;
+  } else {
+    sparqlTemplate += `SELECT ${select_target.join(' ')} WHERE {\n`;
+  }
+  sparqlTemplate +=  '  ' + pattern.join(' ') + "\n }";
   if(commander.limit) {
     sparqlTemplate += ` LIMIT ${commander.limit}`;
   }
