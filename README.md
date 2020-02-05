@@ -10,6 +10,8 @@ SPANG re-implemented in JavaScript comes with new features as SPANG2.
 
 [spfmt](https://github.com/hchiba1/sparql-utils/tree/master/spfmt)
 
+`spfmt` is a SPARQL formatter written in JavaScript.
+
 ## SPARQL medadata
 [sparql-doc](https://github.com/ldodds/sparql-doc)
 ```
