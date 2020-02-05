@@ -1,5 +1,7 @@
 # SPARQL-related utilities
 
+## SPANG2
+
 ## SPARQL formatter
 
 [spfmt](https://github.com/hchiba1/sparql-utils/tree/master/spfmt)
