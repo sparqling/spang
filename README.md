@@ -1,6 +1,8 @@
 # SPARQL-related utilities
 
-[spfmt](https://github.com/hchiba1/sparql-utils/tree/master/spfmt): a SPARQL formatter
+## SPARQL formatter
+
+[spfmt](https://github.com/hchiba1/sparql-utils/tree/master/spfmt)
 
 ## SPARQL medadata
 [sparql-doc](https://github.com/ldodds/sparql-doc)
