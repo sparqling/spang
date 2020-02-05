@@ -1,1 +1,1 @@
-spang -e test -L10
+spang2 -e test -L 10
