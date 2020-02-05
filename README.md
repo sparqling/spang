@@ -2,6 +2,8 @@
 
 ## SPANG2
 
+SPANG re-implemented in JavaScript comes with new features as SPANG2.
+
 ## SPARQL formatter
 
 [spfmt](https://github.com/hchiba1/sparql-utils/tree/master/spfmt)
