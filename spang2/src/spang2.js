@@ -80,8 +80,9 @@ var commander = require('commander').version(version)
     .option('-S, --subject <SUBJECT>', 'shortcut')
     .option('-P, --predicate <PREDICATE>', 'shortcut')
     .option('-O, --object <OBJECT>', 'shortcut')
-    .option('-N, --number', 'shortcut of COUNT query, which can be used alone or with [SPO]')
-    .option('-G, --graph', 'shortcut to search Graph names, which can be used alone or with [SPO]')
+    .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
+    .option('-N, --number', 'shortcut of COUNT query (use alone or with -[SPO])')
+    .option('-G, --graph', 'shortcut to search Graph names (use alone or with -[SPO])')
     .option('-q, --show_query', 'show query and quit')
     .option('-L, --limit <LIMIT>', 'LIMIT output (use with -[SPOF])')
     .option('-l, --list_nick_name', 'list up available nicknames and quit')
@@ -104,7 +105,7 @@ if(commander.list_nick_name) {
 }
 
 if(commander.args.length < 1 &&
-   (!commander.subject && !commander.predicate && !commander.object && !commander.number || !commander.endpoint)) {
+   (!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit || !commander.endpoint)) {
   commander.help();
 }
 
@@ -118,7 +119,8 @@ if(commander.param) {
 }
 
 
-if(commander.subject || commander.predicate || commander.object || commander.number || commander.grpah) {
+if(commander.subject || commander.predicate || commander.object || commander.limit ||
+   commander.number || commander.graph || commander.from) {
   var select_target = [], prefixes = [], pattern = [];
   [[commander.subject, 's'], [commander.predicate, 'p'], [commander.object, 'o']].forEach( (pair) => {
     var arg = pair[0];
@@ -133,15 +135,18 @@ if(commander.subject || commander.predicate || commander.object || commander.num
     }
   });
   sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n";
-  if(commander.number) {
-    sparqlTemplate += `SELECT COUNT(*) WHERE {\n  ${pattern.join(' ')}\n}`;
-  } else if(commander.graph) {
+  if(commander.graph) {
     sparqlTemplate += `SELECT ?graph\nWHERE {\n  GRAPH ?graph {\n    ${pattern.join(' ')}\n  }\n}\nGROUP BY ?grpah\nORDER BY ?graph`;
-  }else {
-    sparqlTemplate += `SELECT ${select_target.join(' ')} WHERE {\n ${pattern.join(' ')}\n}`;
-  }
-  if(commander.limit) {
-    sparqlTemplate += ` LIMIT ${commander.limit}`;
+  } else {
+    const fromPart = commander.from ? `\nFROM ${commander.from}` : '';
+    if(commander.number) {
+      sparqlTemplate += `SELECT COUNT(*) ${fromPart}WHERE {\n  ${pattern.join(' ')}\n}`;
+    } else {
+      sparqlTemplate += `SELECT ${select_target.join(' ')} ${fromPart}\nWHERE {\n ${pattern.join(' ')}\n}`;
+    }
+    if(commander.limit) {
+      sparqlTemplate += ` LIMIT ${commander.limit}`;
+    }
   }
   metadata = {};
 } else {
