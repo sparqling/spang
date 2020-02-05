@@ -1,11 +1,6 @@
 # SPARQL-related utilities
 
-## SPARQL formatter
-Example web site:<br>
-https://hchiba1.github.io/sparql-utils/
-
-Document:<br>
-https://github.com/hchiba1/sparql-utils/tree/master/spfmt
+[spfmt](https://github.com/hchiba1/sparql-utils/tree/master/spfmt): a SPARQL formatter
 
 ## SPARQL medadata
 [sparql-doc](https://github.com/ldodds/sparql-doc)
