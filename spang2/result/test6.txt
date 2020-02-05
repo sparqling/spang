@@ -1,0 +1,1 @@
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/>
