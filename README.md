@@ -1,18 +1,22 @@
 # SPARQL-related utilities
 
-## SPANG2
+## Commands
+
+### SPANG2
 
 [spang2](https://github.com/hchiba1/sparql-utils/tree/master/spang2)
 
 SPANG is now re-implemented in JavaScript, and comes with new features.
 
-## SPARQL formatter
+### SPARQL formatter
 
 [spfmt](https://github.com/hchiba1/sparql-utils/tree/master/spfmt)
 
 `spfmt` is a SPARQL formatter written in JavaScript.
 
-## SPARQL medadata
+## Specifications
+
+### SPARQL medadata
 [sparql-doc](https://github.com/ldodds/sparql-doc)
 ```
 # @title Get orthololog from MBGD
@@ -28,7 +32,7 @@ extension
 # @param gene=
 ```
 
-## SPARQL syntax
+### SPARQL syntax
 The EBNF notation of SPARQL is extracted from:<br>
 https://www.w3.org/TR/sparql11-query/#sparqlGrammar
 
