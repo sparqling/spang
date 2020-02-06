@@ -5,21 +5,21 @@ var version = require("../package.json").version;
 const acceptHeaderMap = {
   "xml"      : "application/sparql-results+xml",
   "json"     : "application/sparql-results+json",
-  // TODO receive as json and format to tsv afterward
-  "tsv"      : "application/sparql-results+json",
-  "rdf/xml"  : "application/rdf+xml",
-  "rdfxml"   : "application/rdf+xml",
-  "turtle"   : "application/x-turtle",
-  "ttl"      : "application/x-turtle",
-  "n3"       : "text/rdf+n3",
+  "tsv"      : "application/sparql-results+json", // receive as json and format to tsv afterward
+  "text/tsv" : "text/tab-separated-values",
   "n-triples": "text/plain",
   "nt"       : "text/plain",
+  "n3"       : "text/rdf+n3",
   "html"     : "text/html",
+  "bool"     : "text/boolean",
+  "turtle"   : "application/x-turtle",
+  "ttl"      : "application/x-turtle",
+  "rdf/xml"  : "application/rdf+xml",
+  "rdfxml"   : "application/rdf+xml",
   "rdfjson"  : "application/rdf+json",
   "rdfbin"   : "application/x-binary-rdf",
   "rdfbint"  : "application/x-binary-rdf-results-table",
   "js"       : "application/javascript",
-  "bool"     : "text/boolean",
 };
 
 toString = (resource) => {
