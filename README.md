@@ -2,7 +2,7 @@
 
 ## Command-line utilities
 
-### SPANG2
+### Client
 
 [spang2](https://github.com/hchiba1/sparql-utils/tree/master/spang2)
 
