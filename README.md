@@ -8,7 +8,7 @@
 
 SPANG is a commmand-line SPARQL client. It is now re-implemented in JavaScript, and comes with new features.
 
-### SPARQL formatter
+### Formatter
 
 [spfmt](https://github.com/hchiba1/sparql-utils/tree/master/spfmt)
 
@@ -16,7 +16,17 @@ SPANG is a commmand-line SPARQL client. It is now re-implemented in JavaScript, 
 
 ## Specifications
 
-### SPARQL medadata
+### Syntax
+The EBNF notation of SPARQL is extracted from:<br>
+https://www.w3.org/TR/sparql11-query/#sparqlGrammar
+
+The PEG expression of SPARQL grammer was originally provided by:<br>
+https://github.com/antoniogarrote/rdfstore-js/
+
+PEG can be tested at:<br>
+https://pegjs.org/online
+
+### Medadata
 [sparql-doc](https://github.com/ldodds/sparql-doc)
 ```
 # @title Get orthololog from MBGD
@@ -31,13 +41,3 @@ extension
 # @output_class up:Protein
 # @param gene=
 ```
-
-### SPARQL syntax
-The EBNF notation of SPARQL is extracted from:<br>
-https://www.w3.org/TR/sparql11-query/#sparqlGrammar
-
-The PEG expression of SPARQL grammer was originally provided by:<br>
-https://github.com/antoniogarrote/rdfstore-js/
-
-PEG can be tested at:<br>
-https://pegjs.org/online
