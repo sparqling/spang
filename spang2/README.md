@@ -12,12 +12,11 @@ $ spang2 [OPTIONS] SPARQL_TEMPLATE
 ```
 
 ## Test examples
-If you have globally installed mocha
+```
+$ ./node_modules/mocha/bin/mocha
+```
+Or, if you have globally installed mocha,
 
 ```
 $ mocha
-```
-Otherwise,
-```
-$ ./node_modules/mocha/bin/mocha
 ```
