@@ -1,12 +1,12 @@
 # SPARQL-related utilities
 
-## Commands
+## Command-line utilities
 
 ### SPANG2
 
 [spang2](https://github.com/hchiba1/sparql-utils/tree/master/spang2)
 
-SPANG is now re-implemented in JavaScript, and comes with new features.
+SPANG is a commmand-line SPARQL client. It is now re-implemented in JavaScript, and comes with new features.
 
 ### SPARQL formatter
 
