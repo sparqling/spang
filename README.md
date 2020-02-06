@@ -4,7 +4,7 @@
 
 [spang2](https://github.com/hchiba1/sparql-utils/tree/master/spang2)
 
-SPANG re-implemented in JavaScript comes with new features as SPANG2.
+SPANG is now re-implemented in JavaScript, and comes with new features.
 
 ## SPARQL formatter
 
