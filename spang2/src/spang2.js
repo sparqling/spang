@@ -136,16 +136,16 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
   });
   sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n";
   if(commander.graph) {
-    sparqlTemplate += `SELECT ?graph\nWHERE {\n  GRAPH ?graph {\n    ${pattern.join(' ')}\n  }\n}\nGROUP BY ?grpah\nORDER BY ?graph`;
+    sparqlTemplate += `SELECT ?graph\nWHERE {\n    GRAPH ?graph {\n        ${pattern.join(' ')}\n    }\n}\nGROUP BY ?grpah\nORDER BY ?graph`;
   } else {
     const fromPart = commander.from ? `\nFROM ${commander.from}` : '';
     if(commander.number) {
-      sparqlTemplate += `SELECT COUNT(*) ${fromPart}WHERE {\n  ${pattern.join(' ')}\n}`;
+      sparqlTemplate += `SELECT COUNT(*)${fromPart}\nWHERE {\n    ${pattern.join(' ')}\n}`;
     } else {
-      sparqlTemplate += `SELECT ${select_target.join(' ')} ${fromPart}\nWHERE {\n ${pattern.join(' ')}\n}`;
+      sparqlTemplate += `SELECT ${select_target.join(' ')}${fromPart}\nWHERE {\n    ${pattern.join(' ')}\n}`;
     }
     if(commander.limit) {
-      sparqlTemplate += ` LIMIT ${commander.limit}`;
+      sparqlTemplate += `\nLIMIT ${commander.limit}`;
     }
   }
   metadata = {};
