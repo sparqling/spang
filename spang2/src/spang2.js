@@ -75,7 +75,7 @@ var parameterMap = {};
 var retrieveByGet = false;
 
 var commander = require('commander').version(version)
-    .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html; default tsv', 'tsv')
+    .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-e, --endpoint <ENDPOINT>', 'target endpoint')
     .option('-S, --subject <SUBJECT>', 'shortcut')
     .option('-P, --predicate <PREDICATE>', 'shortcut')
