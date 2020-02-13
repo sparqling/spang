@@ -8,7 +8,7 @@ $ npm link
 
 ## Usage
 ```
-spang2 [options] <SPARQL_TEMPLATE>
+Usage: spang2 [options] <SPARQL_TEMPLATE>
 
 Options:
   -V, --version                output the version number
