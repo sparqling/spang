@@ -35,3 +35,31 @@ Or, if you have globally installed mocha,
 ```
 $ mocha
 ```
+## Todo
+```
+import {spang} from './spang2.js'
+
+const template = spang.getTemplate('http://spang.dbcls.jp/query/disgenet/disease_gene.rq');
+
+const embeddedSparql = spang.embed(template, {disease: 'C0751955'});
+
+const shortcutSparql = spang.shortcut({S: 'uniprot:K9Z723', L: 10});
+
+const result = spang.query(embeddedSparql, 'disgenet', { abbr: true} );
+
+const result2 = spang.query(template, 'disgenet', { abbr: true, param: { disease: 'C0751955'} });
+
+const endpointList = spang.showEndpoints();
+
+const prefixList = spang.showPrefixes();
+
+const reformattedSparql = spang.format(embeddedSparql);
+
+const metadata = spang.getMetadata(template);
+
+const shortcutSparql = spang.exec({S: 'uniprot:K9Z723', L: 10, q: true});
+
+const endpointList = spang.exec({l: true});
+
+spang.exec('-S uniprot:K9Z723 -L 10 -q');
+```
