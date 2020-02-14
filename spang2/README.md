@@ -35,41 +35,4 @@ Or, if you have globally installed mocha,
 ```
 $ mocha
 ```
-## Todo
-JavaScriptライブラリとして呼び出す場合
-```
-import {spang} from './spang2.js'
 
-// URLからテンプレート取得                                                                                         
-const template = spang.getTemplate('http://spang.dbcls.jp/query/disgenet/disease_gene.rq');
-
-// テンプレートにパラメータ埋め込み                                                                                
-const embeddedSparql = spang.embed(template, {disease: 'C0751955'});
-
-// ショートカットコマンド                                                                                          
-const shortcutSparql = spang.shortcut({S: 'uniprot:K9Z723', L: 10});
-
-// クエリを投げる（prefixは適宜補う、オプションも設定可能）                                                        
-const result = spang.query(embeddedSparql, 'disgenet', { abbr: true} );
-
-// テンプレートに埋め込みながら投げる                                                                              
-const result2 = spang.query(template, 'disgenet', { abbr: true, param: { disease: 'C0751955'} });
-
-// 省略名が設定されているエンドポイントを表示                                                                      
-const endpointList = spang.showEndpoints();
-
-// 設定されているPrefixをすべて表示                                                                                
-const prefixList = spang.showPrefixes();
-
-// SPARQLをリフォーマット                                                                                          
-const reformattedSparql = spang.format(embeddedSparql);
-
-// テンプレートやSPARQLからメタデータを取得                                                                        
-const metadata = spang.getMetadata(template);
-
-// CUIのインターフェースに合わせる別パターン                                                                       
-const shortcutSparql = spang.exec({S: 'uniprot:K9Z723', L: 10, q: true});
-const endpointList = spang.exec({l: true});
-
-spang.exec('-S uniprot:K9Z723 -L 10 -q');
-```
