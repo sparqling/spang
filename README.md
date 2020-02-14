@@ -7,7 +7,11 @@
 [spang2](https://github.com/hchiba1/sparql-utils/tree/master/spang2)
 
 SPANG is a commmand-line SPARQL client. It is now re-implemented in JavaScript, and comes with new features.
-
+```
+$ cd spang2
+$ npm install
+$ npm link
+```
 ```
 Usage: spang2 [options] <SPARQL_TEMPLATE>
 
