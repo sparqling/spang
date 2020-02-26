@@ -3041,7 +3041,7 @@ IRI_REF "[122] IRI_REF"
  base:(PN_CHARS_U / [0-9] / ':' / PLX) rest:((PN_CHARS / '.' / ':' / PLX)* (PN_CHARS / ':' / PLX))? {
 */
 PN_LOCAL "[152] PN_LOCAL"
-    = base:(PN_CHARS_U / [0-9] / ':' / PLX) rest:(PN_CHARS / '.' / ':' / PLX)* {
+    = base:('$' / PN_CHARS_U / [0-9] / ':' / PLX) rest:(PN_CHARS / '.' / ':' / PLX)* {
   return base + (rest||[]).join('');
 }
 

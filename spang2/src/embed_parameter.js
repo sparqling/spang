@@ -28,6 +28,14 @@ exports.embedParameter = (sparql, parameterMap) => {
       replacements.push({start: value.location.start.offset,
                         end: value.location.end.offset - 1,
                         after: parameterMap[value.value]});
+    } else if(value && value.token == 'uri' && value.suffix && value.suffix.startsWith('$')) {
+      const after = parameterMap[value.suffix.substring(1)];
+      if(after) {
+        replacements.push({start: value.location.end.offset - value.suffix.length,
+                           end: value.location.end.offset,
+                           after: after
+                          });
+      }
     }
   });
   var embeddedSparql = sparql;
