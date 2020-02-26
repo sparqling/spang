@@ -132,9 +132,19 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
     var arg = pair[0];
     var placeHolder = pair[1];
     if(arg) {
-      pattern.push(arg);
-      const prefixMatched = arg.match(/^(\w+):\w+$/);
-      if(prefixMatched) prefixes.push(prefixMatched[1]);
+      const urlMatched = arg.match(/^<?(\w+:\/\/[^>]+)>?$/);
+      if(urlMatched) {
+        pattern.push(`<${urlMatched[1]}>`);
+      } else {
+        const prefixMatched = arg.match(/^(\w+):\w+$/);
+        if(prefixMatched) {
+          prefixes.push(prefixMatched[1]);
+          pattern.push(arg);
+        } else {
+          // literal
+          pattern.push(`"${arg}"`);
+        }
+      }
     } else {
       select_target.push('?' + placeHolder);
       pattern.push('?' + placeHolder);
