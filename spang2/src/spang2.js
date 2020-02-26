@@ -25,10 +25,16 @@ const acceptHeaderMap = {
 toString = (resource) => {
   if(resource.type == 'uri') {
     return `<${resource.value}>`;
+  } else if(resource.type == 'typed-literal') {
+    return `"${resource.value}"^^<${resource.datatype}>`;
   } else {
     return `"${resource.value}"`;
   }
 }
+
+debugPrint = (object) => {
+  console.log(JSON.stringify(object, undefined, 2));
+};
 
 querySparql = (endpoint, query, format) => {
   const accept = acceptHeaderMap[format];
