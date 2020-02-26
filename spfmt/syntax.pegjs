@@ -1994,7 +1994,8 @@ Var "[93] Var"
     = WS* v:(VAR1 / VAR2) WS* {
     var term = {location: location()};
     term.token = 'var';
-    term.value = v;
+    term.prefix = v.prefix;
+    term.value = v.value;
     return term;
 }
 
@@ -2778,13 +2779,13 @@ IRI_REF "[122] IRI_REF"
      [126]      VAR1      ::=   '?' VARNAME
      */
     VAR1 "[126] VAR1"
-    = '?' v:VARNAME { return v }
+    = '?' v:VARNAME { return { prefix: "?",  value: v }; }
 
     /*
      [127]      VAR2      ::=   '$' VARNAME
      */
     VAR2 "[127] VAR2"
-    = '$' v:VARNAME { return v }
+    = '$' v:VARNAME { return { prefix: "$",  value: v }; }
 
     /*
      [128]      LANGTAG   ::=   '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*

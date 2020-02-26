@@ -78,6 +78,20 @@ querySparql = (endpoint, query, format) => {
   });
 };
 
+formatArgument = (argument) => {
+  const urlMatched = argument.match(/^<?(\w+:\/\/[^>]+)>?$/);
+  if(urlMatched) {
+    return `<${urlMatched[1]}>`;
+  } else {
+    const prefixMatched = argument.match(/^(\w+):\w+$/);
+    if(prefixMatched) {
+      return argument;
+    } else {
+      return `"${argument}"`;
+    }
+  }
+};
+
 var db, sparqlTemplate, localMode;
 var parameterMap = {};
 var retrieveByGet = false;
@@ -135,18 +149,10 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
     var arg = pair[0];
     var placeHolder = pair[1];
     if(arg) {
-      const urlMatched = arg.match(/^<?(\w+:\/\/[^>]+)>?$/);
-      if(urlMatched) {
-        pattern.push(`<${urlMatched[1]}>`);
-      } else {
-        const prefixMatched = arg.match(/^(\w+):\w+$/);
-        if(prefixMatched) {
+      pattern.push(formatArgument(arg));
+      const prefixMatched = arg.match(/^(\w+):\w+$/);
+      if(prefixMatched) {
           prefixes.push(prefixMatched[1]);
-          pattern.push(arg);
-        } else {
-          // literal
-          pattern.push(`"${arg}"`);
-        }
       }
     } else {
       select_target.push('?' + placeHolder);
@@ -157,7 +163,7 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
   if(commander.graph) {
     sparqlTemplate += `SELECT ?graph\nWHERE {\n    GRAPH ?graph {\n        ${pattern.join(' ')}\n    }\n}\nGROUP BY ?grpah\nORDER BY ?graph`;
   } else {
-    const fromPart = commander.from ? `\nFROM ${commander.from}` : '';
+    const fromPart = commander.from ? `\nFROM ${formatArgument(commander.from)}` : '';
     if(commander.number) {
       sparqlTemplate += `SELECT COUNT(*)${fromPart}\nWHERE {\n    ${pattern.join(' ')}\n}`;
     } else {
