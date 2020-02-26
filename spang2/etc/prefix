@@ -29,11 +29,15 @@ PREFIX ncit: <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#>
 PREFIX spangl: <http://purl.org/net/spang/library/>
 
 PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX oboOwl: <http://purl.org/obo/owl/>
+PREFIX oboTax: <http://purl.obolibrary.org/obo/NCBITaxon_>
 PREFIX sio: <http://semanticscience.org/resource/>
 PREFIX uniprot: <http://purl.uniprot.org/uniprot/>
 PREFIX up: <http://purl.uniprot.org/core/>
 PREFIX tax: <http://purl.uniprot.org/taxonomy/>
 PREFIX taxid: <http://identifiers.org/taxonomy/>
+PREFIX taxon: <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
+PREFIX taxonomy: <http://www.ncbi.nlm.nih.gov/taxonomy/>
 PREFIX pdb: <http://rdf.wwpdb.org/pdb/>
 PREFIX PDBo: <http://rdf.wwpdb.org/schema/pdbx-v40.owl#>
 PREFIX chembl: <http://rdf.ebi.ac.uk/terms/chembl#>

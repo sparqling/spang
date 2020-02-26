@@ -22,10 +22,22 @@ const acceptHeaderMap = {
   "js"       : "application/javascript",
 };
 
+fs = require('fs');
+request = require('request')
+child_process = require('child_process');
+search_db_name = require('./search_db_name');
+const prefixModule = require('./prefix.js');
+const searchPrefix = prefixModule.searchPrefix;
+const retrievePrefixes = prefixModule.retrievePrefixes;
+const metadataModule = require('./metadata.js');
+embed_parameter = require('./embed_parameter.js');
+
 toString = (resource) => {
   if(resource.type == 'uri') {
+    if(commander.abbreviate) return prefixModule.abbreviateURL(resource.value);
     return `<${resource.value}>`;
   } else if(resource.type == 'typed-literal') {
+    if(commander.abbreviate) return `"${resource.value}"^^${prefixModule.abbreviateURL(resource.datatype)}`;
     return `"${resource.value}"^^<${resource.datatype}>`;
   } else {
     return `"${resource.value}"`;
@@ -66,16 +78,6 @@ querySparql = (endpoint, query, format) => {
   });
 };
 
-fs = require('fs');
-request = require('request')
-child_process = require('child_process');
-search_db_name = require('./search_db_name');
-const prefixModule = require('./prefix.js');
-const searchPrefix = prefixModule.searchPrefix;
-const retrievePrefixes = prefixModule.retrievePrefixes;
-const metadataModule = require('./metadata.js');
-embed_parameter = require('./embed_parameter.js');
-
 var db, sparqlTemplate, localMode;
 var parameterMap = {};
 var retrieveByGet = false;
@@ -89,6 +91,7 @@ var commander = require('commander').version(version)
     .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
     .option('-N, --number', 'shortcut of COUNT query (use alone or with -[SPO])')
     .option('-G, --graph', 'shortcut to search Graph names (use alone or with -[SPO])')
+    .option('-a, --abbreviate', 'abbreviate results using predefined prefixes')
     .option('-q, --show_query', 'show query and quit')
     .option('-L, --limit <LIMIT>', 'LIMIT output (use alone or with -[SPOF])')
     .option('-l, --list_nick_name', 'list up available nicknames and quit')

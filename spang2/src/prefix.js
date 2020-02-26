@@ -12,28 +12,44 @@ var traverse = (o, fn) => {
 
 var prefixPath = `${__dirname}/../etc/prefix`;
 var prefixMap;
+var urlToPrefix;
+var orderedPrefixURLs;
 
 readPrefixFile = () => {
   // TODO: error handling
   var contents = fs.readFileSync(prefixPath, 'utf8');
   prefixMap = {};
+  urlToPrefix = {};
   contents.split("\n").forEach(line => {
     tokens = line.split(/\s+/);
     if(tokens.length == 3 && tokens[0] == 'PREFIX' &&
        tokens[1].endsWith(':') && tokens[2].startsWith('<') &&
        tokens[2].endsWith('>'))
     {
-      prefixMap[tokens[1].substr(0, tokens[1].length - 1)] = line;
+      const prefixName = tokens[1].substr(0, tokens[1].length - 1);
+      prefixMap[prefixName] = line;
+      urlToPrefix[tokens[2].substring(1, tokens[2].length - 2)] = prefixName;
     }
   });
 }
 
-exports.searchPrefix = (prefixName) => {
-  if(fs.existsSync(prefixPath)) {
+getPrefixMap = () => {
+  if(prefixMap || fs.existsSync(prefixPath)) {
     if(!prefixMap) readPrefixFile();
-    return prefixMap[prefixName];
+    return prefixMap;
   }
+  return {};
+}
+
+searchPrefixByURL = (url) => {
+  getPrefixMap(); // prepare ulrToPrefix
+  return urlToPrefix[url];
 };
+
+exports.searchPrefix = (prefixName) => {
+  return getPrefixMap()[prefixName];
+};
+
 
 exports.retrievePrefixes = (sparql) => {
   var parsedQuery = new parser.parse(sparql);
@@ -45,3 +61,23 @@ exports.retrievePrefixes = (sparql) => {
   });
   return prefixes;
 };
+
+exports.getPrefixMap = getPrefixMap;
+
+exports.getOrderedPrefixURLs = getOrderedPrefixURLs = () => {
+  if(!orderedPrefixURLs) {
+    getPrefixMap(); // prepare ulrToPrefix
+    orderedPrefixURLs = Object.keys(urlToPrefix).sort((a, b) => -(a.length - b.length));
+  }
+  return orderedPrefixURLs;
+}
+
+exports.abbreviateURL = (srcUrl) => {
+  for(const url of getOrderedPrefixURLs()) {
+    if(srcUrl.startsWith(url)) {
+      const prefix = searchPrefixByURL(url)
+      return `${prefix}:${srcUrl.substring(url.length + 1)}`;
+    }
+  }
+  return `<${srcUrl}>`;
+}
