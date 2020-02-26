@@ -1,1 +1,3 @@
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
+<http://www.openlinksw.com/schemas/virtrdf#>
+<http://www.w3.org/ns/ldp#>
