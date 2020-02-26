@@ -159,7 +159,8 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
       pattern.push('?' + placeHolder);
     }
   });
-  sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n";
+  sparqlTemplate = "";
+  if(prefixes.length > 0) sparqlTemplate += prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n";
   if(commander.graph) {
     sparqlTemplate += `SELECT ?graph\nWHERE {\n    GRAPH ?graph {\n        ${pattern.join(' ')}\n    }\n}\nGROUP BY ?grpah\nORDER BY ?graph`;
   } else {
