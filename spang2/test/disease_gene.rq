@@ -1,0 +1,16 @@
+# @title Get genes associated with a specific disease, e.g. C0751955 ("Brain Infarction")
+# @endpoint http://rdf.disgenet.org/sparql/
+# @prefix https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio
+# @param disease=C0751955 
+
+PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
+
+SELECT DISTINCT ?gene ?score ?gene_label ?source
+WHERE {
+    ?gda sio:SIO_000253 ?source ;                 # has source
+         sio:SIO_000216/sio:SIO_000300 ?score ;   # has measurement value/has value
+         sio:SIO_000628 ?gene, umls:{{disease}} . # refers to gene and disease
+    ?gene a ncit:C16612 ;
+         rdfs:label ?gene_label .
+}
+ORDER BY DESC(?score) ?source
