@@ -16,15 +16,15 @@ describe('embed_parameter.js', () => {
 });
 
 describe('shell scripts', () => {
-  results = fs.readdirSync('./result');
-  resultNames = results.map(r => path.basename(r, path.extname(r)));
+  results = fs.readdirSync('./test');
+  resultNames = results.map(r => path.basename(r, '.txt'));
   tests = fs.readdirSync('./test');
   tests.forEach(test => {
     const basename = path.basename(test, '.sh');
     if(test.endsWith('.sh') && resultNames.includes(basename)) {
       it(test, () => {
         const actual = execSync(`./test/${test}`).toString();
-        const expected = fs.readFileSync(`./result/${basename}.txt`).toString();
+        const expected = fs.readFileSync(`./test/${basename}.txt`).toString();
         assert.equal(actual, expected);
       });
     }
