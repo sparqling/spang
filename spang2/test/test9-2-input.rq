@@ -1,0 +1,9 @@
+# @endpoint test
+# @input taxid:2 owl:Class
+# @input rdfs:label rdfs:Resource
+
+SELECT ?label
+WHERE {
+  VALUES (?taxid ?p) { {{INPUT}} }
+  ?taxid ?p ?label .
+}
