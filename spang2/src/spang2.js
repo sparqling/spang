@@ -30,6 +30,7 @@ const prefixModule = require('./prefix.js');
 const searchPrefix = prefixModule.searchPrefix;
 const retrievePrefixes = prefixModule.retrievePrefixes;
 const metadataModule = require('./metadata.js');
+const shortcut = require('./shortcut.js').shortcut;
 embed_parameter = require('./embed_parameter.js');
 
 toString = (resource) => {
@@ -78,19 +79,6 @@ querySparql = (endpoint, query, format) => {
   });
 };
 
-formatArgument = (argument) => {
-  const urlMatched = argument.match(/^<?(\w+:\/\/[^>]+)>?$/);
-  if(urlMatched) {
-    return `<${urlMatched[1]}>`;
-  } else {
-    const prefixMatched = argument.match(/^(\w+):\w+$/);
-    if(prefixMatched) {
-      return argument;
-    } else {
-      return `"${argument}"`;
-    }
-  }
-};
 
 var db, sparqlTemplate, localMode;
 var parameterMap = {};
@@ -144,36 +132,8 @@ if(commander.param) {
 
 if(commander.subject || commander.predicate || commander.object || commander.limit ||
    commander.number || commander.graph || commander.from) {
-  var select_target = [], prefixes = [], pattern = [];
-  [[commander.subject, 's'], [commander.predicate, 'p'], [commander.object, 'o']].forEach( (pair) => {
-    var arg = pair[0];
-    var placeHolder = pair[1];
-    if(arg) {
-      pattern.push(formatArgument(arg));
-      const prefixMatched = arg.match(/^(\w+):\w+$/);
-      if(prefixMatched) {
-          prefixes.push(prefixMatched[1]);
-      }
-    } else {
-      select_target.push('?' + placeHolder);
-      pattern.push('?' + placeHolder);
-    }
-  });
-  sparqlTemplate = "";
-  if(prefixes.length > 0) sparqlTemplate += prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n";
-  if(commander.graph) {
-    sparqlTemplate += `SELECT ?graph\nWHERE {\n    GRAPH ?graph {\n        ${pattern.join(' ')}\n    }\n}\nGROUP BY ?grpah\nORDER BY ?graph`;
-  } else {
-    const fromPart = commander.from ? `\nFROM ${formatArgument(commander.from)}` : '';
-    if(commander.number) {
-      sparqlTemplate += `SELECT COUNT(*)${fromPart}\nWHERE {\n    ${pattern.join(' ')}\n}`;
-    } else {
-      sparqlTemplate += `SELECT ${select_target.join(' ')}${fromPart}\nWHERE {\n    ${pattern.join(' ')}\n}`;
-    }
-    if(commander.limit) {
-      sparqlTemplate += `\nLIMIT ${commander.limit}`;
-    }
-  }
+  sparqlTemplate = shortcut({S: commander.subject, P: commander.predicate, O: commander.object,
+                             L: commander.limit, N: commander.number, G: commander.graph, F: commander.from}, prefixModule.getPrefixMap());
   metadata = {};
 } else {
   sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
