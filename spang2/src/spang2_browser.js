@@ -1,7 +1,9 @@
 spang = {};
 spang.embed = require('./embed_parameter.js').embedParameter;
 spang.request = require('request');
+spang.prefix = require('./prefix.js');
 const version = require('../package.json').version;
+
 spang.getTemplate = (url, callback) => {
   var options = {
     uri: url, 
@@ -21,6 +23,7 @@ spang.getTemplate = (url, callback) => {
   });
 };
 
-//  const shortcutSparql = spang.shortcut({S: 'uniprot:K9Z723', L: 10});
-spang.shortcut = require('./shortcut.js').shortcut
-spang.shortcut = spang.shortcut.bind(null, require('./prefix.js').getPrefixMap());
+spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio');
+
+spang.shortcut = require('./shortcut.js').shortcut;
+spang.shortcut = spang.shortcut.bind(null,spang.prefix.getPrefixMap());

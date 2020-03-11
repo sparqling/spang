@@ -37,7 +37,7 @@ readPrefixFile = (contents, reload=false) => {
 }
 
 prepareInitialPrefix = () => {
-  if(!prefixMap) readPrefixFile(fs.readFileSync(prefixPath, 'utf8'));
+  if(!prefixMap && fs.readFileSync) readPrefixFile(fs.readFileSync(prefixPath, 'utf8'));
 };
 
 getPrefixMap = () => {
