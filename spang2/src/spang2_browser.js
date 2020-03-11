@@ -26,4 +26,12 @@ spang.getTemplate = (url, callback) => {
 spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio');
 
 spang.shortcut = require('./shortcut.js').shortcut;
-spang.shortcut = spang.shortcut.bind(null,spang.prefix.getPrefixMap());
+
+bind_trailing_args = (fn, ...bound_args) =>
+{
+    return function(...args) {
+        return fn(...args, ...bound_args);
+    };
+}
+
+spang.shortcut = bind_trailing_args(spang.shortcut, spang.prefix.getPrefixMap());
