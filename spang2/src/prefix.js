@@ -1,6 +1,6 @@
-parser = require('./parser.js');
-fs = require('fs');
-syncRequest = require('sync-request');
+const parser = require('./parser.js');
+const fs = require('fs');
+const syncRequest = require('sync-request');
 
 var traverse = (o, fn) => {
   for (const i in o) {

@@ -3,6 +3,8 @@ spang.embed = require('./embed_parameter.js').embedParameter;
 spang.request = require('request');
 spang.prefix = require('./prefix.js');
 const version = require('../package.json').version;
+const syncRequest = require('sync-request');
+spang.constructSparql = require('./construct_sparql.js').constructSparql;
 
 spang.getTemplate = (url, callback) => {
   var options = {
@@ -35,3 +37,16 @@ bind_trailing_args = (fn, ...bound_args) =>
 }
 
 spang.shortcut = bind_trailing_args(spang.shortcut, spang.prefix.getPrefixMap());
+
+spang.query = (sparqlTemplate, endpoint, options, callback) => {
+  var sparql, metadata;
+  [sparql, metadata] = spang.constructSparql(sparqlTemplate, options.param);
+  if(!endpoint) {
+    endpoint = metadata.endpoint;
+  }
+  // if (!(/^(http|https):\/\//.test(endpoint))) {
+  //   [endpoint, retrieveByGet] = require('./search_db_name.js').searchDBName(endpoint, syncRequest("GET", url).getBody('utf8'));
+  // }
+  console.log(sparql);
+  require('./query_sparql.js')(endpoint, sparql, options.format, callback);
+};

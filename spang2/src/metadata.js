@@ -18,7 +18,7 @@ exports.retrieveMetadata = (sparql) => {
         }
         else if(dataName == 'input') {
           if(!metadata['input']) metadata['input'] = [];
-          metadata['input'].push(matched[2]);
+          metadata['input'].push(matched[2].split(' ')[0]);
         }
         else if(metadata[dataName]) {
           console.warn(`Warning: metadata @${dataName} duplicates, only the first one will be handled`);

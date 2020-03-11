@@ -1,44 +1,22 @@
 #!/usr/bin/env node
 
-var version = require("../package.json").version;
-
-const acceptHeaderMap = {
-  "xml"      : "application/sparql-results+xml",
-  "json"     : "application/sparql-results+json",
-  "tsv"      : "application/sparql-results+json", // receive as json and format to tsv afterward
-  "text/tsv" : "text/tab-separated-values",
-  "n-triples": "text/plain",
-  "nt"       : "text/plain",
-  "n3"       : "text/rdf+n3",
-  "html"     : "text/html",
-  "bool"     : "text/boolean",
-  "turtle"   : "application/x-turtle",
-  "ttl"      : "application/x-turtle",
-  "rdf/xml"  : "application/rdf+xml",
-  "rdfxml"   : "application/rdf+xml",
-  "rdfjson"  : "application/rdf+json",
-  "rdfbin"   : "application/x-binary-rdf",
-  "rdfbint"  : "application/x-binary-rdf-results-table",
-  "js"       : "application/javascript",
-};
-
 fs = require('fs');
-request = require('request')
-child_process = require('child_process');
-search_db_name = require('./search_db_name');
+
+const version = require("../package.json").version;
+const child_process = require('child_process');
+const search_db_name = require('./search_db_name');
 const prefixModule = require('./prefix.js');
-const searchPrefix = prefixModule.searchPrefix;
-const retrievePrefixes = prefixModule.retrievePrefixes;
-const metadataModule = require('./metadata.js');
 const shortcut = require('./shortcut.js').shortcut;
-embed_parameter = require('./embed_parameter.js');
+const constructSparql = require('./construct_sparql.js').constructSparql;
+const querySparql = require('./query_sparql.js');
+
 
 toString = (resource) => {
   if(resource.type == 'uri') {
-    if(commander.abbreviate) return prefixModule.abbreviateURL(resource.value);
+    if(commander.abbr) return prefixModule.abbreviateURL(resource.value);
     return `<${resource.value}>`;
   } else if(resource.type == 'typed-literal') {
-    if(commander.abbreviate) return `"${resource.value}"^^${prefixModule.abbreviateURL(resource.datatype)}`;
+    if(commander.abbr) return `"${resource.value}"^^${prefixModule.abbreviateURL(resource.datatype)}`;
     return `"${resource.value}"^^<${resource.datatype}>`;
   } else {
     return `"${resource.value}"`;
@@ -47,36 +25,6 @@ toString = (resource) => {
 
 debugPrint = (object) => {
   console.log(JSON.stringify(object, undefined, 2));
-};
-
-querySparql = (endpoint, query, format) => {
-  const accept = acceptHeaderMap[format];
-  var options = {
-    uri: endpoint, 
-    form: {query: query},
-    qs: {query: query},
-    followAllRedirects: true,
-    headers:{ 
-      "User-agent": `spang2/spang2_${version}`, 
-      "Accept": accept
-    }
-  };
-  request.post(options, function(error, response, body){
-    if (!error && response.statusCode == 200) {
-      if(format == 'tsv') {
-        const obj = JSON.parse(body);
-        const vars = obj.head.vars;
-        obj.results.bindings.forEach(b => {
-          console.log(vars.map(v => toString(b[v])).join("\t"));
-        });
-      } else {
-        console.log(body);
-      }
-    } else {
-      console.log('error: '+ response.statusCode);
-      console.log(body);
-    }
-  });
 };
 
 
@@ -93,7 +41,7 @@ var commander = require('commander').version(version)
     .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
     .option('-N, --number', 'shortcut of COUNT query (use alone or with -[SPO])')
     .option('-G, --graph', 'shortcut to search Graph names (use alone or with -[SPO])')
-    .option('-a, --abbreviate', 'abbreviate results using predefined prefixes')
+    .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-q, --show_query', 'show query and quit')
     .option('-L, --limit <LIMIT>', 'LIMIT output (use alone or with -[SPOF])')
     .option('-l, --list_nick_name', 'list up available nicknames and quit')
@@ -135,21 +83,7 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
                              L: commander.limit, N: commander.number, G: commander.graph, F: commander.from}, prefixModule.getPrefixMap());
   metadata = {};
 } else {
-  sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
-  metadata = metadataModule.retrieveMetadata(sparqlTemplate);
-  if(metadata.prefix) {
-    if(/^(http|https):\/\//.test(metadata.prefix))
-      prefixModule.loadPrefixFileByURL(metadata.prefix);
-    else
-      prefixModule.loadPrefixFile(metadata.prefix);
-  }
-  if(metadata.param) parameterMap = { ...metadata.param, ...parameterMap };
-  if(metadata.input) {
-    parameterMap['INPUT'] = metadata.input.map((i) => `( ${i} )`).join(' ');
-  }
-  sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
-  prefixes = retrievePrefixes(sparqlTemplate);
-  sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n" + sparqlTemplate;
+  [sparqlTemplate, metadata] = constructSparql(fs.readFileSync(sparqlTemplate, 'utf8'), parameterMap);
 }
 
 if(commander.show_query) {
@@ -181,5 +115,20 @@ else if(localMode) {
       process.exit(-1);
     }
   }
-  querySparql(db, sparqlTemplate, commander.format);
+  querySparql(db, sparqlTemplate, commander.format, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      if(commander.format == 'tsv') {
+        const obj = JSON.parse(body);
+        const vars = obj.head.vars;
+        obj.results.bindings.forEach(b => {
+          console.log(vars.map(v => toString(b[v])).join("\t"));
+        });
+      } else {
+        console.log(body);
+      }
+    } else {
+      console.log('error: '+ response.statusCode);
+      console.log(body);
+    }
+  });
 }
