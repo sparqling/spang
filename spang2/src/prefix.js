@@ -1,5 +1,6 @@
 parser = require('./parser.js');
 fs = require('fs');
+syncRequest = require('sync-request');
 
 var traverse = (o, fn) => {
   for (const i in o) {
@@ -15,11 +16,13 @@ var prefixMap;
 var urlToPrefix;
 var orderedPrefixURLs;
 
-readPrefixFile = () => {
+
+readPrefixFile = (contents, reload=false) => {
   // TODO: error handling
-  var contents = fs.readFileSync(prefixPath, 'utf8');
-  prefixMap = {};
-  urlToPrefix = {};
+  if(reload || !prefixMap) {
+    prefixMap = {};
+    urlToPrefix = {};
+  }
   contents.split("\n").forEach(line => {
     tokens = line.split(/\s+/);
     if(tokens.length == 3 && tokens[0] == 'PREFIX' &&
@@ -33,18 +36,33 @@ readPrefixFile = () => {
   });
 }
 
+prepareInitialPrefix = () => {
+  if(!prefixMap) readPrefixFile(fs.readFileSync(prefixPath, 'utf8'));
+};
+
 getPrefixMap = () => {
   if(prefixMap || fs.existsSync(prefixPath)) {
-    if(!prefixMap) readPrefixFile();
+    prepareInitialPrefix();
     return prefixMap;
   }
   return {};
 }
 
 searchPrefixByURL = (url) => {
-  getPrefixMap(); // prepare ulrToPrefix
+  prepareInitialPrefix();
   return urlToPrefix[url];
 };
+
+exports.loadPrefixFile = (filePath) => {
+  prepareInitialPrefix();
+  prefixPath = filePath;
+  readPrefixFile(fs.readFileSync(prefixPath, 'utf8'));
+}
+
+exports.loadPrefixFileByURL = (url) => {
+  prepareInitialPrefix();
+  readPrefixFile(syncRequest("GET", url).getBody('utf8'));
+}
 
 exports.searchPrefix = (prefixName) => {
   return getPrefixMap()[prefixName];
@@ -66,7 +84,7 @@ exports.getPrefixMap = getPrefixMap;
 
 exports.getOrderedPrefixURLs = getOrderedPrefixURLs = () => {
   if(!orderedPrefixURLs) {
-    getPrefixMap(); // prepare ulrToPrefix
+    prepareInitialPrefix();
     orderedPrefixURLs = Object.keys(urlToPrefix).sort((a, b) => -(a.length - b.length));
   }
   return orderedPrefixURLs;

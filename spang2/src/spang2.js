@@ -137,6 +137,12 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
 } else {
   sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
+  if(metadata.prefix) {
+    if(/^(http|https):\/\//.test(metadata.prefix))
+      prefixModule.loadPrefixFileByURL(metadata.prefix);
+    else
+      prefixModule.loadPrefixFile(metadata.prefix);
+  }
   if(metadata.param) parameterMap = { ...metadata.param, ...parameterMap };
   sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
   prefixes = retrievePrefixes(sparqlTemplate);
