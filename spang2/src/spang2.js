@@ -129,7 +129,6 @@ if(commander.param) {
   });
 }
 
-
 if(commander.subject || commander.predicate || commander.object || commander.limit ||
    commander.number || commander.graph || commander.from) {
   sparqlTemplate = shortcut({S: commander.subject, P: commander.predicate, O: commander.object,
@@ -138,7 +137,7 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
 } else {
   sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8')
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
-  if(metadata.param) parameterMap = { ...parameterMap, ...metadata.param };
+  if(metadata.param) parameterMap = { ...metadata.param, ...parameterMap };
   sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
   prefixes = retrievePrefixes(sparqlTemplate);
   sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n" + sparqlTemplate;
