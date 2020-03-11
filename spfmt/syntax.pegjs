@@ -1114,10 +1114,10 @@ InlineDataOneVar "[63] InlineDataOneVar"
     var result =  {
       token: 'inlineData',
       location: location(),
-        values: [{
-            'var': v,
-            'value': d
-        }]
+      values: [{
+        'var': v,
+        'value': d
+      }]
     };
 
     return result;
@@ -1129,14 +1129,18 @@ InlineDataOneVar "[63] InlineDataOneVar"
 */
 
 InlineDataFull "[64] InlineDataFull"
-    = WS* vars:( NIL/'(' WS* Var* WS* ')') WS* '{' WS* vals:( WS* '(' WS* DataBlockValue* WS* ')' WS* / NIL)* WS* '}' {
+    = WS*  NIL/'(' WS* vars:(Var*) WS* ')' WS* '{' WS* vals:( DataBlockTuple / NIL)* WS* '}' {
     var result = {
       token: 'inlineData',
       location: location(),
-        values: [],
-        todo: true
+      values: vars.map((v, i) => { return  { 'var': v, 'value': vals[i] }; })
     };
     return result;
+}
+
+DataBlockTuple = '(' WS* val:(DataBlockValue*) WS* ')' WS*
+{
+    return val;
 }
 
 /*
@@ -1144,7 +1148,7 @@ InlineDataFull "[64] InlineDataFull"
 */
 
 DataBlockValue "[65] DataBlockValue"
-    = WS* v:(IRI_REF / RDFLiteral / NumericLiteral / BooleanLiteral / 'UNDEF') WS* {
+    = WS* v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 'UNDEF') WS* {
     return v;
 }
 

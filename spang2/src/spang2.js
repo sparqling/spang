@@ -144,6 +144,9 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
       prefixModule.loadPrefixFile(metadata.prefix);
   }
   if(metadata.param) parameterMap = { ...metadata.param, ...parameterMap };
+  if(metadata.input) {
+    parameterMap['INPUT'] = metadata.input.map((i) => `( ${i} )`).join(' ');
+  }
   sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
   prefixes = retrievePrefixes(sparqlTemplate);
   sparqlTemplate = prefixes.map(pre => searchPrefix(pre)).join("\n") + "\n" + sparqlTemplate;

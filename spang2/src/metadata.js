@@ -6,19 +6,24 @@ exports.retrieveMetadata = (sparql) => {
       line = line.substring(1).trim();
       const matched = line.match(/^@(\w+)\s+(.+)$/);
       if(matched) {
-        if(matched[1] == 'param') {
+        const dataName = matched[1];
+        if(dataName == 'param') {
           if(!metadata['param']) metadata['param'] = {};
           const paramMatched = matched[2].match(/^\s*(\w+)\s*=\s*(.+)$/);
           if(paramMatched) {
             metadata['param'][paramMatched[1]] = paramMatched[2]
           } else {
-            console.warn(`Warning: metadata @${matched[1]} must be in the form of <name>=<value>`);
+            console.warn(`Warning: metadata @${dataName} must be in the form of <name>=<value>`);
           }
         }
-        else if(metadata[matched[1]]) {
-          console.warn(`Warning: metadata @${matched[1]} duplicates, only the first one will be handled`);
+        else if(dataName == 'input') {
+          if(!metadata['input']) metadata['input'] = [];
+          metadata['input'].push(matched[2]);
+        }
+        else if(metadata[dataName]) {
+          console.warn(`Warning: metadata @${dataName} duplicates, only the first one will be handled`);
         } else {
-          metadata[matched[1]] = matched[2];
+          metadata[dataName] = matched[2];
         }
       }
     }
