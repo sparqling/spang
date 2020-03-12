@@ -1,0 +1,8 @@
+# @endpoint test
+# @input taxid:2 taxon:Taxon
+
+SELECT ?taxid ?label
+WHERE {
+  VALUES (?taxid) { {{INPUT}} }
+  ?taxid rdfs:label ?label .
+}
