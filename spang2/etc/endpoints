@@ -11,6 +11,9 @@ cyano http://genome.microbedb.jp/sparql/
 nibb http://sparql.nibb.ac.jp/sparql
 mbgd http://sparql.nibb.ac.jp/sparql
 disgenet http://rdf.disgenet.org/sparql/
+orth https://orth.dbcls.jp/togo/sparql
+horth https://orth.dbcls.jp/horth/sparql
+horthdev https://orth.dbcls.jp/horthdev/sparql
 default https://spang.dbcls.jp/sparql
 spang https://spang.dbcls.jp/sparql
 test https://spang.dbcls.jp/sparql-test
