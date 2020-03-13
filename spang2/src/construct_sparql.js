@@ -4,7 +4,8 @@ const retrievePrefixes = prefixModule.retrievePrefixes;
 const searchPrefix = prefixModule.searchPrefix;
 const embed_parameter = require('./embed_parameter.js');
 const fs = require('fs');
-const buffer = fs.readFileSync(process.stdin.fd, "utf8");
+
+const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
 
 exports.constructSparql = (sparqlTemplate, parameterMap) =>
 {
@@ -16,8 +17,8 @@ exports.constructSparql = (sparqlTemplate, parameterMap) =>
       prefixModule.loadPrefixFile(metadata.prefix);
   }
   if(metadata.param) parameterMap = { ...metadata.param, ...parameterMap };
-  if(buffer) {
-    parameterMap['INPUT'] = buffer.split("\n").filter(line => line.length > 0).map(line => '(' + line + ')').join(' ');
+  if(input) {
+    parameterMap['INPUT'] = input.split("\n").filter(line => line.length > 0).map(line => '(' + line + ')').join(' ');
   }
   else if(metadata.input) {
     parameterMap['INPUT'] = '(' + metadata.input.join(' ') + ')';
