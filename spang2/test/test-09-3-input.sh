@@ -1,2 +1,2 @@
 #!/bin/sh
-cat test9-3-input | spang2 test/test9-1-input.rq
+cat test/test-09-3-input | spang2 test/test-09-3-input.rq
