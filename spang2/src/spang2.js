@@ -83,17 +83,15 @@ if(commander.list_nick_name) {
   process.exit(0);
 }
 
-if(commander.args.length < 1 && !dbMap['default']) {
+if(commander.args.length < 1) {
   if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
-    console.log('Any shortcut or template is required.');
+    console.log('Shortcut or template is required.');
     commander.help();
-  } else if(!commander.endpoint) {
+  } else if(!commander.endpoint && !dbMap['default']) {
     console.log('Endpoint is required.');
     commander.help();
   }
 }
-
-
 
 if(commander.param) {
   params = commander.param.split(',');
