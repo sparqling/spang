@@ -25,7 +25,7 @@ spang.getTemplate = (url, callback) => {
   });
 };
 
-spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio');
+spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/sparql-utils/master/spang2/etc/prefix');
 
 spang.shortcut = require('./shortcut.js').shortcut;
 

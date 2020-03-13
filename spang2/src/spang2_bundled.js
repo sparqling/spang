@@ -85537,7 +85537,7 @@ exports.constructSparql = (sparqlTemplate, parameterMap) =>
   }
   if(metadata.param) parameterMap = { ...metadata.param, ...parameterMap };
   if(metadata.input) {
-    parameterMap['INPUT'] = metadata.input.map((i) => `( ${i} )`).join(' ');
+    parameterMap['INPUT'] = '(' + metadata.input.join(' ') + ')';
   }
   sparqlTemplate = embed_parameter.embedParameter(sparqlTemplate, parameterMap);
   prefixes = retrievePrefixes(sparqlTemplate);
@@ -85616,7 +85616,7 @@ exports.retrieveMetadata = (sparql) => {
         }
         else if(dataName == 'input') {
           if(!metadata['input']) metadata['input'] = [];
-          metadata['input'].push(matched[2]);
+          metadata['input'].push(matched[2].split(' ')[0]);
         }
         else if(metadata[dataName]) {
           console.warn(`Warning: metadata @${dataName} duplicates, only the first one will be handled`);
@@ -105536,7 +105536,7 @@ spang.getTemplate = (url, callback) => {
   });
 };
 
-spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio');
+spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/sparql-utils/master/spang2/etc/prefix');
 
 spang.shortcut = require('./shortcut.js').shortcut;
 
