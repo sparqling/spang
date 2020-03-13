@@ -53,10 +53,10 @@ var commander = require('commander').version(version)
 
 commander.parse(process.argv);
 
+const dbMap = search_db_name.listup();
 
 if(commander.list_nick_name) {
   console.log('SPARQL endpoints');
-  const dbMap = search_db_name.listup();
   const maxLen = Object.keys(dbMap).map(key => key.length).reduce((a, b) => Math.max(a, b));
   for(const entry in dbMap) {
     console.log(` ${entry.padEnd(maxLen, ' ')} ${dbMap[entry].url}`);
@@ -64,10 +64,16 @@ if(commander.list_nick_name) {
   process.exit(0);
 }
 
-if(commander.args.length < 1 &&
-   (!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit || !commander.endpoint)) {
-  commander.help();
+if(commander.args.length < 1 && !dbMap['default']) {
+  if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
+    console.log('Any shortcut or template is required.');
+    commander.help();
+  } else if(!commander.endpoint) {
+    console.log('Endpoint is required.');
+    commander.help();
+  }
 }
+
 
 
 if(commander.param) {
@@ -103,8 +109,11 @@ else if(localMode) {
     db = commander.endpoint;
   } else if(metadata.endpoint) {
     db = metadata.endpoint;
+  } else if(dbMap['default'])
+  {
+    db = dbMap['default'].url;
   } else {
-    console.log('endpoint is required');
+    console.log('Endpoint is required');
     process.exit(-1);
   }
 
@@ -133,7 +142,7 @@ else if(localMode) {
         console.log(body);
       }
     } else {
-      console.log('error: '+ response.statusCode);
+      console.log('Error: '+ response.statusCode);
       console.log(body);
     }
   });
