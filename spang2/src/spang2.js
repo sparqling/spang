@@ -9,6 +9,7 @@ const prefixModule = require('./prefix.js');
 const shortcut = require('./shortcut.js').shortcut;
 const constructSparql = require('./construct_sparql.js').constructSparql;
 const querySparql = require('./query_sparql.js');
+const syncRequest = require('sync-request');
 
 
 toString = (resource) => {
@@ -83,7 +84,12 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
                              L: commander.limit, N: commander.number, G: commander.graph, F: commander.from}, prefixModule.getPrefixMap());
   metadata = {};
 } else {
-  [sparqlTemplate, metadata] = constructSparql(fs.readFileSync(sparqlTemplate, 'utf8'), parameterMap);
+  if(/^(http|https):\/\//.test(sparqlTemplate)) {
+    sparqlTemplate = syncRequest("GET", sparqlTemplate).getBody("utf8");
+  } else {
+    sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8');
+  }
+  [sparqlTemplate, metadata] = constructSparql(sparqlTemplate, parameterMap);
 }
 
 if(commander.show_query) {
