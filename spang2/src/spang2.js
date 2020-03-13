@@ -121,7 +121,7 @@ else if(localMode) {
       process.exit(-1);
     }
   }
-  querySparql(db, sparqlTemplate, commander.format, (error, response, body) => {
+  querySparql(db, sparqlTemplate, commander.format, retrieveByGet, (error, response, body) => {
     if (!error && response.statusCode == 200) {
       if(commander.format == 'tsv') {
         const obj = JSON.parse(body);

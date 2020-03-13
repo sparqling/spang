@@ -22,7 +22,7 @@ const acceptHeaderMap = {
 };
 
 
-module.exports = (endpoint, query, format, callback) => {
+module.exports = (endpoint, query, format, byGet, callback) => {
   const accept = acceptHeaderMap[format];
   var options = {
     uri: endpoint, 
@@ -34,5 +34,9 @@ module.exports = (endpoint, query, format, callback) => {
       "Accept": accept
     }
   };
-  request.post(options, callback);
+  if(byGet) {
+    request.get(options, callback);
+  } else {
+    request.post(options, callback);
+  }
 };
