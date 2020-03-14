@@ -85,7 +85,6 @@ if(commander.list_nick_name) {
 
 if(commander.args.length < 1) {
   if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
-    console.log('Shortcut or template is required.');
     commander.help();
   } else if(!commander.endpoint && !dbMap['default']) {
     console.log('Endpoint is required.');
