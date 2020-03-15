@@ -34,7 +34,7 @@ var parameterMap = {};
 var retrieveByGet = false;
 
 var commander = require('commander').version(version)
-    .option('-e, --endpoint <ENDPOINT>', 'target endpoint')
+    .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint')
     .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-a, --abbr', 'abbreviate results using predefined prefixes')
@@ -85,12 +85,13 @@ if(commander.list_nick_name) {
 
 if(commander.args.length < 1) {
   if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
-    console.log('Query is required');
-    process.exit(-1);
-    // commander.help();
+    console.log(`SPANG v${version}: Specify a SPARQL query (using template or shortcut).\n`);
+    // process.exit(-1);
+    commander.help();
   } else if(!commander.endpoint && !dbMap['default']) {
-    console.log('Endpoint is required');
-    process.exit(-1);
+    console.log(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
+    // process.exit(-1);
+    commander.help();
   }
 }
 
