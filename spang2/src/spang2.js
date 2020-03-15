@@ -85,9 +85,11 @@ if(commander.list_nick_name) {
 
 if(commander.args.length < 1) {
   if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
-    commander.help();
+    console.log('Query is required');
+    process.exit(-1);
+    // commander.help();
   } else if(!commander.endpoint && !dbMap['default']) {
-    console.log('ERROR: Endpoint is required.');
+    console.log('Endpoint is required');
     process.exit(-1);
   }
 }
