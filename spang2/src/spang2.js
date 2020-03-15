@@ -86,11 +86,9 @@ if(commander.list_nick_name) {
 if(commander.args.length < 1) {
   if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
     console.log(`SPANG v${version}: Specify a SPARQL query (using template or shortcut).\n`);
-    // process.exit(-1);
     commander.help();
   } else if(!commander.endpoint && !dbMap['default']) {
     console.log(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
-    // process.exit(-1);
     commander.help();
   }
 }
