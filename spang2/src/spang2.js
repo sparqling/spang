@@ -117,36 +117,27 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
 
 if(commander.show_query) {
   console.log(sparqlTemplate);
-} else {
-  if(commander.endpoint) {
-    db = commander.endpoint;
-  } else if(metadata.endpoint) {
-    db = metadata.endpoint;
-  } else if(dbMap['default']) {
-    db = dbMap['default'].url;
-  } else {
-    console.log('Endpoint is required');
-    process.exit(-1);
-  }
+  process.exit(0);
+}
 
-  if(/^\w/.test(db)) {
-    if (!(/^(http|https):\/\//.test(db))) {
-      if (!dbMap[db]) {
-        console.log(`${db}: no such endpoint`);
-        process.exit(-1);
-      }
-      [db, retrieveByGet] = search_db_name.searchDBName(db);
-    }
-  } else {
-    localMode = true;
-    if (db == '-') {
-      // TODO: db should be a temporary file name?
-      db = fs.readFileSync(process.stdin.fd, "utf8");
-    } else if(!fs.existsSync(db)) {
-      console.log(`${db}: no such file`);
+if(commander.endpoint) {
+  db = commander.endpoint;
+} else if(metadata.endpoint) {
+  db = metadata.endpoint;
+} else if(dbMap['default']) {
+  db = dbMap['default'].url;
+} else {
+  console.log('Endpoint is required');
+  process.exit(-1);
+}
+
+if(/^\w/.test(db)) {
+  if (!(/^(http|https):\/\//.test(db))) {
+    if (!dbMap[db]) {
+      console.log(`${db}: no such endpoint`);
       process.exit(-1);
     }
-    console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
+    [db, retrieveByGet] = search_db_name.searchDBName(db);
   }
   querySparql(db, sparqlTemplate, commander.format, retrieveByGet, (error, response, body) => {
     if (!error && response.statusCode == 200) {
@@ -164,4 +155,15 @@ if(commander.show_query) {
       console.log(body);
     }
   });
+} else {
+  // localMode = true;
+  if (db == '-') {
+    // TODO: db should be a temporary file name?
+    // db = fs.readFileSync(process.stdin.fd, "utf8");
+  } else if(!fs.existsSync(db)) {
+    console.log(`${db}: no such file`);
+    process.exit(-1);
+  }
+  // TODO: use Jena or other JS implementation?
+  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
 }
