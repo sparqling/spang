@@ -34,19 +34,19 @@ var parameterMap = {};
 var retrieveByGet = false;
 
 var commander = require('commander').version(version)
-    .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-e, --endpoint <ENDPOINT>', 'target endpoint')
+    .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
+    .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
+    .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
     .option('-P, --predicate <PREDICATE>', 'shortcut to specify predicate')
     .option('-O, --object <OBJECT>', 'shortcut to specify object')
+    .option('-L, --limit <LIMIT>', 'LIMIT output (use alone or with -[SPOF])')
     .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
     .option('-N, --number', 'shortcut of COUNT query (use alone or with -[SPO])')
     .option('-G, --graph', 'shortcut to search Graph names (use alone or with -[SPO])')
-    .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-q, --show_query', 'show query and quit')
-    .option('-L, --limit <LIMIT>', 'LIMIT output (use alone or with -[SPOF])')
-    .option('-l, --list_nick_name', 'list up available nicknames and quit')
-    .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
+    .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
     .arguments('<SPARQL_TEMPLATE>').action((s) => {
       sparqlTemplate = s;
     });
