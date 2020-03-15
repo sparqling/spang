@@ -14,7 +14,7 @@ readDBMap = (src=null) => {
     if(tokens.length > 1 && !/^ *#/.test(line)) {
       dbMap[tokens[0]] = {
         url: tokens[1],
-        byGet: tokens.length > 2 && tokens[2] == 'GET'
+        byGet: tokens.length <= 2 || tokens[2] != 'POST'
       };
     }
   });

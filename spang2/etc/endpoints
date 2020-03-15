@@ -1,6 +1,6 @@
 default https://spang.dbcls.jp/sparql
 dbpedia http://dbpedia.org/sparql
-wikidata http://query.wikidata.org/sparql GET
+wikidata http://query.wikidata.org/sparql
 uniprot https://sparql.uniprot.org
 allie http://data.allie.dbcls.jp/sparql
 atlas http://www.ebi.ac.uk/rdf/services/atlas/sparql

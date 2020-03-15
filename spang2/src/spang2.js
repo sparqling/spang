@@ -31,7 +31,7 @@ debugPrint = (object) => {
 
 var db, sparqlTemplate, localMode;
 var parameterMap = {};
-var retrieveByGet = false;
+var retrieveByGet = true;
 
 var commander = require('commander').version(version)
     .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (in nickname or in URL)')
@@ -46,6 +46,7 @@ var commander = require('commander').version(version)
     .option('-N, --number', 'shortcut of COUNT query (use alone or with -[SPO])')
     .option('-G, --graph', 'shortcut to search Graph names (use alone or with -[SPO])')
     .option('-q, --show_query', 'show query and quit')
+    .option('-m, --method <METHOD>', 'GET or POST', 'GET')
     .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
     .arguments('<SPARQL_TEMPLATE>').action((s) => {
       sparqlTemplate = s;
@@ -138,6 +139,11 @@ if(/^\w/.test(db)) {
       process.exit(-1);
     }
     [db, retrieveByGet] = search_db_name.searchDBName(db);
+  }
+  if (/^get$/i.test(commander.method)) {
+    retrieveByGet = true
+  } else if (/^post$/i.test(commander.method)) {
+    retrieveByGet = false
   }
   querySparql(db, sparqlTemplate, commander.format, retrieveByGet, (error, response, body) => {
     if (!error && response.statusCode == 200) {
