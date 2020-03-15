@@ -117,9 +117,6 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
 
 if(commander.show_query) {
   console.log(sparqlTemplate);
-}
-else if(localMode) {
-  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
 } else {
   if(commander.endpoint) {
     db = commander.endpoint;
@@ -143,11 +140,13 @@ else if(localMode) {
   } else {
     localMode = true;
     if (db == '-') {
+      // TODO: db should be a temporary file name?
       db = fs.readFileSync(process.stdin.fd, "utf8");
     } else if(!fs.existsSync(db)) {
       console.log(`${db}: no such file`);
       process.exit(-1);
     }
+    console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
   }
   querySparql(db, sparqlTemplate, commander.format, retrieveByGet, (error, response, body) => {
     if (!error && response.statusCode == 200) {
