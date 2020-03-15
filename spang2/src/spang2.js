@@ -120,13 +120,11 @@ if(commander.show_query) {
 else if(localMode) {
   console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
 } else {
-  if(commander.endpoint)
-  {
+  if(commander.endpoint) {
     db = commander.endpoint;
   } else if(metadata.endpoint) {
     db = metadata.endpoint;
-  } else if(dbMap['default'])
-  {
+  } else if(dbMap['default']) {
     db = dbMap['default'].url;
   } else {
     console.log('Endpoint is required');
