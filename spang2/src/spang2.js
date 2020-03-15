@@ -135,6 +135,10 @@ else if(localMode) {
 
   if(/^\w/.test(db)) {
     if (!(/^(http|https):\/\//.test(db))) {
+      if (!dbMap[db]) {
+        console.log(`${db}: no such endpint`);
+        process.exit(-1);
+      }
       [db, retrieveByGet] = search_db_name.searchDBName(db);
     }
   } else {
