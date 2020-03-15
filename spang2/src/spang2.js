@@ -34,7 +34,7 @@ var parameterMap = {};
 var retrieveByGet = false;
 
 var commander = require('commander').version(version)
-    .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint')
+    .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (in nickname or in URL)')
     .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-a, --abbr', 'abbreviate results using predefined prefixes')
@@ -85,7 +85,7 @@ if(commander.list_nick_name) {
 
 if(commander.args.length < 1) {
   if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
-    console.log(`SPANG v${version}: Specify a SPARQL query (using template or shortcut).\n`);
+    console.log(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
     commander.help();
   } else if(!commander.endpoint && !dbMap['default']) {
     console.log(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
@@ -135,7 +135,7 @@ else if(localMode) {
   if(/^\w/.test(db)) {
     if (!(/^(http|https):\/\//.test(db))) {
       if (!dbMap[db]) {
-        console.log(`${db}: no such endpint`);
+        console.log(`${db}: no such endpoint`);
         process.exit(-1);
       }
       [db, retrieveByGet] = search_db_name.searchDBName(db);
