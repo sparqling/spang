@@ -87,8 +87,8 @@ if(commander.args.length < 1) {
   if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
     commander.help();
   } else if(!commander.endpoint && !dbMap['default']) {
-    console.log('Endpoint is required.');
-    commander.help();
+    console.log('ERROR: Endpoint is required.');
+    process.exit(-1);
   }
 }
 
