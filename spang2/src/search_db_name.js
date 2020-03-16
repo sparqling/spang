@@ -1,15 +1,10 @@
 fs = require('fs');
 
-var dbMapPath = `${__dirname}/../etc/endpoints`;
+var defaultPaths = [`${__dirname}/../etc/endpoints`, `${require('os').homedir()}/.spang/endpoints`]
 var dbMap;
 
-readDBMap = (src=null) => {
-  // TODO: error handling
-  dbMap = {};
-  if(!src && fs.existsSync(dbMapPath)) {
-    src = fs.readFileSync(dbMapPath, 'utf8');
-  }
-  src.split("\n").forEach(line => {
+parseDBMap = (text) => {
+  text.split("\n").forEach(line => {
     tokens = line.split(/\s+/);
     if(tokens.length > 1) {
       dbMap[tokens[0]] = {
@@ -17,8 +12,21 @@ readDBMap = (src=null) => {
         byGet: tokens.length > 2 && tokens[2] == 'get'
       };
     }
-  });
-}
+  });  
+};
+
+readDBMap = (src=null) => {
+  dbMap = {};
+  if(!src) {
+    defaultPaths.forEach((dbPath) => {
+      if(fs.existsSync(dbPath)) {
+        parseDBMap(fs.readFileSync(dbPath, 'utf8'));
+      }
+    });
+  } else {
+    parseDBMap(src);
+  }
+};
 
 exports.searchDBName = (dbName, src=null) => {
   if(!dbMap || src) readDBMap(src);

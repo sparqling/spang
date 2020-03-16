@@ -11,14 +11,13 @@ var traverse = (o, fn) => {
   }
 }
 
-var prefixPath = `${__dirname}/../etc/prefix`;
+var defaultPrefixPaths = [`${__dirname}/../etc/prefix`, `${require('os').homedir()}/.spang/prefix`]
 var prefixMap;
 var urlToPrefix;
 var orderedPrefixURLs;
 
 
 readPrefixFile = (contents, reload=false) => {
-  // TODO: error handling
   if(reload || !prefixMap) {
     prefixMap = {};
     urlToPrefix = {};
@@ -37,12 +36,18 @@ readPrefixFile = (contents, reload=false) => {
 }
 
 prepareInitialPrefix = () => {
-  if(!prefixMap && fs.readFileSync) readPrefixFile(fs.readFileSync(prefixPath, 'utf8'));
+  if(!prefixMap && fs.readFileSync) {
+    defaultPrefixPaths.forEach(prefixPath => {
+      if(fs.existsSync(prefixPath)) {
+        readPrefixFile(fs.readFileSync(prefixPath, 'utf8'));
+      }
+    });
+  }
 };
 
 getPrefixMap = () => {
-  if(prefixMap || fs.existsSync(prefixPath)) {
-    prepareInitialPrefix();
+  prepareInitialPrefix();
+  if(prefixMap) {
     return prefixMap;
   }
   return {};
@@ -55,8 +60,7 @@ searchPrefixByURL = (url) => {
 
 exports.loadPrefixFile = (filePath) => {
   prepareInitialPrefix();
-  prefixPath = filePath;
-  readPrefixFile(fs.readFileSync(prefixPath, 'utf8'));
+  readPrefixFile(fs.readFileSync(filePath, 'utf8'));
 }
 
 exports.loadPrefixFileByURL = (url) => {
