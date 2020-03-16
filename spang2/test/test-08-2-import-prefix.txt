@@ -1,67 +1,67 @@
-<http://identifiers.org/ncbigene/2247>	"0.3"^^xsd:double	"fibroblast growth factor 2 [ncbigene:2247]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
-<http://identifiers.org/ncbigene/2840>	"0.3"^^xsd:double	"G protein-coupled receptor 17 [ncbigene:2840]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
-<http://identifiers.org/ncbigene/5327>	"0.3"^^xsd:double	"plasminogen activator, tissue type [ncbigene:5327]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
-<http://identifiers.org/ncbigene/1536>	"0.3"^^xsd:double	"cytochrome b-245 beta chain [ncbigene:1536]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
-<http://identifiers.org/ncbigene/23411>	"0.3"^^xsd:double	"sirtuin 1 [ncbigene:23411]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
-<http://identifiers.org/ncbigene/10763>	"0.2"^^xsd:double	"nestin [ncbigene:10763]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/6916>	"0.2"^^xsd:double	"thromboxane A synthase 1 [ncbigene:6916]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/8678>	"0.2"^^xsd:double	"beclin 1 [ncbigene:8678]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/1508>	"0.2"^^xsd:double	"cathepsin B [ncbigene:1508]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/3553>	"0.2"^^xsd:double	"interleukin 1 beta [ncbigene:3553]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/3481>	"0.2"^^xsd:double	"insulin like growth factor 2 [ncbigene:3481]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/9370>	"0.2"^^xsd:double	"adiponectin, C1Q and collagen domain containing [ncbigene:9370]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/199>	"0.2"^^xsd:double	"allograft inflammatory factor 1 [ncbigene:199]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/4192>	"0.2"^^xsd:double	"midkine [ncbigene:4192]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/8505>	"0.2"^^xsd:double	"poly(ADP-ribose) glycohydrolase [ncbigene:8505]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/23394>	"0.2"^^xsd:double	"activity dependent neuroprotector homeobox [ncbigene:23394]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/4440>	"0.2"^^xsd:double	"musashi RNA binding protein 1 [ncbigene:4440]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/3176>	"0.2"^^xsd:double	"histamine N-methyltransferase [ncbigene:3176]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/3082>	"0.2"^^xsd:double	"hepatocyte growth factor [ncbigene:3082]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/5155>	"0.2"^^xsd:double	"platelet derived growth factor subunit B [ncbigene:5155]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/132>	"0.2"^^xsd:double	"adenosine kinase [ncbigene:132]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
-<http://identifiers.org/ncbigene/1636>	"0.03"^^xsd:double	"angiotensin I converting enzyme [ncbigene:1636]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/7422>	"0.02"^^xsd:double	"vascular endothelial growth factor A [ncbigene:7422]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/185>	"0.02"^^xsd:double	"angiotensin II receptor type 1 [ncbigene:185]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/3569>	"0.02"^^xsd:double	"interleukin 6 [ncbigene:3569]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/1401>	"0.02"^^xsd:double	"C-reactive protein [ncbigene:1401]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/22908>	"0.02"^^xsd:double	"SAC1 like phosphatidylinositide phosphatase [ncbigene:22908]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/7157>	"0.02"^^xsd:double	"tumor protein p53 [ncbigene:7157]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/4846>	"0.02"^^xsd:double	"nitric oxide synthase 3 [ncbigene:4846]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/3569>	"0.02"^^xsd:double	"interleukin 6 [ncbigene:3569]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
-<http://identifiers.org/ncbigene/1401>	"0.02"^^xsd:double	"C-reactive protein [ncbigene:1401]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
-<http://identifiers.org/ncbigene/4846>	"0.02"^^xsd:double	"nitric oxide synthase 3 [ncbigene:4846]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
-<http://identifiers.org/ncbigene/1400>	"0.01"^^xsd:double	"collapsin response mediator protein 1 [ncbigene:1400]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/7124>	"0.01"^^xsd:double	"tumor necrosis factor [ncbigene:7124]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/3077>	"0.01"^^xsd:double	"homeostatic iron regulator [ncbigene:3077]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/4353>	"0.01"^^xsd:double	"myeloperoxidase [ncbigene:4353]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/10580>	"0.01"^^xsd:double	"sorbin and SH3 domain containing 1 [ncbigene:10580]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/4023>	"0.01"^^xsd:double	"lipoprotein lipase [ncbigene:4023]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/50604>	"0.01"^^xsd:double	"interleukin 20 [ncbigene:50604]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/1535>	"0.01"^^xsd:double	"cytochrome b-245 alpha chain [ncbigene:1535]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/183>	"0.01"^^xsd:double	"angiotensinogen [ncbigene:183]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/3456>	"0.01"^^xsd:double	"interferon beta 1 [ncbigene:3456]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/1524>	"0.01"^^xsd:double	"C-X3-C motif chemokine receptor 1 [ncbigene:1524]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/7056>	"0.01"^^xsd:double	"thrombomodulin [ncbigene:7056]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/1116>	"0.01"^^xsd:double	"chitinase 3 like 1 [ncbigene:1116]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/23604>	"0.01"^^xsd:double	"death associated protein kinase 2 [ncbigene:23604]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/27190>	"0.01"^^xsd:double	"interleukin 17B [ncbigene:27190]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/5172>	"0.01"^^xsd:double	"solute carrier family 26 member 4 [ncbigene:5172]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/2668>	"0.01"^^xsd:double	"glial cell derived neurotrophic factor [ncbigene:2668]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/10059>	"0.01"^^xsd:double	"dynamin 1 like [ncbigene:10059]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/7402>	"0.01"^^xsd:double	"utrophin [ncbigene:7402]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/5583>	"0.01"^^xsd:double	"protein kinase C eta [ncbigene:5583]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/574501>	"0.01"^^xsd:double	"microRNA 499a [ncbigene:574501]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/596>	"0.01"^^xsd:double	"BCL2, apoptosis regulator [ncbigene:596]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/8562>	"0.01"^^xsd:double	"density regulated re-initiation and release factor [ncbigene:8562]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/5972>	"0.01"^^xsd:double	"renin [ncbigene:5972]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/2153>	"0.01"^^xsd:double	"coagulation factor V [ncbigene:2153]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/6573>	"0.01"^^xsd:double	"solute carrier family 19 member 1 [ncbigene:6573]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/10205>	"0.01"^^xsd:double	"myelin protein zero like 2 [ncbigene:10205]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/335>	"0.01"^^xsd:double	"apolipoprotein A1 [ncbigene:335]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/187>	"0.01"^^xsd:double	"apelin receptor [ncbigene:187]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/1511>	"0.01"^^xsd:double	"cathepsin G [ncbigene:1511]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
-<http://identifiers.org/ncbigene/4353>	"0.01"^^xsd:double	"myeloperoxidase [ncbigene:4353]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
-<http://identifiers.org/ncbigene/958>	"0.01"^^xsd:double	"CD40 molecule [ncbigene:958]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
-<http://identifiers.org/ncbigene/5583>	"0.01"^^xsd:double	"protein kinase C eta [ncbigene:5583]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
-<http://identifiers.org/ncbigene/2153>	"0.01"^^xsd:double	"coagulation factor V [ncbigene:2153]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
-<http://identifiers.org/ncbigene/187>	"0.01"^^xsd:double	"apelin receptor [ncbigene:187]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
+ncbigene:2247	"0.3"^^xsd:double	"fibroblast growth factor 2 [ncbigene:2247]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
+ncbigene:2840	"0.3"^^xsd:double	"G protein-coupled receptor 17 [ncbigene:2840]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
+ncbigene:5327	"0.3"^^xsd:double	"plasminogen activator, tissue type [ncbigene:5327]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
+ncbigene:1536	"0.3"^^xsd:double	"cytochrome b-245 beta chain [ncbigene:1536]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
+ncbigene:23411	"0.3"^^xsd:double	"sirtuin 1 [ncbigene:23411]"	<http://rdf.disgenet.org/v6.0.0/void/CTD_human>
+ncbigene:10763	"0.2"^^xsd:double	"nestin [ncbigene:10763]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:6916	"0.2"^^xsd:double	"thromboxane A synthase 1 [ncbigene:6916]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:8678	"0.2"^^xsd:double	"beclin 1 [ncbigene:8678]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:1508	"0.2"^^xsd:double	"cathepsin B [ncbigene:1508]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:3553	"0.2"^^xsd:double	"interleukin 1 beta [ncbigene:3553]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:3481	"0.2"^^xsd:double	"insulin like growth factor 2 [ncbigene:3481]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:9370	"0.2"^^xsd:double	"adiponectin, C1Q and collagen domain containing [ncbigene:9370]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:199	"0.2"^^xsd:double	"allograft inflammatory factor 1 [ncbigene:199]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:4192	"0.2"^^xsd:double	"midkine [ncbigene:4192]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:8505	"0.2"^^xsd:double	"poly(ADP-ribose) glycohydrolase [ncbigene:8505]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:23394	"0.2"^^xsd:double	"activity dependent neuroprotector homeobox [ncbigene:23394]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:4440	"0.2"^^xsd:double	"musashi RNA binding protein 1 [ncbigene:4440]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:3176	"0.2"^^xsd:double	"histamine N-methyltransferase [ncbigene:3176]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:3082	"0.2"^^xsd:double	"hepatocyte growth factor [ncbigene:3082]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:5155	"0.2"^^xsd:double	"platelet derived growth factor subunit B [ncbigene:5155]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:132	"0.2"^^xsd:double	"adenosine kinase [ncbigene:132]"	<http://rdf.disgenet.org/v6.0.0/void/RGD>
+ncbigene:1636	"0.03"^^xsd:double	"angiotensin I converting enzyme [ncbigene:1636]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:7422	"0.02"^^xsd:double	"vascular endothelial growth factor A [ncbigene:7422]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:185	"0.02"^^xsd:double	"angiotensin II receptor type 1 [ncbigene:185]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:3569	"0.02"^^xsd:double	"interleukin 6 [ncbigene:3569]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:1401	"0.02"^^xsd:double	"C-reactive protein [ncbigene:1401]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:22908	"0.02"^^xsd:double	"SAC1 like phosphatidylinositide phosphatase [ncbigene:22908]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:7157	"0.02"^^xsd:double	"tumor protein p53 [ncbigene:7157]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:4846	"0.02"^^xsd:double	"nitric oxide synthase 3 [ncbigene:4846]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:3569	"0.02"^^xsd:double	"interleukin 6 [ncbigene:3569]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
+ncbigene:1401	"0.02"^^xsd:double	"C-reactive protein [ncbigene:1401]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
+ncbigene:4846	"0.02"^^xsd:double	"nitric oxide synthase 3 [ncbigene:4846]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
+ncbigene:1400	"0.01"^^xsd:double	"collapsin response mediator protein 1 [ncbigene:1400]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:7124	"0.01"^^xsd:double	"tumor necrosis factor [ncbigene:7124]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:3077	"0.01"^^xsd:double	"homeostatic iron regulator [ncbigene:3077]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:4353	"0.01"^^xsd:double	"myeloperoxidase [ncbigene:4353]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:10580	"0.01"^^xsd:double	"sorbin and SH3 domain containing 1 [ncbigene:10580]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:4023	"0.01"^^xsd:double	"lipoprotein lipase [ncbigene:4023]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:50604	"0.01"^^xsd:double	"interleukin 20 [ncbigene:50604]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:1535	"0.01"^^xsd:double	"cytochrome b-245 alpha chain [ncbigene:1535]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:183	"0.01"^^xsd:double	"angiotensinogen [ncbigene:183]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:3456	"0.01"^^xsd:double	"interferon beta 1 [ncbigene:3456]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:1524	"0.01"^^xsd:double	"C-X3-C motif chemokine receptor 1 [ncbigene:1524]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:7056	"0.01"^^xsd:double	"thrombomodulin [ncbigene:7056]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:1116	"0.01"^^xsd:double	"chitinase 3 like 1 [ncbigene:1116]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:23604	"0.01"^^xsd:double	"death associated protein kinase 2 [ncbigene:23604]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:27190	"0.01"^^xsd:double	"interleukin 17B [ncbigene:27190]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:5172	"0.01"^^xsd:double	"solute carrier family 26 member 4 [ncbigene:5172]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:2668	"0.01"^^xsd:double	"glial cell derived neurotrophic factor [ncbigene:2668]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:10059	"0.01"^^xsd:double	"dynamin 1 like [ncbigene:10059]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:7402	"0.01"^^xsd:double	"utrophin [ncbigene:7402]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:5583	"0.01"^^xsd:double	"protein kinase C eta [ncbigene:5583]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:574501	"0.01"^^xsd:double	"microRNA 499a [ncbigene:574501]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:596	"0.01"^^xsd:double	"BCL2, apoptosis regulator [ncbigene:596]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:8562	"0.01"^^xsd:double	"density regulated re-initiation and release factor [ncbigene:8562]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:5972	"0.01"^^xsd:double	"renin [ncbigene:5972]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:2153	"0.01"^^xsd:double	"coagulation factor V [ncbigene:2153]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:6573	"0.01"^^xsd:double	"solute carrier family 19 member 1 [ncbigene:6573]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:10205	"0.01"^^xsd:double	"myelin protein zero like 2 [ncbigene:10205]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:335	"0.01"^^xsd:double	"apolipoprotein A1 [ncbigene:335]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:187	"0.01"^^xsd:double	"apelin receptor [ncbigene:187]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:1511	"0.01"^^xsd:double	"cathepsin G [ncbigene:1511]"	<http://rdf.disgenet.org/v6.0.0/void/BEFREE>
+ncbigene:4353	"0.01"^^xsd:double	"myeloperoxidase [ncbigene:4353]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
+ncbigene:958	"0.01"^^xsd:double	"CD40 molecule [ncbigene:958]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
+ncbigene:5583	"0.01"^^xsd:double	"protein kinase C eta [ncbigene:5583]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
+ncbigene:2153	"0.01"^^xsd:double	"coagulation factor V [ncbigene:2153]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
+ncbigene:187	"0.01"^^xsd:double	"apelin receptor [ncbigene:187]"	<http://rdf.disgenet.org/v6.0.0/void/LHGDN>
