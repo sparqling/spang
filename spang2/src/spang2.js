@@ -35,7 +35,7 @@ var retrieveByGet = true;
 
 var commander = require('commander').version(version)
     .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (in nickname or in URL)')
-    .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
+    .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-v, --vars', 'output variable names')
