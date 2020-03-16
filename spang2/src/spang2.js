@@ -49,6 +49,7 @@ var commander = require('commander').version(version)
     .option('-q, --show_query', 'show query and quit')
     .option('-m, --method <METHOD>', 'GET or POST', 'GET')
     .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
+    .option('-r, --prefix <PREFIX_FILES>', 'prefix definition files PREFIX_FILE1,... (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
     .arguments('<SPARQL_TEMPLATE>').action((s) => {
       sparqlTemplate = s;
     });
@@ -73,6 +74,10 @@ splitShortOptions = (argv) => {
 commandArguments = splitShortOptions(process.argv);
 
 commander.parse(commandArguments);
+
+if(commander.prefix) {
+  prefixModule.setPrefixFiles(commander.prefix.split(',').map(path => path.trim()));
+}
 
 const dbMap = search_db_name.listup();
 
