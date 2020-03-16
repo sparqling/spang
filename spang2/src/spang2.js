@@ -38,6 +38,7 @@ var commander = require('commander').version(version)
     .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-a, --abbr', 'abbreviate results using predefined prefixes')
+    .option('-v, --vars', 'output variable names')
     .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
     .option('-P, --predicate <PREDICATE>', 'shortcut to specify predicate')
     .option('-O, --object <OBJECT>', 'shortcut to specify object')
@@ -150,6 +151,9 @@ if(/^\w/.test(db)) {
       if(commander.format == 'tsv') {
         const obj = JSON.parse(body);
         const vars = obj.head.vars;
+        if (commander.vars) {
+          console.log(vars.join("\t"))
+        }
         obj.results.bindings.forEach(b => {
           console.log(vars.map(v => toString(b[v])).join("\t"));
         });
