@@ -8,6 +8,7 @@
   "description": "Javascript Implementation of SPANG",
   "dependencies": {
     "commander": "^2.16.0",
+    "expand-home-dir": "0.0.3",
     "fs": "0.0.1-security",
     "mustache": "4.0.0",
     "request": "^2.85.0",

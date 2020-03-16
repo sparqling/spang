@@ -1,6 +1,7 @@
 const parser = require('./parser.js');
 const fs = require('fs');
 const syncRequest = require('sync-request');
+const expandHomeDir = require('expand-home-dir')
 
 var traverse = (o, fn) => {
   for (const i in o) {
@@ -61,6 +62,19 @@ searchPrefixByURL = (url) => {
 exports.loadPrefixFile = (filePath) => {
   prepareInitialPrefix();
   readPrefixFile(fs.readFileSync(filePath, 'utf8'));
+}
+
+exports.setPrefixFiles = (filePaths) => {
+  var first = true;
+  filePaths.forEach(filePath => {
+    filePath = expandHomeDir(filePath);
+    if(fs.existsSync(filePath)) {
+      readPrefixFile(fs.readFileSync(filePath, 'utf8', first));
+      first = false;
+    } else {
+      console.error(`Prefix file '${filePath}' is not found.`);
+    }
+  });
 }
 
 exports.loadPrefixFileByURL = (url) => {
