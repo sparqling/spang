@@ -1,8 +1,8 @@
 # @title Get information for a taxonomy ID
+# @param taxid=taxid:2
 PREFIX taxid: <http://identifiers.org/taxonomy/>
 
-SELECT ?taxid ?label
+SELECT ?p ?o
 WHERE {
-    ?taxid rdfs:label ?label
+    ?taxid ?p ?o
 }
-VALUES ?taxid { taxid:2 taxid:2157 taxid:2759 }

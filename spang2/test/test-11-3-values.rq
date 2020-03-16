@@ -5,4 +5,3 @@ SELECT ?taxid ?label
 WHERE {
     ?taxid rdfs:label ?label
 }
-VALUES ?taxid { taxid:2 taxid:2157 taxid:2759 }

@@ -1,0 +1,28 @@
+<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon>
+<http://www.w3.org/2000/01/rdf-schema#label>	"Bacteria"
+<http://www.w3.org/2000/01/rdf-schema#seeAlso>	<http://purl.uniprot.org/taxonomy/2>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://purl.obolibrary.org/obo/NCBITaxon_2>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://purl.org/obo/owl/NCBITaxon#2>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://www.berkeleybop.org/ontologies/owl/NCBITaxon#2>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://www.ncbi.nlm.nih.gov/taxonomy/2>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/2>
+<http://www.w3.org/2000/01/rdf-schema#subClassOf>	<http://identifiers.org/taxonomy/131567>
+<http://purl.org/dc/terms/identifier>	"2"^^<http://www.w3.org/2001/XMLSchema#integer>
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/blastName>	"bacteria"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/genbankCommonName>	"eubacteria"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCode>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode11>
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart>	"Monera"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart>	"Procaryotae"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart>	"Prokaryota"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart>	"Prokaryotae"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart>	"prokaryote"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart>	"prokaryotes"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/rank>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Superkingdom>
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/scientificName>	"Bacteria"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName>	"Bacteria <bacteria>"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName>	"Monera <bacteria>"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName>	"Procaryotae <bacteria>"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName>	"Prokaryota <bacteria>"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName>	"Prokaryotae <bacteria>"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName>	"prokaryote <bacteria>"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName>	"prokaryotes <bacteria>"

@@ -1,0 +1,9 @@
+# @title Get information for a taxonomy ID
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+
+SELECT ?taxid ?p ?label
+WHERE {
+    ?taxid ?p ?label .
+}
+ORDER BY ?taxid
+VALUES (?taxid ?p) { (taxid:2 rdfs:label) (taxid:2157 rdfs:label) (taxid:2759 taxon:synonym) }
