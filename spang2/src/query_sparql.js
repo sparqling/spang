@@ -30,7 +30,7 @@ module.exports = (endpoint, query, format, byGet, callback) => {
     qs: {query: query},
     followAllRedirects: true,
     headers:{ 
-      "User-agent": `spang2/spang2_${version}`, 
+      "User-agent": `SPANG/${version}`, 
       "Accept": accept
     }
   };

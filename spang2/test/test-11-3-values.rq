@@ -1,0 +1,7 @@
+# @title Get information for a taxonomy ID
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+
+SELECT ?taxid ?label
+WHERE {
+    ?taxid rdfs:label ?label
+}

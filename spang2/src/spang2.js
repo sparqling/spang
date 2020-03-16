@@ -31,22 +31,24 @@ debugPrint = (object) => {
 
 var db, sparqlTemplate, localMode;
 var parameterMap = {};
-var retrieveByGet = false;
+var retrieveByGet = true;
 
 var commander = require('commander').version(version)
+    .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (in nickname or in URL)')
+    .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
-    .option('-e, --endpoint <ENDPOINT>', 'target endpoint')
+    .option('-a, --abbr', 'abbreviate results using predefined prefixes')
+    .option('-v, --vars', 'output variable names')
     .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
     .option('-P, --predicate <PREDICATE>', 'shortcut to specify predicate')
     .option('-O, --object <OBJECT>', 'shortcut to specify object')
+    .option('-L, --limit <LIMIT>', 'LIMIT output (use alone or with -[SPOF])')
     .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
     .option('-N, --number', 'shortcut of COUNT query (use alone or with -[SPO])')
     .option('-G, --graph', 'shortcut to search Graph names (use alone or with -[SPO])')
-    .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-q, --show_query', 'show query and quit')
-    .option('-L, --limit <LIMIT>', 'LIMIT output (use alone or with -[SPOF])')
-    .option('-l, --list_nick_name', 'list up available nicknames and quit')
-    .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
+    .option('-m, --method <METHOD>', 'GET or POST', 'GET')
+    .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
     .arguments('<SPARQL_TEMPLATE>').action((s) => {
       sparqlTemplate = s;
     });
@@ -85,10 +87,10 @@ if(commander.list_nick_name) {
 
 if(commander.args.length < 1) {
   if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
-    console.log('Shortcut or template is required.');
+    console.log(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
     commander.help();
   } else if(!commander.endpoint && !dbMap['default']) {
-    console.log('Endpoint is required.');
+    console.log(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
     commander.help();
   }
 }
@@ -117,41 +119,41 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
 
 if(commander.show_query) {
   console.log(sparqlTemplate);
+  process.exit(0);
 }
-else if(localMode) {
-  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
-} else {
-  if(commander.endpoint)
-  {
-    db = commander.endpoint;
-  } else if(metadata.endpoint) {
-    db = metadata.endpoint;
-  } else if(dbMap['default'])
-  {
-    db = dbMap['default'].url;
-  } else {
-    console.log('Endpoint is required');
-    process.exit(-1);
-  }
 
-  if(/^\w/.test(db)) {
-    if (!(/^(http|https):\/\//.test(db))) {
-      [db, retrieveByGet] = search_db_name.searchDBName(db);
-    }
-  } else {
-    localMode = true;
-    if (db == '-') {
-      db = fs.readFileSync(process.stdin.fd, "utf8");
-    } else if(!fs.existsSync(db)) {
-      console.log(`${db}: no such file`);
+if(commander.endpoint) {
+  db = commander.endpoint;
+} else if(metadata.endpoint) {
+  db = metadata.endpoint;
+} else if(dbMap['default']) {
+  db = dbMap['default'].url;
+} else {
+  console.log('Endpoint is required');
+  process.exit(-1);
+}
+
+if(/^\w/.test(db)) {
+  if (!(/^(http|https):\/\//.test(db))) {
+    if (!dbMap[db]) {
+      console.log(`${db}: no such endpoint`);
       process.exit(-1);
     }
+    [db, retrieveByGet] = search_db_name.searchDBName(db);
+  }
+  if (/^get$/i.test(commander.method)) {
+    retrieveByGet = true
+  } else if (/^post$/i.test(commander.method)) {
+    retrieveByGet = false
   }
   querySparql(db, sparqlTemplate, commander.format, retrieveByGet, (error, response, body) => {
     if (!error && response.statusCode == 200) {
       if(commander.format == 'tsv') {
         const obj = JSON.parse(body);
         const vars = obj.head.vars;
+        if (commander.vars) {
+          console.log(vars.join("\t"))
+        }
         obj.results.bindings.forEach(b => {
           console.log(vars.map(v => toString(b[v])).join("\t"));
         });
@@ -163,4 +165,15 @@ else if(localMode) {
       console.log(body);
     }
   });
+} else {
+  // localMode = true;
+  if (db == '-') {
+    // TODO: db should be a temporary file name?
+    // db = fs.readFileSync(process.stdin.fd, "utf8");
+  } else if(!fs.existsSync(db)) {
+    console.log(`${db}: no such file`);
+    process.exit(-1);
+  }
+  // TODO: use Jena or other JS implementation?
+  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
 }

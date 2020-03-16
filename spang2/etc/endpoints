@@ -1,4 +1,6 @@
+default https://spang.dbcls.jp/sparql
 dbpedia http://dbpedia.org/sparql
+wikidata http://query.wikidata.org/sparql
 uniprot https://sparql.uniprot.org
 allie http://data.allie.dbcls.jp/sparql
 atlas http://www.ebi.ac.uk/rdf/services/atlas/sparql
@@ -14,6 +16,4 @@ disgenet http://rdf.disgenet.org/sparql/
 orth https://orth.dbcls.jp/togo/sparql
 horth https://orth.dbcls.jp/horth/sparql
 horthdev https://orth.dbcls.jp/horthdev/sparql
-default https://spang.dbcls.jp/sparql
-spang https://spang.dbcls.jp/sparql
 test https://spang.dbcls.jp/sparql-test

@@ -1,0 +1,3 @@
+<http://identifiers.org/taxonomy/2>	"Bacteria"
+<http://identifiers.org/taxonomy/2157>	"Archaea"
+<http://identifiers.org/taxonomy/2759>	"Eukaryota"
