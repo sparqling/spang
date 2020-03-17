@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 fs = require('fs');
+reformatter = require('./reformatter.js');
 
 const version = require("../package.json").version;
 const child_process = require('child_process');
@@ -50,6 +51,7 @@ var commander = require('commander')
     .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
     .option('-m, --method <METHOD>', 'GET or POST', 'GET')
     .option('-q, --show_query', 'show query and quit')
+    .option('--fmt', 'format query')
     .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
     .version(version)
     .arguments('<SPARQL_TEMPLATE>')
@@ -77,6 +79,17 @@ splitShortOptions = (argv) => {
 commandArguments = splitShortOptions(process.argv);
 
 commander.parse(commandArguments);
+
+if (commander.fmt) {
+  var src;
+  if(commander.args[0]) {
+    src = fs.readFileSync(commander.args[0]).toString();
+  } else {
+    src = fs.readFileSync(process.stdin.fd, "utf8").toString();
+  }
+  console.log(reformatter.reformat(src));
+  process.exit(0)
+}
 
 if(commander.prefix) {
   prefixModule.setPrefixFiles(commander.prefix.split(',').map(path => path.trim()));
