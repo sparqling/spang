@@ -33,9 +33,9 @@ var db, sparqlTemplate, localMode;
 var parameterMap = {};
 var retrieveByGet = true;
 
-var commander = require('commander').version(version)
+var commander = require('commander')
     .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (in nickname or in URL)')
-    .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
+    .option('-r, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
     .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-v, --vars', 'output variable names')
@@ -46,11 +46,14 @@ var commander = require('commander').version(version)
     .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
     .option('-N, --number', 'shortcut of COUNT query (use alone or with -[SPO])')
     .option('-G, --graph', 'shortcut to search Graph names (use alone or with -[SPO])')
+    .option('-p, --prefix <PREFIX_FILES>', 'prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
+    .option('-n, --ignore', 'ignore user-defined file (~/.spang/prefix)')
     .option('-q, --show_query', 'show query and quit')
     .option('-m, --method <METHOD>', 'GET or POST', 'GET')
     .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
-    .option('-r, --prefix <PREFIX_FILES>', 'prefix definition files PREFIX_FILE1,... (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
-    .arguments('<SPARQL_TEMPLATE>').action((s) => {
+    .version(version)
+    .arguments('<SPARQL_TEMPLATE>')
+    .action((s) => {
       sparqlTemplate = s;
     });
 
