@@ -12,7 +12,7 @@ var traverse = (o, fn) => {
   }
 }
 
-var defaultPrefixPaths = [`${__dirname}/../etc/prefix`, `${require('os').homedir()}/.spang/prefix`]
+var defaultPrefixPaths = [`${__dirname}/../etc/prefix`]
 var prefixMap;
 var urlToPrefix;
 var orderedPrefixURLs;
