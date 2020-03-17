@@ -1,0 +1,4 @@
+prefix ex: <http://example.com>
+SELECT * WHERE { 
+?s ?p ?o
+} limit 10

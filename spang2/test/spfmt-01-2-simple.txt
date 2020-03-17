@@ -3,4 +3,3 @@ WHERE {
     [] a ?Concept .
 }
 LIMIT 100
-

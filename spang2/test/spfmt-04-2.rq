@@ -1,0 +1,6 @@
+prefix ex: <http://example.com>
+SELECT *
+WHERE {
+?s ?p ?o .
+FILTER (lang(?o) = "en")
+}

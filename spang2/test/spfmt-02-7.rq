@@ -1,0 +1,5 @@
+prefix ex: <http://example.com>
+SELECT * WHERE { 
+    ?s ?p ?o ; # Comment
+       ?p2 ?o2 . 
+}

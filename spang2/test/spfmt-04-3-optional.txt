@@ -1,0 +1,8 @@
+prefix ex: <http://example.com>
+SELECT *
+WHERE {
+    ?s ex:p1 ?o .
+    OPTIONAL {
+        ?s ex:p2 ?label .
+    }
+}

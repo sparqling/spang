@@ -1,0 +1,5 @@
+prefix ex: <http://example.com>
+SELECT ?s WHERE { 
+?s ?p ?o
+}
+ORDER BY ?s

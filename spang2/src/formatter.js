@@ -15,7 +15,7 @@ exports.format = (parsedQuery) => {
   forPrologue(parsedQuery.prologue);
   forBody(parsedQuery.body);
   forInlineData(parsedQuery.inlineData);
-  addLine('', -1);
+  // addLine('', -1);
   return lines.join('\n');
 };
 

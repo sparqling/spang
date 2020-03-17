@@ -1,0 +1,4 @@
+prefix ex: <http://example.com>
+SELECT * WHERE { 
+?s ex:p1/ex:p2 ?o
+}

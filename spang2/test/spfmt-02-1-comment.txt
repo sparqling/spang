@@ -1,0 +1,9 @@
+# Comment
+# Comment2
+
+PREFIX ex: <http://example.com>
+
+SELECT *
+WHERE {
+    ?s ?p ?o .
+}
