@@ -24,7 +24,9 @@ exports.embedParameter = (sparql, parameterMap) => {
   var parsedQuery = new parser.parse(sparql);
   replacements = [];
   traverse(parsedQuery, (key, value) => {
-    if(value && value.token == 'var' && value.prefix == '$' && parameterMap[value.value]) {
+    if(value && value.token == 'var' 
+       // && value.prefix == '$' // only $var is replaced by parameter
+       && parameterMap[value.value]) {
       replacements.push({start: value.location.start.offset,
                         end: value.location.end.offset - 1,
                         after: parameterMap[value.value]});
