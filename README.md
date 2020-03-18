@@ -2,11 +2,9 @@
 
 ## Command-line utilities
 
-### Client
+### SPARQL client
 
-[spang2](https://github.com/hchiba1/sparql-utils/tree/master/spang2)
-
-SPANG is a commmand-line SPARQL client. It is now re-implemented in JavaScript, and comes with new features.
+`spang2` is a commmand-line SPARQL client. It is now re-implemented in JavaScript, and comes with new features.
 ```
 $ cd spang2
 $ npm install
@@ -16,20 +14,41 @@ $ npm link
 Usage: spang2 [options] <SPARQL_TEMPLATE>
 
 Options:
-  -V, --version                output the version number
+  -e, --endpoint <ENDPOINT>    target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)
+  -r, --param <PARAMS>         parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")
   -f, --format <FORMAT>        tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html (default: "tsv")
-  -e, --endpoint <ENDPOINT>    target endpoint
+  -a, --abbr                   abbreviate results using predefined prefixes
+  -v, --vars                   variable names are included in output (in the case of tsv format)
   -S, --subject <SUBJECT>      shortcut to specify subject
   -P, --predicate <PREDICATE>  shortcut to specify predicate
   -O, --object <OBJECT>        shortcut to specify object
-  -F, --from <FROM>            shortcut to search FROM specific graph (use alone or with -[SPOLN])
-  -N, --number                 shortcut of COUNT query (use alone or with -[SPO])
-  -G, --graph                  shortcut to search Graph names (use alone or with -[SPO])
-  -q, --show_query             show query and quit
   -L, --limit <LIMIT>          LIMIT output (use alone or with -[SPOF])
-  -l, --list_nick_name         list up available nicknames and quit
-  --param <PARAMS>             parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")
+  -F, --from <FROM>            shortcut to search FROM specific graph (use alone or with -[SPOLN])
+  -N, --number                 shortcut to COUNT results (use alone or with -[SPO])
+  -G, --graph                  shortcut to search for graph names (use alone or with -[SPO])
+  -p, --prefix <PREFIX_FILES>  prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)
+  -n, --ignore                 ignore user-specific file (~/.spang/prefix) for test purpose
+  -m, --method <METHOD>        GET or POST (default: "GET")
+  -q, --show_query             show query and quit
+  --fmt                        format query
+  -l, --list_nick_name         list up available nicknames of endpoints and quit
+  -V, --version                output the version number
   -h, --help                   output usage information
+```
+#### Test examples
+```
+$ ./node_modules/mocha/bin/mocha
+```
+Or, if you have globally installed mocha,
+
+```
+$ mocha
+```
+
+#### Update spang2_bundled.js
+Update the `src/spang2_bundled.js` as follows after editing any other JS codes
+```
+$ ./node_modules/browserify/bin/cmd.js src/spang2_browser.js > src/spang2_bundled.js 
 ```
 
 ### SPARQL formatter
