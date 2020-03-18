@@ -5,9 +5,7 @@ const searchPrefix = prefixModule.searchPrefix;
 const embed_parameter = require('./embed_parameter.js');
 const fs = require('fs');
 
-const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
-
-exports.constructSparql = (sparqlTemplate, parameterMap) =>
+exports.constructSparql = (sparqlTemplate, parameterMap, input='') =>
 {
   var metadata = metadataModule.retrieveMetadata(sparqlTemplate);
   if(metadata.prefix) {

@@ -11,7 +11,7 @@ const shortcut = require('./shortcut.js').shortcut;
 const constructSparql = require('./construct_sparql.js').constructSparql;
 const querySparql = require('./query_sparql.js');
 const syncRequest = require('sync-request');
-
+const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
 
 toString = (resource) => {
   if(resource.type == 'uri') {
@@ -85,7 +85,7 @@ if (commander.fmt) {
   if(commander.args[0]) {
     src = fs.readFileSync(commander.args[0]).toString();
   } else {
-    src = fs.readFileSync(process.stdin.fd, "utf8").toString();
+    src = input;
   }
   console.log(reformatter.reformat(src));
   process.exit(0)
@@ -139,7 +139,7 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
   } else {
     sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8');
   }
-  [sparqlTemplate, metadata] = constructSparql(sparqlTemplate, parameterMap);
+  [sparqlTemplate, metadata] = constructSparql(sparqlTemplate, parameterMap, input);
 }
 
 if(commander.show_query) {
