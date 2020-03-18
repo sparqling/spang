@@ -1,19 +1,17 @@
 # SPARQL-related utilities
 
-## Command-line utilities
-
-### SPARQL client
+## SPARQL client
 
 `spang2` is a commmand-line SPARQL client. It is now re-implemented in JavaScript, and comes with new features.
 
-#### Installation
+### Installation
 ```
 $ cd spang2
 $ npm install
 $ npm link
 ```
 
-#### Usage
+### Usage
 ```
 Usage: spang2 [options] <SPARQL_TEMPLATE>
 
@@ -39,7 +37,7 @@ Options:
   -V, --version                output the version number
   -h, --help                   output usage information
 ```
-#### Test examples
+### Test examples
 ```
 $ ./node_modules/mocha/bin/mocha
 ```
@@ -49,13 +47,13 @@ Or, if you have globally installed mocha,
 $ mocha
 ```
 
-#### Update spang2_bundled.js
+### Update spang2_bundled.js
 Update the `src/spang2_bundled.js` as follows after editing any other JS codes
 ```
 $ ./node_modules/browserify/bin/cmd.js src/spang2_browser.js > src/spang2_bundled.js 
 ```
 
-### SPARQL formatter
+## SPARQL formatter
 
 `spfmt` is a SPARQL formatter written in JavaScript.
 
@@ -64,7 +62,7 @@ It can be used in a web site or in the command line.
 An example web site:<br>
 https://hchiba1.github.io/sparql-utils/
 
-#### Usage on a web site
+### Usage on a web site
 
 * Download `spfmt_bundled.js` and use it in your HTML.
 
@@ -100,19 +98,19 @@ WHERE {
      };
     </script>
 ```
-#### Usage in command line
+### Usage in command line
 
-##### Requirements
+#### Requirements
 - Node.js (>= 11.0.0)
 - npm (>= 6.12.0)
 
-##### Installation
+#### Installation
 ```
 $ npm install
 $ npm link
 ```
 
-##### Usage
+#### Usage
 ```
 $ cat messy.rq 
 SELECT * WHERE         {         ?s ?p ?o }
@@ -124,7 +122,7 @@ WHERE {
 }
 ```
 
-##### Test examples
+#### Test examples
 If you have globally installed mocha
 
 ```
@@ -135,13 +133,13 @@ Otherwise,
 $ ./node_modules/mocha/bin/mocha
 ```
 
-#### Update spfmt_bundled.js
+### Update spfmt_bundled.js
 Update the `spfmt_bundled.js` as follows after editing any other JS codes
 ```
 $ ./node_modules/browserify/bin/cmd.js src/spfmt_browser.js > src/spfmt_bundled.js 
 ```
 
-## Specifications
+## SPARQL specifications
 
 ### Syntax
 The EBNF notation of SPARQL is extracted from:<br>
