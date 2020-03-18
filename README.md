@@ -5,11 +5,15 @@
 ### SPARQL client
 
 `spang2` is a commmand-line SPARQL client. It is now re-implemented in JavaScript, and comes with new features.
+
+#### Installation
 ```
 $ cd spang2
 $ npm install
 $ npm link
 ```
+
+#### Usage
 ```
 Usage: spang2 [options] <SPARQL_TEMPLATE>
 
