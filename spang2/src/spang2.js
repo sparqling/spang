@@ -36,8 +36,8 @@ var retrieveByGet = true;
 
 var commander = require('commander')
     .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
-    .option('-r, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
-    .option('-f, --format <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
+    .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
+    .option('-o, --out <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
     .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
@@ -47,11 +47,11 @@ var commander = require('commander')
     .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
     .option('-N, --number', 'shortcut to COUNT results (use alone or with -[SPO])')
     .option('-G, --graph', 'shortcut to search for graph names (use alone or with -[SPO])')
-    .option('-p, --prefix <PREFIX_FILES>', 'prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
+    .option('-r, --prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
     .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
     .option('-m, --method <METHOD>', 'GET or POST', 'GET')
     .option('-q, --show_query', 'show query and quit')
-    .option('--fmt', 'format query')
+    .option('-f, --fmt', 'format query')
     .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
     .version(version)
     .arguments('<SPARQL_TEMPLATE>')
@@ -171,9 +171,9 @@ if(/^\w/.test(db)) {
   } else if (/^post$/i.test(commander.method)) {
     retrieveByGet = false
   }
-  querySparql(db, sparqlTemplate, commander.format, retrieveByGet, (error, response, body) => {
+  querySparql(db, sparqlTemplate, commander.out, retrieveByGet, (error, response, body) => {
     if (!error && response.statusCode == 200) {
-      if(commander.format == 'tsv') {
+      if(commander.out == 'tsv') {
         const obj = JSON.parse(body);
         const vars = obj.head.vars;
         if (commander.vars) {
@@ -200,5 +200,5 @@ if(/^\w/.test(db)) {
     process.exit(-1);
   }
   // TODO: use Jena or other JS implementation?
-  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.format} '${sparqlTemplate}'`).toString());
+  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.out} '${sparqlTemplate}'`).toString());
 }

@@ -1,2 +1,2 @@
 #!/bin/sh
-spang2 -e test -S taxid:2 -f json
+spang2 -e test -S taxid:2 -o json
