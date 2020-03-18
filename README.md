@@ -1,4 +1,4 @@
-# SPARQL-related utilities
+# SPANG2
 
 ## SPARQL client
 
