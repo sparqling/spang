@@ -23,6 +23,7 @@
     "pegjs": "^0.10.0"
   },
   "bin": {
-    "spang2": "./src/spang2.js"
+    "spang2": "./src/spang2.js",
+    "spfmt": "./src/spfmt.js"
   }
 }
