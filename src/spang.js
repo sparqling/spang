@@ -37,7 +37,7 @@ var retrieveByGet = true;
 var commander = require('commander')
     .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
     .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
-    .option('-o, --out <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
+    .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
     .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
@@ -51,7 +51,7 @@ var commander = require('commander')
     .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
     .option('-m, --method <METHOD>', 'GET or POST', 'GET')
     .option('-q, --show_query', 'show query and quit')
-    .option('-f, --fmt', 'format query')
+    .option('-f, --fmt', 'format the query')
     .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
     .version(version)
     .arguments('<SPARQL_TEMPLATE>')
@@ -83,7 +83,10 @@ commander.parse(commandArguments);
 if (commander.fmt) {
   var src;
   if(commander.args[0]) {
-    src = fs.readFileSync(commander.args[0]).toString();
+    src = fs.readFileSync(commander.args[0], "utf8").toString();
+  } else if (process.stdin.isTTY) {
+    console.log('Format SPARQL query: input is required');
+    process.exit(-1)
   } else {
     src = input;
   }
