@@ -37,7 +37,7 @@ var retrieveByGet = true;
 var commander = require('commander')
     .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
     .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
-    .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
+    .option('-o, --out <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
     .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
