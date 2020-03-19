@@ -3,7 +3,8 @@
 fs = require('fs');
 reformatter = require('./reformatter.js');
 
-var commander = require('commander').version(require("../package.json").version)
+var commander = require('commander')
+    .version(require("../package.json").version)
     .arguments('<src>');
 
 commander.parse(process.argv);
@@ -11,7 +12,9 @@ commander.parse(process.argv);
 var src;
 
 if(commander.args[0]) {
-  src = fs.readFileSync(commander.args[0]).toString();
+    src = fs.readFileSync(commander.args[process.stdin.fd], "utf8").toString();
+} else if (process.stdin.isTTY) {
+  commander.help();
 } else {
   src = fs.readFileSync(0).toString();
 }
