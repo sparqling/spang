@@ -11,7 +11,7 @@ spang.getTemplate = (url, callback) => {
     uri: url, 
     followAllRedirects: true,
     headers:{ 
-      'User-agent': `spang2/spang2_${version}`, 
+      'User-agent': `SPANG/${version}`, 
       'Accept': 'text/plain'
     }
   };
@@ -25,7 +25,7 @@ spang.getTemplate = (url, callback) => {
   });
 };
 
-spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/sparql-utils/master/spang2/etc/prefix');
+spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/spang2/master/etc/prefix');
 
 spang.shortcut = require('./shortcut.js').shortcut;
 
