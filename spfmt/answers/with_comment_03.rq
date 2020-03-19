@@ -1,7 +1,0 @@
-PREFIX foo: <http://bar> #first comment
-
-SELECT ?s # second
-WHERE {
-    ?s a foo:Human .
-#third
-} # last

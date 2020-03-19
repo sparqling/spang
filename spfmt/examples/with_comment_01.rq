@@ -1,6 +1,0 @@
-PREFIX foo: <http://bar>
-SELECT ?s     
-where { ?s a
- foo:Human . # any human                                    
-                                                                                                    
-   }
