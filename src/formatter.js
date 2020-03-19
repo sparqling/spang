@@ -42,7 +42,7 @@ addLine = (text, origLine = 0) => {
 forPrologue = (prologue) => {
   // TODO: handle base
   prologue.prefixes.forEach((prefix) => {
-    addLine(`PREFIX ${prefix.prefix}: <${prefix.local}>`, prefix.location.end.line);
+    addLine(`PREFIX ${prefix.prefix||""}: <${prefix.local}>`, prefix.location.end.line);
   });
   if(prologue.prefixes.length > 0) {
     addLine("", prologue.prefixes[prologue.prefixes.length - 1].location.end.line + 1);
