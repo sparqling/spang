@@ -12,7 +12,7 @@ commander.parse(process.argv);
 var src;
 
 if(commander.args[0]) {
-    src = fs.readFileSync(commander.args[process.stdin.fd], "utf8").toString();
+    src = fs.readFileSync(commander.args[0], "utf8").toString();
 } else if (process.stdin.isTTY) {
   commander.help();
 } else {
