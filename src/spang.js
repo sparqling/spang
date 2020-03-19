@@ -37,7 +37,7 @@ var retrieveByGet = true;
 var commander = require('commander')
     .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
     .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
-    .option('-o, --out <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
+    .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
     .option('-a, --abbr', 'abbreviate results using predefined prefixes')
     .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
     .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
@@ -174,9 +174,9 @@ if(/^\w/.test(db)) {
   } else if (/^post$/i.test(commander.method)) {
     retrieveByGet = false
   }
-  querySparql(db, sparqlTemplate, commander.out, retrieveByGet, (error, response, body) => {
+  querySparql(db, sparqlTemplate, commander.outfmt, retrieveByGet, (error, response, body) => {
     if (!error && response.statusCode == 200) {
-      if(commander.out == 'tsv') {
+      if(commander.outfmt == 'tsv') {
         const obj = JSON.parse(body);
         const vars = obj.head.vars;
         if (commander.vars) {
@@ -203,5 +203,5 @@ if(/^\w/.test(db)) {
     process.exit(-1);
   }
   // TODO: use Jena or other JS implementation?
-  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.out} '${sparqlTemplate}'`).toString());
+  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.outfmt} '${sparqlTemplate}'`).toString());
 }
