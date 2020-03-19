@@ -47,10 +47,10 @@ Or, if you have globally installed mocha,
 $ mocha
 ```
 
-### Update spang2_bundled.js
-Update the `src/spang2_bundled.js` as follows after editing any other JS codes
+### Update spang_bundled.js
+Update the `src/spang_bundled.js` as follows after editing any other JS codes
 ```
-$ ./node_modules/browserify/bin/cmd.js src/spang2_browser.js > src/spang2_bundled.js 
+$ ./node_modules/browserify/bin/cmd.js src/spang_browser.js > src/spang_bundled.js 
 ```
 
 ## SPARQL formatter
