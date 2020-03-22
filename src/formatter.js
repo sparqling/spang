@@ -113,17 +113,17 @@ forTriple = (triple) => {
 /** @return string */
 forTripleElem = (elem) => {
   switch(elem.token) {
-  case 'var':
-    return '?' + elem.value;
-  case 'uri':
-    if(elem.prefix && elem.suffix) return elem.prefix + ":" + elem.suffix;
-    else if(elem.value == typeUri) return 'a';
-    else return "<" + elem.value + ">";
-  case 'literal':
-    var txt = '"' + elem.value + '"';
-    if(elem.lang) txt += '@' + elem.lang;
-    return txt;
-  case 'blank':
-    return '[]';
+    case 'var':
+      return '?' + elem.value;
+    case 'uri':
+      if(elem.prefix && elem.suffix) return elem.prefix + ":" + elem.suffix;
+      else if(elem.value == typeUri) return 'a';
+      else return "<" + elem.value + ">";
+    case 'literal':
+      var txt = '"' + elem.value + '"';
+      if(elem.lang) txt += '@' + elem.lang;
+      return txt;
+    case 'blank':
+      return '[]';
   }
 };
