@@ -74,6 +74,9 @@ forSelect = (select) => {
   forPattern(select.pattern);
   currentIndent = currentIndent.substr(0, currentIndent.Length - indentUnit.Length);
   addLine('}', select.pattern.location.end.line);
+  if (select.order) {
+    addLine(`ORDER BY ?${select.order[0].expression.value.value}`); // TODO: ASC, etc.
+  }
   if(select.limit) {
     addLine(`LIMIT ${select.limit}`, select.location.end.line);
   }
@@ -125,5 +128,9 @@ forTripleElem = (elem) => {
       return txt;
     case 'blank':
       return '[]';
+    case 'path':
+      return forTripleElem(elem.value[0].value) + '/' + forTripleElem(elem.value[1].value); // TODO: path
+    default:
+      return elem.token; // for debug
   }
 };
