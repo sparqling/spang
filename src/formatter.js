@@ -118,7 +118,7 @@ forTripleElem = (elem) => {
   case 'uri':
     if(elem.prefix && elem.suffix) return elem.prefix + ":" + elem.suffix;
     else if(elem.value == typeUri) return 'a';
-    else return elem.value;
+    else return "<" + elem.value + ">";
   case 'literal':
     var txt = '"' + elem.value + '"';
     if(elem.lang) txt += '@' + elem.lang;
