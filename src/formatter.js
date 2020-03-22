@@ -75,11 +75,24 @@ forSelect = (select) => {
   currentIndent = currentIndent.substr(0, currentIndent.Length - indentUnit.Length);
   addLine('}', select.pattern.location.end.line);
   if (select.order) {
-    addLine(`ORDER BY ?${select.order[0].expression.value.value}`); // TODO: ASC, etc.
+    addLine('ORDER BY ' + forOrder(select.order)); 
   }
   if(select.limit) {
     addLine(`LIMIT ${select.limit}`, select.location.end.line);
   }
+};
+
+forOrder = (conditions) => {
+  var orderConditions = [];
+  conditions.forEach(condition => {
+    var oc = forTripleElem(condition.expression.value);
+    if (condition.direction == 'DESC') {
+      orderConditions.push(`DESC(${oc})`);
+    } else {
+      orderConditions.push(oc);
+    }
+  });
+  return orderConditions.join(" ");
 };
 
 /** @return string */
