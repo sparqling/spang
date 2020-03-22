@@ -112,6 +112,7 @@ forProjection = (projection) => {
 /** @return list of lines */
 forPattern = (pattern) => {
   pattern.patterns.forEach(forBasicPattern);
+  pattern.filters.forEach(forFilter);
 };
 
 /** @return list of lines */
@@ -147,3 +148,20 @@ forTripleElem = (elem) => {
       return elem.token; // for debug
   }
 };
+
+forFilter = (filter) => {
+  // TODO: other expressionType
+  if (filter.value.expressionType == "relationalexpression") {
+    var e = filter.value;
+    addLine(`FILTER (${forExpression(e.op1)} ${e.operator} ${forExpression(e.op2)})`);
+  }
+}
+
+forExpression = (e) => {
+  // TODO: other expressionType
+  if (e.expressionType == "atomic") {
+    return(forTripleElem(e.value));
+  } else if (e.expressionType == "irireforfunction") {
+    return(forTripleElem(e.iriref));
+  }
+}
