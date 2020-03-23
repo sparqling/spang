@@ -1,4 +1,4 @@
 prefix ex: <http://example.com>
-SELECT * WHERE { 
+SELECT * WHERE {
     ?s ex:hoge+ ?o .
 }

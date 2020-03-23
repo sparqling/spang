@@ -75,7 +75,7 @@ forSelect = (select) => {
   currentIndent = currentIndent.substr(0, currentIndent.Length - indentUnit.Length);
   addLine('}', select.pattern.location.end.line);
   if (select.order) {
-    addLine('ORDER BY ' + forOrder(select.order)); 
+    addLine('ORDER BY ' + forOrder(select.order));
   }
   if(select.limit) {
     addLine(`LIMIT ${select.limit}`, select.location.end.line);
