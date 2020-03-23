@@ -65,7 +65,8 @@ Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery )
 UpdateUnit = Update
 
 // [4] Prologue  ::=  BaseDecl? PrefixDecl*
-Prologue = b:BaseDecl? WS* pfx:PrefixDecl* {
+Prologue = b:BaseDecl? WS* pfx:PrefixDecl*
+{
   return { token: 'prologue',
            location: location(), 
            base: b,
@@ -84,9 +85,9 @@ BaseDecl = WS* ('BASE'/'base') WS* i:IRI_REF
   return base;
 }
 
-// [6]    PrefixDecl        ::=   'PREFIX' PNAME_NS IRI_REF
-PrefixDecl = WS* ('PREFIX'/'prefix')  WS* p:PNAME_NS  WS* l:IRI_REF {
-  
+// [6] PrefixDecl ::= 'PREFIX' PNAME_NS IRI_REF
+PrefixDecl = WS* ('PREFIX'/'prefix')  WS* p:PNAME_NS  WS* l:IRI_REF
+{
   registerPrefix(p,l);
   
   var prefix = {};
@@ -110,7 +111,6 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
       dataset['named'].push(g.graph)
     }
   }
-  
   
   if(dataset['named'].length === 0 && dataset['implicit'].length === 0) {
     dataset['implicit'].push({token:'uri',
@@ -192,10 +192,8 @@ SelectClause = WS* ('SELECT'/'select') WS* mod:( ('DISTINCT'/'distinct') / ('RED
   return {vars: vars, modifier:arrayToString(mod), location: location()};
 }
 
-/*
- [10]    ConstructQuery    ::=   'CONSTRUCT' ConstructTemplate DatasetClause* WhereClause SolutionModifier
-                                'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
- */
+// [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier |
+//                                    DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
 ConstructQuery = WS* ('CONSTRUCT'/'construct') WS* t:ConstructTemplate WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
   var dataset = {'named':[], 'implicit':[]};
@@ -389,19 +387,19 @@ GroupCondition = WS* b:BuiltInCall WS*
   return v;
 }
 
-// [21]   HavingClause      ::=   'HAVING' HavingCondition+
+// [21] HavingClause ::= 'HAVING' HavingCondition+
 HavingClause = 'HAVING' HavingCondition+
 
-// [21]   HavingCondition   ::=   Constraint
+// [22] HavingCondition ::= Constraint
 HavingCondition = Constraint
 
-// [22]   OrderClause       ::=   'ORDER' 'BY' OrderCondition+
+// [23] OrderClause ::= 'ORDER' 'BY' OrderCondition+
 OrderClause = ('ORDER'/'order') WS* ('BY'/'by') WS* os:OrderCondition+ WS*
 {
   return os;
 }
 
-// [23]   OrderCondition    ::=    ( ( 'ASC' | 'DESC' ) BrackettedExpression ) | ( Constraint | Var )
+// [24] OrderCondition ::= ( ( 'ASC' | 'DESC' ) BrackettedExpression ) | ( Constraint | Var )
 OrderCondition = direction:( 'ASC'/ 'asc' / 'DESC'/ 'desc' ) WS* e:BrackettedExpression WS*
 {
   return { direction: direction.toUpperCase(), expression:e };
@@ -418,28 +416,31 @@ OrderCondition = direction:( 'ASC'/ 'asc' / 'DESC'/ 'desc' ) WS* e:BrackettedExp
   return { direction: 'ASC', expression:e };
 }
 
-// [24]   LimitOffsetClauses        ::=   ( LimitClause OffsetClause? | OffsetClause LimitClause? )
-LimitOffsetClauses = cls:( LimitClause OffsetClause? / OffsetClause LimitClause? ) {
-    var acum = {};
-    for(var i=0; i<cls.length; i++) {
-        var cl = cls[i];
-        if(cl != null && cl.limit != null) {
-            acum['limit'] = cl.limit;
-        } else if(cl != null && cl.offset != null){
-            acum['offset'] = cl.offset;
-        }
+// [25] LimitOffsetClauses ::= ( LimitClause OffsetClause? | OffsetClause LimitClause? )
+LimitOffsetClauses = cls:( LimitClause OffsetClause? / OffsetClause LimitClause? )
+{
+  var acum = {};
+  for(var i=0; i<cls.length; i++) {
+    var cl = cls[i];
+    if(cl != null && cl.limit != null) {
+      acum['limit'] = cl.limit;
+    } else if(cl != null && cl.offset != null){
+      acum['offset'] = cl.offset;
     }
-
-    return acum;
+  }
+  
+  return acum;
 }
 
-// [25]   LimitClause       ::=   'LIMIT' INTEGER
-LimitClause = ('LIMIT'/'limit') WS* i:INTEGER WS* {
+// [26] LimitClause ::= 'LIMIT' INTEGER
+LimitClause = ('LIMIT'/'limit') WS* i:INTEGER WS*
+{
   return { limit:parseInt(i.value) };
 }
 
-// [26]   OffsetClause      ::=   'OFFSET' INTEGER
-OffsetClause = ('OFFSET'/'offset') WS* i:INTEGER WS* {
+// [27] OffsetClause ::= 'OFFSET' INTEGER
+OffsetClause = ('OFFSET'/'offset') WS* i:INTEGER WS*
+{
   return { offset:parseInt(i.value) };
 }
 
@@ -515,7 +516,7 @@ Drop = ('DROP'/'drop')  WS* ('SILENT'/'silent')? WS* ref:GraphRefAll
   return query;
 }
 
-// [34]   Create    ::=   'CREATE' 'SILENT'? GraphRef
+// [34] Create ::= 'CREATE' 'SILENT'? GraphRef
 Create = ('CREATE'/'create') WS* ('SILENT'/'silent')? WS* ref:GraphRef
 {
   var query = {};
@@ -526,7 +527,7 @@ Create = ('CREATE'/'create') WS* ('SILENT'/'silent')? WS* ref:GraphRef
   return query;
 }
 
-// [36]   InsertData        ::=   'INSERT' <WS*> ',DATA' QuadData
+// [38] InsertData ::= 'INSERT' <WS*> ',DATA' QuadData
 InsertData = ('INSERT'/'insert') WS* ('DATA'/'data') WS* qs:QuadData
 {
   var query = {};
@@ -537,7 +538,7 @@ InsertData = ('INSERT'/'insert') WS* ('DATA'/'data') WS* qs:QuadData
   return query;
 }
 
-// [37] DeleteData ::= 'DELETE' <WS*> 'DATA' QuadData
+// [39] DeleteData ::= 'DELETE' <WS*> 'DATA' QuadData
 DeleteData = ('DELETE'/'delete') WS* ('DATA'/'data') qs:QuadData
 {
   var query = {};
@@ -549,7 +550,7 @@ DeleteData = ('DELETE'/'delete') WS* ('DATA'/'data') qs:QuadData
   return query;
 }
 
-// [38] DeleteWhere ::= 'DELETE' <WS*> 'WHERE' QuadPattern
+// [40] DeleteWhere ::= 'DELETE' <WS*> 'WHERE' QuadPattern
 DeleteWhere = ('DELETE'/'delete') WS* ('WHERE'/'where') WS* p:GroupGraphPattern
 {
   var query = {};
@@ -584,7 +585,7 @@ DeleteWhere = ('DELETE'/'delete') WS* ('WHERE'/'where') WS* p:GroupGraphPattern
   return query;
 }
 
-// [39] Modify ::= ( 'WITH' IRIref )? ( DeleteClause InsertClause? | InsertClause ) UsingClause* 'WHERE' GroupGraphPattern
+// [41] Modify ::= ( 'WITH' IRIref )? ( DeleteClause InsertClause? | InsertClause ) UsingClause* 'WHERE' GroupGraphPattern
 Modify = wg:(('WITH'/'with') WS* IRIref)? WS* dic:( DeleteClause WS* InsertClause? / InsertClause ) WS* uc:UsingClause* WS* ('WHERE'/'where') WS* p:GroupGraphPattern WS*
 {
   var query = {};
@@ -617,19 +618,19 @@ Modify = wg:(('WITH'/'with') WS* IRIref)? WS* dic:( DeleteClause WS* InsertClaus
   return query;
 }
 
-// [40] DeleteClause ::= 'DELETE' QuadPattern
+// [42] DeleteClause ::= 'DELETE' QuadPattern
 DeleteClause = ('DELETE'/'delete') q:QuadPattern
 {
   return q;
 }
 
-// [41] InsertClause ::= 'INSERT' QuadPattern
+// [43] InsertClause ::= 'INSERT' QuadPattern
 InsertClause = ('INSERT'/'insert') q:QuadPattern
 {
   return q;
 }
 
-// [42] UsingClause ::= 'USING' ( IRIref | 'NAMED' IRIref )
+// [44] UsingClause ::= 'USING' ( IRIref | 'NAMED' IRIref )
 UsingClause = WS* ('USING'/'using') WS* g:( IRIref / ('NAMED'/'named') WS* IRIref )
 {
   if(g.length!=null) {
@@ -639,13 +640,13 @@ UsingClause = WS* ('USING'/'using') WS* g:( IRIref / ('NAMED'/'named') WS* IRIre
   }
 }
 
-// [43] GraphRef ::= 'GRAPH' IRIref
+// [46] GraphRef ::= 'GRAPH' IRIref
 GraphRef = ('GRAPH'/'graph') WS* i:IRIref
 {
   return i;
 }
 
-// [44] GraphRefAll ::= GraphRef | 'DEFAULT' | 'NAMED' | 'ALL'
+// [47] GraphRefAll ::= GraphRef | 'DEFAULT' | 'NAMED' | 'ALL'
 GraphRefAll = g:GraphRef
 {
   return g;
@@ -826,11 +827,9 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
 //      }
 }
 
-/*
- @warning
- @rewritten
- [52]   TriplesBlock      ::=   TriplesSameSubjectPath ( '.' TriplesBlock? )?
- */
+// [52] TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
+// warning??
+// rewritten??
 TriplesBlock = b:TriplesSameSubjectPath bs:(WS*  '.' TriplesBlock? )?
 {
   var triples = b.triplesContext;
@@ -920,7 +919,7 @@ GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* ('UNION'/'union') WS* Gro
   }
 }
 
-// [59]   Filter    ::=   'FILTER' Constraint
+// [59] Filter ::= 'FILTER' Constraint
 Filter = WS* ('FILTER'/'filter') WS* c:Constraint
 {
   return {token: 'filter',
@@ -928,7 +927,7 @@ Filter = WS* ('FILTER'/'filter') WS* c:Constraint
           value: c}
 }
 
-// [60]   Bind      ::=   'BIND' '(' Expression 'AS' Var ')'
+// [60] Bind ::= 'BIND' '(' Expression 'AS' Var ')'
 Bind = WS* ('BIND'/'bind') WS* '(' WS* ex:Expression WS* ('as'/'AS') WS* v:Var WS* ')'
 {
   return {token: 'bind',
@@ -947,8 +946,7 @@ InlineData = WS* ('VALUES'/'values') WS* d:DataBlock
 }
 
 // [62] DataBlock ::= InlineDataOneVar | InlineDataFull
-DataBlock
-    = InlineDataOneVar / InlineDataFull
+DataBlock = InlineDataOneVar / InlineDataFull
 
 // [63] InlineDataOneVar ::= Var '{' DataBlockValue* '}'
 InlineDataOneVar = WS* v:Var WS* '{' WS* d:DataBlockValue* '}'
@@ -968,8 +966,8 @@ InlineDataOneVar = WS* v:Var WS* '{' WS* d:DataBlockValue* '}'
 }
 
 // [64] InlineDataFull ::= ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
+// for simplicity, ignore NIL, and use DataBlockTuple instead of '(' DataBlockValue* ')'
 InlineDataFull = WS*  '(' WS* vars:(Var*) WS* ')' WS* '{' WS* vals:( DataBlockTuple)* WS* '}'
-    // Ignore NIL, and consider '(' DataBlockValue* ')' as DataBlockTuple, for simplicity
 {
   var result = {token: 'inlineDataFull',
                 location: location(),
@@ -979,7 +977,7 @@ InlineDataFull = WS*  '(' WS* vars:(Var*) WS* ')' WS* '{' WS* vals:( DataBlockTu
   return result;
 }
 
-// DataBlockTuple is considered here, for simplicity
+// for simplicity, DataBlockTuple is used
 DataBlockTuple = '(' WS* val:(DataBlockValue*) WS* ')' WS*
 {
   return val;
@@ -1031,7 +1029,7 @@ ArgList = NIL
   return args;
 }
 
-// [63]   ExpressionList    ::=   ( NIL | '(' Expression ( WS* ',' WS* Expression )* ')' )
+// [72] ExpressionList ::= ( NIL | '(' Expression ( WS* ',' WS* Expression )* ')' )
 ExpressionList = NIL
 {
   var args = {};
@@ -1053,13 +1051,13 @@ ExpressionList = NIL
   return args;
 }
 
-// [64] ConstructTemplate ::= '{' ConstructTriples? '}'
+// [73] ConstructTemplate ::= '{' ConstructTriples? '}'
 ConstructTemplate = '{' WS* ts:ConstructTriples? WS* '}'
 {
   return ts;
 }
 
-// [65] ConstructTriples ::=  TriplesSameSubject ( '.' ConstructTriples? )?
+// [74] ConstructTriples ::= TriplesSameSubject ( '.' ConstructTriples? )?
 ConstructTriples = b:TriplesSameSubject bs:( WS* '.' WS* ConstructTriples? )?
 {
   var triples = b.triplesContext;
@@ -1077,7 +1075,7 @@ ConstructTriples = b:TriplesSameSubject bs:( WS* '.' WS* ConstructTriples? )?
           triplesContext: triples}
 }
 
-// [66] TriplesSameSubject ::=  VarOrTerm PropertyListNotEmpty | TriplesNode PropertyList
+// [75] TriplesSameSubject ::= VarOrTerm PropertyListNotEmpty | TriplesNode PropertyList
 TriplesSameSubject = WS* s:VarOrTerm WS* pairs:PropertyListNotEmpty
 {
   var triplesContext = pairs.triplesContext;
@@ -1143,7 +1141,7 @@ TriplesSameSubject = WS* s:VarOrTerm WS* pairs:PropertyListNotEmpty
   return token;
 }
 
-//[83]    PropertyListPathNotEmpty          ::=   ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
+// [83] PropertyListPathNotEmpty ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
 PropertyListPathNotEmpty = v:(VerbPath / VerbSimple) WS* ol:ObjectListPath rest:( WS* ';' WS* ( (VerbPath / VerbSimple) WS* ObjectList)? )*
 {
   var tokenParsed = {};
@@ -1190,7 +1188,7 @@ PropertyListPathNotEmpty = v:(VerbPath / VerbSimple) WS* ol:ObjectListPath rest:
   return tokenParsed;
 }
 
-// [67]   PropertyListNotEmpty      ::=   Verb ObjectList ( ';' ( Verb ObjectList )? )*
+// [67] PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
 PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* ObjectList )? )*
 {
   var tokenParsed = {};
@@ -1237,10 +1235,10 @@ PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* Ob
   return tokenParsed;
 }
 
-// [68] PropertyList      ::=   PropertyListNotEmpty?
+// [68] PropertyList ::= PropertyListNotEmpty?
 PropertyList = PropertyListNotEmpty?
 
-// [86] ObjectListPath    ::=   ObjectPath ( ',' ObjectPath )*
+// [86] ObjectListPath ::= ObjectPath ( ',' ObjectPath )*
 ObjectListPath = obj:ObjectPath WS* objs:(',' WS* ObjectPath)*
 {
   var toReturn = [];
@@ -1258,7 +1256,7 @@ ObjectListPath = obj:ObjectPath WS* objs:(',' WS* ObjectPath)*
   return toReturn;
 }
 
-// [69] ObjectList        ::=   Object ( ',' Object )*
+// [69] ObjectList ::= Object ( ',' Object )*
 ObjectList = obj:Object WS* objs:( ',' WS* Object )*
 {
   var toReturn = [];
@@ -1276,102 +1274,98 @@ ObjectList = obj:Object WS* objs:( ',' WS* Object )*
   return toReturn;
 }
 
-// [87]   ObjectPath        ::=   GraphNodePath
+// [87] ObjectPath ::= GraphNodePath
 ObjectPath = GraphNodePath
 
-// [70]   Object    ::=   GraphNode
+// [70] Object ::= GraphNode
 Object = GraphNode
 
-// [71]   Verb      ::=   VarOrIRIref | 'a'
-Verb = VarOrIRIref / 'a'
+// [71] Verb ::= VarOrIRIref | 'a'
+Verb = VarOrIRIref
+/ 'a'
 {
-  return{token: 'uri', 
-         prefix:null, 
-         suffix:null,
-         location: location(),
-         value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}
+  return {token: 'uri', 
+          prefix:null, 
+          suffix:null,
+          location: location(),
+          value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}
 }
 
-/*
- @todo
- @incomplete
- @semantics
- // support for property paths must be added
- [72]   TriplesSameSubjectPath    ::=   VarOrTerm PropertyListNotEmptyPath |    TriplesNodePath PropertyListPath
- */
-TriplesSameSubjectPath
+// [72] TriplesSameSubjectPath ::= VarOrTerm PropertyListNotEmptyPath | TriplesNodePath PropertyListPath
+// incomplete??
+// support for property paths must be added??
+TriplesSameSubjectPath = WS* s:VarOrTerm WS* pairs:PropertyListNotEmptyPath
 // This was used when property paths not supported yet :(
 //  = TriplesSameSubject
-    = WS* s:VarOrTerm WS* pairs:PropertyListNotEmptyPath {
-    var triplesContext = pairs.triplesContext;
-    var subject = s;
-    if(pairs.pairs) {
-        for(var i=0; i< pairs.pairs.length; i++) {
-            var pair = pairs.pairs[i];
-            var triple = null;
-            if(pair[1].length != null)
-                pair[1] = pair[1][0]
-            if(subject.token && subject.token==='triplesnodecollection') {
-                triple = {subject: subject.chainSubject[0], predicate: pair[0], object: pair[1]};
-                if(triple.predicate.token === 'path' && triple.predicate.kind === 'element') {
-                    triple.predicate = triple.predicate.value;
-                }
-                triplesContext.push(triple);
-                triplesContext = triplesContext.concat(subject.triplesContext);
-            } else {
-                triple = {subject: subject, predicate: pair[0], object: pair[1]}
-                if(triple.predicate.token === 'path' && triple.predicate.kind === 'element') {
-                    triple.predicate = triple.predicate.value;
-                }
-                triplesContext.push(triple);
-            }
+{
+  var triplesContext = pairs.triplesContext;
+  var subject = s;
+  if(pairs.pairs) {
+    for(var i=0; i< pairs.pairs.length; i++) {
+      var pair = pairs.pairs[i];
+      var triple = null;
+      if(pair[1].length != null)
+        pair[1] = pair[1][0]
+      if(subject.token && subject.token==='triplesnodecollection') {
+        triple = {subject: subject.chainSubject[0], predicate: pair[0], object: pair[1]};
+        if(triple.predicate.token === 'path' && triple.predicate.kind === 'element') {
+          triple.predicate = triple.predicate.value;
         }
-    }
-
-    var tokenParsed = {};
-    tokenParsed.token = "triplessamesubject";
-    tokenParsed.triplesContext = triplesContext;
-    tokenParsed.chainSubject = subject;
-
-    return tokenParsed;
-}
-/ WS* tn:TriplesNodePath WS* pairs:PropertyListPath {
-    var triplesContext = tn.triplesContext;
-    var subject = tn.chainSubject;
-
-    if(pairs != null && pairs.pairs != null) {
-        for(var i=0; i< pairs.pairs.length; i++) {
-            var pair = pairs.pairs[i];
-            if(pair[1].length != null)
-                pair[1] = pair[1][0]
-
-            if(tn.token === "triplesnodecollection") {
-                for(var j=0; j<subject.length; j++) {
-                    var subj = subject[j];
-                    if(subj.triplesContext != null) {
-                        var triple = {subject: subj.chainSubject, predicate: pair[0], object: pair[1]}
-                        triplesContext.concat(subj.triplesContext);
-                    } else {
-                        var triple = {subject: subject[j], predicate: pair[0], object: pair[1]}
-                        triplesContext.push(triple);
-                    }
-                }
-            } else {
-                var triple = {subject: subject, predicate: pair[0], object: pair[1]}
-                triplesContext.push(triple);
-            }
+        triplesContext.push(triple);
+        triplesContext = triplesContext.concat(subject.triplesContext);
+      } else {
+        triple = {subject: subject, predicate: pair[0], object: pair[1]}
+        if(triple.predicate.token === 'path' && triple.predicate.kind === 'element') {
+          triple.predicate = triple.predicate.value;
         }
+        triplesContext.push(triple);
+      }
     }
+  }
 
-    var tokenParsed = {};
-    tokenParsed.token = "triplessamesubject";
-    tokenParsed.triplesContext = triplesContext;
-    tokenParsed.chainSubject = subject;
+  var tokenParsed = {};
+  tokenParsed.token = "triplessamesubject";
+  tokenParsed.triplesContext = triplesContext;
+  tokenParsed.chainSubject = subject;
 
-    return tokenParsed;
-
+  return tokenParsed;
 }
+/ WS* tn:TriplesNodePath WS* pairs:PropertyListPath
+{
+  var triplesContext = tn.triplesContext;
+  var subject = tn.chainSubject;
 
+  if(pairs != null && pairs.pairs != null) {
+    for(var i=0; i< pairs.pairs.length; i++) {
+      var pair = pairs.pairs[i];
+      if(pair[1].length != null)
+        pair[1] = pair[1][0]
+
+      if(tn.token === "triplesnodecollection") {
+        for(var j=0; j<subject.length; j++) {
+          var subj = subject[j];
+          if(subj.triplesContext != null) {
+            var triple = {subject: subj.chainSubject, predicate: pair[0], object: pair[1]}
+            triplesContext.concat(subj.triplesContext);
+          } else {
+            var triple = {subject: subject[j], predicate: pair[0], object: pair[1]}
+            triplesContext.push(triple);
+          }
+        }
+      } else {
+        var triple = {subject: subject, predicate: pair[0], object: pair[1]}
+        triplesContext.push(triple);
+      }
+    }
+  }
+
+  var tokenParsed = {};
+  tokenParsed.token = "triplessamesubject";
+  tokenParsed.triplesContext = triplesContext;
+  tokenParsed.chainSubject = subject;
+
+  return tokenParsed;
+}
 
 // [73] PropertyListNotEmptyPath ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
 PropertyListNotEmptyPath = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath rest:( WS* ';' WS* ( ( VerbPath / VerbSimple ) ObjectList)? )*
@@ -1437,14 +1431,11 @@ VerbPath = p:Path
 // [76] VerbSimple ::= Var
 VerbSimple = Var
 
-/*
- [77]   Path      ::=   PathAlternative
- @todo
- @fix
- */
+// [77] Path ::= PathAlternative
+// to fix??
 Path = PathAlternative
 
-// [78]   PathAlternative   ::=   PathSequence ( '|' PathSequence )*
+// [78] PathAlternative ::= PathSequence ( '|' PathSequence )*
 PathAlternative = first:PathSequence rest:( '|' PathSequence)*
 {
   if(rest == null || rest.length === 0) {
@@ -1485,20 +1476,21 @@ PathSequence = first:PathEltOrInverse rest:( '/' PathEltOrInverse)*
 }
 
 // [80]   PathElt   ::=   PathPrimary PathMod?
-PathElt = p:PathPrimary mod:PathMod? {
-    if(p.token && p.token != 'path' && mod == '') {
-        return p;
-    } else if(p.token && p.token != path && mod != '') {
-        var path = {};
+PathElt = p:PathPrimary mod:PathMod?
+{
+  if(p.token && p.token != 'path' && mod == '') {
+    return p;
+  } else if(p.token && p.token != path && mod != '') {
+    var path = {};
         path.token = 'path';
-        path.kind = 'element';
-        path.value = p;
-        path.modifier = mod;
-        return path;
-    } else {
-        p.modifier = mod;
-        return p;
-    }
+    path.kind = 'element';
+    path.value = p;
+    path.modifier = mod;
+    return path;
+  } else {
+    p.modifier = mod;
+    return p;
+  }
 }
 
 // [81]   PathEltOrInverse          ::=   PathElt | '^' PathElt
@@ -1518,10 +1510,11 @@ PathMod = ( '*' / '?' / '+' / '{' ( Integer ( ',' ( '}' / Integer '}' ) / '}' ) 
 // [83]   PathPrimary       ::=   ( IRIref | 'a' | '!' PathNegatedPropertySet | '(' Path ')' )
 PathPrimary = IRIref / 'a' 
 {
-    return{token: 'uri',  location: location(), prefix:null, suffix:null, value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}
+  return{token: 'uri',  location: location(), prefix:null, suffix:null, value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}
 }
-/ '!' PathNegatedPropertySet / '(' p:Path ')' {
-    return p;
+/ '!' PathNegatedPropertySet / '(' p:Path ')'
+{
+  return p;
 }
 
 // [84]   PathNegatedPropertySet    ::=   ( PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')' )
@@ -1594,171 +1587,167 @@ TriplesNodePath
       return {token:"triplesnodecollection", triplesContext:triplesContext, chainSubject:chainSubject,  location: location()};
 } / BlankNodePropertyListPath
 
-/*
- @todo
- // finish semantic
- [87]   TriplesNode       ::=   Collection |    BlankNodePropertyList
- */
-TriplesNode "[87] TriplesNode"
-    = c:Collection {
-    var triplesContext = [];
-    var chainSubject = [];
+// [87] TriplesNode ::= Collection | BlankNodePropertyList
+// todo??
+TriplesNode = c:Collection
+{
+  var triplesContext = [];
+  var chainSubject = [];
 
-    var triple = null;
+  var triple = null;
 
-    // catch NIL
-    /*
-     if(c.length == 1 && c[0].token && c[0].token === 'nil') {
-     GlobalBlankNodeCounter++;
-     return  {token: "triplesnodecollection",
-     triplesContext:[{subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-     predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-     object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))}}],
-     chainSubject:{token:'blank', value:("_:"+GlobalBlankNodeCounter)}};
+  // catch NIL
+  /*
+   if(c.length == 1 && c[0].token && c[0].token === 'nil') {
+   GlobalBlankNodeCounter++;
+   return  {token: "triplesnodecollection",
+   triplesContext:[{subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
+   predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
+   object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))}}],
+   chainSubject:{token:'blank', value:("_:"+GlobalBlankNodeCounter)}};
 
-     }
-     */
+   }
+   */
 
-    // other cases
-    for(var i=0; i<c.length; i++) {
-        GlobalBlankNodeCounter++;
-        //_:b0  rdf:first  1 ;
-        //rdf:rest   _:b1 .
-        var nextObject = null;
-        if(c[i].chainSubject == null && c[i].triplesContext == null) {
-            nextObject = c[i];
-        } else {
-            nextObject = c[i].chainSubject;
-            triplesContext = triplesContext.concat(nextObject.triplesContext);
-        }
-        triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-            predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#first'},
-            object:nextObject };
+  // other cases
+  for(var i=0; i<c.length; i++) {
+    GlobalBlankNodeCounter++;
+    //_:b0  rdf:first  1 ;
+    //rdf:rest   _:b1 .
+    var nextObject = null;
+    if(c[i].chainSubject == null && c[i].triplesContext == null) {
+      nextObject = c[i];
+    } else {
+      nextObject = c[i].chainSubject;
+      triplesContext = triplesContext.concat(nextObject.triplesContext);
+    }
+    triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
+              predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#first'},
+              object:nextObject };
 
-        if(i==0) {
-            chainSubject.push(triple.subject);
-        }
-
-        triplesContext.push(triple);
-
-        if(i===(c.length-1)) {
-            triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-                object:   {token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'}};
-        } else {
-            triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-                object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))} };
-        }
-
-        triplesContext.push(triple);
+    if(i==0) {
+      chainSubject.push(triple.subject);
     }
 
-    return {token:"triplesnodecollection", triplesContext:triplesContext, chainSubject:chainSubject};
+    triplesContext.push(triple);
+
+    if(i===(c.length-1)) {
+      triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
+                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
+                object:   {token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'}};
+    } else {
+      triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
+                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
+                object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))} };
+    }
+
+    triplesContext.push(triple);
+  }
+
+  return {token:"triplesnodecollection", triplesContext:triplesContext, chainSubject:chainSubject};
 }
 / BlankNodePropertyList
 
-// [101]          BlankNodePropertyListPath         ::=   '[' PropertyListPathNotEmpty ']'
-BlankNodePropertyListPath
-  = WS* '[' WS* pl:PropertyListNotEmptyPath ']' WS* {
-    GlobalBlankNodeCounter++;
-    var subject = {token:'blank', value:'_:'+GlobalBlankNodeCounter};
-     var newTriples =  [];
+// [100] BlankNodePropertyList ::= '[' PropertyListNotEmpty ']'
+BlankNodePropertyList = WS* '[' WS* pl:PropertyListNotEmpty WS* ']' WS*
+{
+  GlobalBlankNodeCounter++;
+  var subject = {token:'blank', value:'_:'+GlobalBlankNodeCounter};
+  var newTriples =  [];
 
-    for(var i=0; i< pl.pairs.length; i++) {
-        var pair = pl.pairs[i];
-        var triple = {}
-        triple.subject = subject;
-        triple.predicate = pair[0];
-        if(pair[1].length != null)
-            pair[1] = pair[1][0]
-        triple.object = pair[1];
-        newTriples.push(triple);
-    }
+  for(var i=0; i< pl.pairs.length; i++) {
+    var pair = pl.pairs[i];
+    var triple = {}
+    triple.subject = subject;
+    triple.predicate = pair[0];
+    if(pair[1].length != null)
+      pair[1] = pair[1][0]
+    triple.object = pair[1];
+    newTriples.push(triple);
+  }
 
-    return {
-      token: 'triplesnode',
-      location: location(),
-        kind: 'blanknodepropertylist',
-        triplesContext: pl.triplesContext.concat(newTriples),
-        chainSubject: subject
-    };
+  return {
+    token: 'triplesnode',
+    location: location(),
+    kind: 'blanknodepropertylist',
+    triplesContext: pl.triplesContext.concat(newTriples),
+    chainSubject: subject
+  };
 }
 
-// [88]   BlankNodePropertyList     ::=   '[' PropertyListNotEmpty ']'
-BlankNodePropertyList
-    = WS* '[' WS* pl:PropertyListNotEmpty WS* ']' WS* {
+// [101] BlankNodePropertyListPath ::= '[' PropertyListPathNotEmpty ']'
+BlankNodePropertyListPath = WS* '[' WS* pl:PropertyListNotEmptyPath ']' WS*
+{
+  GlobalBlankNodeCounter++;
+  var subject = {token:'blank', value:'_:'+GlobalBlankNodeCounter};
+  var newTriples =  [];
 
-    GlobalBlankNodeCounter++;
-    var subject = {token:'blank', value:'_:'+GlobalBlankNodeCounter};
-    var newTriples =  [];
+  for(var i=0; i< pl.pairs.length; i++) {
+    var pair = pl.pairs[i];
+    var triple = {}
+    triple.subject = subject;
+    triple.predicate = pair[0];
+    if(pair[1].length != null)
+      pair[1] = pair[1][0]
+    triple.object = pair[1];
+    newTriples.push(triple);
+  }
 
-    for(var i=0; i< pl.pairs.length; i++) {
-        var pair = pl.pairs[i];
-        var triple = {}
-        triple.subject = subject;
-        triple.predicate = pair[0];
-        if(pair[1].length != null)
-            pair[1] = pair[1][0]
-        triple.object = pair[1];
-        newTriples.push(triple);
-    }
-
-    return {
-      token: 'triplesnode',
-      location: location(),
-        kind: 'blanknodepropertylist',
-        triplesContext: pl.triplesContext.concat(newTriples),
-        chainSubject: subject
-    };
+  return {
+    token: 'triplesnode',
+    location: location(),
+    kind: 'blanknodepropertylist',
+    triplesContext: pl.triplesContext.concat(newTriples),
+    chainSubject: subject
+  };
 }
 
-// [103]          CollectionPath    ::=   '(' GraphNodePath+ ')'
-CollectionPath
-    = WS* '(' WS* gn:GraphNodePath+ WS* ')' WS* {
-    return gn;
+// [102] Collection ::= '(' GraphNode+ ')'
+Collection = WS* '(' WS* gn:GraphNode+ WS* ')' WS*
+{
+  return gn;
 }
 
-// [89]   Collection        ::=   '(' GraphNode+ ')'
-Collection
-    = WS* '(' WS* gn:GraphNode+ WS* ')' WS* {
-    return gn;
+// [103] CollectionPath ::= '(' GraphNodePath+ ')'
+CollectionPath = WS* '(' WS* gn:GraphNodePath+ WS* ')' WS*
+{
+  return gn;
 }
 
-// [105]          GraphNodePath     ::=   VarOrTerm | TriplesNodePath
-GraphNodePath
-    =gn:(WS* VarOrTerm WS* / WS* TriplesNodePath WS*) {
-    return gn[1];
+// [104] GraphNode ::= VarOrTerm | TriplesNode
+GraphNode = gn:(WS* VarOrTerm WS* / WS* TriplesNode WS*)
+{
+  return gn[1];
 }
 
-// [90]   GraphNode         ::=   VarOrTerm |     TriplesNode
-GraphNode
-    = gn:(WS* VarOrTerm WS* / WS* TriplesNode WS*) {
-    return gn[1];
+// [105] GraphNodePath ::= VarOrTerm | TriplesNodePath
+GraphNodePath =gn:(WS* VarOrTerm WS* / WS* TriplesNodePath WS*)
+{
+  return gn[1];
 }
 
-// [91]   VarOrTerm         ::=   Var | GraphTerm
-VarOrTerm
-    = (Var / GraphTerm)
+// [106] VarOrTerm ::= Var | GraphTerm
+VarOrTerm = (Var / GraphTerm)
 
-// [92]   VarOrIRIref       ::=   Var | IRIref
-VarOrIRIref
-    = (Var /IRIref)
+// [107] VarOrIRIref ::= Var | IRIref
+VarOrIRIref = (Var /IRIref)
 
-// [93]   Var       ::=   VAR1 | VAR2
-Var
-    = WS* v:(VAR1 / VAR2) WS* {
-    var term = {location: location()};
-    term.token = 'var';
-    // term.value = v;
-    term.prefix = v.prefix;
-    term.value = v.value;
-    return term;
+// [108] Var ::= VAR1 | VAR2
+Var = WS* v:(VAR1 / VAR2) WS*
+{
+  var term = {location: location()};
+
+  term.token = 'var';
+
+  // term.value = v;
+  term.prefix = v.prefix;
+  term.value = v.value;
+
+  return term;
 }
 
-// [94]   GraphTerm         ::=   IRIref |        RDFLiteral |    NumericLiteral |        BooleanLiteral |        BlankNode |     NIL
-GraphTerm
-    = IRIref /  RDFLiteral /    NumericLiteral /        BooleanLiteral /        BlankNode /     NIL
+// [109] GraphTerm ::= IRIref | RDFLiteral | NumericLiteral | BooleanLiteral | BlankNode | NIL
+GraphTerm = IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / BlankNode / NIL
 /*
  = t:IRIref {
  var term = {};
@@ -1804,446 +1793,445 @@ GraphTerm
  }
  */
 
-// [95]   Expression        ::=   ConditionalOrExpression
+// [119] Expression ::= ConditionalOrExpression
 Expression = ConditionalOrExpression
 
-// [96]   ConditionalOrExpression   ::=   ConditionalAndExpression ( '||' ConditionalAndExpression )*
-ConditionalOrExpression
-    = v:ConditionalAndExpression vs:(WS* '||' WS* ConditionalAndExpression)* {
-    if(vs.length === 0) {
-        return v;
-    }
-
-    var exp = {};
-    exp.token = "expression";
-    exp.expressionType = "conditionalor";
-    var ops = [v];
-
-    for(var i=0; i<vs.length; i++) {
-        ops.push(vs[i][3]);
-    }
-
-    exp.operands = ops;
-
-    return exp;
+// [111] ConditionalOrExpression ::= ConditionalAndExpression ( '||' ConditionalAndExpression )*
+ConditionalOrExpression = v:ConditionalAndExpression vs:(WS* '||' WS* ConditionalAndExpression)*
+{
+  if(vs.length === 0) {
+    return v;
+  }
+  
+  var exp = {};
+  exp.token = "expression";
+  exp.expressionType = "conditionalor";
+  var ops = [v];
+  
+  for(var i=0; i<vs.length; i++) {
+    ops.push(vs[i][3]);
+  }
+  
+  exp.operands = ops;
+  
+  return exp;
 }
 
-// [97]   ConditionalAndExpression          ::=   ValueLogical ( '&&' ValueLogical )*
-ConditionalAndExpression
-    = v:ValueLogical vs:(WS* '&&' WS* ValueLogical)* {
-    if(vs.length === 0) {
-        return v;
-    }
-    var exp = {};
-    exp.token = "expression";
-    exp.expressionType = "conditionaland";
-    var ops = [v];
-
-    for(var i=0; i<vs.length; i++) {
-        ops.push(vs[i][3]);
-    }
-
-    exp.operands = ops;
-
-    return exp;
+// [112] ConditionalAndExpression ::= ValueLogical ( '&&' ValueLogical )*
+ConditionalAndExpression = v:ValueLogical vs:(WS* '&&' WS* ValueLogical)*
+{
+  if(vs.length === 0) {
+    return v;
+  }
+  var exp = {};
+  exp.token = "expression";
+  exp.expressionType = "conditionaland";
+  var ops = [v];
+  
+  for(var i=0; i<vs.length; i++) {
+    ops.push(vs[i][3]);
+  }
+  
+  exp.operands = ops;
+  
+  return exp;
 }
 
-// [98]   ValueLogical      ::=   RelationalExpression
-ValueLogical
-    = RelationalExpression
+// [113] ValueLogical ::= RelationalExpression
+ValueLogical = RelationalExpression
 
-// [99]   RelationalExpression      ::=   NumericExpression ( '=' NumericExpression | '!=' NumericExpression | '<' NumericExpression | '>' NumericExpression | '<=' NumericExpression | '>=' NumericExpression | 'IN' ExpressionList | 'NOT IN' ExpressionList )?
-RelationalExpression
-    = op1:NumericExpression op2:(
-        WS* '=' WS* NumericExpression /
-        WS* '!=' WS* NumericExpression /
-        WS* '<' WS* NumericExpression /
-        WS* '>' WS* NumericExpression /
-        WS* '<=' WS* NumericExpression /
-        WS* '>=' WS* NumericExpression /
-        WS* ('I'/'i')('N'/'n') WS* ExpressionList /
-        WS* ('N'/'n')('O'/'o')('T'/'t') WS* ('I'/'i')('N'/'n') WS* ExpressionList
-   )* {
-    if(op2.length === 0) {
-        return op1;
-    } else if(op2[0][1] === 'i' || op2[0][1] === 'I' || op2[0][1] === 'n' || op2[0][1] === 'N'){
-        var exp = {};
-
-        if(op2[0][1] === 'i' || op2[0][1] === 'I') {
-            var operator = "=";
-            exp.expressionType = "conditionalor"
-        } else {
-            var operator = "!=";
-            exp.expressionType = "conditionaland"
-        }
-        var lop = op1;
-        var rops = []
-        for(var opi=0; opi<op2[0].length; opi++) {
-            if(op2[0][opi].token ==="args") {
-                rops = op2[0][opi].value;
-                break;
-            }
-        }
-
-        exp.token = "expression";
-        exp.operands = [];
-        for(var i=0; i<rops.length; i++) {
-            var nextOperand = {};
-            nextOperand.token = "expression";
-            nextOperand.expressionType = "relationalexpression";
-            nextOperand.operator = operator;
-            nextOperand.op1 = lop;
-            nextOperand.op2 = rops[i];
-
-            exp.operands.push(nextOperand);
-        }
-        return exp;
+// [114] RelationalExpression ::= NumericExpression ( '=' NumericExpression | '!=' NumericExpression | '<' NumericExpression | '>' NumericExpression | '<=' NumericExpression | '>=' NumericExpression | 'IN' ExpressionList | 'NOT IN' ExpressionList )?
+RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression /
+                                                  WS* '!=' WS* NumericExpression /
+                                                  WS* '<' WS* NumericExpression /
+                                                  WS* '>' WS* NumericExpression /
+                                                  WS* '<=' WS* NumericExpression /
+                                                  WS* '>=' WS* NumericExpression /
+                                                  WS* ('I'/'i')('N'/'n') WS* ExpressionList /
+                                                  WS* ('N'/'n')('O'/'o')('T'/'t') WS* ('I'/'i')('N'/'n') WS* ExpressionList)*
+{
+  if(op2.length === 0) {
+    return op1;
+  } else if(op2[0][1] === 'i' || op2[0][1] === 'I' || op2[0][1] === 'n' || op2[0][1] === 'N'){
+    var exp = {};
+    
+    if(op2[0][1] === 'i' || op2[0][1] === 'I') {
+      var operator = "=";
+      exp.expressionType = "conditionalor"
     } else {
-        var exp = {};
-        exp.expressionType = "relationalexpression"
-        exp.operator = op2[0][1];
-        exp.op1 = op1;
-        exp.op2 = op2[0][3];
-        exp.token = "expression";
-
-        return exp;
+      var operator = "!=";
+      exp.expressionType = "conditionaland"
     }
+    var lop = op1;
+    var rops = []
+    for(var opi=0; opi<op2[0].length; opi++) {
+      if(op2[0][opi].token ==="args") {
+        rops = op2[0][opi].value;
+        break;
+      }
+    }
+    
+    exp.token = "expression";
+    exp.operands = [];
+    for(var i=0; i<rops.length; i++) {
+      var nextOperand = {};
+      nextOperand.token = "expression";
+      nextOperand.expressionType = "relationalexpression";
+      nextOperand.operator = operator;
+      nextOperand.op1 = lop;
+      nextOperand.op2 = rops[i];
+      
+      exp.operands.push(nextOperand);
+    }
+    return exp;
+  } else {
+    var exp = {};
+    exp.expressionType = "relationalexpression"
+    exp.operator = op2[0][1];
+    exp.op1 = op1;
+    exp.op2 = op2[0][3];
+    exp.token = "expression";
+    
+    return exp;
+  }
 }
 
-// [100]          NumericExpression         ::=   AdditiveExpression
-NumericExpression
-    = AdditiveExpression
+// [115] NumericExpression ::= AdditiveExpression
+NumericExpression = AdditiveExpression
 
-/*
- [101]          AdditiveExpression        ::=   MultiplicativeExpression ( '+' MultiplicativeExpression |
- '-' MultiplicativeExpression |
- ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )? )*
- */
-AdditiveExpression
-    = op1:MultiplicativeExpression ops:( WS* '+' WS* MultiplicativeExpression / WS* '-' WS* MultiplicativeExpression / ( NumericLiteralNegative / NumericLiteralNegative ) ( (WS* '*' WS* UnaryExpression) / (WS* '/' WS* UnaryExpression))? )* {
-    if(ops.length === 0) {
-        return op1;
+// [116] AdditiveExpression ::= MultiplicativeExpression ( '+' MultiplicativeExpression | '-' MultiplicativeExpression | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )? )*
+AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* MultiplicativeExpression / WS* '-' WS* MultiplicativeExpression / ( NumericLiteralNegative / NumericLiteralNegative ) ( (WS* '*' WS* UnaryExpression) / (WS* '/' WS* UnaryExpression))? )*
+{
+  if(ops.length === 0) {
+    return op1;
+  }
+
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'additiveexpression';
+  ex.summand = op1;
+  ex.summands = [];
+  
+  for(var i=0; i<ops.length; i++) {
+    var summand = ops[i];
+    var sum = {};
+    if(summand.length == 4 && typeof(summand[1]) === "string") {
+      sum.operator = summand[1];
+      sum.expression = summand[3];
+    } else {
+      var subexp = {}
+      var firstFactor = sum[0];
+      var operator = sum[1][1];
+      var secondFactor = sum[1][3];
+      var operator = null;
+      if(firstFactor.value < 0) {
+        sum.operator = '-';
+        firstFactor.value = - firstFactor.value;
+      } else {
+        sum.operator = '+';
+      }
+      subexp.token = 'expression';
+      subexp.expressionType = 'multiplicativeexpression';
+      subexp.operator = firstFactor;
+      subexp.factors = [{operator: operator, expression: secondFactor}];
+      
+      sum.expression = subexp;
     }
-
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'additiveexpression';
-    ex.summand = op1;
-    ex.summands = [];
-
-    for(var i=0; i<ops.length; i++) {
-        var summand = ops[i];
-        var sum = {};
-        if(summand.length == 4 && typeof(summand[1]) === "string") {
-            sum.operator = summand[1];
-            sum.expression = summand[3];
-        } else {
-            var subexp = {}
-            var firstFactor = sum[0];
-            var operator = sum[1][1];
-            var secondFactor = sum[1][3];
-            var operator = null;
-            if(firstFactor.value < 0) {
-                sum.operator = '-';
-                firstFactor.value = - firstFactor.value;
-            } else {
-                sum.operator = '+';
-            }
-            subexp.token = 'expression';
-            subexp.expressionType = 'multiplicativeexpression';
-            subexp.operator = firstFactor;
-            subexp.factors = [{operator: operator, expression: secondFactor}];
-
-            sum.expression = subexp;
-        }
-        ex.summands.push(sum);
-    }
-
-    return ex;
+    ex.summands.push(sum);
+  }
+  
+  return ex;
 }
 
-
-// [102]          MultiplicativeExpression          ::=   UnaryExpression ( '*' UnaryExpression | '/' UnaryExpression )*
-MultiplicativeExpression
-    = exp:UnaryExpression exps:(WS* '*' WS* UnaryExpression / WS* '/' WS* UnaryExpression)* {
-    if(exps.length === 0) {
-        return exp;
-    }
-
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'multiplicativeexpression';
-    ex.factor = exp;
-    ex.factors = [];
-    for(var i=0; i<exps.length; i++) {
-        var factor = exps[i];
-        var fact = {};
-        fact.operator = factor[1];
-        fact.expression = factor[3];
-        ex.factors.push(fact);
-    }
-
-    return ex;
+// [117] MultiplicativeExpression ::= UnaryExpression ( '*' UnaryExpression | '/' UnaryExpression )*
+MultiplicativeExpression = exp:UnaryExpression exps:(WS* '*' WS* UnaryExpression / WS* '/' WS* UnaryExpression)*
+{
+  if(exps.length === 0) {
+    return exp;
+  }
+  
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'multiplicativeexpression';
+  ex.factor = exp;
+  ex.factors = [];
+  for(var i=0; i<exps.length; i++) {
+    var factor = exps[i];
+    var fact = {};
+    fact.operator = factor[1];
+    fact.expression = factor[3];
+    ex.factors.push(fact);
+  }
+  
+  return ex;
 }
 
-// [103]          UnaryExpression   ::=     '!' PrimaryExpression  |      '+' PrimaryExpression | '-' PrimaryExpression | PrimaryExpression
-UnaryExpression
-    = '!' WS* e:PrimaryExpression {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'unaryexpression';
-    ex.unaryexpression = "!";
-    ex.expression = e;
+// [118] UnaryExpression ::= '!' PrimaryExpression | '+' PrimaryExpression | '-' PrimaryExpression | PrimaryExpression
+UnaryExpression = '!' WS* e:PrimaryExpression
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'unaryexpression';
+  ex.unaryexpression = "!";
+  ex.expression = e;
 
-    return ex;
+  return ex;
 }
-/ '+' WS* v:PrimaryExpression {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'unaryexpression';
-    ex.unaryexpression = "+";
-    ex.expression = v;
+/ '+' WS* v:PrimaryExpression
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'unaryexpression';
+  ex.unaryexpression = "+";
+  ex.expression = v;
 
-    return ex;
+  return ex;
 }
-/ '-' WS* v:PrimaryExpression {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'unaryexpression';
-    ex.unaryexpression = "-";
-    ex.expression = v;
+/ '-' WS* v:PrimaryExpression
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'unaryexpression';
+  ex.unaryexpression = "-";
+  ex.expression = v;
 
-    return ex;
+  return ex;
 }
 / PrimaryExpression
 
-/*  [104]       PrimaryExpression         ::=   BrackettedExpression | BuiltInCall | IRIrefOrFunction | RDFLiteral | NumericLiteral | BooleanLiteral | Var | Aggregate
- */
-PrimaryExpression
-    = BrackettedExpression
-/ BuiltInCall
-/ IRIrefOrFunction
-/ v:RDFLiteral {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'atomic';
-    ex.primaryexpression = 'rdfliteral';
-    ex.value = v;
+// [119] PrimaryExpression ::= BrackettedExpression | BuiltInCall | IRIrefOrFunction | RDFLiteral | NumericLiteral | BooleanLiteral | Var | Aggregate
+PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RDFLiteral
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'atomic';
+  ex.primaryexpression = 'rdfliteral';
+  ex.value = v;
 
-    return ex;
+  return ex;
 }
-/ v:NumericLiteral {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'atomic';
-    ex.primaryexpression = 'numericliteral';
-    ex.value = v;
+/ v:NumericLiteral
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'atomic';
+  ex.primaryexpression = 'numericliteral';
+  ex.value = v;
 
-    return ex;
+  return ex;
 }
-/ v:BooleanLiteral {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'atomic';
-    ex.primaryexpression = 'booleanliteral';
-    ex.value = v;
+/ v:BooleanLiteral
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'atomic';
+  ex.primaryexpression = 'booleanliteral';
+  ex.value = v;
 
-    return ex;
+  return ex;
 }
 / Aggregate
-/ v:Var {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'atomic';
-    ex.primaryexpression = 'var';
-    ex.value = v;
+/ v:Var
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'atomic';
+  ex.primaryexpression = 'var';
+  ex.value = v;
 
-    return ex;
+  return ex;
 }
 
-// [105]          BrackettedExpression      ::=   '(' Expression ')'
-BrackettedExpression
-    = '(' WS* e:Expression WS* ')' {
-    return e;
+// [105] BrackettedExpression ::= '(' Expression ')'
+BrackettedExpression = '(' WS* e:Expression WS* ')'
+{
+  return e;
 }
 
-/*
- @todo
- @incomplete
- [106]          BuiltInCall       ::=     'STR' '(' Expression ')'
- |  'LANG' '(' Expression ')'
- |  'LANGMATCHES' '(' Expression ',' Expression ')'
- |  'DATATYPE' '(' Expression ')'
- |  'BOUND' '(' Var ')'
- |  'IRI' '(' Expression ')'
- |  'URI' '(' Expression ')'
- |  'BNODE' ( '(' Expression ')' | NIL )
- |  'COALESCE' ExpressionList
- |  'IF' '(' Expression ',' Expression ',' Expression ')'
- |  'STRLANG' '(' Expression ',' Expression ')'
- |  'STRDT' '(' Expression ',' Expression ')'
- |  'sameTerm' '(' Expression ',' Expression ')'
- |  'isIRI' '(' Expression ')'
- |  'isURI' '(' Expression ')'
- |  'isBLANK' '(' Expression ')'
- |  'isLITERAL' '(' Expression ')'
- |  'isNUMERIC' '(' Expression ')'
- |  RegexExpression
- |  ExistsFunc
- |  NotExistsFunc
- */
-BuiltInCall "[106] BuiltInCall"
-    = ('STR'/'str') WS* '(' WS* e:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression'
-    ex.expressionType = 'builtincall'
-    ex.builtincall = 'str'
-    ex.args = [e]
-
-    return ex;
+// [121] BuiltInCall ::= 'STR' '(' Expression ')'
+//                    |  'LANG' '(' Expression ')'
+//                    |  'LANGMATCHES' '(' Expression ',' Expression ')'
+//                    |  'DATATYPE' '(' Expression ')'
+//                    |  'BOUND' '(' Var ')'
+//                    |  'IRI' '(' Expression ')'
+//                    |  'URI' '(' Expression ')'
+//                    |  'BNODE' ( '(' Expression ')' | NIL )
+//                    |  'COALESCE' ExpressionList
+//                    |  'IF' '(' Expression ',' Expression ',' Expression ')'
+//                    |  'STRLANG' '(' Expression ',' Expression ')'
+//                    |  'STRDT' '(' Expression ',' Expression ')'
+//                    |  'sameTerm' '(' Expression ',' Expression ')'
+//                    |  'isIRI' '(' Expression ')'
+//                    |  'isURI' '(' Expression ')'
+//                    |  'isBLANK' '(' Expression ')'
+//                    |  'isLITERAL' '(' Expression ')'
+//                    |  'isNUMERIC' '(' Expression ')'
+//                    |  RegexExpression
+//                    |  ExistsFunc
+//                    |  NotExistsFunc
+// incomplete??
+BuiltInCall = ('STR'/'str') WS* '(' WS* e:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression'
+  ex.expressionType = 'builtincall'
+  ex.builtincall = 'str'
+  ex.args = [e]
+  
+  return ex;
 }
-/ ('LANG'/'lang') WS* '(' WS* e:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression'
-    ex.expressionType = 'builtincall'
-    ex.builtincall = 'lang'
-    ex.args = [e]
-
-    return ex;
+/ ('LANG'/'lang') WS* '(' WS* e:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression'
+  ex.expressionType = 'builtincall'
+  ex.builtincall = 'lang'
+  ex.args = [e]
+  
+  return ex;
 }
-/ ('LANGMATCHES'/'langmatches') WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression'
-    ex.expressionType = 'builtincall'
-    ex.builtincall = 'langmatches'
-    ex.args = [e1,e2]
-
-    return ex;
+/ ('LANGMATCHES'/'langmatches') WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression'
+  ex.expressionType = 'builtincall'
+  ex.builtincall = 'langmatches'
+  ex.args = [e1,e2]
+  
+  return ex;
 }
-/ ('DATATYPE'/'datatype') WS* '(' WS* e:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression'
-    ex.expressionType = 'builtincall'
-    ex.builtincall = 'datatype'
-    ex.args = [e]
-
-    return ex;
+/ ('DATATYPE'/'datatype') WS* '(' WS* e:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression'
+  ex.expressionType = 'builtincall'
+  ex.builtincall = 'datatype'
+  ex.args = [e]
+  
+  return ex;
 }
-/ ('BOUND'/'bound') WS* '(' WS* v:Var WS* ')'  {
-    var ex = {};
-    ex.token = 'expression'
-    ex.expressionType = 'builtincall'
-    ex.builtincall = 'bound'
-    ex.args = [v]
+/ ('BOUND'/'bound') WS* '(' WS* v:Var WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression'
+  ex.expressionType = 'builtincall'
+  ex.builtincall = 'bound'
+  ex.args = [v]
 
-    return ex;
+  return ex;
 }
-/ ('IRI'/'iri') WS* '(' WS* e:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'builtincall';
-    ex.builtincall = 'iri'
-    ex.args = [e];
+/ ('IRI'/'iri') WS* '(' WS* e:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'iri'
+  ex.args = [e];
 
-    return ex;
+  return ex;
 }
+/ ('URI'/'uri') WS* '(' WS* e:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'uri'
+  ex.args = [e];
 
-/ ('URI'/'uri') WS* '(' WS* e:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'builtincall';
-    ex.builtincall = 'uri'
-    ex.args = [e];
-
-    return ex;
+  return ex;
 }
+/ ('BNODE'/'bnode') WS* arg:('(' WS* e:Expression WS* ')' / NIL)
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'bnode';
+  if(arg.length === 5) {
+    ex.args = [arg[2]];
+  } else {
+    ex.args = null;
+  }
 
-/ ('BNODE'/'bnode') WS* arg:('(' WS* e:Expression WS* ')' / NIL) {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'builtincall';
-    ex.builtincall = 'bnode';
-    if(arg.length === 5) {
-        ex.args = [arg[2]];
-    } else {
-        ex.args = null;
-    }
-
-    return ex;
+  return ex;
 }
+/ ('COALESCE'/'coalesce') WS* args:ExpressionList
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'coalesce';
+  ex.args = args;
 
-/ ('COALESCE'/'coalesce') WS* args:ExpressionList {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'builtincall';
-    ex.builtincall = 'coalesce';
-    ex.args = args;
-
-    return ex;
+  return ex;
 }
+/ ('IF'/'if') WS* '(' WS* test:Expression WS* ',' WS* trueCond:Expression WS* ',' WS* falseCond:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'if';
+  ex.args = [test,trueCond,falseCond];
 
-/ ('IF'/'if') WS* '(' WS* test:Expression WS* ',' WS* trueCond:Expression WS* ',' WS* falseCond:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'builtincall';
-    ex.builtincall = 'if';
-    ex.args = [test,trueCond,falseCond];
-
-    return ex;
+  return ex;
 }
-/ ('ISLITERAL'/'isliteral'/'isLITERAL') WS* '(' WS* arg:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'builtincall';
-    ex.builtincall = 'isliteral';
-    ex.args = [arg];
+/ ('ISLITERAL'/'isliteral'/'isLITERAL') WS* '(' WS* arg:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'isliteral';
+  ex.args = [arg];
 
-    return ex;
+  return ex;
 }
-/ ('ISBLANK'/'isblank'/'isBLANK') WS* '(' WS* arg:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'builtincall';
-    ex.builtincall = 'isblank';
-    ex.args = [arg];
+/ ('ISBLANK'/'isblank'/'isBLANK') WS* '(' WS* arg:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'isblank';
+  ex.args = [arg];
 
-    return ex;
+  return ex;
 }
-/ ('SAMETERM'/'sameterm') WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'builtincall';
-    ex.builtincall = 'sameterm';
-    ex.args = [e1, e2];
-    return ex;
+/ ('SAMETERM'/'sameterm') WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'sameterm';
+  ex.args = [e1, e2];
+  return ex;
 }
-/ ('ISURI'/'isuri'/'isURI'/'ISIRI'/'isiri'/'isIRI') WS* '(' WS* arg:Expression WS* ')' {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'builtincall';
-    ex.builtincall = 'isuri';
-    ex.args = [arg];
+/ ('ISURI'/'isuri'/'isURI'/'ISIRI'/'isiri'/'isIRI') WS* '(' WS* arg:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'isuri';
+  ex.args = [arg];
 
-    return ex;
+  return ex;
 }
-/ ('custom:'/'CUSTOM:') fnname:[a-zA-Z0-9_]+ WS* '(' alter:(WS* Expression ',')* WS* finalarg:Expression WS* ')'  {
-    var ex = {};
-    ex.token = 'expression';
-    ex.expressionType = 'custom';
-    ex.name = fnname.join('');
-    var acum = [];
-    for(var i=0; i<alter.length; i++)
-        acum.push(alter[i][1]);
-    acum.push(finalarg);
-    ex.args = acum;
+/ ('custom:'/'CUSTOM:') fnname:[a-zA-Z0-9_]+ WS* '(' alter:(WS* Expression ',')* WS* finalarg:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'custom';
+  ex.name = fnname.join('');
+  var acum = [];
+  for(var i=0; i<alter.length; i++)
+    acum.push(alter[i][1]);
+  acum.push(finalarg);
+  ex.args = acum;
 
-    return ex;
+  return ex;
 }
 / RegexExpression
 / ExistsFunc
 / NotExistsFunc
 
-// [107] RegexExpression ::= 'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'
+// [122] RegexExpression ::= 'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'
 RegexExpression = ('REGEX'/'regex') WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* eo:( ',' WS* Expression)?  WS* ')'
 {
   var regex = {};
@@ -2258,7 +2246,7 @@ RegexExpression = ('REGEX'/'regex') WS* '(' WS* e1:Expression WS* ',' WS* e2:Exp
   return regex;
 }
 
-// [108] ExistsFunc ::= 'EXISTS' GroupGraphPattern
+// [125] ExistsFunc ::= 'EXISTS' GroupGraphPattern
 ExistsFunc = ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
 {
   var ex = {};
@@ -2270,7 +2258,7 @@ ExistsFunc = ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
   return ex;
 }
 
-// [109]   NotExistsFunc     ::=   'NOT EXISTS' GroupGraphPattern
+// [126] NotExistsFunc ::=   'NOT EXISTS' GroupGraphPattern
 NotExistsFunc = ('NOT'/'not') WS* ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
 {
   var ex = {};
@@ -2282,17 +2270,14 @@ NotExistsFunc = ('NOT'/'not') WS* ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
   return ex;
 }
 
-/*
- @todo
- @incomplete
- [110]          Aggregate         ::=   ( 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')' |
- 'SUM' '(' 'DISTINCT'? Expression ')' |
- 'MIN' '(' 'DISTINCT'? Expression ')' |
- 'MAX' '(' 'DISTINCT'? Expression ')' |
- 'AVG' '(' 'DISTINCT'? Expression ')' |
- 'SAMPLE' '(' 'DISTINCT'? Expression ')' |
- 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')' )
- */
+// [127] Aggregate ::= ( 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')' |
+//       'SUM' '(' 'DISTINCT'? Expression ')' |
+//       'MIN' '(' 'DISTINCT'? Expression ')' |
+//       'MAX' '(' 'DISTINCT'? Expression ')' |
+//       'AVG' '(' 'DISTINCT'? Expression ')' |
+//       'SAMPLE' '(' 'DISTINCT'? Expression ')' |
+//       'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')' )
+// incomplete??
 Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*'/Expression) WS* ')' WS*
 {
   var exp = {};
@@ -2361,12 +2346,8 @@ Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*
   return exp
 }
 
-/*
- @error
- Something has gone wrong with numeration in the rules!!
-
- [117] IRIrefOrFunction ::= IRIref ArgList?
- */
+// [128] IRIrefOrFunction ::= IRIref ArgList?
+// error?? Something has gone wrong with numeration in the rules!!
 IRIrefOrFunction = i:IRIref WS* args:ArgList?
 {
   var fcall = {};
@@ -2378,7 +2359,7 @@ IRIrefOrFunction = i:IRIref WS* args:ArgList?
   return fcall;
 }
 
-// [112] RDFLiteral ::= String ( LANGTAG | ( '^^' IRIref ) )?
+// [129] RDFLiteral ::= String ( LANGTAG | ( '^^' IRIref ) )?
 RDFLiteral = s:String e:( LANGTAG / ('^^' IRIref) )?
 {
   if(typeof(e) === "string" && e.length > 0) {
@@ -2393,19 +2374,19 @@ RDFLiteral = s:String e:( LANGTAG / ('^^' IRIref) )?
   }
 }
 
-// [113]          NumericLiteral    ::=   NumericLiteralUnsigned | NumericLiteralPositive | NumericLiteralNegative
+// [130] NumericLiteral ::= NumericLiteralUnsigned | NumericLiteralPositive | NumericLiteralNegative
 NumericLiteral = NumericLiteralUnsigned / NumericLiteralPositive / NumericLiteralNegative
 
-// [114]          NumericLiteralUnsigned    ::=   INTEGER |       DECIMAL |       DOUBLE
+// [131] NumericLiteralUnsigned ::= INTEGER | DECIMAL | DOUBLE
 NumericLiteralUnsigned = DOUBLE / DECIMAL / INTEGER
 
-// [115]          NumericLiteralPositive    ::=   INTEGER_POSITIVE |      DECIMAL_POSITIVE |      DOUBLE_POSITIVE
+// [132] NumericLiteralPositive ::= INTEGER_POSITIVE | DECIMAL_POSITIVE | DOUBLE_POSITIVE
 NumericLiteralPositive = DOUBLE_POSITIVE / DECIMAL_POSITIVE / INTEGER_POSITIVE
 
-// [116]          NumericLiteralNegative    ::=   INTEGER_NEGATIVE |      DECIMAL_NEGATIVE |      DOUBLE_NEGATIVE
+// [133] NumericLiteralNegative ::= INTEGER_NEGATIVE | DECIMAL_NEGATIVE | DOUBLE_NEGATIVE
 NumericLiteralNegative = DOUBLE_NEGATIVE / DECIMAL_NEGATIVE / INTEGER_NEGATIVE
 
-// [117]          BooleanLiteral    ::=   'true' |        'false'
+// [134] BooleanLiteral ::= 'true' | 'false'
 BooleanLiteral = ('TRUE'/'true')
 {
   var lit = {};
@@ -2425,7 +2406,7 @@ BooleanLiteral = ('TRUE'/'true')
   return lit;
 }
 
-// [118] String ::= STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2
+// [135] String ::= STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2
 String = s:STRING_LITERAL_LONG1 
 {
   return {token:'string', value:s,  location: location()}
@@ -2443,7 +2424,7 @@ String = s:STRING_LITERAL_LONG1
   return {token:'string', value:s, location: location()}
 }
 
-// [119] IRIref ::= IRI_REF | PrefixedName
+// [136] IRIref ::= IRI_REF | PrefixedName
 IRIref = iri:IRI_REF
 {
   return {token: 'uri', prefix:null, suffix:null, value:iri, location: location()}
@@ -2453,12 +2434,12 @@ IRIref = iri:IRI_REF
   return p
 }
 
-// [120]          PrefixedName      ::=   PNAME_LN | PNAME_NS
+// [137] PrefixedName ::= PNAME_LN | PNAME_NS
 PrefixedName = p:PNAME_LN { return {token: 'uri', prefix:p[0], suffix:p[1], value:null, location: location() } }
 / p:PNAME_NS 
 { return {token: 'uri', prefix:p, suffix:'', value:null, location: location() } }
 
-// [121]          BlankNode         ::=   BLANK_NODE_LABEL |      ANON
+// [138] BlankNode ::= BLANK_NODE_LABEL | ANON
 BlankNode = l:BLANK_NODE_LABEL
 {
   return {token:'blank', value:l, location: location()}
@@ -2469,314 +2450,223 @@ BlankNode = l:BLANK_NODE_LABEL
   return {token:'blank', value:'_:'+GlobalBlankNodeCounter, location: location()}
 }
 
-/*
- [122]          IRI_REF   ::=   '<' ([^<>"{}|^`\]-[#x00-#x20])* '>'
- @todo check this rule
- @incomplete
- */
+// [122] IRI_REF ::= '<' ([^<>"{}|^`\]-[#x00-#x20])* '>'
+// incomplete??
 IRI_REF = '<' iri_ref:[^<>\"\{\}|^`\\]* '>' { return iri_ref.join('') }
 
-// [123]      PNAME_NS          ::=   PN_PREFIX? ':'
-    PNAME_NS
-    = p:PN_PREFIX? ':' { return p }
+// [123] PNAME_NS ::= PN_PREFIX? ':'
+PNAME_NS = p:PN_PREFIX? ':'
+{
+  return p
+}
 
-// [124]      PNAME_LN          ::=   PNAME_NS PN_LOCAL
-PNAME_LN = p:PNAME_NS s:PN_LOCAL { return [p, s] }
+// [124] PNAME_LN ::= PNAME_NS PN_LOCAL
+PNAME_LN = p:PNAME_NS s:PN_LOCAL
+{
+  return [p, s]
+}
 
-    /*
-     [125]      BLANK_NODE_LABEL          ::=   '_:' PN_LOCAL
-     */
-    BLANK_NODE_LABEL "[125] BLANK_NODE_LABEL"
-    = '_:' l:PN_LOCAL { return l }
+// [142] BLANK_NODE_LABEL ::= ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
+// [142] BLANK_NODE_LABEL ::= '_:' PN_LOCAL
+BLANK_NODE_LABEL = '_:' l:PN_LOCAL 
+{
+  return l
+}
 
-    /*
-     [126]      VAR1      ::=   '?' VARNAME
-     */
-    VAR1 "[126] VAR1"
-    // = '?' v:VARNAME { return v }
-    = '?' v:VARNAME { return { prefix: "?",  value: v }; }
+// [143] VAR1 ::= '?' VARNAME
+VAR1 = '?' v:VARNAME 
+{
+  // return v
+  return { prefix: "?",  value: v };
+}
 
-    /*
-     [127]      VAR2      ::=   '$' VARNAME
-     */
-    VAR2 "[127] VAR2"
-    // = '$' v:VARNAME { return v }
-    = '$' v:VARNAME { return { prefix: "$",  value: v }; }
+// [144] VAR2 ::= '$' VARNAME
+VAR2 = '$' v:VARNAME 
+{
+  // return v
+  return { prefix: "$",  value: v };
+}
 
-    /*
-     [128]      LANGTAG   ::=   '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
-     */
-    LANGTAG "[128] LANGTAG"
-    = '@' a:[a-zA-Z]+ b:('-' [a-zA-Z0-9]+)*  {
-
-    if(b.length===0) {
+// [145] LANGTAG ::= '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
+LANGTAG = '@' a:[a-zA-Z]+ b:('-' [a-zA-Z0-9]+)*
+{
+  if(b.length===0) {
     return ("@"+a.join('')).toLowerCase();
-    } else {
+  } else {
     return ("@"+a.join('')+"-"+b[0][1].join('')).toLowerCase();
-    }
-    }
+  }
+}
 
-    /*
-     [129]      INTEGER   ::=   [0-9]+
-     */
-    INTEGER "[129] INTEGER"
-    = d:[0-9]+ {
-    var lit = {};
-    lit.token = "literal";
-    lit.lang = null;
-    lit.type = "http://www.w3.org/2001/XMLSchema#integer";
-    lit.value = flattenString(d);
-    return lit;
-    }
+// [146] INTEGER ::= [0-9]+
+INTEGER = d:[0-9]+
+{
+  var lit = {};
+  lit.token = "literal";
+  lit.lang = null;
+  lit.type = "http://www.w3.org/2001/XMLSchema#integer";
+  lit.value = flattenString(d);
+  return lit;
+}
 
-    /*
-     [130]      DECIMAL   ::=   [0-9]+ '.' [0-9]* | '.' [0-9]+
-     */
-    DECIMAL "[130] DECIMAL"
-    = a:[0-9]+ b:'.' c:[0-9]* {
+// [147] DECIMAL ::= [0-9]+ '.' [0-9]* | '.' [0-9]+
+DECIMAL = a:[0-9]+ b:'.' c:[0-9]*
+{
+  var lit = {};
+  lit.token = "literal";
+  lit.lang = null;
+  lit.type = "http://www.w3.org/2001/XMLSchema#decimal";
+  lit.value = flattenString([a,b,c]);
+  return lit;
+}
+/ a:'.' b:[0-9]+
+{
+  var lit = {};
+  lit.token = "literal";
+  lit.lang = null;
+  lit.type = "http://www.w3.org/2001/XMLSchema#decimal";
+  lit.value = flattenString([a,b]);
+  return lit;
+}
 
-    var lit = {};
-    lit.token = "literal";
-    lit.lang = null;
-    lit.type = "http://www.w3.org/2001/XMLSchema#decimal";
-    lit.value = flattenString([a,b,c]);
-    return lit;
-    }
-    / a:'.' b:[0-9]+ {
-    var lit = {};
-    lit.token = "literal";
-    lit.lang = null;
-    lit.type = "http://www.w3.org/2001/XMLSchema#decimal";
-    lit.value = flattenString([a,b]);
-    return lit;
-    }
+// [148] DOUBLE ::= [0-9]+ '.' [0-9]* EXPONENT | '.' ([0-9])+ EXPONENT | ([0-9])+ EXPONENT
+DOUBLE = a:[0-9]+ b:'.' c:[0-9]* e:EXPONENT
+{
+  var lit = {};
+  lit.token = "literal";
+  lit.lang = null;
+  lit.type = "http://www.w3.org/2001/XMLSchema#double";
+  lit.value = flattenString([a,b,c,e]);
+  return lit;
+}
+/ a:'.' b:[0-9]+ c:EXPONENT
+{
+  var lit = {};
+  lit.token = "literal";
+  lit.lang = null;
+  lit.type = "http://www.w3.org/2001/XMLSchema#double";
+  lit.value = flattenString([a,b,c]);
+  return lit;
+}
+/ a:[0-9]+ b:EXPONENT
+{
+  var lit = {};
+  lit.token = "literal";
+  lit.lang = null;
+  lit.type = "http://www.w3.org/2001/XMLSchema#double";
+  lit.value = flattenString([a,b]);
+  return lit;
+}
 
-    /*
-     [131]      DOUBLE    ::=   [0-9]+ '.' [0-9]* EXPONENT | '.' ([0-9])+ EXPONENT | ([0-9])+ EXPONENT
-     */
-    DOUBLE "[131] DOUBLE"
-    = a:[0-9]+ b:'.' c:[0-9]* e:EXPONENT {
-    var lit = {};
-    lit.token = "literal";
-    lit.lang = null;
-    lit.type = "http://www.w3.org/2001/XMLSchema#double";
-    lit.value = flattenString([a,b,c,e]);
-    return lit;
-    }
-    / a:'.' b:[0-9]+ c:EXPONENT {
-    var lit = {};
-    lit.token = "literal";
-    lit.lang = null;
-    lit.type = "http://www.w3.org/2001/XMLSchema#double";
-    lit.value = flattenString([a,b,c]);
-    return lit;
-    }
-    / a:[0-9]+ b:EXPONENT {
-    var lit = {};
-    lit.token = "literal";
-    lit.lang = null;
-    lit.type = "http://www.w3.org/2001/XMLSchema#double";
-    lit.value = flattenString([a,b]);
-    return lit;
-    }
+// [149] INTEGER_POSITIVE ::= '+' INTEGER
+INTEGER_POSITIVE = '+' d:INTEGER { d.value = "+"+d.value; return d; }
 
-    /*
-     [132]      INTEGER_POSITIVE          ::=   '+' INTEGER
-     */
-    INTEGER_POSITIVE "[132] INTEGER_POSITIVE"
-    = '+' d:INTEGER { d.value = "+"+d.value; return d; }
+// [150] DECIMAL_POSITIVE ::= '+' DECIMAL
+DECIMAL_POSITIVE = '+' d:DECIMAL { d.value = "+"+d.value; return d }
 
-    /*
-     [133]      DECIMAL_POSITIVE          ::=   '+' DECIMAL
-     */
-    DECIMAL_POSITIVE "[133] DECIMAL_POSITIVE"
-    = '+' d:DECIMAL { d.value = "+"+d.value; return d }
+// [151] DOUBLE_POSITIVE ::= '+' DOUBLE
+DOUBLE_POSITIVE = '+' d:DOUBLE { d.value = "+"+d.value; return d }
 
-    /*
-     [134]      DOUBLE_POSITIVE   ::=   '+' DOUBLE
-     */
-    DOUBLE_POSITIVE "[134] DOUBLE_POSITIVE"
-    = '+' d:DOUBLE { d.value = "+"+d.value; return d }
+// [152] INTEGER_NEGATIVE ::= '-' INTEGER
+INTEGER_NEGATIVE = '-' d:INTEGER { d.value = "-"+d.value; return d; }
 
-    /*
-     [135]      INTEGER_NEGATIVE          ::=   '-' INTEGER
-     */
-    INTEGER_NEGATIVE "[135] INTEGER_NEGATIVE"
-    = '-' d:INTEGER { d.value = "-"+d.value; return d; }
+// [153] DECIMAL_NEGATIVE ::= '-' DECIMAL
+DECIMAL_NEGATIVE = '-' d:DECIMAL { d.value = "-"+d.value; return d; }
 
-    /*
-     [136]      DECIMAL_NEGATIVE          ::=   '-' DECIMAL
-     */
-    DECIMAL_NEGATIVE "[136] DECIMAL_NEGATIVE"
-    = '-' d:DECIMAL { d.value = "-"+d.value; return d; }
-    /*
-     [137]      DOUBLE_NEGATIVE   ::=   '-' DOUBLE
-     */
-    DOUBLE_NEGATIVE "[137] DOUBLE_NEGATIVE"
-    = '-' d:DOUBLE { d.value = "-"+d.value; return d; }
+// [154] DOUBLE_NEGATIVE   ::=   '-' DOUBLE
+DOUBLE_NEGATIVE = '-' d:DOUBLE { d.value = "-"+d.value; return d; }
 
-    /*
-     [138]      EXPONENT          ::=   [eE] [+-]? [0-9]+
-     */
-    EXPONENT "[138] EXPONENT"
-    = a:[eE] b:[+-]? c:[0-9]+  { return flattenString([a,b,c]) }
+// [155] EXPONENT ::= [eE] [+-]? [0-9]+
+EXPONENT = a:[eE] b:[+-]? c:[0-9]+  { return flattenString([a,b,c]) }
 
-    /*
-     [139]      STRING_LITERAL1   ::=   "'" ( ([^#x27#x5C#xA#xD]) | ECHAR )* "'"
-     */
-    STRING_LITERAL1 "[139] STRING_LITERAL1"
-    =  "'" content:([^\u0027\u005C\u000A\u000D] / ECHAR)* "'" { return flattenString(content) }
+// [156] STRING_LITERAL1   ::=   "'" ( ([^#x27#x5C#xA#xD]) | ECHAR )* "'"
+STRING_LITERAL1 = "'" content:([^\u0027\u005C\u000A\u000D] / ECHAR)* "'" { return flattenString(content) }
 
-    /*
-     [140]      STRING_LITERAL2   ::=   '"' ( ([^#x22#x5C#xA#xD]) | ECHAR )* '"'
-     */
-    STRING_LITERAL2 "[140] STRING_LITERAL2"
-    =  '"' content:([^\u0022\u005C\u000A\u000D] / ECHAR)* '"' { return flattenString(content) }
+// [157] STRING_LITERAL2   ::=   '"' ( ([^#x22#x5C#xA#xD]) | ECHAR )* '"'
+STRING_LITERAL2 = '"' content:([^\u0022\u005C\u000A\u000D] / ECHAR)* '"' { return flattenString(content) }
 
-    /*
-     @todo check
-     [141]      STRING_LITERAL_LONG1      ::=   "'''" ( ( "'" | "''" )? ( [^'\] | ECHAR ) )* "'''"
-     */
-    STRING_LITERAL_LONG1 "[141] STRING_LITERAL_LONG1"
-    = "'''" content:([^\'\\] / ECHAR)* "'''"  { return flattenString(content) }
+// [158] STRING_LITERAL_LONG1 ::= "'''" ( ( "'" | "''" )? ( [^'\] | ECHAR ) )* "'''"
+// check??
+STRING_LITERAL_LONG1 = "'''" content:([^\'\\] / ECHAR)* "'''"  { return flattenString(content) }
 
-    /*
-     @todo check
-     [142]      STRING_LITERAL_LONG2      ::=   '"""' ( ( '"' | '""' )? ( [^"\] | ECHAR ) )* '"""'
-     */
-    STRING_LITERAL_LONG2 "[142] STRING_LITERAL_LONG2"
-    = '"""' content:([^\"\\] / ECHAR)* '"""'  { return flattenString(content) }
+// [159] STRING_LITERAL_LONG2 ::= '"""' ( ( '"' | '""' )? ( [^"\] | ECHAR ) )* '"""'
+// check??
+STRING_LITERAL_LONG2 = '"""' content:([^\"\\] / ECHAR)* '"""'  { return flattenString(content) }
 
-    /*
-     [143]      ECHAR     ::=   '\' [tbnrf\"']
-     */
-    ECHAR "[143] ECHAR"
-    = '\\' [tbnrf\"\']
+// [160] ECHAR ::= '\' [tbnrf\"']
+ECHAR = '\\' [tbnrf\"\']
 
-    /*
-     [144]      NIL       ::=   '(' WS* ')'
-     */
-
-    NIL "[144] NIL"
-    = '(' WS* ')' {
-
-    return  {
-      token: "triplesnodecollection",
-      location: location(),
+// [161] NIL ::= '(' WS* ')'
+NIL = '(' WS* ')'
+{
+  return {
+    token: "triplesnodecollection",
+    location: location(),
     triplesContext:[],
     chainSubject:[{token:'uri', value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"}]};
-    }
+}
 
-    /*
-     [145]      WS        ::=   #x20 | #x9 | #xD | #xA
-     */
-    WS "[145] WS"
-    = [\u0020]
-    / [\u0009]
-    / [\u000D]
-    / [\u000A]
-    / COMMENT
+// [162] WS ::= #x20 | #x9 | #xD | #xA
+WS = [\u0020] / [\u0009] / [\u000D] / [\u000A] / COMMENT
 
+// comment ::= '#' ( [^#xA#xD] )*
+COMMENT = comment:('#'([^\u000A\u000D])*)
+     // = '#'([^\u000A\u000D])*
+{
+  Comments[location().start.line] = flattenString(comment).trim();
+  return '';
+}
 
-    /*
-     comment    ::=     '#' ( [^#xA#xD] )*
-     */
-    COMMENT " COMMENT"
-    // = '#'([^\u000A\u000D])*
-    = comment:('#'([^\u000A\u000D])*)
-    {
-      Comments[location().start.line] = flattenString(comment).trim();
-      return '';
-    }
+// [163] ANON ::= '[' WS* ']'
+ANON = '[' WS* ']'
 
+// [164] PN_CHARS_BASE ::= [A-Z] | [a-z] | [#x00C0-#x00D6] | [#x00D8-#x00F6] | [#x00F8-#x02FF] | [#x0370-#x037D] | [#x037F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+PN_CHARS_BASE = [A-Z] / [a-z] / [\u00C0-\u00D6] / [\u00D8-\u00F6] / [\u00F8-\u02FF] / [\u0370-\u037D] / [\u037F-\u1FFF] / [\u200C-\u200D] / [\u2070-\u218F] / [\u2C00-\u2FEF] / [\u3001-\uD7FF] / [\uF900-\uFDCF] / [\uFDF0-\uFFFD] / [\u1000-\uEFFF]
 
-    /*
-     [146]      ANON      ::=   '[' WS* ']'
-     */
-    ANON "[146] ANON"
-    = '[' WS* ']'
+// [165] PN_CHARS_U ::= PN_CHARS_BASE | '_'
+PN_CHARS_U = PN_CHARS_BASE / '_'
 
-    /*
-     [147]      PN_CHARS_BASE     ::=   [A-Z] | [a-z] | [#x00C0-#x00D6] | [#x00D8-#x00F6] | [#x00F8-#x02FF] | [#x0370-#x037D] | [#x037F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
-     */
-    PN_CHARS_BASE  "[147] PN_CHARS_BASE"
-    = [A-Z]
-    / [a-z]
-    / [\u00C0-\u00D6]
-    / [\u00D8-\u00F6]
-    / [\u00F8-\u02FF]
-    / [\u0370-\u037D]
-    / [\u037F-\u1FFF]
-    / [\u200C-\u200D]
-    / [\u2070-\u218F]
-    / [\u2C00-\u2FEF]
-    / [\u3001-\uD7FF]
-    / [\uF900-\uFDCF]
-    / [\uFDF0-\uFFFD]
-    / [\u1000-\uEFFF]
+// [166] VARNAME ::= ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040] )*
+VARNAME = init:( PN_CHARS_U / [0-9] ) rpart:( PN_CHARS_U / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040])* { return init+rpart.join('') }
 
-    /*
-     [148]      PN_CHARS_U        ::=   PN_CHARS_BASE | '_'
-     */
+// [167] PN_CHARS ::= PN_CHARS_U | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]
+PN_CHARS = PN_CHARS_U / '-' / [0-9]
+  / [\u00B7]
+  / [\u0300-\u036F]
+  / [\u203F-\u2040]
 
-    PN_CHARS_U "[148] PN_CHARS_U"
-    = PN_CHARS_BASE
-    / '_'
-
-    /*
-     [149]      VARNAME   ::=   ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040] )*
-     */
-
-    VARNAME "[149] VARNAME"
-    = init:( PN_CHARS_U / [0-9] ) rpart:( PN_CHARS_U / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040])* { return init+rpart.join('') }
-
-    /*
-     [150]      PN_CHARS          ::=   PN_CHARS_U | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]
-     */
-
-    PN_CHARS "[150] PN_CHARS"
-    = PN_CHARS_U
-    / '-'
-    / [0-9]
-    / [\u00B7]
-    / [\u0300-\u036F]
-    / [\u203F-\u2040]
-
-    /*
-     [151]      PN_PREFIX         ::=   PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)?
-     */
-
-    PN_PREFIX "[151] PN_PREFIX"
-    = base:PN_CHARS_BASE rest:(PN_CHARS / '.')* { if(rest[rest.length-1] == '.'){
+// [168] PN_PREFIX ::= PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)?
+PN_PREFIX = base:PN_CHARS_BASE rest:(PN_CHARS / '.')*
+//?
+{ 
+  if(rest[rest.length-1] == '.'){
     throw new Error("Wrong PN_PREFIX, cannot finish with '.'")
-    } else {
+  } else {
     return base + rest.join('');
-    }}
+  }
+}
 
-/*
- [152]          PN_LOCAL          ::=   ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
- [169]          PN_LOCAL          ::=   (PN_CHARS_U | ':' | [0-9] | PLX ) ((PN_CHARS | '.' | ':' | PLX)* (PN_CHARS | ':' | PLX) )?
- base:(PN_CHARS_U / [0-9] / ':' / PLX) rest:((PN_CHARS / '.' / ':' / PLX)* (PN_CHARS / ':' / PLX))? {
-*/
+// [169] PN_LOCAL ::= (PN_CHARS_U | ':' | [0-9] | PLX ) ((PN_CHARS | '.' | ':' | PLX)* (PN_CHARS | ':' | PLX) )?
+// similar to BLANK_NODE_LABEL??
+// base:(PN_CHARS_U / [0-9] / ':' / PLX) rest:((PN_CHARS / '.' / ':' / PLX)* (PN_CHARS / ':' / PLX))? {
 PN_LOCAL = base:('$' / PN_CHARS_U / [0-9] / ':' / PLX) rest:(PN_CHARS / '.' / ':' / PLX)* 
   // '$' is added
 {
   return base + (rest||[]).join('');
 }
 
-// [170]          PLX       ::=   PERCENT | PN_LOCAL_ESC
+// [170] PLX ::= PERCENT | PN_LOCAL_ESC
 PLX = PERCENT / PN_LOCAL_ESC
 
-// [171]          PERCENT   ::=   '%' HEX HEX
+// [171] PERCENT ::= '%' HEX HEX
 PERCENT = h:('%' HEX HEX)
 {
   return h.join("");
 }
 
-// [172]          HEX       ::=   [0-9] | [A-F] | [a-f]
+// [172] HEX ::= [0-9] | [A-F] | [a-f]
 HEX = [0-9] / [A-F] / [a-f]
 
-// [173]          PN_LOCAL_ESC      ::=   '\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%' )
+// [173] PN_LOCAL_ESC ::= '\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%' )
 PN_LOCAL_ESC = '\\' c:( '_' / '~' / '.' / '-' / '!' / '$' / '&' / "'" / '(' / ')' / '*' / '+' / ',' / ';' / ':' / '=' / '/' / '?' / '#' / '@' / '%' )
 {
   return "\\"+c;
