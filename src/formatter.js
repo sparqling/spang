@@ -23,16 +23,25 @@ indentUnit = "    ";
 typeUri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
 addLine = (text, origLine = 0) => {
-  if(Comments.length > 0 &&
-     prevOrigLine != origLine && 
-     (origLine == -1 || origLine > Comments[0].line)) {
-    if(lines.length == 0) lines.unshift(Comments[0].text);
-    else if(origLine > prevOrigLine + 1) {
-      // for line where only comment exists
-      lines.push(Comments[0].text);
-    }
-    else lines[lines.length - 1] += ' ' + Comments[0].text;
-    Comments.shift();
+  // TODO: embedding comments properly
+  // if(Comments.length > 0 &&
+  //    prevOrigLine != origLine &&
+  //    (origLine == -1 || origLine > Comments[0].line)) {
+  //   if(lines.length == 0) lines.unshift(Comments[0].text);
+  //   else if(origLine > prevOrigLine + 1) {
+  //     // for line where only comment exists
+  //     lines.push(Comments[0].text);
+  //   }
+  //   else lines[lines.length - 1] += ' ' + Comments[0].text;
+  //   Comments.shift();
+  // }
+  // For now, just adding all comments, and a new line before the code
+  if (Comments.length > 0) {
+    Comments.forEach((comment) => {
+      lines.push(comment.text);
+    });
+    Comments = [];
+    lines.push('');
   }
   lines.push(currentIndent + text);
   if(prevOrigLine < origLine) prevOrigLine = origLine;
