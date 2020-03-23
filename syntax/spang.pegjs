@@ -47,8 +47,8 @@ SPARQL = QueryUnit / UpdateUnit
 QueryUnit = Query
 
 // [2] Query ::= Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause
-Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
-  // The last WS* was missing
+// Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
+Query = p:Prologue WS* f:(FunctionCall*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
 {
   return {
     token: 'query',
@@ -57,6 +57,7 @@ Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery )
     prologue: p,
     body: q,
     comments: Object.entries(Comments).map(([k, v]) => { return {text: Comments[k], line: parseInt(k)} }),
+    functions: f,
     inlineData: v
   }
 }
@@ -2435,9 +2436,14 @@ IRIref = iri:IRI_REF
 }
 
 // [137] PrefixedName ::= PNAME_LN | PNAME_NS
-PrefixedName = p:PNAME_LN { return {token: 'uri', prefix:p[0], suffix:p[1], value:null, location: location() } }
+PrefixedName = p:PNAME_LN 
+{
+  return {token: 'uri', prefix:p[0], suffix:p[1], value:null, location: location() }
+}
 / p:PNAME_NS 
-{ return {token: 'uri', prefix:p, suffix:'', value:null, location: location() } }
+{
+  return {token: 'uri', prefix:p, suffix:'', value:null, location: location() }
+}
 
 // [138] BlankNode ::= BLANK_NODE_LABEL | ANON
 BlankNode = l:BLANK_NODE_LABEL

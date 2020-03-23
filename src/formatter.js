@@ -13,6 +13,7 @@ exports.format = (parsedQuery) => {
   currentIndent = '';
   prevOrigLine = 0;
   forPrologue(parsedQuery.prologue);
+  parsedQuery.functions.forEach(forFunction);
   forBody(parsedQuery.body);
   forInlineData(parsedQuery.inlineData);
   // addLine('', -1);
@@ -202,4 +203,11 @@ forInlineData = (inline) => {
 
 forTuple = (tuple) => {
   return '(' + tuple.map(forTripleElem).join(' ') + ')';
+};
+
+forFunction = (func) => {
+  var name = forTripleElem(func.iriref);
+  var args = func.args.map(forExpression).join(", ");
+  addLine(`${name}(${args})`);
+  addLine('');
 };
