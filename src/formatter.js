@@ -22,7 +22,7 @@ exports.format = (parsedQuery) => {
 indentUnit = "    ";
 typeUri = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
-addLine = (text, origLine = 0) => {
+addLine = (text, origLine = 0, indent = currentIndent) => {
   // TODO: embedding comments properly
   // if(Comments.length > 0 &&
   //    prevOrigLine != origLine &&
@@ -43,7 +43,7 @@ addLine = (text, origLine = 0) => {
     Comments = [];
     lines.push('');
   }
-  lines.push(currentIndent + text);
+  lines.push(indent + text);
   if(prevOrigLine < origLine) prevOrigLine = origLine;
 }
 
@@ -80,7 +80,7 @@ forSelect = (select) => {
   addLine(select_line + select.projection.map((proj) => forProjection(proj)).join(' '), lastLine);
   addLine('WHERE {', lastLine + 1);
   currentIndent += indentUnit;
-  forPattern(select.pattern);
+  forPattern(select.pattern, currentIndent);
   currentIndent = currentIndent.substr(0, currentIndent.Length - indentUnit.Length);
   addLine('}', select.pattern.location.end.line);
   if (select.order) {
@@ -119,17 +119,17 @@ forProjection = (projection) => {
 };
 
 /** @return list of lines */
-forPattern = (pattern) => {
-  pattern.patterns.forEach(forGraphPattern);
+forPattern = (pattern, indent) => {
+  pattern.patterns.forEach(p => forGraphPattern(p, indent));
   pattern.filters.forEach(forFilter);
 };
 
-forGraphPattern = (pattern) => {
+forGraphPattern = (pattern, indent) => {
   if (pattern.token === 'basicgraphpattern') {
-    forBasicPattern(pattern);
+    forBasicPattern(pattern, indent);
   } else if (pattern.token === 'optionalgraphpattern') {
     addLine('OPTIONAL {');
-    forPattern(pattern.value);
+    forPattern(pattern.value, indent + indentUnit);
     addLine('}');
   } else {
     addLine(pattern.token); // for debug
@@ -137,15 +137,17 @@ forGraphPattern = (pattern) => {
 };
 
 /** @return list of lines */
-forBasicPattern = (pattern) => {
-  pattern.triplesContext.forEach(forTriple);
+forBasicPattern = (pattern, indent) => {
+  pattern.triplesContext.forEach(t => forTriple(t, indent));
 };
 
 /** @return string */
-forTriple = (triple) => {
+forTriple = (triple, indent) => {
   addLine(forTripleElem(triple.subject) + ' ' + 
-    forTripleElem(triple.predicate) + ' ' + 
-      forTripleElem(triple.object) + ' .', triple.object.location.end.line);
+          forTripleElem(triple.predicate) + ' ' + 
+          forTripleElem(triple.object) + ' .'
+          , triple.object.location.end.line
+          , indent);
 };
 
 /** @return string */
