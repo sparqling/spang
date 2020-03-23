@@ -60,7 +60,10 @@ forPrologue = (prologue) => {
 
 /** @return list of lines */
 forInlineData = (inline) => {
-  // TODO
+  if (inline) {
+    var vals = inline.values[0].value.map(v => forTripleElem(v)).join(' ');
+    addLine(`VALUES ${forTripleElem(inline.values[0].var)} { ${vals} }`);
+  }
 };
 
 /** @return list of lines */
