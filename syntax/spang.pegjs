@@ -56,7 +56,7 @@ QueryUnit "[1] QueryUnit"
  [2]    Query     ::=   Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery )
  */
 Query "[2] Query"
-    = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause {
+    = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS* {
     return {
         token: 'query',
         location: location(),
