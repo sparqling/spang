@@ -1114,26 +1114,30 @@ InlineDataOneVar "[63] InlineDataOneVar"
     var result =  {
       token: 'inlineData',
       location: location(),
-      values: [{
-        'var': v,
-        'value': d
-      }]
+      // values: [{
+      //   'var': v,
+      //   'value': d
+      // }]
+      var: v,
+      values: d
     };
 
     return result;
 }
 
 /*
-    @todo: match the vars to values and return them in a single array of inline data bindings, beware of UNDEF values @see [65]
     [64]        InlineDataFull    ::=   ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
 */
 
 InlineDataFull "[64] InlineDataFull"
-    = WS*  NIL/'(' WS* vars:(Var*) WS* ')' WS* '{' WS* vals:( DataBlockTuple / NIL)* WS* '}' {
+    // Ignore NIL, here
+    = WS*  '(' WS* vars:(Var*) WS* ')' WS* '{' WS* vals:( DataBlockTuple)* WS* '}' {
     var result = {
-      token: 'inlineData',
+      token: 'inlineDataFull',
       location: location(),
-      values: vars.map((v, i) => { return  { 'var': v, 'value': vals[i] }; })
+      variables: vars,
+      // values: vars.map((v, i) => { return  { 'var': v, 'value': vals[i] }; })
+      values: vals
     };
     return result;
 }
