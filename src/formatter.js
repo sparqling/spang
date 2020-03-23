@@ -59,14 +59,6 @@ forPrologue = (prologue) => {
 };
 
 /** @return list of lines */
-forInlineData = (inline) => {
-  if (inline) {
-    var vals = inline.values[0].value.map(v => forTripleElem(v)).join(' ');
-    addLine(`VALUES ${forTripleElem(inline.values[0].var)} { ${vals} }`);
-  }
-};
-
-/** @return list of lines */
 forBody = (body) => {
   switch(body.kind) {
     case 'select':
@@ -191,3 +183,21 @@ forExpression = (e) => {
     return(forTripleElem(e.iriref));
   }
 }
+
+/** @return list of lines */
+forInlineData = (inline) => {
+  if (inline) {
+    if (inline.token === 'inlineData') {
+      var vals = inline.values.map(forTripleElem).join(' ');
+      addLine(`VALUES ${forTripleElem(inline.var)} { ${vals} }`);
+    } else {
+      var vars = inline.variables.map(forTripleElem).join(' ');
+      var vals = inline.values.map(forTuple).join(' ')
+      addLine(`VALUES (${vars}) { ${vals} }`)
+    }
+  }
+};
+
+forTuple = (tuple) => {
+  return '(' + tuple.map(forTripleElem).join(' ') + ')';
+};
