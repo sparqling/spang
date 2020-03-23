@@ -126,6 +126,8 @@ forGraphPattern = (pattern, indent) => {
     addLine('OPTIONAL {');
     forPattern(pattern.value, indent + indentUnit);
     addLine('}');
+  } else if (pattern.token == 'inlineData') {
+    forInlineData(pattern);
   } else {
     addLine(pattern.token); // for debug
   }
