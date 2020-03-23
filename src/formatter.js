@@ -120,8 +120,20 @@ forProjection = (projection) => {
 
 /** @return list of lines */
 forPattern = (pattern) => {
-  pattern.patterns.forEach(forBasicPattern);
+  pattern.patterns.forEach(forGraphPattern);
   pattern.filters.forEach(forFilter);
+};
+
+forGraphPattern = (pattern) => {
+  if (pattern.token === 'basicgraphpattern') {
+    forBasicPattern(pattern);
+  } else if (pattern.token === 'optionalgraphpattern') {
+    addLine('OPTIONAL {');
+    forPattern(pattern.value);
+    addLine('}');
+  } else {
+    addLine(pattern.token); // for debug
+  }
 };
 
 /** @return list of lines */
