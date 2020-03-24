@@ -48,7 +48,7 @@ QueryUnit = Query
 
 // [2] Query ::= Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause
 // Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
-Query = p:Prologue WS* f:(FunctionCall*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
+Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
 {
   return {
     token: 'query',
@@ -59,6 +59,15 @@ Query = p:Prologue WS* f:(FunctionCall*) WS* q:( SelectQuery / ConstructQuery / 
     comments: Object.entries(Comments).map(([k, v]) => { return {text: Comments[k], line: parseInt(k)} }),
     functions: f,
     inlineData: v
+  }
+}
+
+Function = h:FunctionCall WS* b:GroupGraphPattern WS*
+{
+  return {
+    token: 'function',
+    header:h,
+    body:b
   }
 }
 
@@ -848,7 +857,7 @@ TriplesBlock = b:TriplesSameSubjectPath bs:(WS*  '.' TriplesBlock? )?
 }
 
 // [53] GraphPatternNotTriples ::= GroupOrUnionGraphPattern | OptionalGraphPattern | MinusGraphPattern | GraphGraphPattern | ServiceGraphPattern | Filter | Bind | InlineData
-GraphPatternNotTriples = GroupOrUnionGraphPattern / OptionalGraphPattern / MinusGraphPattern / GraphGraphPattern / ServiceGraphPattern / Filter / Bind / InlineData
+GraphPatternNotTriples = GroupOrUnionGraphPattern / OptionalGraphPattern / MinusGraphPattern / GraphGraphPattern / ServiceGraphPattern / Filter / Bind / InlineData / FunctionCall
 
 // [54] OptionalGraphPattern ::= 'OPTIONAL' GroupGraphPattern
 OptionalGraphPattern = WS* ('OPTIONAL'/'optional') WS* v:GroupGraphPattern
@@ -990,19 +999,19 @@ DataBlockValue = WS* v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 
   return v;
 }
 
-// [61] FunctionCall ::= IRIref ArgList
+// [70] FunctionCall ::= IRIref ArgList
 FunctionCall = i:IRIref WS* args:ArgList
 {
   var fcall = {};
   fcall.token = "expression";
-  fcall.expressionType = 'irireforfunction'
+  fcall.expressionType = 'functioncall'
   fcall.iriref = i;
   fcall.args = args.value;
   
   return fcall;
 }
 
-// [62] ArgList ::= ( NIL | '(' 'DISTINCT'? Expression ( ',' Expression )* ')' )
+// [71] ArgList ::= ( NIL | '(' 'DISTINCT'? Expression ( ',' Expression )* ')' )
 ArgList = NIL
 {
   var args = {};

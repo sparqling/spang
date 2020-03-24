@@ -129,8 +129,10 @@ forGraphPattern = (pattern, indent) => {
     addLine('}');
   } else if (pattern.token == 'inlineData') {
     forInlineData(pattern);
+  } else if (pattern.token === 'expression') {
+    forExpression(pattern);
   } else {
-    addLine(pattern.token); // for debug
+    addLine('pattern: ' + pattern.token); // for debug
   }
 };
 
@@ -184,6 +186,10 @@ forExpression = (e) => {
     return(forTripleElem(e.value));
   } else if (e.expressionType == "irireforfunction") {
     return(forTripleElem(e.iriref));
+  } else if (e.expressionType === 'functioncall') {
+    forFunctionCall(e);
+  } else {
+    addLine('expressionType: ' + e.expressionType); // for debug
   }
 }
 
@@ -206,8 +212,16 @@ forTuple = (tuple) => {
 };
 
 forFunction = (func) => {
-  var name = forTripleElem(func.iriref);
-  var args = func.args.map(forExpression).join(", ");
-  addLine(`${name}(${args})`);
+  var name = forTripleElem(func.header.iriref);
+  var args = func.header.args.map(forExpression).join(", ");
+  addLine(`${name}(${args}) {`);
+  forPattern(func.body, currentIndent + indentUnit);
+  addLine('}');
   addLine('');
 };
+
+forFunctionCall = (funcCall) => {
+  var name = forTripleElem(funcCall.iriref);
+  var args = funcCall.args.map(forExpression).join(", ");
+  addLine(`${name}(${args})`);
+}
