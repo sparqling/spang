@@ -1,2 +1,2 @@
 #!/bin/sh
-cat test/spfmt-01-1.rq | src/spfmt.js
+cat test/spfmt-01-1.rq | bin/spfmt.js

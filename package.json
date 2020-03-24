@@ -1,11 +1,11 @@
 {
-  "name": "spang2",
+  "name": "spang",
   "engines": {
     "node": ">=11.0.0",
     "npm": ">=6.0.0"
   },
   "version": "2.0.0",
-  "description": "Javascript Implementation of SPANG",
+  "description": "JavaScript implementation of SPANG",
   "dependencies": {
     "commander": "^2.16.0",
     "expand-home-dir": "0.0.3",
@@ -23,7 +23,7 @@
     "pegjs": "^0.10.0"
   },
   "bin": {
-    "spang2": "./src/spang.js",
-    "spfmt": "./src/spfmt.js"
+    "spang2": "./bin/spang.js",
+    "spfmt": "./bin/spfmt.js"
   }
 }

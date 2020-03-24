@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 fs = require('fs');
-reformatter = require('./reformatter.js');
+reformatter = require('../lib/reformatter.js');
 
 const version = require("../package.json").version;
 const child_process = require('child_process');
-const search_db_name = require('./search_db_name');
-const prefixModule = require('./prefix.js');
-const shortcut = require('./shortcut.js').shortcut;
-const constructSparql = require('./construct_sparql.js').constructSparql;
-const querySparql = require('./query_sparql.js');
+const search_db_name = require('../lib/search_db_name');
+const prefixModule = require('../lib/prefix.js');
+const shortcut = require('../lib/shortcut.js').shortcut;
+const constructSparql = require('../lib/construct_sparql.js').constructSparql;
+const querySparql = require('../lib/query_sparql.js');
 const syncRequest = require('sync-request');
 const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
 

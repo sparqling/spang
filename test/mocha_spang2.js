@@ -1,4 +1,4 @@
-const embed_parameter = require('../src/embed_parameter.js');
+const embed_parameter = require('../lib/embed_parameter.js');
 const chai = require('chai');
 const path = require('path');
 chai.use(require('chai-fs'));
