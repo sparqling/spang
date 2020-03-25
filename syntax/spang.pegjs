@@ -1485,14 +1485,16 @@ PathSequence = first:PathEltOrInverse rest:( '/' PathEltOrInverse)*
   }
 }
 
-// [80]   PathElt   ::=   PathPrimary PathMod?
+// [80] PathElt ::= PathPrimary PathMod?
 PathElt = p:PathPrimary mod:PathMod?
 {
-  if(p.token && p.token != 'path' && mod == '') {
+  if(p.token && p.token != 'path' && mod == '') { // uri without mod
+    p.kind = 'primary' // for debug
     return p;
-  } else if(p.token && p.token != path && mod != '') {
+  // } else if(p.token && p.token != path && mod != '') { // bug?
+  } else if(p.token && p.token != 'path' && mod != '') { // uri with mod
     var path = {};
-        path.token = 'path';
+    path.token = 'path';
     path.kind = 'element';
     path.value = p;
     path.modifier = mod;
@@ -1503,8 +1505,9 @@ PathElt = p:PathPrimary mod:PathMod?
   }
 }
 
-// [81]   PathEltOrInverse          ::=   PathElt | '^' PathElt
-PathEltOrInverse = PathElt / '^' elt:PathElt
+// [81] PathEltOrInverse ::= PathElt | '^' PathElt
+PathEltOrInverse = PathElt
+/ '^' elt:PathElt
 {
     var path = {};
     path.token = 'path';
@@ -1514,15 +1517,22 @@ PathEltOrInverse = PathElt / '^' elt:PathElt
     return path;
 }
 
-// [82]   PathMod   ::=   ( '*' | '?' | '+' | '{' ( Integer ( ',' ( '}' | Integer '}' ) | '}' ) | ',' Integer '}' ) )
-PathMod = ( '*' / '?' / '+' / '{' ( Integer ( ',' ( '}' / Integer '}' ) / '}' ) / ',' Integer '}' ) )
+// [82] PathMod ::= ( '*' | '?' | '+' | '{' ( Integer ( ',' ( '}' | Integer '}' ) | '}' ) | ',' Integer '}' ) )
+// an extension??
+// PathMod = ( '*' / '?' / '+' / '{' ( Integer ( ',' ( '}' / Integer '}' ) / '}' ) / ',' Integer '}' ) )
+PathMod = m:('?' / '*' / '+')
+{
+  return m;
+}
 
-// [83]   PathPrimary       ::=   ( IRIref | 'a' | '!' PathNegatedPropertySet | '(' Path ')' )
-PathPrimary = IRIref / 'a' 
+// [83] PathPrimary ::= ( IRIref | 'a' | '!' PathNegatedPropertySet | '(' Path ')' )
+PathPrimary = IRIref
+/ 'a'
 {
   return{token: 'uri',  location: location(), prefix:null, suffix:null, value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}
 }
-/ '!' PathNegatedPropertySet / '(' p:Path ')'
+/ '!' PathNegatedPropertySet
+/ '(' p:Path ')'
 {
   return p;
 }
@@ -2647,7 +2657,8 @@ PN_CHARS_BASE = [A-Z] / [a-z] / [\u00C0-\u00D6] / [\u00D8-\u00F6] / [\u00F8-\u02
 PN_CHARS_U = PN_CHARS_BASE / '_'
 
 // [166] VARNAME ::= ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040] )*
-VARNAME = init:( PN_CHARS_U / [0-9] ) rpart:( PN_CHARS_U / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040])* { return init+rpart.join('') }
+VARNAME = init:( PN_CHARS_U / [0-9] ) rpart:( PN_CHARS_U / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040])*
+{ return init+rpart.join('') }
 
 // [167] PN_CHARS ::= PN_CHARS_U | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]
 PN_CHARS = PN_CHARS_U / '-' / [0-9]
