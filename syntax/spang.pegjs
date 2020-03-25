@@ -14,7 +14,7 @@
 
   var GlobalBlankNodeCounter = 0;
 
-  var Comments = {};  // For extracting comments
+  var CommentsHash = {};  // For extracting comments
 
   var prefixes = {};
 
@@ -50,20 +50,18 @@ QueryUnit = Query
 // Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
 Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
 {
-  var comments = Object.entries(Comments).map(([k, v]) => {
-    return {line: parseInt(k), text: v} 
-  });
+  var commentsList = Object.entries(CommentsHash).map(([loc, str]) => ({line:parseInt(loc), text:str}));
 
   return {
     token: 'query',
-    location: location(),
     kind: 'query',
+    header: flattenString(h),
     prologue: p,
     body: q,
-    comments: comments,
+    comments: commentsList,
     functions: f,
-    header: flattenString(h),
-    inlineData: v
+    inlineData: v,
+    location: location()
   }
 }
 
@@ -2671,11 +2669,13 @@ HEADER_LINE = h:('#' NON_NEW_LINE* NEW_LINE)
 }
 
 // COMMENT ::= '#' ( [^#xA#xD] )*
-     // = '#'([^\u000A\u000D])*
-// COMMENT = comment:('#'([^\u000A\u000D])*)
+// COMMENT = comment:('#' ([^\u000A\u000D])*)
 COMMENT = comment:('#' NON_NEW_LINE*)
 {
-  Comments[location().start.line] = flattenString(comment).trim();
+  var loc = location().start.line;
+  var str = flattenString(comment).trim()
+  CommentsHash[loc] = str;
+
   return '';
 }
 
