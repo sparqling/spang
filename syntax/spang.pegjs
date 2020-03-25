@@ -48,7 +48,7 @@ QueryUnit = Query
 
 // [2] Query ::= Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause
 // Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
-Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
+Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
 {
   return {
     token: 'query',
@@ -58,6 +58,7 @@ Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / Desc
     body: q,
     comments: Object.entries(Comments).map(([k, v]) => { return {text: Comments[k], line: parseInt(k)} }),
     functions: f,
+    header: flattenString(h),
     inlineData: v
   }
 }
@@ -2660,7 +2661,10 @@ NEW_LINE = [\u000A\u000D]
 
 NON_NEW_LINE = [^\u000A\u000D]
 
-HEADER_LINES = '#' NON_NEW_LINE* NEW_LINE+
+HEADER_LINE = h:('#' NON_NEW_LINE* NEW_LINE)
+{
+  return flattenString(h);
+}
 
 // COMMENT ::= '#' ( [^#xA#xD] )*
      // = '#'([^\u000A\u000D])*
