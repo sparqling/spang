@@ -60,7 +60,7 @@ $ ./node_modules/browserify/bin/cmd.js lib/spang_browser.js > lib/spang_bundled.
 It can be used in a web site or in the command line.
 
 An example web site:<br>
-https://hchiba1.github.io/sparql-utils/
+https://hchiba1.github.io/spang/examples/
 
 ### Usage on a web site
 
