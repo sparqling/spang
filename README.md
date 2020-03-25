@@ -48,9 +48,9 @@ $ mocha
 ```
 
 ### Update spang_bundled.js
-Update the `src/spang_bundled.js` as follows after editing any other JS codes
+Update the `lib/spang_bundled.js` as follows after editing any other JS codes
 ```
-$ ./node_modules/browserify/bin/cmd.js src/spang_browser.js > src/spang_bundled.js 
+$ ./node_modules/browserify/bin/cmd.js lib/spang_browser.js > lib/spang_bundled.js 
 ```
 
 ## SPARQL formatter
@@ -87,7 +87,7 @@ WHERE {
     <button id="reformat-button">Reformat</button>
     <textarea id="sparql-text-after" rows=5></textarea>
     
-    <script src="https://cdn.jsdelivr.net/gh/hchiba1/sparql-utils@master/spfmt/src/spfmt_bundled.js"></script>  
+    <script src="https://cdn.jsdelivr.net/gh/hchiba1/spang@master/lib/spfmt_bundled.js"></script>  
     <script type="text/javascript">
      window.onload = () => {
          var textArea = 
@@ -136,7 +136,7 @@ $ ./node_modules/mocha/bin/mocha
 ### Update spfmt_bundled.js
 Update the `spfmt_bundled.js` as follows after editing any other JS codes
 ```
-$ ./node_modules/browserify/bin/cmd.js src/spfmt_browser.js > src/spfmt_bundled.js 
+$ ./node_modules/browserify/bin/cmd.js lib/spfmt_browser.js > lib/spfmt_bundled.js 
 ```
 
 ## SPARQL specifications
