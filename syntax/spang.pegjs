@@ -2591,39 +2591,53 @@ DOUBLE = a:[0-9]+ b:'.' c:[0-9]* e:EXPONENT
 }
 
 // [149] INTEGER_POSITIVE ::= '+' INTEGER
-INTEGER_POSITIVE = '+' d:INTEGER { d.value = "+"+d.value; return d; }
+INTEGER_POSITIVE = '+' d:INTEGER
+{
+  d.value = "+" + d.value;
+  return d;
+}
 
 // [150] DECIMAL_POSITIVE ::= '+' DECIMAL
-DECIMAL_POSITIVE = '+' d:DECIMAL { d.value = "+"+d.value; return d }
+DECIMAL_POSITIVE = '+' d:DECIMAL
+{ d.value = "+"+d.value; return d }
 
 // [151] DOUBLE_POSITIVE ::= '+' DOUBLE
-DOUBLE_POSITIVE = '+' d:DOUBLE { d.value = "+"+d.value; return d }
+DOUBLE_POSITIVE = '+' d:DOUBLE
+{ d.value = "+"+d.value; return d }
 
 // [152] INTEGER_NEGATIVE ::= '-' INTEGER
-INTEGER_NEGATIVE = '-' d:INTEGER { d.value = "-"+d.value; return d; }
+INTEGER_NEGATIVE = '-' d:INTEGER
+{ d.value = "-"+d.value; return d; }
 
 // [153] DECIMAL_NEGATIVE ::= '-' DECIMAL
-DECIMAL_NEGATIVE = '-' d:DECIMAL { d.value = "-"+d.value; return d; }
+DECIMAL_NEGATIVE = '-' d:DECIMAL
+{ d.value = "-"+d.value; return d; }
 
 // [154] DOUBLE_NEGATIVE   ::=   '-' DOUBLE
-DOUBLE_NEGATIVE = '-' d:DOUBLE { d.value = "-"+d.value; return d; }
+DOUBLE_NEGATIVE = '-' d:DOUBLE
+{ d.value = "-"+d.value; return d; }
 
 // [155] EXPONENT ::= [eE] [+-]? [0-9]+
-EXPONENT = a:[eE] b:[+-]? c:[0-9]+  { return flattenString([a,b,c]) }
+EXPONENT = a:[eE] b:[+-]? c:[0-9]+
+{ return flattenString([a,b,c]) }
 
 // [156] STRING_LITERAL1   ::=   "'" ( ([^#x27#x5C#xA#xD]) | ECHAR )* "'"
-STRING_LITERAL1 = "'" content:([^\u0027\u005C\u000A\u000D] / ECHAR)* "'" { return flattenString(content) }
+STRING_LITERAL1 = "'" content:([^\u0027\u005C\u000A\u000D] / ECHAR)* "'"
+{ return flattenString(content) }
 
 // [157] STRING_LITERAL2   ::=   '"' ( ([^#x22#x5C#xA#xD]) | ECHAR )* '"'
-STRING_LITERAL2 = '"' content:([^\u0022\u005C\u000A\u000D] / ECHAR)* '"' { return flattenString(content) }
+STRING_LITERAL2 = '"' content:([^\u0022\u005C\u000A\u000D] / ECHAR)* '"'
+{ return flattenString(content) }
 
 // [158] STRING_LITERAL_LONG1 ::= "'''" ( ( "'" | "''" )? ( [^'\] | ECHAR ) )* "'''"
 // check??
-STRING_LITERAL_LONG1 = "'''" content:([^\'\\] / ECHAR)* "'''"  { return flattenString(content) }
+STRING_LITERAL_LONG1 = "'''" content:([^\'\\] / ECHAR)* "'''"
+{ return flattenString(content) }
 
 // [159] STRING_LITERAL_LONG2 ::= '"""' ( ( '"' | '""' )? ( [^"\] | ECHAR ) )* '"""'
 // check??
-STRING_LITERAL_LONG2 = '"""' content:([^\"\\] / ECHAR)* '"""'  { return flattenString(content) }
+STRING_LITERAL_LONG2 = '"""' content:([^\"\\] / ECHAR)* '"""'
+{ return flattenString(content) }
 
 // [160] ECHAR ::= '\' [tbnrf\"']
 ECHAR = '\\' [tbnrf\"\']
