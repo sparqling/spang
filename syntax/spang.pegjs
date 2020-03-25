@@ -2696,7 +2696,9 @@ VARNAME = init:( PN_CHARS_U / [0-9] ) rpart:( PN_CHARS_U / [0-9] / [\u00B7] / [\
 PN_CHARS = PN_CHARS_U / '-' / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040]
 
 // [168] PN_PREFIX ::= PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)?
-PN_PREFIX = base:PN_CHARS_BASE rest:(PN_CHARS / '.')*
+// PN_PREFIX = base:PN_CHARS_BASE rest:(PN_CHARS / '.')*
+// add '_'
+PN_PREFIX = base:PN_CHARS_U rest:(PN_CHARS / '.')*
 { 
   if(rest[rest.length-1] == '.'){
     throw new Error("Wrong PN_PREFIX, cannot finish with '.'")
