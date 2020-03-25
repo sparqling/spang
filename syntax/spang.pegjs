@@ -1434,6 +1434,7 @@ VerbPath = p:Path
   path.token = 'path';
   path.kind = 'element';
   path.value = p;
+  path.location = location();
   
   return p; // return path?
 }
@@ -1459,6 +1460,7 @@ PathAlternative = first:PathSequence rest:( '|' PathSequence)*
     path.token = 'path';
     path.kind = 'alternative';
     path.value = acum;
+    path.location = location();
     
     return path;
   }
@@ -1478,8 +1480,8 @@ PathSequence = first:PathEltOrInverse rest:( '/' PathEltOrInverse)*
     var path = {};
     path.token = 'path';
     path.kind = 'sequence';
-    
     path.value = acum;
+    path.location = location();
     
     return path;
   }
@@ -2638,10 +2640,18 @@ NIL = '(' WS* ')'
 
 // [162] WS ::= #x20 | #x9 | #xD | #xA
 WS = [\u0020] / [\u0009] / [\u000D] / [\u000A] / COMMENT
+// SPACE | TAB | CR | LF
 
-// comment ::= '#' ( [^#xA#xD] )*
-COMMENT = comment:('#'([^\u000A\u000D])*)
+NEW_LINE = [\u000A\u000D]
+
+NON_NEW_LINE = [^\u000A\u000D]
+
+HEADER_LINES = '#' NON_NEW_LINE* NEW_LINE+
+
+// COMMENT ::= '#' ( [^#xA#xD] )*
      // = '#'([^\u000A\u000D])*
+// COMMENT = comment:('#'([^\u000A\u000D])*)
+COMMENT = comment:('#' NON_NEW_LINE*)
 {
   Comments[location().start.line] = flattenString(comment).trim();
   return '';
@@ -2661,14 +2671,10 @@ VARNAME = init:( PN_CHARS_U / [0-9] ) rpart:( PN_CHARS_U / [0-9] / [\u00B7] / [\
 { return init+rpart.join('') }
 
 // [167] PN_CHARS ::= PN_CHARS_U | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]
-PN_CHARS = PN_CHARS_U / '-' / [0-9]
-  / [\u00B7]
-  / [\u0300-\u036F]
-  / [\u203F-\u2040]
+PN_CHARS = PN_CHARS_U / '-' / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040]
 
 // [168] PN_PREFIX ::= PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)?
 PN_PREFIX = base:PN_CHARS_BASE rest:(PN_CHARS / '.')*
-//?
 { 
   if(rest[rest.length-1] == '.'){
     throw new Error("Wrong PN_PREFIX, cannot finish with '.'")
@@ -2679,9 +2685,10 @@ PN_PREFIX = base:PN_CHARS_BASE rest:(PN_CHARS / '.')*
 
 // [169] PN_LOCAL ::= (PN_CHARS_U | ':' | [0-9] | PLX ) ((PN_CHARS | '.' | ':' | PLX)* (PN_CHARS | ':' | PLX) )?
 // similar to BLANK_NODE_LABEL??
-// base:(PN_CHARS_U / [0-9] / ':' / PLX) rest:((PN_CHARS / '.' / ':' / PLX)* (PN_CHARS / ':' / PLX))? {
-PN_LOCAL = base:('$' / PN_CHARS_U / [0-9] / ':' / PLX) rest:(PN_CHARS / '.' / ':' / PLX)* 
+// base:(PN_CHARS_U / [0-9] / ':' / PLX) rest:((PN_CHARS / '.' / ':' / PLX)* (PN_CHARS / ':' / PLX))?
   // '$' is added
+  // still missing something at the end??
+PN_LOCAL = base:('$' / PN_CHARS_U / [0-9] / ':' / PLX) rest:(PN_CHARS / '.' / ':' / PLX)* 
 {
   return base + (rest||[]).join('');
 }
