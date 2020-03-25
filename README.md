@@ -1,4 +1,4 @@
-# SPANG2
+# SPANG
 
 ## SPARQL client
 
