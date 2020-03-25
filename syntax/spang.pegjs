@@ -50,13 +50,17 @@ QueryUnit = Query
 // Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
 Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
 {
+  var comments = Object.entries(Comments).map(([k, v]) => {
+    return {line: parseInt(k), text: v} 
+  });
+
   return {
     token: 'query',
     location: location(),
     kind: 'query',
     prologue: p,
     body: q,
-    comments: Object.entries(Comments).map(([k, v]) => { return {text: Comments[k], line: parseInt(k)} }),
+    comments: comments,
     functions: f,
     header: flattenString(h),
     inlineData: v
