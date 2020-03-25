@@ -1743,7 +1743,7 @@ VarOrTerm = (Var / GraphTerm)
 VarOrIRIref = (Var /IRIref)
 
 // [108] Var ::= VAR1 | VAR2
-Var = WS* v:(VAR1 / VAR2) WS*
+Var = WS* v:(VAR1 / VAR2 / VAR3) WS*
 {
   var term = {location: location()};
 
@@ -2500,6 +2500,12 @@ VAR2 = '$' v:VARNAME
 {
   // return v
   return { prefix: "$",  value: v };
+}
+
+// support var in mustash
+VAR3 = '{{' v:VARNAME '}}'
+{
+  return { prefix: 'mustash',  value: v };
 }
 
 // [145] LANGTAG ::= '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
