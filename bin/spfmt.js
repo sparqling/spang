@@ -5,18 +5,18 @@ spfmt = require('../lib/spfmt.js');
 
 var commander = require('commander')
     .version(require("../package.json").version)
-    .arguments('<src>');
+    .arguments('<SPARQL>');
 
 commander.parse(process.argv);
 
-var src;
+var sparqlQuery;
 
 if(commander.args[0]) {
-    src = fs.readFileSync(commander.args[0], "utf8").toString();
+  sparqlQuery = fs.readFileSync(commander.args[0], "utf8").toString();
 } else if (process.stdin.isTTY) {
   commander.help();
 } else {
-  src = fs.readFileSync(0).toString();
+  sparqlQuery = fs.readFileSync(0).toString();
 }
 
-console.log(spfmt.reformat(src));
+console.log(spfmt.reformat(sparqlQuery));
