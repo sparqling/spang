@@ -58,7 +58,7 @@ Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / 
     header: flattenString(h),
     prologue: p,
     body: q,
-    comments: commentsList,
+    commentsList: commentsList,
     functions: f,
     inlineData: v,
     location: location()
