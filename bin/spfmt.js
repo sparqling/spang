@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 fs = require('fs');
-reformatter = require('../lib/reformatter.js');
+spfmt = require('../lib/spfmt.js');
 
 var commander = require('commander')
     .version(require("../package.json").version)
@@ -19,4 +19,4 @@ if(commander.args[0]) {
   src = fs.readFileSync(0).toString();
 }
 
-console.log(reformatter.reformat(src));
+console.log(spfmt.reformat(src));

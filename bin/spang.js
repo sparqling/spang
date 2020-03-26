@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 fs = require('fs');
-reformatter = require('../lib/reformatter.js');
+spfmt = require('../lib/spfmt.js');
 
 const version = require("../package.json").version;
 const child_process = require('child_process');
@@ -90,7 +90,7 @@ if (commander.fmt) {
   } else {
     src = input;
   }
-  console.log(reformatter.reformat(src));
+  console.log(spfmt.reformat(src));
   process.exit(0)
 }
 
