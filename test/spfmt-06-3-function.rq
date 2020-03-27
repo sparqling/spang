@@ -1,0 +1,15 @@
+prefix ex: <http://example.com>
+_:name(?s, ?name) {
+  {
+    ?s rdfs:label ?label
+  }
+  union
+  {
+    ?s skos:prefLabel ?label
+  }
+}
+SELECT *
+WHERE {
+  ?s ?p ?o .
+  _:name(?s, ?o)
+}
