@@ -55,7 +55,8 @@ Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / 
   return {
     token: 'query',
     kind: 'query',
-    header: flattenString(h),
+    // header: flattenString(h),
+    headers: h,
     prologue: p,
     body: q,
     commentsList: commentsList,
