@@ -54,6 +54,7 @@ var commander = require('commander')
     .option('-f, --fmt', 'format the query')
     .option('-i, --indent <DEPTH>', "indent depth; use with --fmt", 2)
     .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
+    .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
     .version(version)
     .arguments('<SPARQL_TEMPLATE>')
     .action((s) => {
@@ -91,7 +92,7 @@ if (commander.fmt) {
   } else {
     src = input;
   }
-  console.log(spfmt.reformat(src, commander.indent));
+  console.log(spfmt.reformat(src, commander.indent, commander.debug));
   process.exit(0)
 }
 

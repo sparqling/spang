@@ -5,6 +5,7 @@ spfmt = require('../lib/spfmt.js');
 
 var commander = require('commander')
     .option('-i, --indent <DEPTH>', "indent depth", 2)
+    .option('-d, --debug', 'debug (output AST)')
     .version(require("../package.json").version)
     .arguments('<SPARQL>');
 
@@ -37,4 +38,4 @@ if(commander.args[0]) {
   sparqlQuery = fs.readFileSync(0).toString();
 }
 
-console.log(spfmt.reformat(sparqlQuery, commander.indent));
+console.log(spfmt.reformat(sparqlQuery, commander.indent, commander.debug));
