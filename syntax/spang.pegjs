@@ -54,8 +54,6 @@ Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / 
 
   return {
     token: 'query',
-    kind: 'query',
-    // header: flattenString(h),
     headers: h,
     prologue: p,
     body: q,
@@ -478,8 +476,7 @@ ValuesClause = b:(('VALUES'/'values') DataBlock)?
 Update = p:Prologue WS* u:Update1 us:(WS* ';' WS* Update? )?
 {
   var query = {};
-  query.token = 'query';
-  query.kind = 'update'
+  query.token = 'update';
   query.prologue = p;
   
   var units = [u];
