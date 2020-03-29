@@ -5,9 +5,9 @@ prefix ex: <http://example.com>
 # pre1
 # pre2
 SELECT * WHERE { # select cl
-  ?s ?p ?o . # com4
-  ?s ?p2 ?o2 ; # com4-2
-  ?p3 ?o3. # com4-3
+  ?s ?p ?o .    # com4
+  ?s ?p2 ?o2 ;  # com4-2
+  ?p3 ?o3.      # com4-3
   ?s4 ?p4 ?o4 . # last
   # add
 }

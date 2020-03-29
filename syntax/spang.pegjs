@@ -59,8 +59,7 @@ Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / 
     body: q,
     commentsList: commentsList,
     functions: f,
-    inlineData: v,
-    location: location()
+    inlineData: v
   }
 }
 
@@ -77,12 +76,13 @@ Function = h:FunctionCall WS* b:GroupGraphPattern WS*
 UpdateUnit = Update
 
 // [4] Prologue  ::=  BaseDecl? PrefixDecl*
-Prologue = b:BaseDecl? WS* pfx:PrefixDecl*
+Prologue = b:BaseDecl? WS* p:PrefixDecl*
 {
-  return { token: 'prologue',
-           location: location(), 
-           base: b,
-           prefixes: pfx }
+  return {
+    token: 'prologue',
+    base: b,
+    prefixes: p
+  }
 }
 
 // [5] BaseDecl  ::=  'BASE' IRI_REF
@@ -90,7 +90,7 @@ BaseDecl = WS* ('BASE'/'base') WS* i:IRI_REF
 {
   registerDefaultPrefix(i);
   
-  var base = {location: location()};
+  var base = {};
   base.token = 'base';
   base.value = i;
   
@@ -105,7 +105,6 @@ PrefixDecl = WS* ('PREFIX'/'prefix')  WS* p:PNAME_NS  WS* l:IRI_REF
   var prefix = {};
   prefix.token = 'prefix';
   prefix.prefix = p;
-  prefix.location = location();
   prefix.local = l;
   
   return prefix;
@@ -132,7 +131,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
                               value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
   }
   
-  var query = {location: location()};
+  var query = {};
   query.kind = 'select';
   query.token = 'executableunit';
   query.dataset = dataset;
@@ -159,7 +158,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
 // [8] SubSelect ::= SelectClause WhereClause SolutionModifier
 SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 {
-  var query = {location: location()};
+  var query = {};
 
   query.kind = 'select';
   query.token = 'subselect';
@@ -184,24 +183,38 @@ SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 }
 
 // [9] SelectClause ::= 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( ( Var | ( '(' Expression 'AS' Var ')' ) )+ | '*' )
-SelectClause = WS* ('SELECT'/'select') WS* mod:( ('DISTINCT'/'distinct') / ('REDUCED'/'reduced') )? WS* proj:( ( ( WS* Var WS* ) / ( WS* '(' WS* Expression WS* ('AS'/'as') WS* Var WS* ')' WS* ) )+ / ( WS* '*' WS* )  ) 
+SelectClause = WS* ('SELECT'/'select') WS* mod:( ('DISTINCT'/'distinct') / ('REDUCED'/'reduced') )? WS*
+  proj:( ( ( WS* Var WS* ) / ( WS* '(' WS* Expression WS* ('AS'/'as') WS* Var WS* ')' WS* ) )+ / ( WS* '*' WS* )  ) 
 {
   var vars = [];
   if(proj.length === 3 && proj[1]==="*") {
-    return {vars: [{token: 'variable', location: location(), kind:'*'}], modifier:arrayToString(mod)};
+    return {
+      vars: [{token: 'variable',
+              location: location(),
+              kind:'*'}],
+      modifier:arrayToString(mod)
+    };
   }
   
   for(var i=0; i< proj.length; i++) {
     var aVar = proj[i];
     
     if(aVar.length === 3) {
-      vars.push({token: 'variable', kind:'var', value:aVar[1]});
+      vars.push({token: 'variable',
+                 kind:'var',
+                 value:aVar[1]});
     } else {
-      vars.push({token: 'variable', kind:'aliased', expression: aVar[3], alias:aVar[7]})
+      vars.push({token: 'variable',
+                 kind:'aliased',
+                 expression: aVar[3],
+                 alias:aVar[7]})
     }
   }
   
-  return {vars: vars, modifier:arrayToString(mod), location: location()};
+  return {
+    vars: vars,
+    modifier:arrayToString(mod)
+  };
 }
 
 // [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier |
@@ -2654,11 +2667,12 @@ NIL = '(' WS* ')'
 }
 
 // [162] WS ::= #x20 | #x9 | #xD | #xA
-WS = [\u0020] / [\u0009] / [\u000D] / [\u000A] / COMMENT
+// WS = [\u0020] / [\u0009] / [\u000D] / [\u000A] / COMMENT
+WS = COMMENT / [\u0020] / [\u0009] / [\u000D] / [\u000A]
 // SPACE | TAB | CR | LF
 
+SPACE_OR_TAB = [\u0020\u0009]
 NEW_LINE = [\u000A\u000D]
-
 NON_NEW_LINE = [^\u000A\u000D]
 
 HEADER_LINE = h:('#' NON_NEW_LINE* NEW_LINE)
@@ -2668,10 +2682,12 @@ HEADER_LINE = h:('#' NON_NEW_LINE* NEW_LINE)
 
 // COMMENT ::= '#' ( [^#xA#xD] )*
 // COMMENT = comment:('#' ([^\u000A\u000D])*)
-COMMENT = comment:('#' NON_NEW_LINE*)
+// COMMENT = comment:('#' NON_NEW_LINE*)
+COMMENT = comment:(SPACE_OR_TAB* '#' NON_NEW_LINE*)
 {
   var loc = location().start.line;
-  var str = flattenString(comment).trim()
+  // var str = flattenString(comment).trim()
+  var str = flattenString(comment)
   CommentsHash[loc] = str;
 
   return '';
