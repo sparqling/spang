@@ -11,28 +11,12 @@ const shortcut = require('../lib/shortcut.js').shortcut;
 const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
 const syncRequest = require('sync-request');
-const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
 
-toString = (resource) => {
-  if(resource.type == 'uri') {
-    if(commander.abbr) return prefixModule.abbreviateURL(resource.value);
-    return `<${resource.value}>`;
-  } else if(resource.type == 'typed-literal') {
-    if(commander.abbr) return `"${resource.value}"^^${prefixModule.abbreviateURL(resource.datatype)}`;
-    return `"${resource.value}"^^<${resource.datatype}>`;
-  } else {
-    return `"${resource.value}"`;
-  }
-}
-
-debugPrint = (object) => {
-  console.log(JSON.stringify(object, undefined, 2));
-};
-
-
-var db, sparqlTemplate, localMode;
+var sparqlTemplate;
+var db;
 var parameterMap = {};
 var retrieveByGet = true;
+const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
 
 var commander = require('commander')
     .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
@@ -78,21 +62,19 @@ splitShortOptions = (argv) => {
   return splitted;
 };
 
-commandArguments = splitShortOptions(process.argv);
-
-commander.parse(commandArguments);
+commander.parse(splitShortOptions(process.argv));
 
 if (commander.fmt) {
-  var src;
+  var sparqlQuery;
   if(commander.args[0]) {
-    src = fs.readFileSync(commander.args[0], "utf8").toString();
+    sparqlQuery = fs.readFileSync(commander.args[0], "utf8").toString();
   } else if (process.stdin.isTTY) {
     console.log('Format SPARQL query: input is required');
     process.exit(-1)
   } else {
-    src = input;
+    sparqlQuery = input;
   }
-  console.log(spfmt.reformat(src, commander.indent, commander.debug));
+  console.log(spfmt.reformat(sparqlQuery, commander.indent, commander.debug));
   process.exit(0)
 }
 
@@ -196,14 +178,30 @@ if(/^\w/.test(db)) {
     }
   });
 } else {
-  // localMode = true;
   if (db == '-') {
-    // TODO: db should be a temporary file name?
-    // db = fs.readFileSync(process.stdin.fd, "utf8");
+    // TODO: save input as a temporary file name
   } else if(!fs.existsSync(db)) {
     console.log(`${db}: no such file`);
     process.exit(-1);
   }
-  // TODO: use Jena or other JS implementation?
+  // TODO: use Jena or other JS implementation
   console.log(child_process.execSync(`sparql --data ${db} --results ${commander.outfmt} '${sparqlTemplate}'`).toString());
+}
+
+toString = (resource) => {
+  if (resource.type == 'uri') {
+    if (commander.abbr) {
+      return prefixModule.abbreviateURL(resource.value);
+    } else {
+      return `<${resource.value}>`;
+    }
+  } else if(resource.type == 'typed-literal') {
+    if (commander.abbr) {
+      return `"${resource.value}"^^${prefixModule.abbreviateURL(resource.datatype)}`;
+    } else {
+      return `"${resource.value}"^^<${resource.datatype}>`;
+    }
+  } else {
+    return `"${resource.value}"`;
+  }
 }

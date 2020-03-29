@@ -35,7 +35,7 @@ if(commander.args[0]) {
 } else if (process.stdin.isTTY) {
   commander.help();
 } else {
-  sparqlQuery = fs.readFileSync(0).toString();
+  sparqlQuery = fs.readFileSync(process.stdin.fd).toString();
 }
 
 console.log(spfmt.reformat(sparqlQuery, commander.indent, commander.debug));
