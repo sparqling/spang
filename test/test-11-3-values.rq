@@ -1,7 +1,11 @@
 # @title Get information for a taxonomy ID
+# @param taxid=taxid:2
+
 PREFIX taxid: <http://identifiers.org/taxonomy/>
 
-SELECT ?taxid ?label
+# SELECT ?taxid ?label
+SELECT *
 WHERE {
-    ?taxid rdfs:label ?label
+  ?taxid rdfs:label ?label .
 }
+# {{INPUT}}
