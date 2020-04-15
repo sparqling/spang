@@ -1,0 +1,13 @@
+# @title Get information for a taxonomy ID
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+
+_:isHumanAncestor(?ancestor) {
+  ?human ?p "human" .
+  ?human rdfs:subClassOf+ ?ancestor .
+}  
+
+SELECT ?ancestor ?label
+WHERE {
+  _:isHumanAncestor(?ancestor)
+  ?ancestor rdfs:label ?label .
+}

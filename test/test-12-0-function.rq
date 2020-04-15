@@ -1,0 +1,9 @@
+# @title Get information for a taxonomy ID
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+
+SELECT ?ancestor ?label
+WHERE {
+  ?human ?p "human" .
+  ?human rdfs:subClassOf+ ?ancestor .
+  ?ancestor rdfs:label ?label .
+}
