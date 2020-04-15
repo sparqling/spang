@@ -68,7 +68,8 @@ Function = h:FunctionCall WS* b:GroupGraphPattern WS*
   return {
     token: 'function',
     header:h,
-    body:b
+    body:b,
+    location: location()
   }
 }
 
