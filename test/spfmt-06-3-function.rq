@@ -1,15 +1,10 @@
-prefix ex: <http://example.com>
-_:name(?s, ?name) {
-  {
-    ?s rdfs:label ?label
-  }
-  union
-  {
-    ?s skos:prefLabel ?label
-  }
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix skos: <http://www.w3.org/2004/02/skos/core#>
+_:hasName(?s, ?name) {
+{?s rdfs:label ?name} union {?s skos:prefLabel ?name}
 }
 SELECT *
 WHERE {
-  ?s ?p ?o .
-  _:name(?s, ?o)
+?s ?p ?o .
+_:hasName(?s, ?o)
 }

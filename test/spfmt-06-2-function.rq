@@ -1,9 +1,8 @@
-prefix ex: <http://example.com>
 _:name(?s, ?name) {
-  ?s rdfs:label ?label
+  ?s rdfs:label ?name
 }
 SELECT *
 WHERE {
-  ?s ?p ?o .
-  _:name(?s, ?o)
+?s ?p ?o .
+_:name(?s, "human")
 }

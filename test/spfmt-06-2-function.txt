@@ -1,0 +1,9 @@
+_:name(?s, ?name) {
+  ?s rdfs:label ?name .
+}
+
+SELECT *
+WHERE {
+  ?s ?p ?o .
+  _:name(?s, "human")
+}

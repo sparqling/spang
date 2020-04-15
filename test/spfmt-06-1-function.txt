@@ -1,7 +1,9 @@
-prefix ex: <http://example.com>
+PREFIX ex: <http://example.com>
+
 ex:hasName(?s, ?name) {
-  ?s rdfs:label ?name
+  ?s rdfs:label ?name .
 }
+
 SELECT *
 WHERE {
   ?s ?p ?o .
