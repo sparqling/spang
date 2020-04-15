@@ -1021,7 +1021,7 @@ FunctionCall = i:IRIref WS* args:ArgList
   fcall.expressionType = 'functioncall'
   fcall.iriref = i;
   fcall.args = args.value;
-  
+  fcall.location = location();
   return fcall;
 }
 
