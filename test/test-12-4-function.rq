@@ -1,0 +1,18 @@
+# @title Get information for a taxonomy ID
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+
+_:isAncestor(?ancestor, ?name) {
+  ?human ?p ?name .
+  ?human rdfs:subClassOf+ ?ancestor .
+}
+
+_:isCommonAncestor(?ancestor, ?name1, ?name2) {
+  _:isAncestor(?ancestor, ?name1)
+  _:isAncestor(?ancestor, ?name2)
+}
+
+SELECT ?ancestor ?label
+WHERE {
+  _:isCommonAncestor(?ancestor, "human", "mouse")
+  ?ancestor rdfs:label ?label .
+}
