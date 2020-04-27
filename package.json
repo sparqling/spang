@@ -25,5 +25,9 @@
   "bin": {
     "spang2": "./bin/spang.js",
     "spfmt": "./bin/spfmt.js"
+  },
+  "mocha": {
+    "timeout": 15000,
+    "diff": false
   }
 }
