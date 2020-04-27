@@ -2,14 +2,11 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX taxid: <http://identifiers.org/taxonomy/>
 
-_:isAncestor(?ancestor, ?taxid) {
-  ?taxid rdfs:subClassOf+ ?ancestor .
-}  
-
 SELECT DISTINCT ?ancestor ?label
 WHERE {
-  _:isAncestor(?ancestor, taxid:9606)
-  _:isAncestor(?ancestor, taxid:10090)
+  taxid:9606 rdfs:subClassOf+ ?ancestor .
+  taxid:10090 rdfs:subClassOf+ ?ancestor .
   ?ancestor rdfs:label ?label .
 }
 ORDER BY ?ancestor
+

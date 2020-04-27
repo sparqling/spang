@@ -1,18 +1,19 @@
 # @title Get information for a taxonomy ID
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX taxid: <http://identifiers.org/taxonomy/>
 
-_:isAncestor(?ancestor, ?name) {
-  ?human ?p ?name .
-  ?human rdfs:subClassOf+ ?ancestor .
+_:isAncestor(?ancestor, ?taxid) {
+  ?taxid rdfs:subClassOf+ ?ancestor .
 }
 
-_:isCommonAncestor(?ancestor, ?name1, ?name2) {
-  _:isAncestor(?ancestor, ?name1)
-  _:isAncestor(?ancestor, ?name2)
+_:isCommonAncestor(?ancestor, ?taxid1, ?taxid2) {
+  _:isAncestor(?ancestor, ?taxid1)
+  _:isAncestor(?ancestor, ?taxid2)
 }
 
-SELECT ?ancestor ?label
+SELECT DISTINCT ?ancestor ?label
 WHERE {
-  _:isCommonAncestor(?ancestor, "human", "mouse")
+  _:isCommonAncestor(?ancestor, taxid:9606, taxid:10090)
   ?ancestor rdfs:label ?label .
 }
+ORDER BY ?ancestor

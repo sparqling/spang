@@ -1,0 +1,10 @@
+# @title Get information for a taxonomy ID
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+
+SELECT DISTINCT ?ancestor ?label
+WHERE {
+  taxid:9606 rdfs:subClassOf+ ?ancestor .
+  taxid:10090 rdfs:subClassOf+ ?ancestor .
+  ?ancestor rdfs:label ?label .
+}
+ORDER BY ?ancestor
