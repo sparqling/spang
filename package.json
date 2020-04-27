@@ -29,5 +29,8 @@
   "mocha": {
     "timeout": 15000,
     "diff": false
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
   }
 }
