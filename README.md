@@ -39,18 +39,13 @@ Options:
 ```
 ### Test examples
 ```
-$ ./node_modules/mocha/bin/mocha
-```
-Or, if you have globally installed mocha,
-
-```
-$ mocha
+$ npm test
 ```
 
 ### Update spang_bundled.js
 Update the `lib/spang_bundled.js` as follows after editing any other JS codes
 ```
-$ ./node_modules/browserify/bin/cmd.js lib/spang_browser.js > lib/spang_bundled.js 
+$ npm run browserify
 ```
 
 ## SPARQL formatter
@@ -126,17 +121,13 @@ WHERE {
 If you have globally installed mocha
 
 ```
-$ mocha
-```
-Otherwise,
-```
-$ ./node_modules/mocha/bin/mocha
+$ npm test
 ```
 
 ### Update spfmt_bundled.js
 Update the `spfmt_bundled.js` as follows after editing any other JS codes
 ```
-$ ./node_modules/browserify/bin/cmd.js lib/spfmt_browser.js > lib/spfmt_bundled.js 
+$ npm run browserify
 ```
 
 ## SPARQL specifications
