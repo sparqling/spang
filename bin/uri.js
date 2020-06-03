@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 
-var commander = require('commander')
-    .version(require("../package.json").version)
-    .arguments('<URI>');
+const syncRequest = require('sync-request');
 
-if (commander.args) {
-  console.log(commander.args[0]);
-} else {
-  commander.parse(process.argv);
+const program = require('commander')
+      .version(require("../package.json").version)
+      .arguments('<URI>')
+      .parse(process.argv);
+
+if (program.args.length == 0) {
+  program.help();
 }
 
-// request = require('request')
+const text = syncRequest('GET', program.args[0]).getBody('utf8');
 
-// request.get(commander.args[0]);
+console.log(text);
