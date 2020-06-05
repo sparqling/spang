@@ -13,8 +13,6 @@ const program = require('commander')
 if (program.args.length == 0) {
   program.help();
 }
-const arg = program.args[0];
-let uri;
 
 if (program.prefix) {
   prefixModule.setPrefixFiles(program.prefix.split(',').map(path => path.trim()));
@@ -24,14 +22,7 @@ if (program.prefix) {
   prefixModule.setPrefixFiles([`${__dirname}/../etc/prefix`, `${require('os').homedir()}/.spang/prefix`]);
 }
 
-if (/^(http|https):\/\//.test(arg)) {
-  uri = arg;
-} else if (/^\w+:/.test(arg)) {
-  const matched = arg.match(/^(\w+):(.*)$/);
-  uri = expandPrefix(matched[1]) + matched[2];
-} else {
-  uri = expandPrefix(arg);
-}
+const uri = prefixModule.expandPrefixedUri(program.args[0]);
 
 if (uri) {
   if (program.quit) {
@@ -41,19 +32,4 @@ if (uri) {
 
   const text = syncRequest('GET', uri).getBody('utf8');
   console.log(text);
-}
-
-// Function
-function expandPrefix(prefix){
-  const line = prefixModule.searchPrefix(prefix);
-  if (line) {
-    const tokens = line.split(/\s+/);
-    if(tokens.length == 3 && tokens[0] == 'PREFIX' &&
-       tokens[1].endsWith(':') && tokens[2].startsWith('<') &&
-       tokens[2].endsWith('>'))
-    {
-      const expanded = tokens[2].substring(1, tokens[2].length - 1);
-      return expanded;
-    }
-  }
 }
