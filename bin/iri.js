@@ -24,13 +24,11 @@ if (program.prefix) {
 }
 
 const uri = prefixModule.expandPrefixedUri(program.args[0]);
-
 if (uri) {
   if (program.quit) {
     console.log(uri);
-    process.exit(0);
+  } else {
+    const text = syncRequest('GET', uri).getBody('utf8');
+    console.log(text);
   }
-
-  const text = syncRequest('GET', uri).getBody('utf8');
-  console.log(text);
 }
