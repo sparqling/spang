@@ -5,6 +5,7 @@ const prefixModule = require('../lib/prefix.js');
 
 const program = require('commander')
       .option('-r, --prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
+      .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
       .option('-q, --quit', 'show expanded URI and quit')
       .version(require("../package.json").version)
       .arguments('<URI>')
