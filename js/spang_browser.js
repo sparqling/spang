@@ -1,10 +1,10 @@
 spang = {};
-spang.embed = require('./embed_parameter.js').embedParameter;
+spang.embed = require('../lib/embed_parameter.js').embedParameter;
 spang.request = require('request');
-spang.prefix = require('./prefix.js');
+spang.prefix = require('../lib/prefix.js');
 const version = require('../package.json').version;
 const syncRequest = require('sync-request');
-spang.constructSparql = require('./construct_sparql.js').constructSparql;
+spang.constructSparql = require('../lib/construct_sparql.js').constructSparql;
 
 spang.getTemplate = (url, callback) => {
   var options = {
@@ -27,7 +27,7 @@ spang.getTemplate = (url, callback) => {
 
 spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/spang2/master/etc/prefix');
 
-spang.shortcut = require('./shortcut.js').shortcut;
+spang.shortcut = require('../lib/shortcut.js').shortcut;
 
 bind_trailing_args = (fn, ...bound_args) =>
 {
@@ -48,5 +48,5 @@ spang.query = (sparqlTemplate, endpoint, options, callback) => {
   //   [endpoint, retrieveByGet] = require('./search_db_name.js').searchDBName(endpoint, syncRequest("GET", url).getBody('utf8'));
   // }
   console.log(sparql);
-  require('./query_sparql.js')(endpoint, sparql, options.get, options.format, callback);
+  require('../lib/query_sparql.js')(endpoint, sparql, options.get, options.format, callback);
 };

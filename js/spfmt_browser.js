@@ -1,1 +1,1 @@
-spfmt = require('./spfmt.js');
+spfmt = require('../lib/spfmt.js');
