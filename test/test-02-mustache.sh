@@ -1,2 +1,2 @@
 #!/bin/sh
-spang2 --param p=rdf:type -q test/test-02-mustache.rq
+spang2 --param p=rdf:type -q test-02-mustache.rq

@@ -1,2 +1,2 @@
 #!/bin/sh
-spang2 --fmt test/spfmt-03-5-order.rq -i4
+spang2 --fmt spfmt-03-5-order.rq -i4

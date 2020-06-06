@@ -1,2 +1,2 @@
 #!/bin/sh
-spang2 --fmt test/spfmt-05-1.rq -i4
+spang2 --fmt spfmt-05-1.rq -i4

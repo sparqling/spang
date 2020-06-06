@@ -6,17 +6,18 @@ const assert = chai.assert;
 chai.use(require('chai-fs'));
 
 describe('test', () => {
-  fs.readdirSync('test').forEach(file => {
-    testFile(file);
+  const dir = 'test';
+  fs.readdirSync(dir).forEach(file => {
+    testFile(dir, file);
   });
 });
 
-function testFile(file) {
+function testFile(dir, file) {
   if (file.endsWith('.sh')) {
     const basename = path.basename(file, '.sh');
     it(file, () => {
-      const result = execSync(`./test/${basename}.sh`).toString();
-      const expect = fs.readFileSync(`./test/${basename}.txt`).toString();
+      const result = execSync(`cd ${dir}; ./${basename}.sh`).toString();
+      const expect = fs.readFileSync(`${dir}/${basename}.txt`).toString();
       assert.equal(result, expect);
     });
   }

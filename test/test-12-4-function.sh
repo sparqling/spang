@@ -1,2 +1,2 @@
 #!/bin/sh
-spang2 test/test-12-4-function.rq -q
+spang2 test-12-4-function.rq -q
