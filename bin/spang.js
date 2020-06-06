@@ -40,7 +40,7 @@ var commander = require('commander')
     .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
     .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
     .version(version)
-    .arguments('<SPARQL_TEMPLATE>')
+    .arguments('[SPARQL_TEMPLATE]')
     .action((s) => {
       sparqlTemplate = s;
     });
