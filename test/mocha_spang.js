@@ -5,8 +5,16 @@ const chai = require('chai');
 const assert = chai.assert;
 chai.use(require('chai-fs'));
 
-describe('test', () => {
-  const dir = 'test';
+let dir;
+
+dir = 'test/core';
+describe(dir, () => {
+  fs.readdirSync(dir).forEach(file => {
+    testFile(dir, file);
+  });
+});
+dir = 'test/dev';
+describe(dir, () => {
   fs.readdirSync(dir).forEach(file => {
     testFile(dir, file);
   });
