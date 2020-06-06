@@ -34,6 +34,6 @@
   "scripts": {
     "test": "mocha",
     "pegjs": "pegjs -o lib/parser.js syntax/spang.pegjs",
-    "browserify": "browserify lib/spang_browser.js > lib/spang_bundled.js && browserify lib/spfmt_browser.js > lib/spfmt_bundled.js"
+    "browserify": "browserify js/spang_browser.js > js/spang_bundled.js && browserify js/spfmt_browser.js > js/spfmt_bundled.js"
   }
 }
