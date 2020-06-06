@@ -3,17 +3,17 @@
 fs = require('fs');
 spfmt = require('../lib/spfmt.js');
 
-var commander = require('commander')
-    .option('-i, --indent <DEPTH>', "indent depth", 2)
-    .option('-d, --debug', 'debug (output AST)')
-    .version(require("../package.json").version)
-    .arguments('<SPARQL>');
+const commander = require('commander')
+      .option('-i, --indent <DEPTH>', "indent depth", 2)
+      .option('-d, --debug', 'debug (output AST)')
+      .version(require("../package.json").version)
+      .arguments('[SPARQL]');
 
 commander.parse(process.argv);
 
-var sparqlQuery;
+let sparqlQuery;
 
-if(commander.args[0]) {
+if (commander.args[0]) {
   sparqlQuery = fs.readFileSync(commander.args[0], "utf8").toString();
 } else if (process.stdin.isTTY) {
   commander.help();
