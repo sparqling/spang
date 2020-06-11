@@ -1,0 +1,314 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix dctype: <http://purl.org/dc/dcmitype/> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix ogo: <http://miuras.inf.um.es/ontologies/OGO.owl#> .
+@prefix orthology: <http://purl.org/net/orth#> .
+@prefix : <http://purl.jp/bio/11/orth#> .
+
+<http://purl.jp/bio/11/orth> 
+    a owl:Ontology ;
+    dct:title "Ortholog Ontology (OrthO)" ;
+    dct:description "An ontology for describing ortholog information." ;
+    owl:versionInfo "2016-01-18" ;
+    owl:versionIRI <http://mbgd.genome.ad.jp/ontology/orth.2016-01-18.ttl> ;
+    owl:priorVersion <http://mbgd.genome.ad.jp/ontology/orth.2014-10-16.ttl> ;
+    rdfs:seeAlso <http://mbgd.genome.ad.jp/ontology/> ;
+    owl:imports <http://miuras.inf.um.es/ontologies/OGO.owl> .
+
+:Resource 
+    a owl:Class ;
+    rdfs:label "Resource" ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:Dataset 
+    a owl:Class ;
+    rdfs:label "Dataset" ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+	owl:onProperty :organism ;
+	owl:allValuesFrom :Organism 
+    ] ;
+    rdfs:subClassOf :Resource ;
+    rdfs:subClassOf void:Dataset ;
+    owl:equivalentClass orthology:OrthologyDataset ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+void:Dataset 
+    rdfs:subClassOf dctype:Dataset .
+
+:Group 
+    a owl:Class ;
+    rdfs:label "Group" ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+	owl:onProperty :inDataset ;
+	owl:allValuesFrom :Dataset 
+    ] ;
+    rdfs:subClassOf [
+        a owl:Restriction ;
+	owl:onProperty :member ;
+	owl:allValuesFrom [
+	    a owl:Class ;
+	    owl:unionOf ( :Group 
+	        :SequenceUnit 
+            )
+        ] ;
+    ] ;
+    rdfs:subClassOf :Resource ;
+    rdfs:subClassOf dctype:Collection ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:HomologGroup 
+    a owl:Class ;
+    rdfs:label "HomologGroup" ;
+    rdfs:subClassOf :Group ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:OrthologGroup 
+    a owl:Class ;
+    rdfs:label "OrthologGroup" ;
+    rdfs:subClassOf :HomologGroup ;
+    owl:equivalentClass ogo:Cluster ;
+    owl:equivalentClass orthology:OrthologsCluster ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:ParalogGroup 
+    a owl:Class ;
+    rdfs:label "ParalogGroup" ;
+    rdfs:subClassOf :HomologGroup ;
+    owl:equivalentClass orthology:ParalogsCluster ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:SequenceUnit 
+    a owl:Class ;
+    rdfs:label "SequenceUnit" ;
+    rdfs:subClassOf :Resource ;
+    owl:equivalentClass orthology:SequenceUnit ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:Gene 
+    a owl:Class ;
+    rdfs:label "Gene" ;
+    rdfs:subClassOf :SequenceUnit ;
+    owl:equivalentClass ogo:Gene ;
+    owl:equivalentClass orthology:Gene ;
+    rdfs:subClassOf obo:SO_0000704 ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:Protein 
+    a owl:Class ;
+    rdfs:label "Protein" ;
+    rdfs:subClassOf :SequenceUnit ;
+    owl:equivalentClass ogo:Protein ;
+    owl:equivalentClass orthology:Protein ;
+    rdfs:subClassOf obo:SO_0000104 ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:Transcript 
+    a owl:Class ;
+    rdfs:label "Transcript" ;
+    rdfs:subClassOf :SequenceUnit ;
+    rdfs:subClassOf obo:SO_0000673 ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:Organism 
+    a owl:Class ;
+    rdfs:label "Organism" ;
+    rdfs:subClassOf :Resource ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:Taxon 
+    a owl:Class ;
+    rdfs:label "Taxon" ;
+    rdfs:subClassOf :Organism ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:relation 
+    a owl:ObjectProperty ;
+    rdfs:label "relation" ;
+    rdfs:domain :Resource ;
+    rdfs:range :Resource ;
+    rdfs:subPropertyOf dct:relation ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:groupMembershipRelation 
+    a owl:ObjectProperty ;
+    rdfs:label "groupMembershipRelation" ;
+    rdfs:domain :Group ;
+    rdfs:range :Resource ;
+    rdfs:subPropertyOf :relation ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:inDataset 
+    a owl:ObjectProperty ;
+    rdfs:label "inDataset" ;
+    rdfs:domain :Group ;
+    rdfs:range :Dataset ;
+    rdfs:subPropertyOf :groupMembershipRelation ;
+    rdfs:subPropertyOf void:inDataset ;
+    rdfs:subPropertyOf dct:isPartOf ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:member 
+    a owl:ObjectProperty ;
+    rdfs:label "member" ;
+    rdfs:domain :Group ;
+    rdfs:range [
+        a owl:Class ;
+        owl:unionOf ( :Group 
+            :SequenceUnit 
+        )
+    ] ;
+    rdfs:subPropertyOf :groupMembershipRelation ;
+    rdfs:subPropertyOf rdfs:member ;
+    owl:equivalentProperty ogo:hasOrthologous ;
+    owl:equivalentProperty orthology:hasHomologous ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:pairwiseRelation 
+    a owl:ObjectProperty ;
+    rdfs:label "pairwiseRelation" ;
+    rdfs:domain :SequenceUnit ;
+    rdfs:range :SequenceUnit ;
+    rdfs:subPropertyOf :relation ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:homolog 
+    a owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:label "homolog" ;
+    rdfs:domain :SequenceUnit ;
+    rdfs:range :SequenceUnit ;
+    rdfs:subPropertyOf :pairwiseRelation ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:ortholog 
+    a owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:label "ortholog" ;
+    rdfs:domain :SequenceUnit ;
+    rdfs:range :SequenceUnit ;
+    rdfs:subPropertyOf :homolog ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:paralog 
+    a owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:label "paralog" ;
+    rdfs:domain :SequenceUnit ;
+    rdfs:range :SequenceUnit ;
+    rdfs:subPropertyOf :homolog ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:reference 
+    a owl:ObjectProperty ;
+    rdfs:label "reference" ;
+    rdfs:domain :Resource ;
+    rdfs:range :Resource ;
+    rdfs:subPropertyOf :relation ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:crossReference 
+    a owl:ObjectProperty ;
+    rdfs:label "crossReference" ;
+    rdfs:domain :SequenceUnit ;
+    rdfs:range :SequenceUnit ;
+    rdfs:subPropertyOf :reference ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:gene 
+    a owl:ObjectProperty ;
+    rdfs:label "gene" ;
+    rdfs:domain :SequenceUnit ;
+    rdfs:range :Gene ;
+    rdfs:subPropertyOf :crossReference ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:protein 
+    a owl:ObjectProperty ;
+    rdfs:label "protein" ;
+    rdfs:domain :SequenceUnit ;
+    rdfs:range :Protein ;
+    rdfs:subPropertyOf :crossReference ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:transcript 
+    a owl:ObjectProperty ;
+    rdfs:label "transcript" ;
+    rdfs:domain :SequenceUnit ;
+    rdfs:range :Transcript ;
+    rdfs:subPropertyOf :crossReference ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:organism 
+    a owl:ObjectProperty ;
+    rdfs:label "organism" ;
+    rdfs:domain :Resource ;
+    rdfs:range :Organism ;
+    rdfs:subPropertyOf :reference ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:taxon 
+    a owl:ObjectProperty ;
+    rdfs:label "taxon" ;
+    rdfs:comment "This property is intended to be used for specifying URI representing NCBI taxonomy ID." ;
+    rdfs:domain :Resource ;
+    rdfs:range :Taxon ;
+    rdfs:subPropertyOf :organism ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:value 
+    a owl:DatatypeProperty ;
+    rdfs:label "value" ;
+    rdfs:domain :Resource ;
+    rdfs:range rdfs:Literal ;
+    rdfs:subPropertyOf rdf:value ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:groupValue 
+    a owl:DatatypeProperty ;
+    rdfs:label "groupValue" ;
+    rdfs:domain :Group ;
+    rdfs:range rdfs:Literal ;
+    rdfs:subPropertyOf :value ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:memberValue 
+    a owl:DatatypeProperty ;
+    rdfs:label "memberValue" ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :Group 
+            :SequenceUnit 
+        )
+    ] ;
+    rdfs:range rdfs:Literal ;
+    rdfs:subPropertyOf :value ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:groupScore 
+    a owl:DatatypeProperty ;
+    rdfs:label "groupScore" ;
+    rdfs:domain :Group ;
+    rdfs:range rdfs:Literal ;
+    rdfs:subPropertyOf :groupValue ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+:memberScore 
+    a owl:DatatypeProperty ;
+    rdfs:label "memberScore" ;
+    rdfs:domain [
+        a owl:Class ;
+        owl:unionOf ( :Group 
+            :SequenceUnit 
+        )
+    ] ;
+    rdfs:range rdfs:Literal ;
+    rdfs:subPropertyOf :memberValue ;
+    rdfs:isDefinedBy <http://purl.jp/bio/11/orth> .
+
+orthology:hasSource 
+    rdfs:subClassOf dc:source .
+
