@@ -1,0 +1,6 @@
+# @endpoint test
+SELECT ?taxid
+WHERE {
+  taxid:9606 rdfs:subClassOf ?parent .
+  ?taxid rdfs:subClassOf ?parent .
+}
