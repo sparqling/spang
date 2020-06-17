@@ -1,2 +1,2 @@
 #!/bin/sh
-iri orth
+iri skos -n
