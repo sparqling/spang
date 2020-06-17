@@ -12,57 +12,40 @@ const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
 const syncRequest = require('sync-request');
 
-var sparqlTemplate;
-var db;
-var parameterMap = {};
-var retrieveByGet = true;
+let sparqlTemplate;
+let db;
+let parameterMap = {};
+let retrieveByGet = true;
 const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
 
-var commander = require('commander')
-    .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
-    .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
-    .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
-    .option('-a, --abbr', 'abbreviate results using predefined prefixes')
-    .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
-    .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
-    .option('-P, --predicate <PREDICATE>', 'shortcut to specify predicate')
-    .option('-O, --object <OBJECT>', 'shortcut to specify object')
-    .option('-L, --limit <LIMIT>', 'LIMIT output (use alone or with -[SPOF])')
-    .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
-    .option('-N, --number', 'shortcut to COUNT results (use alone or with -[SPO])')
-    .option('-G, --graph', 'shortcut to search for graph names (use alone or with -[SPO])')
-    .option('-r, --prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
-    .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
-    .option('-m, --method <METHOD>', 'GET or POST', 'GET')
-    .option('-q, --show_query', 'show query and quit')
-    .option('-f, --fmt', 'format the query')
-    .option('-i, --indent <DEPTH>', "indent depth; use with --fmt", 2)
-    .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
-    .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
-    .version(version)
-    .arguments('<SPARQL_TEMPLATE>')
-    .action((s) => {
-      sparqlTemplate = s;
-    });
+const commander = require('commander')
+      .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
+      .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
+      .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
+      .option('-a, --abbr', 'abbreviate results using predefined prefixes')
+      .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
+      .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
+      .option('-P, --predicate <PREDICATE>', 'shortcut to specify predicate')
+      .option('-O, --object <OBJECT>', 'shortcut to specify object')
+      .option('-L, --limit <LIMIT>', 'LIMIT output (use alone or with -[SPOF])')
+      .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
+      .option('-N, --number', 'shortcut to COUNT results (use alone or with -[SPO])')
+      .option('-G, --graph', 'shortcut to search for graph names (use alone or with -[SPO])')
+      .option('-r, --prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
+      .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
+      .option('-m, --method <METHOD>', 'GET or POST', 'GET')
+      .option('-q, --show_query', 'show query and quit')
+      .option('-f, --fmt', 'format the query')
+      .option('-i, --indent <DEPTH>', "indent depth; use with --fmt", 2)
+      .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
+      .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
+      .version(version)
+      .arguments('[SPARQL_TEMPLATE]')
+      .action((s) => {
+        sparqlTemplate = s;
+      });
 
-splitShortOptions = (argv) => {
-  var index = 0;
-  var matched;
-  const shortOptions = commander.options.filter((option) => option.short).map((option) => option.short[1]);
-  var splitted = [];
-  argv.forEach(arg => {
-    const matched = arg.match(/^-(\w+)$/);
-    if(matched && matched[1].length > 1 && !shortOptions.includes(matched[1][1]) ) {
-      splitted.push(`-${matched[1][0]}`);
-      splitted.push(matched[1].substring(1));
-    } else {
-      splitted.push(arg);
-    }
-  });
-  return splitted;
-};
-
-commander.parse(splitShortOptions(process.argv));
+commander.parse(process.argv);
 
 if (commander.fmt) {
   var sparqlQuery;

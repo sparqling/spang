@@ -7,7 +7,7 @@
   "version": "2.0.0",
   "description": "JavaScript implementation of SPANG",
   "dependencies": {
-    "commander": "^2.16.0",
+    "commander": "^5.1.0",
     "expand-home-dir": "0.0.3",
     "fs": "0.0.1-security",
     "mustache": "4.0.0",
@@ -24,6 +24,7 @@
   },
   "bin": {
     "spang2": "./bin/spang.js",
+    "iri": "./bin/iri.js",
     "spfmt": "./bin/spfmt.js"
   },
   "mocha": {
@@ -33,6 +34,6 @@
   "scripts": {
     "test": "mocha",
     "pegjs": "pegjs -o lib/parser.js syntax/spang.pegjs",
-    "browserify": "browserify lib/spang_browser.js > lib/spang_bundled.js && browserify lib/spfmt_browser.js > lib/spfmt_bundled.js" 
+    "browserify": "browserify js/spang_browser.js > js/spang_bundled.js && browserify js/spfmt_browser.js > js/spfmt_bundled.js"
   }
 }

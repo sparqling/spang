@@ -5,15 +5,24 @@ const chai = require('chai');
 const assert = chai.assert;
 chai.use(require('chai-fs'));
 
-describe('test', () => {
-  fs.readdirSync('./test').forEach(file => {
-    if (file.endsWith('.sh')) {
-      const basename = path.basename(file, '.sh');
-      it(file, () => {
-        const result = execSync(`./test/${basename}.sh`).toString();
-        const expect = fs.readFileSync(`./test/${basename}.txt`).toString();
-        assert.equal(result, expect);
+// fs.readdirSync('test').forEach(subdir => {
+['core', 'fmt', 'iri', 'function', 'dev'].forEach(subdir => {
+  if (fs.statSync(`test/${subdir}`).isDirectory()) {
+    describe(subdir, () => {
+      fs.readdirSync(`test/${subdir}`).forEach(file => {
+        testFile(`test/${subdir}`, file);
       });
-    }
-  });
+    });
+  }
 });
+
+function testFile(dir, file) {
+  if (file.endsWith('.sh')) {
+    const basename = path.basename(file, '.sh');
+    it(file, () => {
+      const result = execSync(`cd ${dir}; ./${basename}.sh`).toString();
+      const expect = fs.readFileSync(`${dir}/${basename}.txt`).toString();
+      assert.equal(result, expect);
+    });
+  }
+}

@@ -43,7 +43,7 @@ $ npm test
 ```
 
 ### Update spang_bundled.js
-Update the `lib/spang_bundled.js` as follows after editing any other JS codes
+Update the `js/spang_bundled.js` as follows after editing any other JS codes
 ```
 $ npm run browserify
 ```
@@ -82,7 +82,7 @@ WHERE {
     <button id="reformat-button">Reformat</button>
     <textarea id="sparql-text-after" rows=5></textarea>
     
-    <script src="https://cdn.jsdelivr.net/gh/hchiba1/spang@master/lib/spfmt_bundled.js"></script>  
+    <script src="https://cdn.jsdelivr.net/gh/hchiba1/spang@master/js/spfmt_bundled.js"></script>  
     <script type="text/javascript">
      window.onload = () => {
          var textArea = 
