@@ -1,0 +1,3440 @@
+@base <http://purl.uniprot.org/uniprot/> .
+@prefix annotation: <http://purl.uniprot.org/annotation/> .
+@prefix citation: <http://purl.uniprot.org/citations/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix disease: <http://purl.uniprot.org/diseases/> .
+@prefix ECO: <http://purl.obolibrary.org/obo/ECO_> .
+@prefix enzyme: <http://purl.uniprot.org/enzyme/> .
+@prefix faldo: <http://biohackathon.org/resource/faldo#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix go: <http://purl.obolibrary.org/obo/GO_> .
+@prefix isoform: <http://purl.uniprot.org/isoforms/> .
+@prefix keyword: <http://purl.uniprot.org/keywords/> .
+@prefix location: <http://purl.uniprot.org/locations/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix position: <http://purl.uniprot.org/position/> .
+@prefix pubmed: <http://purl.uniprot.org/pubmed/> .
+@prefix range: <http://purl.uniprot.org/range/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix taxon: <http://purl.uniprot.org/taxonomy/> .
+@prefix tissue: <http://purl.uniprot.org/tissues/> .
+@prefix up: <http://purl.uniprot.org/core/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+<P00156> rdf:type up:Protein ;
+  up:reviewed true ;
+  up:created "1986-07-21"^^xsd:date ;
+  up:modified "2020-04-22"^^xsd:date ;
+  up:version 211 ;
+  up:mnemonic "CYB_HUMAN" ;
+  up:replaces <Q34786> ,
+    <Q8HBR6> ,
+    <Q8HNQ0> ,
+    <Q8HNQ1> ,
+    <Q8HNQ9> ,
+    <Q8HNR4> ,
+    <Q8HNR7> ,
+    <Q8W7V8> ,
+    <Q8WCV9> ,
+    <Q8WCY2> ,
+    <Q8WCY7> ,
+    <Q8WCY8> ,
+    <Q9B1A6> ,
+    <Q9B1B6> ,
+    <Q9B1B8> ,
+    <Q9B1D4> ,
+    <Q9B1X6> ,
+    <Q9B2V0> ,
+    <Q9B2V8> ,
+    <Q9B2W0> ,
+    <Q9B2W3> ,
+    <Q9B2W8> ,
+    <Q9B2X1> ,
+    <Q9B2X7> ,
+    <Q9B2X9> ,
+    <Q9B2Y3> ,
+    <Q9B2Z0> ,
+    <Q9B2Z4> ,
+    <Q9T6H6> ,
+    <Q9T9Y0> ,
+    <Q9TEH4> ;
+  up:citation citation:7219534 ,
+    citation:10508508 ,
+    citation:7623448 ,
+    citation:7530363 ,
+    citation:11130070 ,
+    citation:11553319 ,
+    citation:12022039 ,
+    citation:6100559 ,
+    citation:11047755 ,
+    citation:25944712 ,
+    citation:1757091 ,
+    citation:1732158 ,
+    citation:8910895 ,
+    citation:9818877 ,
+    citation:9806551 ,
+    citation:10453733 ,
+    citation:10502593 ,
+    citation:10960495 ,
+    citation:11601507 ,
+    citation:11464242 ,
+    citation:11891837 ,
+    citation:12905068 ,
+    citation:21269460 ;
+  rdfs:seeAlso <http://purl.uniprot.org/embl-cds/CAA24038.1> ,
+    <http://purl.uniprot.org/embl-cds/AAB58955.3> ,
+    <http://purl.uniprot.org/embl-cds/AAA19775.1> ,
+    <http://purl.uniprot.org/embl-cds/BAA77674.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17219.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17232.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17245.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17258.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17271.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17284.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17297.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17310.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17323.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17336.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17349.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17362.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17375.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17388.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17401.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17414.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17427.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17440.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17453.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17466.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17479.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17492.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17505.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17518.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17531.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17544.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17557.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17570.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17583.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17596.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17609.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17622.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17635.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17648.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17661.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17674.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17687.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17700.1> ,
+    <http://purl.uniprot.org/embl-cds/AAK17713.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17726.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17739.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17752.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17765.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17778.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17791.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17804.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17817.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17830.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17843.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17856.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17869.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17882.2> ,
+    <http://purl.uniprot.org/embl-cds/AAK17895.2> ,
+    <http://purl.uniprot.org/embl-cds/AAL54394.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54409.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54422.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54435.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54448.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54461.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54474.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54487.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54500.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54513.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54526.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54539.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54552.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54565.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54578.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54591.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54604.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54617.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54630.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54643.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54656.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54669.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54682.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54695.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54708.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54721.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54734.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54747.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54760.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54773.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54786.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54799.1> ,
+    <http://purl.uniprot.org/embl-cds/AAL54812.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14559.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14592.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14603.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14614.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14625.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14636.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14680.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14713.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14845.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14878.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14889.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14900.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14911.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14922.1> ,
+    <http://purl.uniprot.org/embl-cds/AAN14944.1> ,
+    <http://purl.uniprot.org/embl-cds/AAA31851.1> ,
+    <http://purl.uniprot.org/pir/A00151> ,
+    <http://purl.uniprot.org/refseq/YP_003024038.1> ,
+    <http://rdf.wwpdb.org/pdb/5XTE> ,
+    <http://rdf.wwpdb.org/pdb/5XTH> ,
+    <http://rdf.wwpdb.org/pdb/5XTI> ,
+    <http://purl.uniprot.org/pdbsum/5XTE> ,
+    <http://purl.uniprot.org/pdbsum/5XTH> ,
+    <http://purl.uniprot.org/pdbsum/5XTI> ,
+    <http://purl.uniprot.org/smr/P00156> ,
+    <http://purl.uniprot.org/biogrid/110619> ,
+    <http://purl.uniprot.org/complexportal/CPX-560> ,
+    <http://purl.uniprot.org/intact/P00156> ,
+    <http://purl.uniprot.org/mint/P00156> ,
+    <http://purl.uniprot.org/string/9606.ENSP00000354554> ,
+    <http://purl.uniprot.org/bindingdb/P00156> ,
+    <http://purl.uniprot.org/drugbank/DB07763> ,
+    <http://purl.uniprot.org/drugbank/DB04141> ,
+    <http://purl.uniprot.org/drugbank/DB08453> ,
+    <http://purl.uniprot.org/drugbank/DB07636> ,
+    <http://purl.uniprot.org/drugbank/DB04799> ,
+    <http://purl.uniprot.org/drugbank/DB07778> ,
+    <http://purl.uniprot.org/drugbank/DB07401> ,
+    <http://purl.uniprot.org/drugbank/DB08330> ,
+    <http://purl.uniprot.org/drugbank/DB08690> ,
+    <http://purl.uniprot.org/iptmnet/P00156> ,
+    <http://purl.uniprot.org/phosphositeplus/P00156> ,
+    <http://purl.uniprot.org/swisspalm/P00156> ,
+    <http://purl.uniprot.org/biomuta/MT-CYB> ,
+    <http://purl.uniprot.org/dmdm/408360043> ,
+    <http://purl.uniprot.org/epd/P00156> ,
+    <http://purl.uniprot.org/jpost/P00156> ,
+    <http://purl.uniprot.org/massive/P00156> ,
+    <http://purl.uniprot.org/paxdb/P00156> ,
+    <http://purl.uniprot.org/peptideatlas/P00156> ,
+    <http://purl.uniprot.org/pride/P00156> ,
+    <http://purl.uniprot.org/proteomicsdb/51225> ,
+    <http://purl.uniprot.org/topdownproteomics/P00156> ,
+    <http://purl.uniprot.org/antibodypedia/35365> ,
+    <http://rdf.ebi.ac.uk/resource/ensembl.transcript/ENST00000361789> ,
+    <http://purl.uniprot.org/geneid/4519> ,
+    <http://purl.uniprot.org/kegg/hsa:4519> ,
+    <http://purl.uniprot.org/ctd/4519> ,
+    <http://identifiers.org/ncbigene/4519> ,
+    <http://purl.uniprot.org/genecards/MT-CYB> ,
+    <http://purl.uniprot.org/genereviews/MT-CYB> ,
+    <http://purl.uniprot.org/hgnc/7427> ,
+    <http://www.proteinatlas.org/ENSG00000198727> ,
+    <http://purl.uniprot.org/malacards/MT-CYB> ,
+    <http://purl.uniprot.org/mim/500000> ,
+    <http://purl.uniprot.org/mim/516020> ,
+    <http://purl.uniprot.org/mim/535000> ,
+    <http://nextprot.org/rdf/entry/NX_P00156> ,
+    <http://purl.uniprot.org/opentargets/ENSG00000198727> ,
+    <http://www.orpha.net/ORDO/Orphanet_137675> ,
+    <http://www.orpha.net/ORDO/Orphanet_1460> ,
+    <http://www.orpha.net/ORDO/Orphanet_104> ,
+    <http://purl.uniprot.org/pharmgkb/PA31234> ,
+    <http://purl.uniprot.org/eggnog/KOG4663> ,
+    <http://purl.uniprot.org/eggnog/COG1290> ,
+    <http://purl.uniprot.org/genetree/ENSGT00390000017948> ,
+    <http://purl.uniprot.org/hogenom/CLU_031114_3_0_1> ,
+    <http://purl.uniprot.org/inparanoid/P00156> ,
+    <http://purl.uniprot.org/ko/K00412> ,
+    <http://purl.uniprot.org/oma/HETGSNN> ,
+    <http://purl.orthodb.org/odbgroup/1125966at2759> ,
+    <http://purl.uniprot.org/phylomedb/P00156> ,
+    <http://purl.uniprot.org/treefam/TF353088> ,
+    <http://identifiers.org/reactome/R-HSA-611105> ,
+    <http://purl.uniprot.org/chitars/CYTB> ,
+    <http://purl.uniprot.org/genewiki/MT-CYB> ,
+    <http://purl.uniprot.org/genomernai/4519> ,
+    <http://purl.uniprot.org/pharos/P00156> ,
+    <http://purl.obolibrary.org/obo/PR_P00156> ,
+    <http://purl.uniprot.org/rnact/P00156> ,
+    <http://purl.uniprot.org/bgee/ENSG00000198727> ,
+    <http://purl.uniprot.org/expressionatlas/P00156> ,
+    <http://purl.uniprot.org/cdd/cd00290> ,
+    <http://purl.uniprot.org/cdd/cd00284> ,
+    <http://purl.uniprot.org/gene3d/1.20.810.10> ,
+    <http://purl.uniprot.org/interpro/IPR005798> ,
+    <http://purl.uniprot.org/interpro/IPR036150> ,
+    <http://purl.uniprot.org/interpro/IPR005797> ,
+    <http://purl.uniprot.org/interpro/IPR027387> ,
+    <http://purl.uniprot.org/interpro/IPR030689> ,
+    <http://purl.uniprot.org/interpro/IPR016174> ,
+    <http://purl.uniprot.org/pfam/PF00032> ,
+    <http://purl.uniprot.org/pfam/PF00033> ,
+    <http://purl.uniprot.org/pirsf/PIRSF038885> ,
+    <http://purl.uniprot.org/supfam/SSF81342> ,
+    <http://purl.uniprot.org/supfam/SSF81648> ,
+    <http://purl.uniprot.org/prosite/PS51003> ,
+    <http://purl.uniprot.org/prosite/PS51002> ;
+  up:recommendedName <P00156#SIP04BB22F94509478D> ;
+  up:alternativeName <P00156#SIP70174F4CDEA2B1F1> ,
+    <P00156#SIP96AAF15ABE9D3699> ,
+    <P00156#SIPB3185EE1AF674321> ,
+    <P00156#SIPC22CFE0E4256EEDB> ;
+  up:organism taxon:9606 ;
+  up:encodedIn up:Mitochondrion ;
+  up:isolatedFrom tissue:799 ,
+    tissue:445 ,
+    tissue:581 ;
+  up:encodedBy <P00156#gene-MD51FC9D4B7D097F8356361EF179A72D133> ;
+  up:annotation <P00156#SIPB79E1FAB130FCC81> ,
+    <P00156#SIP8D9C596970E58C51> ,
+    <P00156#SIP43D613FAF08024EE> ,
+    <P00156#SIPD4EFE77F62AB1F6E> ,
+    <P00156#SIP5D3FD4D2F0A0E6A1> ,
+    <P00156#SIP7FDBA81653292ADC> ,
+    <P00156#SIPA0FC99275B556BB9> ,
+    <P00156#SIPFF588AD94B0945B7> ,
+    <P00156#SIP4C867021FA5A0FD0> ,
+    <P00156#SIP684225CD6A6B6689> ,
+    annotation:PRO_0000061045 ,
+    <P00156#SIP7CACFFCCEDE113F7> ,
+    <P00156#SIPAA693C0111CF5CBA> ,
+    <P00156#SIP6D2947C9EEB98F45> ,
+    <P00156#SIP67CFA0CCE3D88EC5> ,
+    <P00156#SIP948A8C0F61248A7B> ,
+    <P00156#SIP63797D79BFBC9036> ,
+    <P00156#SIP3F7F7F564B1E005F> ,
+    <P00156#SIPF32C610E8F6F4183> ,
+    <P00156#SIPF2858308F29394FF> ,
+    <P00156#SIPBEC68F45DC967BA9> ,
+    <P00156#SIP750E3FEA3953BCE3> ,
+    <P00156#SIP647D780706ED36E9> ,
+    <P00156#SIPB29F1AE3332D0C92> ,
+    annotation:VAR_008585 ,
+    annotation:VAR_013643 ,
+    annotation:VAR_013644 ,
+    annotation:VAR_013645 ,
+    annotation:VAR_033058 ,
+    annotation:VAR_015571 ,
+    annotation:VAR_013646 ,
+    annotation:VAR_013647 ,
+    annotation:VAR_015572 ,
+    annotation:VAR_008388 ,
+    annotation:VAR_008586 ,
+    annotation:VAR_013648 ,
+    annotation:VAR_013649 ,
+    annotation:VAR_013650 ,
+    annotation:VAR_013651 ,
+    annotation:VAR_013652 ,
+    annotation:VAR_013653 ,
+    annotation:VAR_002197 ,
+    annotation:VAR_013654 ,
+    annotation:VAR_011339 ,
+    annotation:VAR_011340 ,
+    annotation:VAR_011341 ,
+    annotation:VAR_013655 ,
+    annotation:VAR_013657 ,
+    annotation:VAR_013656 ,
+    annotation:VAR_033059 ,
+    annotation:VAR_013658 ,
+    annotation:VAR_015573 ,
+    annotation:VAR_008389 ,
+    annotation:VAR_013659 ,
+    annotation:VAR_013660 ,
+    annotation:VAR_013661 ,
+    annotation:VAR_013662 ,
+    annotation:VAR_013663 ,
+    annotation:VAR_013664 ,
+    annotation:VAR_013665 ,
+    annotation:VAR_002198 ,
+    annotation:VAR_013666 ,
+    annotation:VAR_002199 ,
+    annotation:VAR_013667 ,
+    annotation:VAR_013668 ,
+    <P00156#SIP5D6E5BD9F16EE97A> ,
+    <P00156#SIP0AB60922FA29DE5D> ,
+    <P00156#SIPC5C751FC91195A46> ,
+    <P00156#SIP6CDD646F684EC2E3> ,
+    <P00156#SIP3E4867B895F928A2> ,
+    <P00156#SIP981E5A3954232BAE> ,
+    <P00156#SIP5A5EF1EBA9D6C6E4> ,
+    <P00156#SIP185EB8A6FE01C121> ,
+    <P00156#SIP6BB2952DF101A2C4> ,
+    <P00156#SIPBF076F9E8543DE9A> ,
+    <P00156#SIPC2E8234F886CDC76> ,
+    <P00156#SIP656636412325D58F> ,
+    <P00156#SIP9C73196511C1F8B9> ,
+    <P00156#SIPB2D967FBB53B1CC2> ,
+    <P00156#SIPD0DAFE3D7064F0E7> ,
+    <P00156#SIP1328AA4C86155028> ,
+    <P00156#SIPD34452595679DC45> ,
+    <P00156#SIP47094D867EEBD616> ,
+    <P00156#SIP5415CF3001A2BE39> ,
+    <P00156#SIP45719D466078EBE3> ,
+    <P00156#SIPB0C5B07FAFA8828D> ,
+    <P00156#SIP982A341F9EC858D2> ,
+    <P00156#SIP5C2FB20BF45EFB01> ,
+    <P00156#SIPB4C422E42E4CB5A8> ,
+    <P00156#SIPC5363C5E760455CC> ,
+    <P00156#SIP8D424164EAF03116> ,
+    <P00156#SIPBE5EC86D81E296BD> ,
+    <P00156#SIPB6261BE4999F572E> ,
+    <P00156#SIPF5CC3A877231BBAD> ,
+    <P00156#SIP5E291C906269CC38> ;
+  up:existence up:Evidence_at_Protein_Level_Existence ;
+  up:classifiedWith keyword:2 ,
+    keyword:122 ,
+    keyword:898 ,
+    keyword:209 ,
+    keyword:225 ,
+    keyword:349 ,
+    keyword:429 ,
+    keyword:999 ,
+    keyword:621 ,
+    keyword:1185 ,
+    keyword:679 ,
+    keyword:1133 ,
+    keyword:830 ,
+    go:0031305 ,
+    go:0031224 ,
+    go:0005743 ,
+    go:0005750 ,
+    go:0005739 ,
+    go:0046872 ,
+    go:0044877 ,
+    go:0008121 ,
+    go:0031100 ,
+    go:0015990 ,
+    go:0042538 ,
+    go:0006122 ,
+    go:0046686 ,
+    go:0051592 ,
+    go:0033590 ,
+    go:0046688 ,
+    go:0045471 ,
+    go:0033762 ,
+    go:0009408 ,
+    go:0055093 ,
+    go:0001666 ,
+    go:0046689 ;
+  up:sequence isoform:P00156-1 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> ,
+    <P00156#attribution-4D7F72A356C1855D0A9FA246AE0C711F> ,
+    <P00156#attribution-0EB5BB17E7E3B5C9784511A9243A1CC1> ,
+    <P00156#attribution-E70B47A3F5F0E20273BCF1AD363596D3> ,
+    <P00156#attribution-E3AA1198D64AFFBCC64F0CE694EA8E54> ,
+    <P00156#attribution-12E3273586D868124CB58EC507F97941> ,
+    <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> ,
+    <P00156#attribution-D5288DCAE80F4A5A729D6F5B4B11E3F6> ,
+    <P00156#attribution-609619A7DF3E53CE5E48EDEF8B8F9DD1> ,
+    <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> ,
+    <P00156#attribution-DF942B57779369B769DC4BDE190DBD28> ,
+    <P00156#attribution-70C8E873A4568316224865AF77F4C70F> ,
+    <P00156#attribution-9DE5AB3E0BBDFAA23A142F5DE8084FEB> ,
+    <P00156#attribution-7A1008C84196E98392DBFE672DA9CC0F> ,
+    <P00156#attribution-8C6966492649B8E48EBF287192D843B4> ,
+    <P00156#attribution-310E40CF851420AA2B2DA58A20F9B555> ,
+    <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-787DD9FA2F05FBE7DA16BE6B16E01742> ,
+    <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> ,
+    <P00156#attribution-D75C1F64C9000453B1F63C5ADFCED135> ,
+    <P00156#attribution-159F2CC56842C0A9CDD3C0A6CC2D9D5A> ,
+    <P00156#attribution-0B306B95CE13E198B99582D73B71C1CA> ,
+    <P00156#attribution-7981E90F43D93CEB335A92B4474F8467> ,
+    <P00156#attribution-BC97F59B8DACF390DE6C848D2D7F6970> ,
+    <P00156#attribution-CCC14F45523F443DE69BF6E02AB5C6D6> ,
+    <P00156#attribution-60DDBA95C648C2D4372BF0CCBFEE48B7> ,
+    <P00156#attribution-932B5DDF85A58A29C893AED06296C901> ,
+    <P00156#attribution-D96CB443F4CC122A3D875B76F58C5862> ,
+    <P00156#attribution-863F04C808B6C003501BC15773356287> ,
+    <P00156#attribution-8F43AACA957F4951C8B95F5A15836AAF> ;
+  up:proteome <http://purl.uniprot.org/proteomes/UP000005640#Mitochondrion> .
+citation:7219534 rdf:type up:Journal_Citation ;
+  up:title "Sequence and organization of the human mitochondrial genome." ;
+  up:author "Anderson S." ,
+    "Bankier A.T." ,
+    "Barrell B.G." ,
+    "de Bruijn M.H.L." ,
+    "Coulson A.R." ,
+    "Drouin J." ,
+    "Eperon I.C." ,
+    "Nierlich D.P." ,
+    "Roe B.A." ,
+    "Sanger F." ,
+    "Schreier P.H." ,
+    "Smith A.J.H." ,
+    "Staden R." ,
+    "Young I.G." ;
+  skos:exactMatch pubmed:7219534 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/7219534> ;
+  dcterms:identifier "doi:10.1038/290457a0" ;
+  up:date "1981"^^xsd:gYear ;
+  up:name "Nature" ;
+  up:volume "290" ;
+  up:pages "457-465" .
+<#_P00156-citation-7219534> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:7219534 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]" ;
+  up:context <P00156#context-MD5A0ADC2C534EC8FA6F790C85644BE81DC> .
+<P00156#context-MD5A0ADC2C534EC8FA6F790C85644BE81DC> rdf:type up:Tissue ;
+  rdfs:label "Placenta" .
+citation:10508508 rdf:type up:Journal_Citation ;
+  up:title "Reanalysis and revision of the Cambridge reference sequence for human mitochondrial DNA." ;
+  up:author "Andrews R.M." ,
+    "Kubacka I." ,
+    "Chinnery P.F." ,
+    "Lightowlers R.N." ,
+    "Turnbull D.M." ,
+    "Howell N." ;
+  skos:exactMatch pubmed:10508508 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/10508508> ;
+  dcterms:identifier "doi:10.1038/13779" ;
+  up:date "1999"^^xsd:gYear ;
+  up:name "Nat. Genet." ;
+  up:volume "23" ;
+  up:pages "147" .
+<#_P00156-citation-10508508> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:10508508 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "SEQUENCE REVISION TO 7" .
+citation:7623448 rdf:type up:Journal_Citation ;
+  up:title "Novel mutations in mitochondrial cytochrome b in fatal post partum cardiomyopathy." ;
+  up:author "Marin-Garcia J." ,
+    "Ananthakrishnan R." ,
+    "Gonzalvo A." ,
+    "Goldenthal M.J." ;
+  skos:exactMatch pubmed:7623448 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/7623448> ;
+  dcterms:identifier "doi:10.1007/bf00711378" ;
+  up:date "1995"^^xsd:gYear ;
+  up:name "J. Inherit. Metab. Dis." ;
+  up:volume "18" ;
+  up:pages "77-78" .
+<#_P00156-citation-7623448> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:7623448 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "NUCLEOTIDE SEQUENCE [GENOMIC DNA]" ,
+    "VARIANTS ILE-7 AND CARDIOMYOPATHY HIS-255" ;
+  up:context <P00156#context-MD5C41FD6F27589D0AAF29F669EF3A39EB7> .
+<P00156#context-MD5C41FD6F27589D0AAF29F669EF3A39EB7> rdf:type up:Tissue ;
+  rdfs:label "Heart" .
+citation:7530363 rdf:type up:Journal_Citation ;
+  up:title "Recent African origin of modern humans revealed by complete sequences of hominoid mitochondrial DNAs." ;
+  up:author "Horai S." ,
+    "Hayasaka K." ,
+    "Kondo R." ,
+    "Tsugane K." ,
+    "Takahata N." ;
+  skos:exactMatch pubmed:7530363 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/7530363> ;
+  dcterms:identifier "doi:10.1073/pnas.92.2.532" ;
+  up:date "1995"^^xsd:gYear ;
+  up:name "Proc. Natl. Acad. Sci. U.S.A." ;
+  up:volume "92" ;
+  up:pages "532-536" .
+<#_P00156-citation-7530363> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:7530363 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "NUCLEOTIDE SEQUENCE [GENOMIC DNA]" ,
+    "VARIANTS ILE-7; THR-191; ALA-194 AND THR-229" ;
+  up:context <P00156#context-MD5A0ADC2C534EC8FA6F790C85644BE81DC> .
+citation:11130070 rdf:type up:Journal_Citation ;
+  up:title "Mitochondrial genome variation and the origin of modern humans." ;
+  up:author "Ingman M." ,
+    "Kaessmann H." ,
+    "Paeaebo S." ,
+    "Gyllensten U." ;
+  skos:exactMatch pubmed:11130070 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/11130070> ;
+  dcterms:identifier "doi:10.1038/35047064" ;
+  up:date "2000"^^xsd:gYear ;
+  up:name "Nature" ;
+  up:volume "408" ;
+  up:pages "708-713" .
+<#_P00156-citation-11130070> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:11130070 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-378" ,
+    "VARIANTS ILE-7; SER-8; LEU-18; VAL-39; THR-78; THR-122; ALA-123; THR-153; ALA-194; THR-229; ILE-236; THR-306; THR-329; VAL-334; MET-353; MET-356 AND ILE-368" .
+citation:11553319 rdf:type up:Journal_Citation ;
+  up:title "Major genomic mitochondrial lineages delineate early human expansions." ;
+  up:author "Maca-Meyer N." ,
+    "Gonzalez A.M." ,
+    "Larruga J.M." ,
+    "Flores C." ,
+    "Cabrera V.M." ;
+  skos:exactMatch pubmed:11553319 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/11553319> ;
+  dcterms:identifier "doi:10.1186/1471-2156-2-13" ;
+  up:date "2001"^^xsd:gYear ;
+  up:name "BMC Genet." ;
+  up:volume "2" ;
+  up:pages "13" .
+<#_P00156-citation-11553319> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:11553319 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-378" ,
+    "VARIANTS ILE-7; SER-8; LEU-18; THR-122; VAL-164; 189-VAL-THR-190; ALA-194; THR-229; ILE-236; THR-330; ALA-360 AND ILE-368" .
+citation:12022039 rdf:type up:Journal_Citation ;
+  up:title "Mitochondrial genome diversity of native Americans supports a single early entry of founder populations into America." ;
+  up:author "Silva W.A. Jr." ,
+    "Bonatto S.L." ,
+    "Holanda A.J." ,
+    "Ribeiro-Dos-Santos A.K." ,
+    "Paixao B.M." ,
+    "Goldman G.H." ,
+    "Abe-Sandes K." ,
+    "Rodriguez-Delfin L." ,
+    "Barbosa M." ,
+    "Paco-Larson M.L." ,
+    "Petzl-Erler M.L." ,
+    "Valente V." ,
+    "Santos S.E." ,
+    "Zago M.A." ;
+  skos:exactMatch pubmed:12022039 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/12022039> ;
+  dcterms:identifier "doi:10.1086/341358" ;
+  up:date "2002"^^xsd:gYear ;
+  up:name "Am. J. Hum. Genet." ;
+  up:volume "71" ;
+  up:pages "187-192" .
+<#_P00156-citation-12022039> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:12022039 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "NUCLEOTIDE SEQUENCE [GENOMIC DNA] OF 1-378" ,
+    "VARIANTS ILE-7; THR-39; VAL-78; THR-191; ALA-194 AND ASP-260" .
+citation:6100559 rdf:type up:Journal_Citation ;
+  up:title "Serendipitous cloning of a mitochondrial cDNA and its polymorphism." ;
+  up:author "Spurr N.K." ,
+    "Bodmer W.F." ;
+  skos:exactMatch pubmed:6100559 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/6100559> ;
+  up:date "1984"^^xsd:gYear ;
+  up:name "Mol. Biol. Med." ;
+  up:volume "2" ;
+  up:pages "239-249" .
+<#_P00156-citation-6100559> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:6100559 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "NUCLEOTIDE SEQUENCE [MRNA] OF 269-380" ;
+  up:context <P00156#context-MD50D7E919878DEF424CC8F956EDF4E9704> .
+<P00156#context-MD50D7E919878DEF424CC8F956EDF4E9704> rdf:type up:Tissue ;
+  rdfs:label "Lymphoblast" .
+citation:11047755 rdf:type up:Journal_Citation ;
+  up:title "Mitochondrial encephalomyopathy and complex III deficiency associated with a stop-codon mutation in the cytochrome b gene." ;
+  up:author "Keightley J.A." ,
+    "Anitori R." ,
+    "Burton M.D." ,
+    "Quan F." ,
+    "Buist N.R.M." ,
+    "Kennaway N.G." ;
+  skos:exactMatch pubmed:11047755 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/11047755> ;
+  dcterms:identifier "doi:10.1086/316900" ;
+  up:date "2000"^^xsd:gYear ;
+  up:name "Am. J. Hum. Genet." ;
+  up:volume "67" ;
+  up:pages "1400-1410" .
+<#_P00156-citation-11047755> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:11047755 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "DISEASE" .
+citation:25944712 rdf:type up:Journal_Citation ;
+  up:title "N-terminome analysis of the human mitochondrial proteome." ;
+  up:author "Vaca Jacome A.S." ,
+    "Rabilloud T." ,
+    "Schaeffer-Reiss C." ,
+    "Rompais M." ,
+    "Ayoub D." ,
+    "Lane L." ,
+    "Bairoch A." ,
+    "Van Dorsselaer A." ,
+    "Carapito C." ;
+  skos:exactMatch pubmed:25944712 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/25944712> ;
+  dcterms:identifier "doi:10.1002/pmic.201400617" ;
+  up:date "2015"^^xsd:gYear ;
+  up:name "Proteomics" ;
+  up:volume "15" ;
+  up:pages "2519-2524" .
+<#_P00156-citation-25944712> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:25944712 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS]" .
+citation:1757091 rdf:type up:Journal_Citation ;
+  up:title "Normal variants of human mitochondrial DNA and translation products: the building of a reference data base." ;
+  up:author "Marzuki S." ,
+    "Noer A.S." ,
+    "Lertrit P." ,
+    "Thyagarajan D." ,
+    "Kapsa R." ,
+    "Utthanaphol P." ,
+    "Byrne E." ;
+  skos:exactMatch pubmed:1757091 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/1757091> ;
+  dcterms:identifier "doi:10.1007/bf00206061" ;
+  up:date "1991"^^xsd:gYear ;
+  up:name "Hum. Genet." ;
+  up:volume "88" ;
+  up:pages "139-145" .
+<#_P00156-citation-1757091> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:1757091 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANTS ILE-7 AND PRO-87" .
+citation:1732158 rdf:type up:Journal_Citation ;
+  up:title "Mitochondrial DNA complex I and III mutations associated with Leber's hereditary optic neuropathy." ;
+  up:author "Brown M.D." ,
+    "Voljavec A.S." ,
+    "Lott M.T." ,
+    "Torroni A." ,
+    "Yang C.C." ,
+    "Wallace D.C." ;
+  skos:exactMatch pubmed:1732158 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/1732158> ;
+  up:date "1992"^^xsd:gYear ;
+  up:name "Genetics" ;
+  up:volume "130" ;
+  up:pages "163-173" .
+<#_P00156-citation-1732158> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:1732158 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANTS LHON ASN-171 AND MET-356" .
+citation:8910895 rdf:type up:Journal_Citation ;
+  up:title "A novel gly290asp mitochondrial cytochrome b mutation linked to a complex III deficiency in progressive exercise intolerance." ;
+  up:author "Dumoulin R." ,
+    "Sagnol I." ,
+    "Ferlin T." ,
+    "Bozon D." ,
+    "Stepien G." ,
+    "Mousson B." ;
+  skos:exactMatch pubmed:8910895 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/8910895> ;
+  dcterms:identifier "doi:10.1006/mcpr.1996.0053" ;
+  up:date "1996"^^xsd:gYear ;
+  up:name "Mol. Cell. Probes" ;
+  up:volume "10" ;
+  up:pages "389-391" .
+<#_P00156-citation-8910895> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:8910895 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANT EXERCISE INTOLERANCE ASP-290" .
+citation:9818877 rdf:type up:Journal_Citation ;
+  up:title "Missense mutation in the mtDNA cytochrome b gene in a patient with myopathy." ;
+  up:author "Andreu A.L." ,
+    "Bruno C." ,
+    "Shanske S." ,
+    "Shtilbans A." ,
+    "Hirano M." ,
+    "Krishna S." ,
+    "Hayward L." ,
+    "Systrom D.S." ,
+    "Brown R.H. Jr." ,
+    "Dimauro S." ;
+  skos:exactMatch pubmed:9818877 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/9818877> ;
+  dcterms:identifier "doi:10.1212/wnl.51.5.1444" ;
+  up:date "1998"^^xsd:gYear ;
+  up:name "Neurology" ;
+  up:volume "51" ;
+  up:pages "1444-1447" .
+<#_P00156-citation-9818877> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:9818877 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANT MM GLU-339" .
+citation:9806551 rdf:type up:Journal_Citation ;
+  up:title "Somatic mutations of the mitochondrial genome in human colorectal tumours." ;
+  up:author "Polyak K." ,
+    "Li Y." ,
+    "Zhu H." ,
+    "Lengauer C." ,
+    "Willson J.K.V." ,
+    "Markowitz S.D." ,
+    "Trush M.A." ,
+    "Kinzler K.W." ,
+    "Vogelstein B." ;
+  skos:exactMatch pubmed:9806551 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/9806551> ;
+  dcterms:identifier "doi:10.1038/3108" ;
+  up:date "1998"^^xsd:gYear ;
+  up:name "Nat. Genet." ;
+  up:volume "20" ;
+  up:pages "291-293" .
+<#_P00156-citation-9806551> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:9806551 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANTS COLORECTAL CANCER HIS-80 AND LEU-276" .
+citation:10453733 rdf:type up:Journal_Citation ;
+  up:title "A mitochondrial cytochrome b mutation but no mutations of nuclearly encoded subunits in ubiquinol cytochrome c reductase (complex III) deficiency." ;
+  up:author "Valnot I." ,
+    "Kassis J." ,
+    "Chretien D." ,
+    "de Lonlay P." ,
+    "Parfait B." ,
+    "Munnich A." ,
+    "Kachaner J." ,
+    "Rustin P." ,
+    "Roetig A." ;
+  skos:exactMatch pubmed:10453733 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/10453733> ;
+  dcterms:identifier "doi:10.1007/s004390050988" ;
+  up:date "1999"^^xsd:gYear ;
+  up:name "Hum. Genet." ;
+  up:volume "104" ;
+  up:pages "460-466" .
+<#_P00156-citation-10453733> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:10453733 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANT HCM GLU-166" ,
+    "VARIANTS ILE-7; SER-8; LEU-18; ALA-194; ILE-236 AND THR-316" .
+citation:10502593 rdf:type up:Journal_Citation ;
+  up:title "Exercise intolerance due to mutations in the cytochrome b gene of mitochondrial DNA." ;
+  up:author "Andreu A.L." ,
+    "Hanna M.G." ,
+    "Reichmann H." ,
+    "Bruno C." ,
+    "Penn A.S." ,
+    "Tanji K." ,
+    "Pallotti F." ,
+    "Iwata S." ,
+    "Bonilla E." ,
+    "Lach B." ,
+    "Morgan-Hughes J." ,
+    "DiMauro S." ;
+  skos:exactMatch pubmed:10502593 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/10502593> ;
+  dcterms:identifier "doi:10.1056/nejm199909303411404" ;
+  up:date "1999"^^xsd:gYear ;
+  up:name "N. Engl. J. Med." ;
+  up:volume "341" ;
+  up:pages "1037-1044" .
+<#_P00156-citation-10502593> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:10502593 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANTS MM SER-34 AND 251-GLY--LEU-258 DEL" .
+citation:10960495 rdf:type up:Journal_Citation ;
+  up:title "A missense mutation in the mitochondrial cytochrome b gene in a revisited case with histiocytoid cardiomyopathy." ;
+  up:author "Andreu A.L." ,
+    "Checcarelli N." ,
+    "Iwata S." ,
+    "Shanske S." ,
+    "DiMauro S." ;
+  skos:exactMatch pubmed:10960495 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/10960495> ;
+  dcterms:identifier "doi:10.1203/00006450-200009000-00008" ;
+  up:date "2000"^^xsd:gYear ;
+  up:name "Pediatr. Res." ;
+  up:volume "48" ;
+  up:pages "311-314" .
+<#_P00156-citation-10960495> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:10960495 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANT CMIH ASP-251" .
+citation:11601507 rdf:type up:Journal_Citation ;
+  up:title "Multisystem disorder associated with a missense mutation in the mitochondrial cytochrome b gene." ;
+  up:author "Wibrand F." ,
+    "Ravn K." ,
+    "Schwartz M." ,
+    "Rosenberg T." ,
+    "Horn N." ,
+    "Vissing J." ;
+  skos:exactMatch pubmed:11601507 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/11601507> ;
+  dcterms:identifier "doi:10.1002/ana.1224" ;
+  up:date "2001"^^xsd:gYear ;
+  up:name "Ann. Neurol." ;
+  up:volume "50" ;
+  up:pages "540-543" .
+<#_P00156-citation-11601507> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:11601507 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANT MULTISYSTEM DISORDER CYS-278" .
+citation:11464242 rdf:type up:Journal_Citation ;
+  up:title "Functional characterization of novel mutations in the human cytochrome b gene." ;
+  up:author "Legros F." ,
+    "Chatzoglou E." ,
+    "Frachon P." ,
+    "de Baulny H.O." ,
+    "Laforet P." ,
+    "Jardel C." ,
+    "Godinot C." ,
+    "Lombes A." ;
+  skos:exactMatch pubmed:11464242 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/11464242> ;
+  dcterms:identifier "doi:10.1038/sj.ejhg.5200678" ;
+  up:date "2001"^^xsd:gYear ;
+  up:name "Eur. J. Hum. Genet." ;
+  up:volume "9" ;
+  up:pages "510-518" .
+<#_P00156-citation-11464242> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:11464242 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANT EXERCISE INTOLERANCE PRO-151" .
+citation:11891837 rdf:type up:Journal_Citation ;
+  up:title "Septo-optic dysplasia associated with a new mitochondrial cytochrome b mutation." ;
+  up:author "Schuelke M." ,
+    "Krude H." ,
+    "Finckh B." ,
+    "Mayatepek E." ,
+    "Janssen A." ,
+    "Schmelz M." ,
+    "Trefz F." ,
+    "Trijbels F." ,
+    "Smeitink J." ;
+  skos:exactMatch pubmed:11891837 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/11891837> ;
+  dcterms:identifier "doi:10.1002/ana.10151" ;
+  up:date "2002"^^xsd:gYear ;
+  up:name "Ann. Neurol." ;
+  up:volume "51" ;
+  up:pages "388-392" .
+<#_P00156-citation-11891837> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:11891837 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANT EXERCICE INTOLERANCE PRO-35" .
+citation:12905068 rdf:type up:Journal_Citation ;
+  up:title "Association of the mitochondrial DNA 15497G/A polymorphism with obesity in a middle-aged and elderly Japanese population." ;
+  up:author "Okura T." ,
+    "Koda M." ,
+    "Ando F." ,
+    "Niino N." ,
+    "Tanaka M." ,
+    "Shimokata H." ;
+  skos:exactMatch pubmed:12905068 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/12905068> ;
+  dcterms:identifier "doi:10.1007/s00439-003-0983-8" ;
+  up:date "2003"^^xsd:gYear ;
+  up:name "Hum. Genet." ;
+  up:volume "113" ;
+  up:pages "432-436" .
+<#_P00156-citation-12905068> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:12905068 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANT SER-251" .
+citation:21269460 rdf:type up:Journal_Citation ;
+  up:title "Initial characterization of the human central proteome." ;
+  up:author "Burkard T.R." ,
+    "Planyavsky M." ,
+    "Kaupe I." ,
+    "Breitwieser F.P." ,
+    "Buerckstuemmer T." ,
+    "Bennett K.L." ,
+    "Superti-Furga G." ,
+    "Colinge J." ;
+  skos:exactMatch pubmed:21269460 ;
+  foaf:primaryTopicOf <https://www.ncbi.nlm.nih.gov/pubmed/21269460> ;
+  dcterms:identifier "doi:10.1186/1752-0509-5-17" ;
+  up:date "2011"^^xsd:gYear ;
+  up:name "BMC Syst. Biol." ;
+  up:volume "5" ;
+  up:pages "17" .
+<#_P00156-citation-21269460> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:citation ;
+  rdf:object citation:21269460 ;
+  rdf:type up:Citation_Statement ;
+  up:scope "VARIANT [LARGE SCALE ANALYSIS] ILE-7" ,
+    "IDENTIFICATION BY MASS SPECTROMETRY [LARGE SCALE ANALYSIS]" .
+<http://purl.uniprot.org/embl-cds/CAA24038.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/V00662> .
+<http://purl.uniprot.org/embl/V00662> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAB58955.3> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/J01415> .
+<http://purl.uniprot.org/embl/J01415> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAA19775.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/U09500> .
+<http://purl.uniprot.org/embl/U09500> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/BAA77674.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/D38112> .
+<http://purl.uniprot.org/embl/D38112> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17219.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346963> .
+<http://purl.uniprot.org/embl/AF346963> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17232.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346964> .
+<http://purl.uniprot.org/embl/AF346964> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17245.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346965> .
+<http://purl.uniprot.org/embl/AF346965> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17258.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346966> .
+<http://purl.uniprot.org/embl/AF346966> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17271.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346967> .
+<http://purl.uniprot.org/embl/AF346967> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17284.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346968> .
+<http://purl.uniprot.org/embl/AF346968> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17297.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346969> .
+<http://purl.uniprot.org/embl/AF346969> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17310.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346970> .
+<http://purl.uniprot.org/embl/AF346970> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17323.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346971> .
+<http://purl.uniprot.org/embl/AF346971> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17336.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346972> .
+<http://purl.uniprot.org/embl/AF346972> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17349.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346973> .
+<http://purl.uniprot.org/embl/AF346973> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17362.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346974> .
+<http://purl.uniprot.org/embl/AF346974> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17375.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346975> .
+<http://purl.uniprot.org/embl/AF346975> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17388.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346976> .
+<http://purl.uniprot.org/embl/AF346976> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17401.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346977> .
+<http://purl.uniprot.org/embl/AF346977> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17414.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346978> .
+<http://purl.uniprot.org/embl/AF346978> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17427.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346979> .
+<http://purl.uniprot.org/embl/AF346979> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17440.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346980> .
+<http://purl.uniprot.org/embl/AF346980> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17453.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346981> .
+<http://purl.uniprot.org/embl/AF346981> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17466.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346982> .
+<http://purl.uniprot.org/embl/AF346982> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17479.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346983> .
+<http://purl.uniprot.org/embl/AF346983> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17492.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346984> .
+<http://purl.uniprot.org/embl/AF346984> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17505.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346985> .
+<http://purl.uniprot.org/embl/AF346985> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17518.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346986> .
+<http://purl.uniprot.org/embl/AF346986> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17531.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346987> .
+<http://purl.uniprot.org/embl/AF346987> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17544.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346988> .
+<http://purl.uniprot.org/embl/AF346988> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17557.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346989> .
+<http://purl.uniprot.org/embl/AF346989> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17570.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346990> .
+<http://purl.uniprot.org/embl/AF346990> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17583.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346991> .
+<http://purl.uniprot.org/embl/AF346991> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17596.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346992> .
+<http://purl.uniprot.org/embl/AF346992> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17609.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346993> .
+<http://purl.uniprot.org/embl/AF346993> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17622.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346994> .
+<http://purl.uniprot.org/embl/AF346994> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17635.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346995> .
+<http://purl.uniprot.org/embl/AF346995> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17648.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346996> .
+<http://purl.uniprot.org/embl/AF346996> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17661.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346997> .
+<http://purl.uniprot.org/embl/AF346997> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17674.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346998> .
+<http://purl.uniprot.org/embl/AF346998> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17687.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF346999> .
+<http://purl.uniprot.org/embl/AF346999> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17700.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347000> .
+<http://purl.uniprot.org/embl/AF347000> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17713.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347001> .
+<http://purl.uniprot.org/embl/AF347001> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17726.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347002> .
+<http://purl.uniprot.org/embl/AF347002> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17739.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347003> .
+<http://purl.uniprot.org/embl/AF347003> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17752.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347004> .
+<http://purl.uniprot.org/embl/AF347004> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17765.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347005> .
+<http://purl.uniprot.org/embl/AF347005> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17778.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347006> .
+<http://purl.uniprot.org/embl/AF347006> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17791.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347007> .
+<http://purl.uniprot.org/embl/AF347007> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17804.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347008> .
+<http://purl.uniprot.org/embl/AF347008> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17817.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347009> .
+<http://purl.uniprot.org/embl/AF347009> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17830.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347010> .
+<http://purl.uniprot.org/embl/AF347010> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17843.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347011> .
+<http://purl.uniprot.org/embl/AF347011> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17856.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347012> .
+<http://purl.uniprot.org/embl/AF347012> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17869.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347013> .
+<http://purl.uniprot.org/embl/AF347013> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17882.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347014> .
+<http://purl.uniprot.org/embl/AF347014> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAK17895.2> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF347015> .
+<http://purl.uniprot.org/embl/AF347015> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54394.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381981> .
+<http://purl.uniprot.org/embl/AF381981> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54409.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381982> .
+<http://purl.uniprot.org/embl/AF381982> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54422.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381983> .
+<http://purl.uniprot.org/embl/AF381983> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54435.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381984> .
+<http://purl.uniprot.org/embl/AF381984> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54448.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381985> .
+<http://purl.uniprot.org/embl/AF381985> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54461.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381986> .
+<http://purl.uniprot.org/embl/AF381986> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54474.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381987> .
+<http://purl.uniprot.org/embl/AF381987> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54487.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381988> .
+<http://purl.uniprot.org/embl/AF381988> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54500.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381989> .
+<http://purl.uniprot.org/embl/AF381989> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54513.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381990> .
+<http://purl.uniprot.org/embl/AF381990> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54526.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381991> .
+<http://purl.uniprot.org/embl/AF381991> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54539.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381992> .
+<http://purl.uniprot.org/embl/AF381992> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54552.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381993> .
+<http://purl.uniprot.org/embl/AF381993> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54565.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381994> .
+<http://purl.uniprot.org/embl/AF381994> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54578.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381995> .
+<http://purl.uniprot.org/embl/AF381995> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54591.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381996> .
+<http://purl.uniprot.org/embl/AF381996> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54604.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381997> .
+<http://purl.uniprot.org/embl/AF381997> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54617.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381998> .
+<http://purl.uniprot.org/embl/AF381998> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54630.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF381999> .
+<http://purl.uniprot.org/embl/AF381999> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54643.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382000> .
+<http://purl.uniprot.org/embl/AF382000> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54656.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382001> .
+<http://purl.uniprot.org/embl/AF382001> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54669.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382002> .
+<http://purl.uniprot.org/embl/AF382002> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54682.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382003> .
+<http://purl.uniprot.org/embl/AF382003> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54695.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382004> .
+<http://purl.uniprot.org/embl/AF382004> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54708.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382005> .
+<http://purl.uniprot.org/embl/AF382005> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54721.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382006> .
+<http://purl.uniprot.org/embl/AF382006> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54734.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382007> .
+<http://purl.uniprot.org/embl/AF382007> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54747.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382008> .
+<http://purl.uniprot.org/embl/AF382008> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54760.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382009> .
+<http://purl.uniprot.org/embl/AF382009> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54773.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382010> .
+<http://purl.uniprot.org/embl/AF382010> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54786.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382011> .
+<http://purl.uniprot.org/embl/AF382011> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54799.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382012> .
+<http://purl.uniprot.org/embl/AF382012> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAL54812.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF382013> .
+<http://purl.uniprot.org/embl/AF382013> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14559.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465942> .
+<http://purl.uniprot.org/embl/AF465942> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14592.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465945> .
+<http://purl.uniprot.org/embl/AF465945> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14603.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465946> .
+<http://purl.uniprot.org/embl/AF465946> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14614.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465947> .
+<http://purl.uniprot.org/embl/AF465947> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14625.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465948> .
+<http://purl.uniprot.org/embl/AF465948> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14636.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465949> .
+<http://purl.uniprot.org/embl/AF465949> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14680.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465953> .
+<http://purl.uniprot.org/embl/AF465953> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14713.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465956> .
+<http://purl.uniprot.org/embl/AF465956> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14845.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465968> .
+<http://purl.uniprot.org/embl/AF465968> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14878.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465971> .
+<http://purl.uniprot.org/embl/AF465971> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14889.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465972> .
+<http://purl.uniprot.org/embl/AF465972> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14900.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465973> .
+<http://purl.uniprot.org/embl/AF465973> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14911.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465974> .
+<http://purl.uniprot.org/embl/AF465974> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14922.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465975> .
+<http://purl.uniprot.org/embl/AF465975> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAN14944.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/AF465977> .
+<http://purl.uniprot.org/embl/AF465977> rdf:type up:Genomic_DNA .
+<http://purl.uniprot.org/embl-cds/AAA31851.1> rdf:type up:Nucleotide_Resource ;
+  up:database <http://purl.uniprot.org/database/EMBL> ;
+  up:locatedOn <http://purl.uniprot.org/embl/M28016> .
+<http://purl.uniprot.org/embl/M28016> rdf:type up:MRNA .
+<http://purl.uniprot.org/pir/A00151> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PIR> ;
+  rdfs:comment "CBHU" .
+<http://purl.uniprot.org/refseq/YP_003024038.1> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/RefSeq> ;
+  rdfs:comment "NC_012920.1" .
+<http://rdf.wwpdb.org/pdb/5XTE> rdf:type up:Structure_Resource ;
+  up:database <http://purl.uniprot.org/database/PDB> ;
+  up:method up:Electron_Microscopy ;
+  up:resolution "3.40"^^xsd:float ;
+  up:chainSequenceMapping <http://purl.uniprot.org/isoforms/P00156-1#PDB_5XTE_tt2tt379> .
+<http://purl.uniprot.org/isoforms/P00156-1#PDB_5XTE_tt2tt379> up:chain "J/V=2-379" .
+<http://rdf.wwpdb.org/pdb/5XTH> rdf:type up:Structure_Resource ;
+  up:database <http://purl.uniprot.org/database/PDB> ;
+  up:method up:Electron_Microscopy ;
+  up:resolution "3.90"^^xsd:float ;
+  up:chainSequenceMapping <http://purl.uniprot.org/isoforms/P00156-1#PDB_5XTH_tt2tt379> .
+<http://purl.uniprot.org/isoforms/P00156-1#PDB_5XTH_tt2tt379> up:chain "AJ/AV=2-379" .
+<http://rdf.wwpdb.org/pdb/5XTI> rdf:type up:Structure_Resource ;
+  up:database <http://purl.uniprot.org/database/PDB> ;
+  up:method up:Electron_Microscopy ;
+  up:resolution "17.40"^^xsd:float ;
+  up:chainSequenceMapping <http://purl.uniprot.org/isoforms/P00156-1#PDB_5XTI_tt2tt379> .
+<http://purl.uniprot.org/isoforms/P00156-1#PDB_5XTI_tt2tt379> up:chain "AJ/AV=2-379" .
+<http://purl.uniprot.org/pdbsum/5XTE> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PDBsum> .
+<http://purl.uniprot.org/pdbsum/5XTH> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PDBsum> .
+<http://purl.uniprot.org/pdbsum/5XTI> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PDBsum> .
+<http://purl.uniprot.org/smr/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/SMR> .
+<http://purl.uniprot.org/biogrid/110619> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/BioGrid> ;
+  rdfs:comment "12" .
+<http://purl.uniprot.org/complexportal/CPX-560> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/ComplexPortal> ;
+  rdfs:comment "Mitochondrial respiratory chain complex III" .
+<http://purl.uniprot.org/intact/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/IntAct> ;
+  rdfs:comment "8" .
+<http://purl.uniprot.org/mint/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/MINT> .
+<http://purl.uniprot.org/string/9606.ENSP00000354554> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/STRING> .
+<http://purl.uniprot.org/bindingdb/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/BindingDB> .
+<http://purl.uniprot.org/drugbank/DB07763> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DrugBank> ;
+  rdfs:comment "(5S)-3-ANILINO-5-(2,4-DIFLUOROPHENYL)-5-METHYL-1,3-OXAZOLIDINE-2,4-DIONE" .
+<http://purl.uniprot.org/drugbank/DB04141> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DrugBank> ;
+  rdfs:comment "2-Hexyloxy-6-Hydroxymethyl-Tetrahydro-Pyran-3,4,5-Triol" .
+<http://purl.uniprot.org/drugbank/DB08453> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DrugBank> ;
+  rdfs:comment "2-Nonyl-4-quinolinol 1-oxide" .
+<http://purl.uniprot.org/drugbank/DB07636> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DrugBank> ;
+  rdfs:comment "5-Heptyl-6-hydroxy-1,3-benzothiazole-4,7-dione" .
+<http://purl.uniprot.org/drugbank/DB04799> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DrugBank> ;
+  rdfs:comment "6-Hydroxy-5-undecyl-4,7-benzothiazoledione" .
+<http://purl.uniprot.org/drugbank/DB07778> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DrugBank> ;
+  rdfs:comment "FAMOXADONE" .
+<http://purl.uniprot.org/drugbank/DB07401> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DrugBank> ;
+  rdfs:comment "METHYL (2Z)-2-(2-{[6-(2-CYANOPHENOXY)PYRIMIDIN-4-YL]OXY}PHENYL)-3-METHOXYACRYLATE" .
+<http://purl.uniprot.org/drugbank/DB08330> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DrugBank> ;
+  rdfs:comment "METHYL (2Z)-3-METHOXY-2-{2-[(E)-2-PHENYLVINYL]PHENYL}ACRYLATE" .
+<http://purl.uniprot.org/drugbank/DB08690> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DrugBank> ;
+  rdfs:comment "UBIQUINONE-2" .
+<http://purl.uniprot.org/iptmnet/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/iPTMnet> .
+<http://purl.uniprot.org/phosphositeplus/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PhosphoSitePlus> .
+<http://purl.uniprot.org/swisspalm/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/SwissPalm> .
+<http://purl.uniprot.org/biomuta/MT-CYB> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/BioMuta> .
+<http://purl.uniprot.org/dmdm/408360043> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DMDM> .
+<http://purl.uniprot.org/epd/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/EPD> .
+<http://purl.uniprot.org/jpost/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/jPOST> .
+<http://purl.uniprot.org/massive/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/MassIVE> .
+<http://purl.uniprot.org/paxdb/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PaxDb> .
+<http://purl.uniprot.org/peptideatlas/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PeptideAtlas> .
+<http://purl.uniprot.org/pride/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PRIDE> .
+<http://purl.uniprot.org/proteomicsdb/51225> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/ProteomicsDB> .
+<http://purl.uniprot.org/topdownproteomics/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/TopDownProteomics> .
+<http://purl.uniprot.org/antibodypedia/35365> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Antibodypedia> ;
+  rdfs:comment "165 antibodies" .
+<http://rdf.ebi.ac.uk/resource/ensembl.transcript/ENST00000361789> rdf:type up:Transcript_Resource ;
+  up:database <http://purl.uniprot.org/database/Ensembl> ;
+  up:translatedTo <http://rdf.ebi.ac.uk/resource/ensembl.protein/ENSP00000354554> ;
+  up:transcribedFrom <http://rdf.ebi.ac.uk/resource/ensembl/ENSG00000198727> .
+<http://purl.uniprot.org/geneid/4519> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/GeneID> .
+<http://purl.uniprot.org/kegg/hsa:4519> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/KEGG> .
+<http://purl.uniprot.org/ctd/4519> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/CTD> .
+<http://identifiers.org/ncbigene/4519> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/DisGeNET> .
+<http://purl.uniprot.org/genecards/MT-CYB> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/GeneCards> .
+<http://purl.uniprot.org/genereviews/MT-CYB> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/GeneReviews> .
+<http://purl.uniprot.org/hgnc/7427> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/HGNC> ;
+  rdfs:comment "MT-CYB" .
+<http://www.proteinatlas.org/ENSG00000198727> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/HPA> ;
+  rdfs:comment "Tissue enhanced (blood, skeletal muscle)" .
+<http://purl.uniprot.org/malacards/MT-CYB> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/MalaCards> .
+<http://purl.uniprot.org/mim/500000> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/MIM> ;
+  rdfs:comment "phenotype" .
+<http://purl.uniprot.org/mim/516020> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/MIM> ;
+  rdfs:comment "gene" .
+<http://purl.uniprot.org/mim/535000> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/MIM> ;
+  rdfs:comment "phenotype" .
+<http://nextprot.org/rdf/entry/NX_P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/neXtProt> .
+<http://purl.uniprot.org/opentargets/ENSG00000198727> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/OpenTargets> .
+<http://www.orpha.net/ORDO/Orphanet_137675> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Orphanet> ;
+  rdfs:comment "Histiocytoid cardiomyopathy" .
+<http://www.orpha.net/ORDO/Orphanet_1460> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Orphanet> ;
+  rdfs:comment "Isolated complex III deficiency" .
+<http://www.orpha.net/ORDO/Orphanet_104> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Orphanet> ;
+  rdfs:comment "Leber hereditary optic neuropathy" .
+<http://purl.uniprot.org/pharmgkb/PA31234> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PharmGKB> .
+<http://purl.uniprot.org/eggnog/KOG4663> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/eggNOG> ;
+  rdfs:comment "Eukaryota" .
+<http://purl.uniprot.org/eggnog/COG1290> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/eggNOG> ;
+  rdfs:comment "LUCA" .
+<http://purl.uniprot.org/genetree/ENSGT00390000017948> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/GeneTree> .
+<http://purl.uniprot.org/hogenom/CLU_031114_3_0_1> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/HOGENOM> .
+<http://purl.uniprot.org/inparanoid/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/InParanoid> .
+<http://purl.uniprot.org/ko/K00412> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/KO> .
+<http://purl.uniprot.org/oma/HETGSNN> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/OMA> .
+<http://purl.orthodb.org/odbgroup/1125966at2759> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/OrthoDB> .
+<http://purl.uniprot.org/phylomedb/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PhylomeDB> .
+<http://purl.uniprot.org/treefam/TF353088> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/TreeFam> .
+<http://identifiers.org/reactome/R-HSA-611105> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Reactome> ;
+  rdfs:comment "Respiratory electron transport" .
+<http://purl.uniprot.org/chitars/CYTB> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/ChiTaRS> ;
+  rdfs:comment "human" .
+<http://purl.uniprot.org/genewiki/MT-CYB> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/GeneWiki> .
+<http://purl.uniprot.org/genomernai/4519> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/GenomeRNAi> .
+<http://purl.uniprot.org/pharos/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Pharos> ;
+  rdfs:comment "Tbio" .
+<http://purl.obolibrary.org/obo/PR_P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PRO> .
+<http://purl.uniprot.org/rnact/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/RNAct> ;
+  rdfs:comment "protein" .
+<http://purl.uniprot.org/bgee/ENSG00000198727> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Bgee> ;
+  rdfs:comment "Expressed in putamen and 85 other tissues" .
+<http://purl.uniprot.org/expressionatlas/P00156> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/ExpressionAtlas> ;
+  rdfs:comment "baseline and differential" .
+<http://purl.uniprot.org/cdd/cd00290> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/CDD> ;
+  rdfs:comment "cytochrome_b_C" ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#CDD_cd00290_match_1> .
+<http://purl.uniprot.org/cdd/cd00284> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/CDD> ;
+  rdfs:comment "Cytochrome_b_N" ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#CDD_cd00284_match_1> .
+<http://purl.uniprot.org/gene3d/1.20.810.10> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Gene3D> ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#Gene3D_1.20.810.10_match_1> .
+<http://purl.uniprot.org/interpro/IPR005798> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/InterPro> ;
+  rdfs:comment "Cyt_b/b6_C" .
+<http://purl.uniprot.org/interpro/IPR036150> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/InterPro> ;
+  rdfs:comment "Cyt_b/b6_C_sf" .
+<http://purl.uniprot.org/interpro/IPR005797> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/InterPro> ;
+  rdfs:comment "Cyt_b/b6_N" .
+<http://purl.uniprot.org/interpro/IPR027387> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/InterPro> ;
+  rdfs:comment "Cytb/b6-like_sf" .
+<http://purl.uniprot.org/interpro/IPR030689> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/InterPro> ;
+  rdfs:comment "Cytochrome_b" .
+<http://purl.uniprot.org/interpro/IPR016174> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/InterPro> ;
+  rdfs:comment "Di-haem_cyt_TM" .
+<http://purl.uniprot.org/pfam/PF00032> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Pfam> ;
+  rdfs:comment "Cytochrom_B_C" ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#Pfam_PF00032_match_1> .
+<http://purl.uniprot.org/pfam/PF00033> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/Pfam> ;
+  rdfs:comment "Cytochrome_B" ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#Pfam_PF00033_match_1> .
+<http://purl.uniprot.org/pirsf/PIRSF038885> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PIRSF> ;
+  rdfs:comment "COB" ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#PIRSF_PIRSF038885_match_1> .
+<http://purl.uniprot.org/supfam/SSF81342> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/SUPFAM> ;
+  rdfs:comment "SSF81342" ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#SUPFAM_SSF81342_match_1> .
+<http://purl.uniprot.org/supfam/SSF81648> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/SUPFAM> ;
+  rdfs:comment "SSF81648" ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#SUPFAM_SSF81648_match_1> .
+<http://purl.uniprot.org/prosite/PS51003> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PROSITE> ;
+  rdfs:comment "CYTB_CTER" ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#PROSITE_PS51003_match_1> .
+<http://purl.uniprot.org/prosite/PS51002> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/PROSITE> ;
+  rdfs:comment "CYTB_NTER" ;
+  up:signatureSequenceMatch <http://purl.uniprot.org/isoforms/P00156-1#PROSITE_PS51002_match_1> .
+<P00156#SIP04BB22F94509478D> rdf:type up:Structured_Name ;
+  up:fullName "Cytochrome b" .
+<P00156#SIP70174F4CDEA2B1F1> rdf:type up:Structured_Name ;
+  up:fullName "Complex III subunit 3" .
+<P00156#SIP96AAF15ABE9D3699> rdf:type up:Structured_Name ;
+  up:fullName "Complex III subunit III" .
+<P00156#SIPB3185EE1AF674321> rdf:type up:Structured_Name ;
+  up:fullName "Cytochrome b-c1 complex subunit 3" .
+<P00156#SIPC22CFE0E4256EEDB> rdf:type up:Structured_Name ;
+  up:fullName "Ubiquinol-cytochrome-c reductase complex cytochrome b subunit" .
+<#_kb.P00156_up.isolatedFrom_tissue.799> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:isolatedFrom ;
+  rdf:object tissue:799 ;
+  up:citation citation:7219534 ,
+    citation:7530363 .
+<#_kb.P00156_up.isolatedFrom_tissue.445> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:isolatedFrom ;
+  rdf:object tissue:445 ;
+  up:citation citation:7623448 .
+<#_kb.P00156_up.isolatedFrom_tissue.581> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:isolatedFrom ;
+  rdf:object tissue:581 ;
+  up:citation citation:6100559 .
+<P00156#gene-MD51FC9D4B7D097F8356361EF179A72D133> rdf:type up:Gene ;
+  skos:prefLabel "MT-CYB" ;
+  skos:altLabel "COB" ,
+    "CYTB" ,
+    "MTCYB" .
+<P00156#SIPB79E1FAB130FCC81> rdf:type up:Function_Annotation ;
+  rdfs:comment "Component of the ubiquinol-cytochrome c reductase complex (complex III or cytochrome b-c1 complex) that is part of the mitochondrial respiratory chain. The b-c1 complex mediates electron transfer from ubiquinol to cytochrome c. Contributes to the generation of a proton gradient across the mitochondrial membrane that is then used for ATP synthesis." .
+<#_5A77859BD90BB151_rdfs.comment_1ED107001D9E567B> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIPB79E1FAB130FCC81> ;
+  rdf:predicate rdfs:comment ;
+  rdf:object "Component of the ubiquinol-cytochrome c reductase complex (complex III or cytochrome b-c1 complex) that is part of the mitochondrial respiratory chain. The b-c1 complex mediates electron transfer from ubiquinol to cytochrome c. Contributes to the generation of a proton gradient across the mitochondrial membrane that is then used for ATP synthesis." ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP8D9C596970E58C51> rdf:type up:Cofactor_Annotation ;
+  rdfs:comment "Binds 2 heme groups non-covalently." ;
+  up:cofactor <http://purl.obolibrary.org/obo/CHEBI_30413> .
+<#_4327A6DDBD50A83D_rdfs.comment_FDF839140247AFF7> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIP8D9C596970E58C51> ;
+  rdf:predicate rdfs:comment ;
+  rdf:object "Binds 2 heme groups non-covalently." ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<#_4327A6DDBD50A83D_up.cofactor_527E2EA34BD54252> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIP8D9C596970E58C51> ;
+  rdf:predicate up:cofactor ;
+  rdf:object <http://purl.obolibrary.org/obo/CHEBI_30413> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP43D613FAF08024EE> rdf:type up:Subunit_Annotation ;
+  rdfs:comment "The cytochrome bc1 complex contains 11 subunits: 3 respiratory subunits (MT-CYB, CYC1 and UQCRFS1), 2 core proteins (UQCRC1 and UQCRC2) and 6 low-molecular weight proteins (UQCRH/QCR6, UQCRB/QCR7, UQCRQ/QCR8, UQCR10/QCR9, UQCR11/QCR10 and a cleavage product of UQCRFS1). This cytochrome bc1 complex then forms a dimer." .
+<#_6BCD8E5DBBA653A2_rdfs.comment_D8579087E9032499> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIP43D613FAF08024EE> ;
+  rdf:predicate rdfs:comment ;
+  rdf:object "The cytochrome bc1 complex contains 11 subunits: 3 respiratory subunits (MT-CYB, CYC1 and UQCRFS1), 2 core proteins (UQCRC1 and UQCRC2) and 6 low-molecular weight proteins (UQCRH/QCR6, UQCRB/QCR7, UQCRQ/QCR8, UQCR10/QCR9, UQCR11/QCR10 and a cleavage product of UQCRFS1). This cytochrome bc1 complex then forms a dimer." ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIPD4EFE77F62AB1F6E> rdf:type up:Subcellular_Location_Annotation ;
+  up:locatedIn <P00156#SIP60B881BAE8732DDF> .
+<P00156#SIP60B881BAE8732DDF> up:cellularComponent location:168 ;
+  up:topology location:9909 .
+<#_940D9AE918EEBCE4_ECA11A063956BBD5_04B841B1B5F4B13B> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIP60B881BAE8732DDF> ;
+  rdf:predicate up:cellularComponent ;
+  rdf:object location:168 ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<#_940D9AE918EEBCE4_up.topology_597FCCCA90EEF434> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIP60B881BAE8732DDF> ;
+  rdf:predicate up:topology ;
+  rdf:object location:9909 ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP5D3FD4D2F0A0E6A1> rdf:type up:Disease_Annotation ;
+  rdfs:comment "Defects in MT-CYB are a rare cause of mitochondrial dysfunction underlying different myopathies. They include mitochondrial encephalomyopathy, hypertrophic cardiomyopathy (HCM), and sporadic mitochondrial myopathy (MM). In mitochondrial myopathy, exercise intolerance is the predominant symptom. Additional features include lactic acidosis, muscle weakness and/or myoglobinuria. Defects in MTCYB are also found in cases of exercise intolerance accompanied by deafness, mental retardation, retinitis pigmentosa, cataract, growth retardation, epilepsy (multisystem disorder)." .
+<#_C1B6FFA8CEFED0D9_rdfs.comment_79E3EAE4786C947C> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIP5D3FD4D2F0A0E6A1> ;
+  rdf:predicate rdfs:comment ;
+  rdf:object "Defects in MT-CYB are a rare cause of mitochondrial dysfunction underlying different myopathies. They include mitochondrial encephalomyopathy, hypertrophic cardiomyopathy (HCM), and sporadic mitochondrial myopathy (MM). In mitochondrial myopathy, exercise intolerance is the predominant symptom. Additional features include lactic acidosis, muscle weakness and/or myoglobinuria. Defects in MTCYB are also found in cases of exercise intolerance accompanied by deafness, mental retardation, retinitis pigmentosa, cataract, growth retardation, epilepsy (multisystem disorder)." ;
+  up:attribution <P00156#attribution-310E40CF851420AA2B2DA58A20F9B555> ,
+    <P00156#attribution-D75C1F64C9000453B1F63C5ADFCED135> .
+<P00156#SIP7FDBA81653292ADC> rdf:type up:Disease_Annotation ;
+  rdfs:comment "The disease is caused by mutations affecting the gene represented in this entry." ;
+  up:disease disease:248 .
+<#_DBBED3EF6705353A_up.disease_1CA237A026E1C251> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIP7FDBA81653292ADC> ;
+  rdf:predicate up:disease ;
+  rdf:object disease:248 ;
+  up:attribution <P00156#attribution-8C6966492649B8E48EBF287192D843B4> .
+<P00156#SIPA0FC99275B556BB9> rdf:type up:Disease_Annotation ;
+  rdfs:comment "The disease is caused by mutations affecting distinct genetic loci, including the gene represented in this entry." ;
+  up:disease disease:640 .
+<#_8742BADDB01D5D28_up.disease_75273CF541FD8F15> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIPA0FC99275B556BB9> ;
+  rdf:predicate up:disease ;
+  rdf:object disease:640 ;
+  up:attribution <P00156#attribution-BC97F59B8DACF390DE6C848D2D7F6970> .
+<P00156#SIPFF588AD94B0945B7> rdf:type up:Annotation ;
+  rdfs:comment "Heme 1 (or BL or b562) is low-potential and absorbs at about 562 nm, and heme 2 (or BH or b566) is high-potential and absorbs at about 566 nm." .
+<#_3A965359FB16753C_rdfs.comment_D965447BF80829B2> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIPFF588AD94B0945B7> ;
+  rdf:predicate rdfs:comment ;
+  rdf:object "Heme 1 (or BL or b562) is low-potential and absorbs at about 562 nm, and heme 2 (or BH or b566) is high-potential and absorbs at about 566 nm." ;
+  up:attribution <P00156#attribution-609619A7DF3E53CE5E48EDEF8B8F9DD1> .
+<P00156#SIP4C867021FA5A0FD0> rdf:type up:Similarity_Annotation ;
+  rdfs:comment "Belongs to the cytochrome b family." .
+<#_1DE627FFECFB346E_rdfs.comment_2EE3B5726A06CDBA> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIP4C867021FA5A0FD0> ;
+  rdf:predicate rdfs:comment ;
+  rdf:object "Belongs to the cytochrome b family." ;
+  up:attribution <P00156#attribution-DF942B57779369B769DC4BDE190DBD28> ,
+    <P00156#attribution-70C8E873A4568316224865AF77F4C70F> .
+<P00156#SIP684225CD6A6B6689> rdf:type up:Caution_Annotation ;
+  rdfs:comment "The full-length protein contains only eight transmembrane helices, not nine as predicted by bioinformatics tools." .
+<#_53D660C5EC6D2851_rdfs.comment_FAAA799E6285AAE4> rdf:type rdf:Statement ;
+  rdf:subject <P00156#SIP684225CD6A6B6689> ;
+  rdf:predicate rdfs:comment ;
+  rdf:object "The full-length protein contains only eight transmembrane helices, not nine as predicted by bioinformatics tools." ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+annotation:PRO_0000061045 rdf:type up:Chain_Annotation ;
+  rdfs:comment "Cytochrome b" ;
+  up:range range:22570981678986798tt1tt380 .
+range:22570981678986798tt1tt380 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt1 ;
+  faldo:end position:22570981678986798tt380 .
+position:22570981678986798tt1 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 1 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt380 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 380 ;
+  faldo:reference isoform:P00156-1 .
+<P00156#SIP7CACFFCCEDE113F7> rdf:type up:Transmembrane_Annotation ;
+  rdfs:comment "Helical" ;
+  up:range range:22570981678986798tt33tt53 .
+range:22570981678986798tt33tt53 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt33 ;
+  faldo:end position:22570981678986798tt53 .
+position:22570981678986798tt33 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 33 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt53 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 53 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_293D7EDFC4DC6FF7> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP7CACFFCCEDE113F7> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIPAA693C0111CF5CBA> rdf:type up:Transmembrane_Annotation ;
+  rdfs:comment "Helical" ;
+  up:range range:22570981678986798tt77tt98 .
+range:22570981678986798tt77tt98 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt77 ;
+  faldo:end position:22570981678986798tt98 .
+position:22570981678986798tt77 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 77 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt98 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 98 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_CD81BD7673599B35> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPAA693C0111CF5CBA> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP6D2947C9EEB98F45> rdf:type up:Transmembrane_Annotation ;
+  rdfs:comment "Helical" ;
+  up:range range:22570981678986798tt113tt133 .
+range:22570981678986798tt113tt133 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt113 ;
+  faldo:end position:22570981678986798tt133 .
+position:22570981678986798tt113 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 113 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt133 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 133 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_D47B0317553C1071> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP6D2947C9EEB98F45> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP67CFA0CCE3D88EC5> rdf:type up:Transmembrane_Annotation ;
+  rdfs:comment "Helical" ;
+  up:range range:22570981678986798tt178tt198 .
+range:22570981678986798tt178tt198 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt178 ;
+  faldo:end position:22570981678986798tt198 .
+position:22570981678986798tt178 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 178 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt198 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 198 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_176A80A41033B6E7> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP67CFA0CCE3D88EC5> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP948A8C0F61248A7B> rdf:type up:Transmembrane_Annotation ;
+  rdfs:comment "Helical" ;
+  up:range range:22570981678986798tt226tt246 .
+range:22570981678986798tt226tt246 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt226 ;
+  faldo:end position:22570981678986798tt246 .
+position:22570981678986798tt226 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 226 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt246 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 246 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_8365BFA571300E39> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP948A8C0F61248A7B> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP63797D79BFBC9036> rdf:type up:Transmembrane_Annotation ;
+  rdfs:comment "Helical" ;
+  up:range range:22570981678986798tt288tt308 .
+range:22570981678986798tt288tt308 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt288 ;
+  faldo:end position:22570981678986798tt308 .
+position:22570981678986798tt288 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 288 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt308 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 308 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_8D988376604FC9A8> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP63797D79BFBC9036> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP3F7F7F564B1E005F> rdf:type up:Transmembrane_Annotation ;
+  rdfs:comment "Helical" ;
+  up:range range:22570981678986798tt320tt340 .
+range:22570981678986798tt320tt340 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt320 ;
+  faldo:end position:22570981678986798tt340 .
+position:22570981678986798tt320 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 320 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt340 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 340 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_2009ECF76275B0BE> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP3F7F7F564B1E005F> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIPF32C610E8F6F4183> rdf:type up:Transmembrane_Annotation ;
+  rdfs:comment "Helical" ;
+  up:range range:22570981678986798tt347tt367 .
+range:22570981678986798tt347tt367 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt347 ;
+  faldo:end position:22570981678986798tt367 .
+position:22570981678986798tt347 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 347 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt367 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 367 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_5C4BC223252C55FA> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPF32C610E8F6F4183> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIPF2858308F29394FF> rdf:type up:Metal_Binding_Annotation ;
+  rdfs:comment "Iron 1 (heme b562 axial ligand)" ;
+  up:range range:22570981678986798tt83tt83 .
+range:22570981678986798tt83tt83 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt83 ;
+  faldo:end position:22570981678986798tt83 .
+position:22570981678986798tt83 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 83 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_A6FEFA5FCDD7DF99> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPF2858308F29394FF> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIPBEC68F45DC967BA9> rdf:type up:Metal_Binding_Annotation ;
+  rdfs:comment "Iron 2 (heme b566 axial ligand)" ;
+  up:range range:22570981678986798tt97tt97 .
+range:22570981678986798tt97tt97 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt97 ;
+  faldo:end position:22570981678986798tt97 .
+position:22570981678986798tt97 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 97 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_A88ED62BD08603A6> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPBEC68F45DC967BA9> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP750E3FEA3953BCE3> rdf:type up:Metal_Binding_Annotation ;
+  rdfs:comment "Iron 1 (heme b562 axial ligand)" ;
+  up:range range:22570981678986798tt182tt182 .
+range:22570981678986798tt182tt182 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt182 ;
+  faldo:end position:22570981678986798tt182 .
+position:22570981678986798tt182 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 182 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_74415B046E2CA929> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP750E3FEA3953BCE3> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIP647D780706ED36E9> rdf:type up:Metal_Binding_Annotation ;
+  rdfs:comment "Iron 2 (heme b566 axial ligand)" ;
+  up:range range:22570981678986798tt196tt196 .
+range:22570981678986798tt196tt196 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt196 ;
+  faldo:end position:22570981678986798tt196 .
+position:22570981678986798tt196 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 196 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_2C9070D0C33C50AB> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP647D780706ED36E9> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+<P00156#SIPB29F1AE3332D0C92> rdf:type up:Binding_Site_Annotation ;
+  rdfs:comment "Ubiquinone" ;
+  up:range range:22570981678986798tt201tt201 .
+range:22570981678986798tt201tt201 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt201 ;
+  faldo:end position:22570981678986798tt201 .
+position:22570981678986798tt201 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 201 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_863347642512E0E8> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPB29F1AE3332D0C92> ;
+  up:attribution <P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> .
+annotation:VAR_008585 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "I" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs193302980> ;
+  up:range range:22570981678986798tt7tt7 .
+<http://purl.uniprot.org/dbsnp/rs193302980> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt7tt7 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt7 ;
+  faldo:end position:22570981678986798tt7 .
+position:22570981678986798tt7 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 7 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_008585> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_008585 ;
+  up:attribution <P00156#attribution-D5288DCAE80F4A5A729D6F5B4B11E3F6> ,
+    <P00156#attribution-9DE5AB3E0BBDFAA23A142F5DE8084FEB> ,
+    <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> ,
+    <P00156#attribution-0B306B95CE13E198B99582D73B71C1CA> ,
+    <P00156#attribution-CCC14F45523F443DE69BF6E02AB5C6D6> ,
+    <P00156#attribution-60DDBA95C648C2D4372BF0CCBFEE48B7> ,
+    <P00156#attribution-932B5DDF85A58A29C893AED06296C901> .
+annotation:VAR_013643 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "S" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs28357679> ;
+  up:range range:22570981678986798tt8tt8 .
+<http://purl.uniprot.org/dbsnp/rs28357679> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt8tt8 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt8 ;
+  faldo:end position:22570981678986798tt8 .
+position:22570981678986798tt8 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 8 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013643> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013643 ;
+  up:attribution <P00156#attribution-9DE5AB3E0BBDFAA23A142F5DE8084FEB> ,
+    <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> .
+annotation:VAR_013644 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "L" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs28357681> ;
+  up:range range:22570981678986798tt18tt18 .
+<http://purl.uniprot.org/dbsnp/rs28357681> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt18tt18 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt18 ;
+  faldo:end position:22570981678986798tt18 .
+position:22570981678986798tt18 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 18 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013644> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013644 ;
+  up:attribution <P00156#attribution-9DE5AB3E0BBDFAA23A142F5DE8084FEB> ,
+    <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> .
+annotation:VAR_013645 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In mitochondrial myopathy; sporadic." ;
+  up:substitution "S" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs207459998> ;
+  up:range range:22570981678986798tt34tt34 .
+<http://purl.uniprot.org/dbsnp/rs207459998> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt34tt34 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt34 ;
+  faldo:end position:22570981678986798tt34 .
+position:22570981678986798tt34 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 34 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013645> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013645 ;
+  up:attribution <P00156#attribution-7A1008C84196E98392DBFE672DA9CC0F> .
+annotation:VAR_033058 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In exercice intolerance; with cardiomyopathy and septo-optic dysplasia." ;
+  up:substitution "P" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs207460004> ;
+  up:range range:22570981678986798tt35tt35 .
+<http://purl.uniprot.org/dbsnp/rs207460004> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt35tt35 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt35 ;
+  faldo:end position:22570981678986798tt35 .
+position:22570981678986798tt35 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 35 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_033058> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_033058 ;
+  up:attribution <P00156#attribution-159F2CC56842C0A9CDD3C0A6CC2D9D5A> .
+annotation:VAR_015571 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs2853505> ;
+  up:range range:22570981678986798tt39tt39 .
+<http://purl.uniprot.org/dbsnp/rs2853505> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt39tt39 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt39 ;
+  faldo:end position:22570981678986798tt39 .
+position:22570981678986798tt39 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 39 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_015571> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_015571 ;
+  up:attribution <P00156#attribution-0B306B95CE13E198B99582D73B71C1CA> .
+annotation:VAR_013646 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "V" ;
+  up:range range:22570981678986798tt39tt39 .
+<#_kb.P00156_up.annotation_a.VAR_013646> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013646 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> .
+annotation:VAR_013647 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs200786872> ;
+  up:range range:22570981678986798tt78tt78 .
+<http://purl.uniprot.org/dbsnp/rs200786872> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt78tt78 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt78 ;
+  faldo:end position:22570981678986798tt78 .
+position:22570981678986798tt78 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 78 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013647> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013647 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> .
+annotation:VAR_015572 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "V" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs199997767> ;
+  up:range range:22570981678986798tt78tt78 .
+<http://purl.uniprot.org/dbsnp/rs199997767> up:database <http://purl.uniprot.org/database/dbSNP> .
+<#_kb.P00156_up.annotation_a.VAR_015572> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_015572 ;
+  up:attribution <P00156#attribution-0B306B95CE13E198B99582D73B71C1CA> .
+annotation:VAR_008388 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In colorectal cancer." ;
+  up:substitution "H" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs207459995> ;
+  up:range range:22570981678986798tt80tt80 .
+<http://purl.uniprot.org/dbsnp/rs207459995> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt80tt80 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt80 ;
+  faldo:end position:22570981678986798tt80 .
+position:22570981678986798tt80 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 80 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_008388> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_008388 ;
+  up:attribution <P00156#attribution-863F04C808B6C003501BC15773356287> .
+annotation:VAR_008586 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "P" ;
+  up:range range:22570981678986798tt87tt87 .
+range:22570981678986798tt87tt87 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt87 ;
+  faldo:end position:22570981678986798tt87 .
+position:22570981678986798tt87 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 87 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_008586> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_008586 ;
+  up:attribution <P00156#attribution-CCC14F45523F443DE69BF6E02AB5C6D6> .
+annotation:VAR_013648 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs28357685> ;
+  up:range range:22570981678986798tt122tt122 .
+<http://purl.uniprot.org/dbsnp/rs28357685> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt122tt122 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt122 ;
+  faldo:end position:22570981678986798tt122 .
+position:22570981678986798tt122 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 122 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013648> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013648 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> .
+annotation:VAR_013649 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "A" ;
+  up:range range:22570981678986798tt123tt123 .
+range:22570981678986798tt123tt123 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt123 ;
+  faldo:end position:22570981678986798tt123 .
+position:22570981678986798tt123 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 123 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013649> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013649 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> .
+annotation:VAR_013650 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In exercise intolerance." ;
+  up:substitution "P" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs207460001> ;
+  up:range range:22570981678986798tt151tt151 .
+<http://purl.uniprot.org/dbsnp/rs207460001> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt151tt151 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt151 ;
+  faldo:end position:22570981678986798tt151 .
+position:22570981678986798tt151 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 151 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013650> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013650 ;
+  up:attribution <P00156#attribution-787DD9FA2F05FBE7DA16BE6B16E01742> .
+annotation:VAR_013651 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs28357687> ;
+  up:range range:22570981678986798tt153tt153 .
+<http://purl.uniprot.org/dbsnp/rs28357687> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt153tt153 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt153 ;
+  faldo:end position:22570981678986798tt153 .
+position:22570981678986798tt153 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 153 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013651> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013651 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> .
+annotation:VAR_013652 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "V" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs201250154> ;
+  up:range range:22570981678986798tt164tt164 .
+<http://purl.uniprot.org/dbsnp/rs201250154> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt164tt164 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt164 ;
+  faldo:end position:22570981678986798tt164 .
+position:22570981678986798tt164 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 164 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013652> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013652 ;
+  up:attribution <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> .
+annotation:VAR_013653 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In hyperthrophic cardiomyopathy." ;
+  up:substitution "E" ;
+  up:range range:22570981678986798tt166tt166 .
+range:22570981678986798tt166tt166 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt166 ;
+  faldo:end position:22570981678986798tt166 .
+position:22570981678986798tt166 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 166 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013653> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013653 ;
+  up:attribution <P00156#attribution-9DE5AB3E0BBDFAA23A142F5DE8084FEB> .
+annotation:VAR_002197 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In LHON; secondary mutation; does not seem to directly cause the disease." ;
+  up:substitution "N" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs41518645> ;
+  skos:related disease:640 ;
+  up:range range:22570981678986798tt171tt171 .
+<http://purl.uniprot.org/dbsnp/rs41518645> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt171tt171 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt171 ;
+  faldo:end position:22570981678986798tt171 .
+position:22570981678986798tt171 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 171 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_002197> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_002197 ;
+  up:attribution <P00156#attribution-BC97F59B8DACF390DE6C848D2D7F6970> .
+annotation:VAR_013654 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "VT" ;
+  up:range range:22570981678986798tt189tt190 .
+range:22570981678986798tt189tt190 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt189 ;
+  faldo:end position:22570981678986798tt190 .
+position:22570981678986798tt189 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 189 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt190 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 190 ;
+  faldo:reference isoform:P00156-1 .
+annotation:VAR_011339 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs2853507> ;
+  up:range range:22570981678986798tt191tt191 .
+<http://purl.uniprot.org/dbsnp/rs2853507> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt191tt191 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt191 ;
+  faldo:end position:22570981678986798tt191 .
+position:22570981678986798tt191 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 191 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_011339> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_011339 ;
+  up:attribution <P00156#attribution-0B306B95CE13E198B99582D73B71C1CA> ,
+    <P00156#attribution-60DDBA95C648C2D4372BF0CCBFEE48B7> .
+annotation:VAR_011340 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "A" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs2853508> ;
+  up:range range:22570981678986798tt194tt194 .
+<http://purl.uniprot.org/dbsnp/rs2853508> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt194tt194 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt194 ;
+  faldo:end position:22570981678986798tt194 .
+position:22570981678986798tt194 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 194 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_011340> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_011340 ;
+  up:attribution <P00156#attribution-9DE5AB3E0BBDFAA23A142F5DE8084FEB> ,
+    <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> ,
+    <P00156#attribution-0B306B95CE13E198B99582D73B71C1CA> ,
+    <P00156#attribution-60DDBA95C648C2D4372BF0CCBFEE48B7> .
+annotation:VAR_011341 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs193302993> ;
+  up:range range:22570981678986798tt229tt229 .
+<http://purl.uniprot.org/dbsnp/rs193302993> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt229tt229 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt229 ;
+  faldo:end position:22570981678986798tt229 .
+position:22570981678986798tt229 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 229 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_011341> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_011341 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> ,
+    <P00156#attribution-60DDBA95C648C2D4372BF0CCBFEE48B7> .
+annotation:VAR_013655 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "I" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs193302994> ;
+  up:range range:22570981678986798tt236tt236 .
+<http://purl.uniprot.org/dbsnp/rs193302994> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt236tt236 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt236 ;
+  faldo:end position:22570981678986798tt236 .
+position:22570981678986798tt236 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 236 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013655> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013655 ;
+  up:attribution <P00156#attribution-9DE5AB3E0BBDFAA23A142F5DE8084FEB> ,
+    <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> .
+annotation:VAR_013657 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In mitochondrial myopathy; sporadic." ;
+  up:substitution "" ;
+  up:range range:22570981678986798tt251tt258 .
+range:22570981678986798tt251tt258 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt251 ;
+  faldo:end position:22570981678986798tt258 .
+position:22570981678986798tt251 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 251 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt258 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 258 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013657> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013657 ;
+  up:attribution <P00156#attribution-7A1008C84196E98392DBFE672DA9CC0F> .
+annotation:VAR_013656 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In CMIH." ;
+  up:substitution "D" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs207460003> ;
+  skos:related disease:248 ;
+  up:range range:22570981678986798tt251tt251 .
+<http://purl.uniprot.org/dbsnp/rs207460003> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt251tt251 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt251 ;
+  faldo:end position:22570981678986798tt251 .
+<#_kb.P00156_up.annotation_a.VAR_013656> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013656 ;
+  up:attribution <P00156#attribution-8C6966492649B8E48EBF287192D843B4> .
+annotation:VAR_033059 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "Associated with susceptibility to obesity." ;
+  up:substitution "S" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs199951903> ;
+  up:range range:22570981678986798tt251tt251 .
+<http://purl.uniprot.org/dbsnp/rs199951903> up:database <http://purl.uniprot.org/database/dbSNP> .
+<#_kb.P00156_up.annotation_a.VAR_033059> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_033059 ;
+  up:attribution <P00156#attribution-7981E90F43D93CEB335A92B4474F8467> .
+annotation:VAR_013658 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In cardiomyopathy; fatal; post-partum." ;
+  up:substitution "H" ;
+  up:range range:22570981678986798tt255tt255 .
+range:22570981678986798tt255tt255 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt255 ;
+  faldo:end position:22570981678986798tt255 .
+position:22570981678986798tt255 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 255 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013658> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013658 ;
+  up:attribution <P00156#attribution-932B5DDF85A58A29C893AED06296C901> .
+annotation:VAR_015573 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "D" ;
+  up:range range:22570981678986798tt260tt260 .
+range:22570981678986798tt260tt260 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt260 ;
+  faldo:end position:22570981678986798tt260 .
+position:22570981678986798tt260 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 260 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_015573> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_015573 ;
+  up:attribution <P00156#attribution-0B306B95CE13E198B99582D73B71C1CA> .
+annotation:VAR_008389 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In colorectal cancer." ;
+  up:substitution "L" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs207459996> ;
+  up:range range:22570981678986798tt276tt276 .
+<http://purl.uniprot.org/dbsnp/rs207459996> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt276tt276 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt276 ;
+  faldo:end position:22570981678986798tt276 .
+position:22570981678986798tt276 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 276 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_008389> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_008389 ;
+  up:attribution <P00156#attribution-863F04C808B6C003501BC15773356287> .
+annotation:VAR_013659 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In multisystem disorder." ;
+  up:substitution "C" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs207460002> ;
+  up:range range:22570981678986798tt278tt278 .
+<http://purl.uniprot.org/dbsnp/rs207460002> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt278tt278 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt278 ;
+  faldo:end position:22570981678986798tt278 .
+position:22570981678986798tt278 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 278 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013659> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013659 ;
+  up:attribution <P00156#attribution-D75C1F64C9000453B1F63C5ADFCED135> .
+annotation:VAR_013660 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In exercise intolerance." ;
+  up:substitution "D" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs207459997> ;
+  up:range range:22570981678986798tt290tt290 .
+<http://purl.uniprot.org/dbsnp/rs207459997> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt290tt290 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt290 ;
+  faldo:end position:22570981678986798tt290 .
+position:22570981678986798tt290 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 290 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013660> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013660 ;
+  up:attribution <P00156#attribution-D96CB443F4CC122A3D875B76F58C5862> .
+annotation:VAR_013661 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs369851331> ;
+  up:range range:22570981678986798tt306tt306 .
+<http://purl.uniprot.org/dbsnp/rs369851331> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt306tt306 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt306 ;
+  faldo:end position:22570981678986798tt306 .
+position:22570981678986798tt306 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 306 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013661> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013661 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> .
+annotation:VAR_013662 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs200975632> ;
+  up:range range:22570981678986798tt316tt316 .
+<http://purl.uniprot.org/dbsnp/rs200975632> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt316tt316 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt316 ;
+  faldo:end position:22570981678986798tt316 .
+position:22570981678986798tt316 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 316 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013662> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013662 ;
+  up:attribution <P00156#attribution-9DE5AB3E0BBDFAA23A142F5DE8084FEB> .
+annotation:VAR_013663 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  up:range range:22570981678986798tt329tt329 .
+range:22570981678986798tt329tt329 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt329 ;
+  faldo:end position:22570981678986798tt329 .
+position:22570981678986798tt329 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 329 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013663> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013663 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> .
+annotation:VAR_013664 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "T" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs386829259> ;
+  up:range range:22570981678986798tt330tt330 .
+<http://purl.uniprot.org/dbsnp/rs386829259> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt330tt330 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt330 ;
+  faldo:end position:22570981678986798tt330 .
+position:22570981678986798tt330 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 330 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013664> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013664 ;
+  up:attribution <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> .
+annotation:VAR_013665 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "V" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs386829260> ;
+  up:range range:22570981678986798tt334tt334 .
+<http://purl.uniprot.org/dbsnp/rs386829260> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt334tt334 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt334 ;
+  faldo:end position:22570981678986798tt334 .
+position:22570981678986798tt334 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 334 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013665> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013665 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> .
+annotation:VAR_002198 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In mitochondrial myopathy." ;
+  up:substitution "E" ;
+  up:range range:22570981678986798tt339tt339 .
+range:22570981678986798tt339tt339 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt339 ;
+  faldo:end position:22570981678986798tt339 .
+position:22570981678986798tt339 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 339 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_002198> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_002198 ;
+  up:attribution <P00156#attribution-8F43AACA957F4951C8B95F5A15836AAF> .
+annotation:VAR_013666 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "M" ;
+  up:range range:22570981678986798tt353tt353 .
+range:22570981678986798tt353tt353 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt353 ;
+  faldo:end position:22570981678986798tt353 .
+position:22570981678986798tt353 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 353 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013666> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013666 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> .
+annotation:VAR_002199 rdf:type up:Natural_Variant_Annotation ;
+  rdfs:comment "In LHON; secondary mutation; does not seem to directly cause the disease." ;
+  up:substitution "M" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs200336777> ;
+  skos:related disease:640 ;
+  up:range range:22570981678986798tt356tt356 .
+<http://purl.uniprot.org/dbsnp/rs200336777> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt356tt356 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt356 ;
+  faldo:end position:22570981678986798tt356 .
+position:22570981678986798tt356 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 356 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_002199> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_002199 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-BC97F59B8DACF390DE6C848D2D7F6970> .
+annotation:VAR_013667 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "A" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs28357376> ;
+  up:range range:22570981678986798tt360tt360 .
+<http://purl.uniprot.org/dbsnp/rs28357376> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt360tt360 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt360 ;
+  faldo:end position:22570981678986798tt360 .
+position:22570981678986798tt360 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 360 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013667> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013667 ;
+  up:attribution <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> .
+annotation:VAR_013668 rdf:type up:Natural_Variant_Annotation ;
+  up:substitution "I" ;
+  rdfs:seeAlso <http://purl.uniprot.org/dbsnp/rs202225494> ;
+  up:range range:22570981678986798tt368tt368 .
+<http://purl.uniprot.org/dbsnp/rs202225494> up:database <http://purl.uniprot.org/database/dbSNP> .
+range:22570981678986798tt368tt368 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt368 ;
+  faldo:end position:22570981678986798tt368 .
+position:22570981678986798tt368 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 368 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_a.VAR_013668> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object annotation:VAR_013668 ;
+  up:attribution <P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> ,
+    <P00156#attribution-60E10145422FCDD243E4AAA962861CC1> .
+<P00156#SIP5D6E5BD9F16EE97A> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt4tt7 .
+range:22570981678986798tt4tt7 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt4 ;
+  faldo:end position:22570981678986798tt7 .
+position:22570981678986798tt4 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 4 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_CE89C64C68C2A62B> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP5D6E5BD9F16EE97A> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP0AB60922FA29DE5D> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt9tt17 .
+range:22570981678986798tt9tt17 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt9 ;
+  faldo:end position:22570981678986798tt17 .
+position:22570981678986798tt9 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 9 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt17 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 17 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_572542B33F9EA54A> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP0AB60922FA29DE5D> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPC5C751FC91195A46> rdf:type up:Beta_Strand_Annotation ;
+  up:range range:22570981678986798tt22tt24 .
+range:22570981678986798tt22tt24 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt22 ;
+  faldo:end position:22570981678986798tt24 .
+position:22570981678986798tt22 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 22 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt24 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 24 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_B1675F63030D8192> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPC5C751FC91195A46> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP6CDD646F684EC2E3> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt29tt31 .
+range:22570981678986798tt29tt31 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt29 ;
+  faldo:end position:22570981678986798tt31 .
+position:22570981678986798tt29 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 29 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt31 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 31 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_534893A606691D8A> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP6CDD646F684EC2E3> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP3E4867B895F928A2> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt32tt52 .
+range:22570981678986798tt32tt52 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt32 ;
+  faldo:end position:22570981678986798tt52 .
+position:22570981678986798tt32 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 32 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt52 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 52 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_8FFC2074D00CA97F> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP3E4867B895F928A2> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP981E5A3954232BAE> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt61tt70 .
+range:22570981678986798tt61tt70 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt61 ;
+  faldo:end position:22570981678986798tt70 .
+position:22570981678986798tt61 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 61 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt70 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 70 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_8A21F2651F8E6774> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP981E5A3954232BAE> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP5A5EF1EBA9D6C6E4> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt76tt103 .
+range:22570981678986798tt76tt103 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt76 ;
+  faldo:end position:22570981678986798tt103 .
+position:22570981678986798tt76 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 76 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt103 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 103 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_97C622415768A10A> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP5A5EF1EBA9D6C6E4> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP185EB8A6FE01C121> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt106tt108 .
+range:22570981678986798tt106tt108 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt106 ;
+  faldo:end position:22570981678986798tt108 .
+position:22570981678986798tt106 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 106 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt108 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 108 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_C4ED0D561452D21D> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP185EB8A6FE01C121> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP6BB2952DF101A2C4> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt110tt131 .
+range:22570981678986798tt110tt131 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt110 ;
+  faldo:end position:22570981678986798tt131 .
+position:22570981678986798tt110 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 110 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt131 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 131 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_E3B14D083D4BA606> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP6BB2952DF101A2C4> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPBF076F9E8543DE9A> rdf:type up:Turn_Annotation ;
+  up:range range:22570981678986798tt132tt134 .
+range:22570981678986798tt132tt134 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt132 ;
+  faldo:end position:22570981678986798tt134 .
+position:22570981678986798tt132 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 132 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt134 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 134 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_7F9367A895AD1791> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPBF076F9E8543DE9A> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPC2E8234F886CDC76> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt137tt148 .
+range:22570981678986798tt137tt148 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt137 ;
+  faldo:end position:22570981678986798tt148 .
+position:22570981678986798tt137 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 137 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt148 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 148 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_F00C9A4A35EF9808> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPC2E8234F886CDC76> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP656636412325D58F> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt149tt152 .
+range:22570981678986798tt149tt152 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt149 ;
+  faldo:end position:22570981678986798tt152 .
+position:22570981678986798tt149 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 149 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt152 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 152 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_27CB2E0986E45E74> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP656636412325D58F> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP9C73196511C1F8B9> rdf:type up:Turn_Annotation ;
+  up:range range:22570981678986798tt154tt156 .
+range:22570981678986798tt154tt156 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt154 ;
+  faldo:end position:22570981678986798tt156 .
+position:22570981678986798tt154 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 154 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt156 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 156 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_B4E3AF73739EFE3C> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP9C73196511C1F8B9> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPB2D967FBB53B1CC2> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt157tt165 .
+range:22570981678986798tt157tt165 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt157 ;
+  faldo:end position:22570981678986798tt165 .
+position:22570981678986798tt157 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 157 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt165 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 165 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_E23270B0E6323FA3> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPB2D967FBB53B1CC2> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPD0DAFE3D7064F0E7> rdf:type up:Beta_Strand_Annotation ;
+  up:range range:22570981678986798tt167tt170 .
+range:22570981678986798tt167tt170 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt167 ;
+  faldo:end position:22570981678986798tt170 .
+position:22570981678986798tt167 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 167 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt170 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 170 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_E865AD3E0F77EB3D> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPD0DAFE3D7064F0E7> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP1328AA4C86155028> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt172tt200 .
+range:22570981678986798tt172tt200 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt172 ;
+  faldo:end position:22570981678986798tt200 .
+position:22570981678986798tt172 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 172 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt200 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 200 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_FED4568031168F68> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP1328AA4C86155028> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPD34452595679DC45> rdf:type up:Turn_Annotation ;
+  up:range range:22570981678986798tt201tt203 .
+range:22570981678986798tt201tt203 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt201 ;
+  faldo:end position:22570981678986798tt203 .
+position:22570981678986798tt203 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 203 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_3615614DB2FBEB61> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPD34452595679DC45> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP47094D867EEBD616> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt214tt216 .
+range:22570981678986798tt214tt216 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt214 ;
+  faldo:end position:22570981678986798tt216 .
+position:22570981678986798tt214 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 214 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt216 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 216 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_D460FEE9ADB4C9A9> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP47094D867EEBD616> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP5415CF3001A2BE39> rdf:type up:Beta_Strand_Annotation ;
+  up:range range:22570981678986798tt217tt219 .
+range:22570981678986798tt217tt219 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt217 ;
+  faldo:end position:22570981678986798tt219 .
+position:22570981678986798tt217 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 217 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt219 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 219 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_7841BB1695E348C4> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP5415CF3001A2BE39> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP45719D466078EBE3> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt220tt244 .
+range:22570981678986798tt220tt244 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt220 ;
+  faldo:end position:22570981678986798tt244 .
+position:22570981678986798tt220 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 220 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt244 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 244 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_8AC59E5D422B6558> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP45719D466078EBE3> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPB0C5B07FAFA8828D> rdf:type up:Beta_Strand_Annotation ;
+  up:range range:22570981678986798tt249tt251 .
+range:22570981678986798tt249tt251 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt249 ;
+  faldo:end position:22570981678986798tt251 .
+position:22570981678986798tt249 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 249 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_22C1FE956F5247DC> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPB0C5B07FAFA8828D> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP982A341F9EC858D2> rdf:type up:Beta_Strand_Annotation ;
+  up:range range:22570981678986798tt255tt258 .
+range:22570981678986798tt255tt258 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt255 ;
+  faldo:end position:22570981678986798tt258 .
+<#_kb.P00156_up.annotation_F61AF26E6B828B55> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP982A341F9EC858D2> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP5C2FB20BF45EFB01> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt272tt283 .
+range:22570981678986798tt272tt283 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt272 ;
+  faldo:end position:22570981678986798tt283 .
+position:22570981678986798tt272 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 272 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt283 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 283 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_E66BB6D9DAF457BE> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP5C2FB20BF45EFB01> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPB4C422E42E4CB5A8> rdf:type up:Beta_Strand_Annotation ;
+  up:range range:22570981678986798tt284tt286 .
+range:22570981678986798tt284tt286 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt284 ;
+  faldo:end position:22570981678986798tt286 .
+position:22570981678986798tt284 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 284 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt286 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 286 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_9818951138FFAD50> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPB4C422E42E4CB5A8> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPC5363C5E760455CC> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt289tt303 .
+range:22570981678986798tt289tt303 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt289 ;
+  faldo:end position:22570981678986798tt303 .
+position:22570981678986798tt289 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 289 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt303 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 303 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_1DF5E179695B94F9> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPC5363C5E760455CC> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP8D424164EAF03116> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt304tt307 .
+range:22570981678986798tt304tt307 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt304 ;
+  faldo:end position:22570981678986798tt307 .
+position:22570981678986798tt304 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 304 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt307 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 307 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_24A0E14E7B3D84BB> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP8D424164EAF03116> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPBE5EC86D81E296BD> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt315tt317 .
+range:22570981678986798tt315tt317 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt315 ;
+  faldo:end position:22570981678986798tt317 .
+position:22570981678986798tt315 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 315 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt317 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 317 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_3229BB61ED203EA6> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPBE5EC86D81E296BD> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPB6261BE4999F572E> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt319tt339 .
+range:22570981678986798tt319tt339 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt319 ;
+  faldo:end position:22570981678986798tt339 .
+position:22570981678986798tt319 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 319 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_4F5443E3E896D3F8> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPB6261BE4999F572E> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIPF5CC3A877231BBAD> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt345tt363 .
+range:22570981678986798tt345tt363 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt345 ;
+  faldo:end position:22570981678986798tt363 .
+position:22570981678986798tt345 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 345 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt363 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 363 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_7087ACBB38592132> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIPF5CC3A877231BBAD> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<P00156#SIP5E291C906269CC38> rdf:type up:Helix_Annotation ;
+  up:range range:22570981678986798tt365tt376 .
+range:22570981678986798tt365tt376 rdf:type faldo:Region ;
+  faldo:begin position:22570981678986798tt365 ;
+  faldo:end position:22570981678986798tt376 .
+position:22570981678986798tt365 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 365 ;
+  faldo:reference isoform:P00156-1 .
+position:22570981678986798tt376 rdf:type faldo:Position ,
+    faldo:ExactPosition ;
+  faldo:position 376 ;
+  faldo:reference isoform:P00156-1 .
+<#_kb.P00156_up.annotation_3D4FD6B274302615> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:annotation ;
+  rdf:object <P00156#SIP5E291C906269CC38> ;
+  up:attribution <P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0031305> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0031305 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0031224> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0031224 ;
+  up:attribution <P00156#attribution-4D7F72A356C1855D0A9FA246AE0C711F> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0005743> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0005743 ;
+  up:attribution <P00156#attribution-0EB5BB17E7E3B5C9784511A9243A1CC1> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0005750> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0005750 ;
+  up:attribution <P00156#attribution-4D7F72A356C1855D0A9FA246AE0C711F> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0005739> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0005739 ;
+  up:attribution <P00156#attribution-E70B47A3F5F0E20273BCF1AD363596D3> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0046872> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0046872 ;
+  up:attribution <P00156#attribution-E3AA1198D64AFFBCC64F0CE694EA8E54> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0044877> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0044877 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0008121> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0008121 ;
+  up:attribution <P00156#attribution-12E3273586D868124CB58EC507F97941> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0031100> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0031100 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0015990> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0015990 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0042538> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0042538 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0006122> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0006122 ;
+  up:attribution <P00156#attribution-4D7F72A356C1855D0A9FA246AE0C711F> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0046686> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0046686 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0051592> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0051592 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0033590> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0033590 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0046688> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0046688 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0045471> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0045471 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0033762> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0033762 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0009408> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0009408 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0055093> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0055093 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0001666> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0001666 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+<#_kb.P00156_up.classifiedWith_obo.GO_0046689> rdf:type rdf:Statement ;
+  rdf:subject <P00156> ;
+  rdf:predicate up:classifiedWith ;
+  rdf:object go:0046689 ;
+  up:attribution <P00156#attribution-B1AD608CDB988A04F52DFA346E696863> .
+isoform:P00156-1 rdf:type up:Simple_Sequence ;
+  up:modified "2012-10-03"^^xsd:date ;
+  up:version 2 ;
+  up:mass 42718 ;
+  up:md5Checksum "b7640d243acdfcc2925ae471a0c289c5" ;
+  rdf:value "MTPMRKTNPLMKLINHSFIDLPTPSNISAWWNFGSLLGACLILQITTGLFLAMHYSPDASTAFSSIAHITRDVNYGWIIRYLHANGASMFFICLFLHIGRGLYYGSFLYSETWNIGIILLLATMATAFMGYVLPWGQMSFWGATVITNLLSAIPYIGTDLVQWIWGGYSVDSPTLTRFFTFHFILPFIIAALATLHLLFLHETGSNNPLGITSHSDKITFHPYYTIKDALGLLLFLLSLMTLTLFSPDLLGDPDNYTLANPLNTPPHIKPEWYFLFAYTILRSVPNKLGGVLALLLSILILAMIPILHMSKQQSMMFRPLSQSLYWLLAADLLILTWIGGQPVSYPFTIIGQVASVLYFTTILILMPTISLIENKMLKWA" .
+<P00156#attribution-B1AD608CDB988A04F52DFA346E696863> dcterms:creator <http://purl.uniprot.org/goa-projects/Ensembl> ;
+  up:evidence ECO:0000501 .
+<P00156#attribution-4D7F72A356C1855D0A9FA246AE0C711F> dcterms:creator <http://purl.uniprot.org/goa-projects/GO_Central> ;
+  up:manual true ;
+  up:evidence ECO:0000318 ;
+  up:source citation:21873635 .
+<P00156#attribution-0EB5BB17E7E3B5C9784511A9243A1CC1> dcterms:creator <http://purl.uniprot.org/goa-projects/Reactome> ;
+  up:manual true ;
+  up:evidence ECO:0000304 .
+<P00156#attribution-E70B47A3F5F0E20273BCF1AD363596D3> dcterms:creator <http://purl.uniprot.org/goa-projects/UniProtKB> ;
+  up:manual true ;
+  up:evidence ECO:0007005 ;
+  up:source citation:20833797 .
+<P00156#attribution-E3AA1198D64AFFBCC64F0CE694EA8E54> dcterms:creator <http://purl.uniprot.org/goa-projects/UniProtKB-KW> ;
+  up:evidence ECO:0000501 .
+<P00156#attribution-12E3273586D868124CB58EC507F97941> dcterms:creator <http://purl.uniprot.org/goa-projects/UniProtKB> ;
+  up:manual true ;
+  up:evidence ECO:0000303 ;
+  up:source citation:6100559 .
+<P00156#attribution-2E44A7A5B5F1DA72C1DE7965787D2DA9> up:manual true ;
+  up:evidence ECO:0000244 ;
+  up:source <http://rdf.wwpdb.org/pdb/5XTE> .
+<P00156#attribution-D5288DCAE80F4A5A729D6F5B4B11E3F6> up:manual true ;
+  up:evidence ECO:0000244 ;
+  up:source citation:21269460 .
+<P00156#attribution-609619A7DF3E53CE5E48EDEF8B8F9DD1> up:manual true ;
+  up:evidence ECO:0000250 .
+<P00156#attribution-F459CF455882476D3BC9EDE0D1117EB9> up:manual true ;
+  up:evidence ECO:0000250 ;
+  up:source <P00157> .
+<P00156#attribution-DF942B57779369B769DC4BDE190DBD28> up:manual true ;
+  up:evidence ECO:0000255 ;
+  up:source <http://purl.uniprot.org/prosite-prorule/PRU00967> .
+<P00156#attribution-70C8E873A4568316224865AF77F4C70F> up:manual true ;
+  up:evidence ECO:0000255 ;
+  up:source <http://purl.uniprot.org/prosite-prorule/PRU00968> .
+<P00156#attribution-9DE5AB3E0BBDFAA23A142F5DE8084FEB> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:10453733 .
+<P00156#attribution-7A1008C84196E98392DBFE672DA9CC0F> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:10502593 .
+<P00156#attribution-8C6966492649B8E48EBF287192D843B4> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:10960495 .
+<P00156#attribution-310E40CF851420AA2B2DA58A20F9B555> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:11047755 .
+<P00156#attribution-794A61F4707535996EF5B1E1F7FFA8FA> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:11130070 .
+<P00156#attribution-787DD9FA2F05FBE7DA16BE6B16E01742> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:11464242 .
+<P00156#attribution-60E10145422FCDD243E4AAA962861CC1> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:11553319 .
+<P00156#attribution-D75C1F64C9000453B1F63C5ADFCED135> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:11601507 .
+<P00156#attribution-159F2CC56842C0A9CDD3C0A6CC2D9D5A> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:11891837 .
+<P00156#attribution-0B306B95CE13E198B99582D73B71C1CA> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:12022039 .
+<P00156#attribution-7981E90F43D93CEB335A92B4474F8467> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:12905068 .
+<P00156#attribution-BC97F59B8DACF390DE6C848D2D7F6970> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:1732158 .
+<P00156#attribution-CCC14F45523F443DE69BF6E02AB5C6D6> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:1757091 .
+<P00156#attribution-60DDBA95C648C2D4372BF0CCBFEE48B7> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:7530363 .
+<P00156#attribution-932B5DDF85A58A29C893AED06296C901> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:7623448 .
+<P00156#attribution-D96CB443F4CC122A3D875B76F58C5862> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:8910895 .
+<P00156#attribution-863F04C808B6C003501BC15773356287> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:9806551 .
+<P00156#attribution-8F43AACA957F4951C8B95F5A15836AAF> up:manual true ;
+  up:evidence ECO:0000269 ;
+  up:source citation:9818877 .
+
