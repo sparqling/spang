@@ -55,7 +55,7 @@ $ npm run browserify
 It can be used in a web site or in the command line.
 
 An example web site:<br>
-https://hchiba1.github.io/spang/examples/
+https://spang.dbcls.jp/example.html
 
 ### Usage on a web site
 
