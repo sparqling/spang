@@ -1,0 +1,36 @@
+# @endpoint test
+# @param taxid=40674
+
+_:taxonInfo(?taxon, ?rank, ?name, ?count) {
+  ?taxon rdfs:label ?name .
+  _:countSpeciesNum(?taxon, ?count)
+}
+
+_:countSpeciesNum(?taxon, ?count) {
+  {
+    SELECT (COUNT(DISTINCT ?species) AS ?count) ?taxon
+    WHERE {
+      ?species taxon:rank taxon:Species ;
+          rdfs:subClassOf+ ?taxon .
+    }
+  }
+}
+
+_:ancestor(?taxid, ?ancestor, ?rank) {
+  ?taxid rdfs:subClassOf+ ?ancestor .
+  ?ancestor taxon:rank ?rank .
+}
+
+SELECT ?order ?order_name ?count_order ?family ?family_name ?count_family ?species ?species_name
+WHERE {
+  ?species taxon:rank taxon:Species ;
+      rdfs:subClassOf+ taxid:{{taxid}} ;
+      rdfs:label ?species_name ;
+      rdfs:subClassOf+ ?family ;
+      rdfs:subClassOf+ ?order .
+  ?family taxon:rank taxon:Family .
+  ?order taxon:rank taxon:Order .
+  _:taxonInfo(?family, ?family_name, ?count_family)
+  _:taxonInfo(?order, ?order_name, ?count_order)
+}
+ORDER BY DESC(?count_order) ?order_name DESC(?count_family) ?family_name ?species_name
