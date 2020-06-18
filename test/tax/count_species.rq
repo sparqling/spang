@@ -1,0 +1,8 @@
+# @endpoint test
+# @param name=Primates
+
+SELECT (COUNT(DISTINCT ?species) AS ?count) ?taxon
+WHERE {
+  ?species rdfs:subClassOf* ?taxon .
+  ?taxon rdfs:label "{{name}}" .
+}
