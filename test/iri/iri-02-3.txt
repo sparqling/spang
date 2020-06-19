@@ -7,8 +7,8 @@
 <rdf:type rdf:resource="http://purl.uniprot.org/core/Protein"/>
 <reviewed rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</reviewed>
 <created rdf:datatype="http://www.w3.org/2001/XMLSchema#date">1986-07-21</created>
-<modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2020-04-22</modified>
-<version rdf:datatype="http://www.w3.org/2001/XMLSchema#int">211</version>
+<modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2020-06-17</modified>
+<version rdf:datatype="http://www.w3.org/2001/XMLSchema#int">212</version>
 <mnemonic>CYB_HUMAN</mnemonic>
 <replaces rdf:resource="http://purl.uniprot.org/uniprot/Q34786"/>
 <replaces rdf:resource="http://purl.uniprot.org/uniprot/Q8HBR6"/>
@@ -213,6 +213,7 @@
 <rdfs:seeAlso rdf:resource="http://purl.uniprot.org/kegg/hsa:4519"/>
 <rdfs:seeAlso rdf:resource="http://purl.uniprot.org/ctd/4519"/>
 <rdfs:seeAlso rdf:resource="http://identifiers.org/ncbigene/4519"/>
+<rdfs:seeAlso rdf:resource="http://purl.uniprot.org/eupathdb/HostDB:ENSG00000198727.2"/>
 <rdfs:seeAlso rdf:resource="http://purl.uniprot.org/genecards/MT-CYB"/>
 <rdfs:seeAlso rdf:resource="http://purl.uniprot.org/genereviews/MT-CYB"/>
 <rdfs:seeAlso rdf:resource="http://purl.uniprot.org/hgnc/7427"/>
@@ -1879,7 +1880,7 @@
 </rdf:Description>
 <rdf:Description rdf:about="http://purl.uniprot.org/biogrid/110619">
 <rdf:type rdf:resource="http://purl.uniprot.org/core/Resource"/>
-<database rdf:resource="http://purl.uniprot.org/database/BioGrid"/>
+<database rdf:resource="http://purl.uniprot.org/database/BioGRID"/>
 <rdfs:comment>12</rdfs:comment>
 </rdf:Description>
 <rdf:Description rdf:about="http://purl.uniprot.org/complexportal/CPX-560">
@@ -2004,7 +2005,7 @@
 <rdf:Description rdf:about="http://purl.uniprot.org/antibodypedia/35365">
 <rdf:type rdf:resource="http://purl.uniprot.org/core/Resource"/>
 <database rdf:resource="http://purl.uniprot.org/database/Antibodypedia"/>
-<rdfs:comment>165 antibodies</rdfs:comment>
+<rdfs:comment>166 antibodies</rdfs:comment>
 </rdf:Description>
 <rdf:Description rdf:about="http://rdf.ebi.ac.uk/resource/ensembl.transcript/ENST00000361789">
 <rdf:type rdf:resource="http://purl.uniprot.org/core/Transcript_Resource"/>
@@ -2027,6 +2028,10 @@
 <rdf:Description rdf:about="http://identifiers.org/ncbigene/4519">
 <rdf:type rdf:resource="http://purl.uniprot.org/core/Resource"/>
 <database rdf:resource="http://purl.uniprot.org/database/DisGeNET"/>
+</rdf:Description>
+<rdf:Description rdf:about="http://purl.uniprot.org/eupathdb/HostDB:ENSG00000198727.2">
+<rdf:type rdf:resource="http://purl.uniprot.org/core/Resource"/>
+<database rdf:resource="http://purl.uniprot.org/database/EuPathDB"/>
 </rdf:Description>
 <rdf:Description rdf:about="http://purl.uniprot.org/genecards/MT-CYB">
 <rdf:type rdf:resource="http://purl.uniprot.org/core/Resource"/>
