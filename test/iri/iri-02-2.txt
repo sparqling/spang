@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <uniprot xmlns="http://uniprot.org/uniprot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://uniprot.org/uniprot http://www.uniprot.org/support/docs/uniprot.xsd">
-<entry dataset="Swiss-Prot" created="1986-07-21" modified="2020-04-22" version="211">
+<entry dataset="Swiss-Prot" created="1986-07-21" modified="2020-06-17" version="212">
 <accession>P00156</accession>
 <accession>Q34786</accession>
 <accession>Q8HBR6</accession>
@@ -994,7 +994,7 @@
 <dbReference type="PDBsum" id="5XTH"/>
 <dbReference type="PDBsum" id="5XTI"/>
 <dbReference type="SMR" id="P00156"/>
-<dbReference type="BioGrid" id="110619">
+<dbReference type="BioGRID" id="110619">
 <property type="interactions" value="12"/>
 </dbReference>
 <dbReference type="ComplexPortal" id="CPX-560">
@@ -1047,7 +1047,7 @@
 <dbReference type="ProteomicsDB" id="51225"/>
 <dbReference type="TopDownProteomics" id="P00156"/>
 <dbReference type="Antibodypedia" id="35365">
-<property type="antibodies" value="165 antibodies"/>
+<property type="antibodies" value="166 antibodies"/>
 </dbReference>
 <dbReference type="Ensembl" id="ENST00000361789">
 <property type="protein sequence ID" value="ENSP00000354554"/>
@@ -1057,6 +1057,7 @@
 <dbReference type="KEGG" id="hsa:4519"/>
 <dbReference type="CTD" id="4519"/>
 <dbReference type="DisGeNET" id="4519"/>
+<dbReference type="EuPathDB" id="HostDB:ENSG00000198727.2"/>
 <dbReference type="GeneCards" id="MT-CYB"/>
 <dbReference type="GeneReviews" id="MT-CYB"/>
 <dbReference type="HGNC" id="HGNC:7427">

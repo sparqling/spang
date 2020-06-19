@@ -25,8 +25,8 @@
 <P00156> rdf:type up:Protein ;
   up:reviewed true ;
   up:created "1986-07-21"^^xsd:date ;
-  up:modified "2020-04-22"^^xsd:date ;
-  up:version 211 ;
+  up:modified "2020-06-17"^^xsd:date ;
+  up:version 212 ;
   up:mnemonic "CYB_HUMAN" ;
   up:replaces <Q34786> ,
     <Q8HBR6> ,
@@ -231,6 +231,7 @@
     <http://purl.uniprot.org/kegg/hsa:4519> ,
     <http://purl.uniprot.org/ctd/4519> ,
     <http://identifiers.org/ncbigene/4519> ,
+    <http://purl.uniprot.org/eupathdb/HostDB:ENSG00000198727.2> ,
     <http://purl.uniprot.org/genecards/MT-CYB> ,
     <http://purl.uniprot.org/genereviews/MT-CYB> ,
     <http://purl.uniprot.org/hgnc/7427> ,
@@ -1441,7 +1442,7 @@ citation:21269460 rdf:type up:Journal_Citation ;
 <http://purl.uniprot.org/smr/P00156> rdf:type up:Resource ;
   up:database <http://purl.uniprot.org/database/SMR> .
 <http://purl.uniprot.org/biogrid/110619> rdf:type up:Resource ;
-  up:database <http://purl.uniprot.org/database/BioGrid> ;
+  up:database <http://purl.uniprot.org/database/BioGRID> ;
   rdfs:comment "12" .
 <http://purl.uniprot.org/complexportal/CPX-560> rdf:type up:Resource ;
   up:database <http://purl.uniprot.org/database/ComplexPortal> ;
@@ -1510,7 +1511,7 @@ citation:21269460 rdf:type up:Journal_Citation ;
   up:database <http://purl.uniprot.org/database/TopDownProteomics> .
 <http://purl.uniprot.org/antibodypedia/35365> rdf:type up:Resource ;
   up:database <http://purl.uniprot.org/database/Antibodypedia> ;
-  rdfs:comment "165 antibodies" .
+  rdfs:comment "166 antibodies" .
 <http://rdf.ebi.ac.uk/resource/ensembl.transcript/ENST00000361789> rdf:type up:Transcript_Resource ;
   up:database <http://purl.uniprot.org/database/Ensembl> ;
   up:translatedTo <http://rdf.ebi.ac.uk/resource/ensembl.protein/ENSP00000354554> ;
@@ -1523,6 +1524,8 @@ citation:21269460 rdf:type up:Journal_Citation ;
   up:database <http://purl.uniprot.org/database/CTD> .
 <http://identifiers.org/ncbigene/4519> rdf:type up:Resource ;
   up:database <http://purl.uniprot.org/database/DisGeNET> .
+<http://purl.uniprot.org/eupathdb/HostDB:ENSG00000198727.2> rdf:type up:Resource ;
+  up:database <http://purl.uniprot.org/database/EuPathDB> .
 <http://purl.uniprot.org/genecards/MT-CYB> rdf:type up:Resource ;
   up:database <http://purl.uniprot.org/database/GeneCards> .
 <http://purl.uniprot.org/genereviews/MT-CYB> rdf:type up:Resource ;
