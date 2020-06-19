@@ -1,5 +1,4 @@
 #!/usr/bin/env spang2
-
 # @title count number of species under a taxon
 # @endpoint test
 # @param name=Primates
@@ -7,5 +6,11 @@
 SELECT (COUNT(DISTINCT ?species) AS ?count) ?taxon
 WHERE {
   ?species rdfs:subClassOf* ?taxon .
-  ?taxon rdfs:label "{{name}}" .
+  {
+    ?taxon rdfs:label "{{name}}" .
+  }
+  UNION
+  {
+    ?taxon taxon:commonName "{{name}}" .
+  }
 }

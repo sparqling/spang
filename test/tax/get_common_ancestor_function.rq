@@ -1,0 +1,20 @@
+#!/usr/bin/env spang2
+
+# @title get common ancestor of two tax IDs
+# @endpoint test
+# @param taxid1=9606
+# @param taxid2=511145
+
+_:latestCommonAncestor(?id1, ?id2, ?ancestor) {
+  ?node1 rdfs:subClassOf ?ancestor .
+  ?node2 rdfs:subClassOf ?ancestor .
+  ?id1 rdfs:subClassOf* ?node1 .
+  ?id2 rdfs:subClassOf* ?node2 .
+  FILTER(?node1 != ?node2)
+}
+
+SELECT ?ancestor ?p ?o
+WHERE {
+  _:latestCommonAncestor(taxid:{{taxid1}}, taxid:{{taxid2}}, ?ancestor)
+  ?ancestor ?p ?o .
+}

@@ -1,6 +1,11 @@
+#!/usr/bin/env spang2
+
+# @title get sister tax id 
 # @endpoint test
+# @param tax=9606
+
 SELECT ?taxid
 WHERE {
-  taxid:9606 rdfs:subClassOf ?parent .
+  taxid:{{tax}} rdfs:subClassOf ?parent .
   ?taxid rdfs:subClassOf ?parent .
 }

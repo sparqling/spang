@@ -1,6 +1,10 @@
+#!/usr/bin/env spang2
+
+# @title get common ancestor of two tax IDs
 # @endpoint test
 # @param taxid1=9606
 # @param taxid2=511145
+
 SELECT ?ancestor ?p ?o
 WHERE {
   ?ancestor ?p ?o .

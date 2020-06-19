@@ -1,12 +1,10 @@
+#!/usr/bin/env spang2
+
+# @title get children of a taxon with numbers of species
 # @endpoint test
 # @param taxid=40674
 
-_:taxonInfo(?taxon, ?rank, ?name, ?count) {
-  ?taxon rdfs:label ?name .
-  _:countSpeciesNum(?taxon, ?count)
-}
-
-_:countSpeciesNum(?taxon, ?count) {
+_:count(?taxon, ?count) {
   {
     SELECT (COUNT(DISTINCT ?species) AS ?count) ?taxon
     WHERE {
@@ -16,21 +14,18 @@ _:countSpeciesNum(?taxon, ?count) {
   }
 }
 
-_:ancestor(?taxid, ?ancestor, ?rank) {
-  ?taxid rdfs:subClassOf+ ?ancestor .
-  ?ancestor taxon:rank ?rank .
-}
-
 SELECT ?order ?order_name ?count_order ?family ?family_name ?count_family ?species ?species_name
 WHERE {
   ?species taxon:rank taxon:Species ;
-      rdfs:subClassOf+ taxid:{{taxid}} ;
       rdfs:label ?species_name ;
+      rdfs:subClassOf+ taxid:{{taxid}} ;
       rdfs:subClassOf+ ?family ;
       rdfs:subClassOf+ ?order .
-  ?family taxon:rank taxon:Family .
-  ?order taxon:rank taxon:Order .
-  _:taxonInfo(?family, ?family_name, ?count_family)
-  _:taxonInfo(?order, ?order_name, ?count_order)
+  ?family taxon:rank taxon:Family ;
+      rdfs:label ?family_name .
+  ?order taxon:rank taxon:Order ;
+      rdfs:label ?order_name .
+  _:count(?family, ?count_family)
+  _:count(?order, ?count_order)
 }
 ORDER BY DESC(?count_order) ?order_name DESC(?count_family) ?family_name ?species_name
