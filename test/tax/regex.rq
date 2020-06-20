@@ -1,0 +1,11 @@
+#!/usr/bin/env spang2
+
+# @title get children of a taxon
+# @endpoint test
+# @param pattern=Homo
+
+SELECT *
+WHERE {
+  ?taxid rdfs:label ?label .
+  FILTER regex(?label, "{{pattern}}")
+}
