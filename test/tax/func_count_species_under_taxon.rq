@@ -1,10 +1,10 @@
 #!/usr/bin/env spang2
 
-# @title get children of a taxon with numbers of species
+# @title Count species under taxon
 # @endpoint test
 # @param taxid=40674
 
-_:count(?taxon, ?count) {
+_:countSpecies(?count, ?taxon) {
   {
     SELECT (COUNT(DISTINCT ?species) AS ?count) ?taxon
     WHERE {
@@ -14,7 +14,7 @@ _:count(?taxon, ?count) {
   }
 }
 
-SELECT ?order ?order_name ?count_order ?family ?family_name ?count_family ?species ?species_name
+SELECT ?order ?order_name ?order_count ?family ?family_name ?family_count ?species ?species_name
 WHERE {
   ?species taxon:rank taxon:Species ;
       rdfs:label ?species_name ;
@@ -25,7 +25,7 @@ WHERE {
       rdfs:label ?family_name .
   ?order taxon:rank taxon:Order ;
       rdfs:label ?order_name .
-  _:count(?family, ?count_family)
-  _:count(?order, ?count_order)
+  _:countSpecies(?family_count, ?family)
+  _:countSpecies(?order_count, ?order)
 }
-ORDER BY DESC(?count_order) ?order_name DESC(?count_family) ?family_name ?species_name
+ORDER BY DESC(?order_count) ?order_name DESC(?family_count) ?family_name ?species_name
