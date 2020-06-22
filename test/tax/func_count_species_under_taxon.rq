@@ -4,7 +4,7 @@
 # @endpoint test
 # @param taxid=40674
 
-_:countSpecies(?count, ?taxon) {
+_:countSpeciesFor(?taxon, ?count) {
   {
     SELECT (COUNT(DISTINCT ?species) AS ?count) ?taxon
     WHERE {
@@ -25,7 +25,7 @@ WHERE {
       rdfs:label ?family_name .
   ?order taxon:rank taxon:Order ;
       rdfs:label ?order_name .
-  _:countSpecies(?family_count, ?family)
-  _:countSpecies(?order_count, ?order)
+  _:countSpeciesFor(?family, ?family_count)
+  _:countSpeciesFor(?order, ?order_count)
 }
 ORDER BY DESC(?order_count) ?order_name DESC(?family_count) ?family_name ?species_name
