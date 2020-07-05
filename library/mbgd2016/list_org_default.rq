@@ -1,0 +1,12 @@
+# @title 
+# @param arg1=Crenarchaeota 
+
+SELECT ?org ?label
+WHERE {
+    mbgdr:default mbgd:organism ?org .
+    ?org a mbgd:Genome .
+    ?org rdfs:label ?label .
+    ?org mbgd:inTaxon ?taxid .
+    ?taxid rdfs:label "$arg1" .
+}
+

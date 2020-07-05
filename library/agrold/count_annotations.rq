@@ -1,0 +1,9 @@
+# @title 
+
+SELECT ?type (COUNT(?s) AS ?count)
+WHERE {
+    ?s agrold:has_annotation ?annotation ;
+       a ?type .
+}
+ORDER BY DESC(?count)
+

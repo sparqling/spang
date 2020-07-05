@@ -1,0 +1,12 @@
+# @title 
+# @param arg1=K9Z723 
+
+SELECT ?protein ?gene ?function
+WHERE {
+    uniprot:$arg1 rdfs:label ?protein ;
+               up:encodedBy/skos:prefLabel ?gene ;
+    	       up:annotation ?annot .
+   ?annot a up:Function_Annotation ;
+   	  rdfs:comment ?function .
+}
+

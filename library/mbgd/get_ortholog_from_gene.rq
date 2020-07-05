@@ -1,0 +1,18 @@
+# @title Get ortholog GO annotation from gene ID
+# @param arg1=eco:B0002 
+
+SELECT ?cluster ?gene_id ?organism ?go ?comment
+WHERE {
+    ?cluster a orth:OrthologGroup ;
+             orth:inDataset mbgdr:default ;
+             orth:member/orth:gene/dct:identifier "$arg1" ;
+             orth:member/orth:gene ?gene .
+    ?gene mbgd:uniprot ?uniprot ;
+          dct:identifier ?gene_id ;
+	  orth:organism/dct:description ?organism .
+    ?uniprot ?goa ?go_id .
+    ?goa rdfs:comment ?comment ;
+         rdfs:subPropertyOf+ goa:goaExperimental .
+    ?go_id skos:prefLabel ?go .
+}
+

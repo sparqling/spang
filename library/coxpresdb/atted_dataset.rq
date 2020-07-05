@@ -1,0 +1,21 @@
+# @title List of dataset
+
+SELECT ?graph ?dataset ?n_genes
+WHERE {
+    {
+        SELECT DISTINCT ?graph ?dataset
+        WHERE {
+            GRAPH ?graph {
+                ?dataset atted:gene_pair ?o .
+            }
+        }
+    }
+    {
+        SELECT ?dataset (COUNT(?o) AS ?n_genes)
+        WHERE {
+            ?dataset atted:gene_id ?o .
+        }
+    }
+}
+ORDER BY DESC(?n_genes)
+

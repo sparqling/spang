@@ -1,0 +1,14 @@
+# @title List gene disease associations
+# @endpoint http://rdf.disgenet.org/sparql/
+# @param n=10 
+
+SELECT ?disease_label ?gene_label ?protein
+WHERE {
+    ?gda sio:SIO_000628 ?gene , ?disease .
+    ?gene a ncit:C16612 ;
+          rdfs:label ?gene_label ;
+          sio:SIO_010078 ?protein .
+    ?disease a ncit:C7057 ;
+          rdfs:label ?disease_label .
+}
+LIMIT {{n}}

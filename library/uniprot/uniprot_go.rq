@@ -1,0 +1,11 @@
+# @title 
+# @param arg1=Q9Y2J0 
+
+SELECT DISTINCT ?go ?go_label
+WHERE {
+    uniprot:$arg1 up:classifiedWith ?go .
+    ?go up:database <http://purl.uniprot.org/database/go> ;
+        rdfs:label ?go_label .
+}
+ORDER BY ?go_label
+

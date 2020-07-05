@@ -1,0 +1,24 @@
+# @title Get UniProt IDs for a specific disease, e.g. C0751955 ("Brain Infarction")
+# @endpoint http://rdf.disgenet.org/sparql/
+# @prefix https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio
+# @param arg1=C0751955 
+
+PREFIX disgenet_source: <http://rdf.disgenet.org/v4.0.0/void/>
+PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
+
+SELECT DISTINCT ?gene ?score ?gene_label ?source ?gda ?pmid ?description
+WHERE {
+    ?gda sio:SIO_000628 umls:{{arg1}} ,
+                        ?gene ;
+          a ?type ;
+          sio:SIO_000253 ?source ;
+          sio:SIO_000216/sio:SIO_000300 ?score .
+    ?gene a ncit:C16612 ;
+          rdfs:label ?gene_label .
+    OPTIONAL {
+        ?gda sio:SIO_000772 ?pmid ;
+             dct:description ?description .
+    }
+}
+ORDER BY DESC(?score) ?source ?pmid
+

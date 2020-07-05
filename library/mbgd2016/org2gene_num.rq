@@ -1,0 +1,24 @@
+# @title 
+
+#stdin org:eco
+#stdin org:bsu
+SELECT ?code ?phylum ?organism ?seq_label ?genes ?length ?date ?pubmed
+WHERE {
+    VALUES (?genome) { $STDIN }
+    ?genome
+        rdfs:label ?organism ;
+        dct:identifier ?code ;
+        mbgd:inTaxon ?tax_phylum ;
+        dct:issued ?date .
+    ?tax_phylum taxont:rank taxont:Phylum ;
+        rdfs:label ?phylum .
+    OPTIONAL {
+	?genome dct:references ?pubmed .
+    }
+    ?genome mbgd:nucSeq ?seq .
+    ?seq mbgd:geneCount ?genes ;
+         rdfs:label ?seq_label ;
+         mbgd:nucLength ?length .
+}
+ORDER BY ?phylum ?organism ?seq_label
+

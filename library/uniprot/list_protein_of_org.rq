@@ -1,0 +1,9 @@
+# @title 
+# @param arg1=tax:511145 
+
+SELECT *
+WHERE {
+    ?protein a up:Protein ;
+             up:organism $arg1 .
+}
+

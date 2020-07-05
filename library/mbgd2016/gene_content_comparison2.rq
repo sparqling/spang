@@ -1,0 +1,63 @@
+# @title Gene content comparison (between 2 taxa)
+# @param arg1=543 
+# @param arg2=186817 
+# @param arg3=0.8 
+# @param arg4=0.2 
+
+PREFIX mgfo: <http://purl.jp/bio/11/mgfo#>
+SELECT ?group ?ratio ?ratio2 ?ref_gene
+WHERE {
+    ?ref_gene dct:identifier ?ref_gene_id ;
+          mbgd:nucSeq/rdfs:label ?chrom_label ;
+          mbgd:nucSeq/rdfs:seeAlso ?chrom_id .
+          # faldo:location/faldo:begin/faldo:position ?begin ;
+          # faldo:location/faldo:end/faldo:position ?end .
+    ?group mgfo:funcMBGD ?exact_func .
+    {
+        SELECT ?group ?ratio ?ratio2 ?ref_gene
+        WHERE {
+            ?group a oo:OrthologsCluster ;
+                   void:inDataset mbgdr:default ;
+                   oo:hasHomologous/mbgd:gene ?ref_gene .
+            ?ref_gene mbgd:organism/^mbgd:defaultOrganism taxid:$arg1 .
+            OPTIONAL
+            {
+                SELECT ?group (COUNT(DISTINCT ?organism) AS ?count)
+                WHERE {
+                    ?group oo:hasHomologous/mbgd:organism ?organism .
+                    ?organism mbgd:inTaxon taxid:$arg1 .
+                }
+            }
+            {
+                SELECT (COUNT(?organism_all) AS ?count_organism_all)
+                WHERE {
+                    ?organism_all mbgd:inTaxon taxid:$arg1 ;
+                                 ^mbgd:organism mbgdr:default .
+                }
+            }
+            OPTIONAL
+            {
+                SELECT ?group (COUNT(DISTINCT ?organism2) AS ?count2)
+                WHERE {
+                    ?group oo:hasHomologous/mbgd:organism ?organism2 .
+                    ?organism2 mbgd:inTaxon taxid:$arg2 .
+                }
+            }
+            {
+                SELECT (COUNT(?organism_all2) AS ?count_organism_all2)
+                WHERE {
+                    ?organism_all2 mbgd:inTaxon taxid:$arg2 ;
+                                  ^mbgd:organism mbgdr:default .
+                }
+            }
+            BIND (IF(BOUND(?count), ?count, 0) AS ?count_or_0)
+            BIND (IF(BOUND(?count2), ?count2, 0) AS ?count2_or_0)
+            BIND ((xsd:decimal(?count_or_0)/?count_organism_all) AS ?ratio)
+            BIND ((xsd:decimal(?count2_or_0)/?count_organism_all2) AS ?ratio2)
+        }
+        ORDER BY ?ratio2 DESC(?ratio)
+    }
+    FILTER (?ratio >= $arg3)
+    FILTER (?ratio2 <= $arg4)
+}
+

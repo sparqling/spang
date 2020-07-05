@@ -1,0 +1,22 @@
+# @title Default organisms list
+
+SELECT DISTINCT ?organisms_id ?superkingdom ?phylum ?name ?taxid ?date ?reference
+WHERE {
+    mbgdr:default orth:organism ?organisms_id .
+    ?organisms_id dct:description ?name ;
+                  orth:taxon ?taxid ;
+                  dct:issued ?date .
+    OPTIONAL {
+	?organisms_id dct:references ?reference
+    }
+    ?taxid rdfs:subClassOf+ ?taxon1 .
+    ?taxon1 up:rank up:Superkingdom ;
+            up:scientificName ?superkingdom .
+    OPTIONAL {
+        ?taxid rdfs:subClassOf+ ?taxon2 .
+        ?taxon2 up:rank up:Phylum ;
+                   up:scientificName ?phylum .
+    }
+}
+ORDER BY ?superkingdom ?phylum ?organism_name
+

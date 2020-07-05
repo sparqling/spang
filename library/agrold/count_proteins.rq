@@ -1,0 +1,11 @@
+# @title Count proteins for each organism
+
+SELECT ?taxid ?taxid_label (COUNT(?protein) AS ?protein_count)
+FROM <http://www.southgreen.fr/agrold/uniprot.plants>
+FROM <http://www.southgreen.fr/agrold/ncbitaxon>
+WHERE {
+    ?protein agrold:taxon ?taxid .
+    ?taxid rdfs:label ?taxid_label .
+}
+ORDER BY DESC(?protein_count)
+

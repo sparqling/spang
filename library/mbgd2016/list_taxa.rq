@@ -1,0 +1,20 @@
+# @title    FILTER(?count >= 2)
+# @param arg1=CompleteGenome 
+
+SELECT ?rank ?name ?taxid ?count
+WHERE {
+    {   
+        SELECT ?taxid (COUNT(?genome) AS ?count)
+        WHERE {
+            ?genome a mbgd:$arg1 ;
+                    # mbgd:taxon/rdfs:subClassOf* ?taxid . 
+                    mbgd:inTaxon ?taxid . 
+        }
+    }
+    ?taxid rdfs:label ?name . 
+    ?taxid taxont:rank ?rank .
+    VALUES ?rank { taxont:Superkingdom taxont:Kingdom taxont:Phylum taxont:Class taxont:Order taxont:Family taxont:Genus taxont:Species }
+}
+#ORDER BY ?name
+ORDER BY DESC(?count) ?name
+

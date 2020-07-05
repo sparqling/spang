@@ -1,0 +1,10 @@
+# @title 
+
+SELECT (COUNT(?uniprot) AS ?count) ?go ?go_label
+WHERE {
+    ?uniprot up:classifiedWith ?go ;
+        up:organism tax:9606 .
+    ?go up:database <http://purl.uniprot.org/database/go> ;
+        rdfs:label ?go_label .
+}
+

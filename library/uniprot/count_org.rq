@@ -1,0 +1,11 @@
+# @title Count proteins for each organism
+
+SELECT ?org (COUNT(?org) AS ?count) ?org_name
+WHERE {
+    ?protein a up:Protein ;
+             up:organism ?org .
+    ?org up:scientificName ?org_name
+}
+GROUP BY ?org ?org_name
+ORDER BY DESC(?count)
+

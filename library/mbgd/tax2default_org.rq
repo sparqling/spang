@@ -1,0 +1,9 @@
+# @title MBGD default organisms in a specific taxon
+
+SELECT ?org
+WHERE {
+    mbgdr:default orth:organism ?org .
+    ?org orth:taxon ?taxid .
+    ?taxid rdfs:subClassOf* tax:$1 .
+}
+

@@ -1,0 +1,6 @@
+# Assembly IDs in MBGD
+SELECT ?mbgd_id ?assembly_id
+WHERE {
+    ?mbgd_id a orth:Organism ;
+             mbgd:assembly ?assembly_id .
+}

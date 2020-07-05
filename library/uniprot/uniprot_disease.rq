@@ -1,0 +1,21 @@
+# @title 
+# @param arg1=P00918 
+
+SELECT ?gene
+?protein_label
+?annot_comment
+?disease_label
+?disease_comment
+WHERE {
+    uniprot:$arg1 up:encodedBy/skos:prefLabel ?gene ;
+	     rdfs:label ?protein_label ;
+	     up:annotation ?annot .
+    ?annot a up:Disease_Annotation ;
+	     rdfs:comment ?annot_comment .
+    OPTIONAL {
+	?annot up:disease ?disease .
+	?disease skos:prefLabel ?disease_label ;
+	         rdfs:comment ?disease_comment .
+    }
+}
+

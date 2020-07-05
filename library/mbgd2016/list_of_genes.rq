@@ -1,0 +1,9 @@
+# @title 
+
+SELECT ?gene ?gene_id ?tax_id
+WHERE {
+    ?gene a orthology:Gene ;
+          dct:identifier ?gene_id ;
+          obo:RO_0002162 ?tax_id .
+}
+

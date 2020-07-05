@@ -1,0 +1,23 @@
+# @title Set of UniProt IDs to GO annotations with ratio
+
+SELECT ?count ?count_all ((xsd:decimal(?count)/?count_all) AS ?ratio) ?go ?go_label
+WHERE {
+    ?go skos:prefLabel ?go_label .
+    {
+        SELECT (COUNT(?uniprot_all) AS ?count_all) ?go
+        WHERE {
+	    ?gene mbgd:taxon taxid:9606 ;
+	          mbgd:uniprot ?uniprot_all .
+            ?uniprot_all goa:goa ?go .
+        }
+    }
+    {
+        SELECT (COUNT(?uniprot) AS ?count) ?go
+        WHERE {
+            VALUES (?uniprot) { $STDIN }
+            ?uniprot goa:goa ?go .
+    	}
+    }
+}
+ORDER BY DESC(?ratio)
+

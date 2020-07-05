@@ -1,0 +1,9 @@
+# @title MBGD draft genomes
+
+SELECT ?genome mbgd:inTaxon ?taxon
+WHERE {
+    ?genome a mbgd:DraftGenome .
+    ?genome orth:taxon ?taxid .
+    ?taxid rdfs:subClassOf* ?taxon . 
+}
+

@@ -1,0 +1,8 @@
+# @title List of organisms associated with UniProt IDs
+
+SELECT DISTINCT ?organism ?organism_name
+WHERE {
+    ?protein up:organism ?organism .
+    ?organism up:scientificName ?organism_name .
+}
+

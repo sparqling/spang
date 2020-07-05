@@ -1,0 +1,11 @@
+# @title Filter UniProt IDs by GO annotation
+# @param arg1=GO_0045202 
+
+#stdin uniprot:K9Z723
+#stdin uniprot:A0A024R9E7
+SELECT ?uniprot
+WHERE {
+    VALUES (?uniprot) { $STDIN }
+    ?uniprot up:classifiedWith obo:$arg1 .
+}
+

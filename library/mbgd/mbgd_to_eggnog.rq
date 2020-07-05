@@ -1,0 +1,31 @@
+# @title eggNOG cluster corresponding to cluster
+# @param arg1=2969 
+# @param arg2=32062 
+# @param arg3=6390 
+# @param arg4=4971 
+
+define input:inference "mbgd"
+SELECT ?gene ?reference ?mbgd_begin ?mbgd_end ?eggnog_begin ?eggnog_end ?eggnog
+WHERE {
+    ?mbgd_grp a orth:OrthologGroup ;
+              orth:inDataset mbgdr:default ;
+              dct:identifier "$arg1";
+              orth:member ?mbgd_mbr .
+    ?mbgd_mbr orth:gene/dct:identifier ?gene ;
+              orth:gene/orth:crossReference ?reference ;
+              mbgd:domainBegin ?mbgd_begin ;
+              mbgd:domainEnd ?mbgd_end .
+    ?eggnog_grp a orth:OrthologGroup ;
+              dct:identifier ?eggnog ;
+              orth:member ?eggnog_mbr .
+    ?eggnog_mbr orth:crossReference+ ?reference ;
+              mbgd:domainBegin ?eggnog_begin ;
+              mbgd:domainEnd ?eggnog_end .
+    { ?eggnog_grp orth:inDataset mbgdr:eggnog_3.0_COG }
+    UNION
+    { ?eggnog_grp orth:inDataset mbgdr:eggnog_3.0_NOG }
+    FILTER (?mbgd_begin <= ?eggnog_end &&
+            ?eggnog_begin <= ?mbgd_end)
+}
+ORDER BY ?gene
+

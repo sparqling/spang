@@ -1,0 +1,26 @@
+# @title 
+
+#stdin taxid:543
+#stdin taxid:1117
+SELECT ?taxid ?code ?min_date
+WHERE {
+    VALUES (?taxid) { $STDIN }
+    mbgdr:default
+        mbgd:organism ?ref_genome .
+    ?ref_genome
+        mbgd:inTaxon ?taxid ;
+	dct:identifier ?code ;
+	dct:issued ?min_date .
+    {
+	SELECT ?taxid (min(?date) AS ?min_date)
+	WHERE {
+	    mbgdr:default
+                mbgd:organism ?genome .
+	    ?genome
+                mbgd:inTaxon ?taxid ;
+		rdfs:label ?organism ;
+		dct:issued ?date .
+	}
+    }
+}
+

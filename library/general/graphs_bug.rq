@@ -1,0 +1,9 @@
+# @title SELECT DISTINCT ?graph, instead of GROUP BY ?graph, returns less results (Virtuoso 7.1.0)
+
+SELECT DISTINCT ?g
+WHERE {
+    GRAPH ?g {
+	?s ?p ?o
+    }
+}
+

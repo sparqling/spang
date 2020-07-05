@@ -1,0 +1,10 @@
+# @title Get molecule from target UniProt ID
+# @param arg1=Q05397 
+
+SELECT DISTINCT ?chembl ?label
+WHERE {
+    ?act chembl:hasAssay/chembl:hasTarget/chembl:hasTargetComponent/chembl:targetCmptXref uniprot:$arg1 .
+    ?act chembl:hasMolecule ?chembl .
+    ?chembl rdfs:label ?label .
+}
+

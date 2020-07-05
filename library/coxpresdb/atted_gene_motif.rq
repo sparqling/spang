@@ -1,0 +1,28 @@
+# @title Get genes which highly co-express with gene
+# @param arg1=818614 
+
+SELECT ?gene ?rank ?cor ?protein ?motif
+WHERE {
+    <http://atted.jp/rdf/db/Ath.c5-0>
+          atted:gene_pair ?pair .
+    ?pair atted:gene_id_1 <http://bio2rdf.org/geneid:$arg1> ;
+          atted:gene_id_2 ?gene ;
+	  atted:mutual_rank ?rank ;
+	  atted:pcc ?cor .
+
+    # Convert Bio2RDF gene URI (http://bio2rdf.org/geneid:...)
+    # to UniProt gene URI (http://purl.uniprot.org/geneid/...)
+    ?gene owl:sameAs ?uniprot_gene
+
+    # Get motifs related to highly co-expressed genes using UniProt
+    SERVICE <http://sparql.uniprot.org/sparql> {
+        ?protein a up:Protein ;
+                 rdfs:seeAlso ?uniprot_gene ;
+		 up:annotation ?annot .
+        ?annot a up:Motif_Annotation ;
+                 rdfs:comment ?motif .
+    }
+}
+ORDER BY ?rank
+LIMIT 20
+

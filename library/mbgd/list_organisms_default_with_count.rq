@@ -1,0 +1,21 @@
+# @title MBGD default organisms (count for each phylum)
+
+# Default organisms summary (phylum)
+SELECT ?superkingdom ?phylum (COUNT(?organism) AS ?count)
+WHERE {
+    mbgdr:default orth:organism ?organism .
+    # ?organism dct:identifier ?organism_id ;
+    #           dct:description ?organism_name ;
+    #           orth:taxon ?taxid .
+    ?organism orth:taxon ?taxid .
+    ?taxid rdfs:subClassOf* ?taxon .
+    ?taxon up:rank up:Superkingdom ;
+           up:scientificName ?superkingdom .
+    OPTIONAL {
+        ?taxid rdfs:subClassOf* ?taxon_opt .
+        ?taxon_opt up:rank up:Phylum ;
+                   up:scientificName ?phylum .
+    }
+}
+ORDER BY ?superkingdom ?phylum
+

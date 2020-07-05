@@ -1,0 +1,29 @@
+# @title 
+# @param arg1=extended 
+# @param arg2=defaultOrganism 
+# @param arg3=default 
+# @param arg4=null 
+
+SELECT ?taxon ?ref_org_code
+WHERE {
+    ?ref_org ^orth:organism mbgdr:$arg1 ;
+        dct:identifier ?ref_org_code ;
+        mbgd:inTaxon ?taxon ;
+        dct:issued ?min_date .
+    {
+        SELECT ?taxon (min(?date) AS ?min_date)
+        WHERE {
+            ?org ^orth:organism mbgdr:$arg1 ;
+                  mbgd:inTaxon ?taxon ;
+                  dct:issued ?date .
+        }
+    }
+    {
+        SELECT ?taxon
+        WHERE {
+            mbgdr:$arg1 orth:organism/mbgd:inTaxon ?taxon .
+            MINUS { ?taxon mbgd:$arg2 ?default_org .}
+        }
+    }
+}
+

@@ -1,0 +1,13 @@
+# @title 
+# @param arg1=GO_0045202 
+
+SELECT DISTINCT ?uniprot ?gene ?uniprot_label ?go ?go_label
+WHERE {
+    ?uniprot up:classifiedWith ?go ;
+             # up:encodedBy/skos:prefLabel ?gene ;
+	     rdfs:label ?uniprot_label .
+    ?go rdfs:subClassOf* obo:$arg1 .
+    ?go rdfs:label ?go_label
+    VALUES (?uniprot) { $STDIN }
+}
+

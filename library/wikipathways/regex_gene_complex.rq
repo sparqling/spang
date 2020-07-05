@@ -1,0 +1,27 @@
+# @title Get complex from gene name
+# @param arg1=cyp 
+
+# SELECT ?source (COUNT(?gene) AS ?count)
+# SELECT ?type (COUNT(?complex) AS ?count)
+SELECT ?gene ?gene_label ?organism_name ?complex
+WHERE {
+    ?gene a wp:GeneProduct .
+    # ?gene dc:source ?source .
+    ?gene rdfs:label ?gene_label .
+    ?gene dct:isPartOf ?complex .
+    # ?complex a ?type .
+    # ?complex a wp:Pathway .
+    # ?complex a wp:Interaction .
+    ?complex a wp:Complex .
+    ?complex dct:isPartOf/wp:organismName ?organism_name .
+    FILTER regex(str(?gene_label), "$arg1", "i")
+    # FILTER (?type != wp:Pathway)
+    # MINUS {
+    # 	?complex a wp:Pathway .
+    # }
+    # MINUS {
+    # 	?complex a wp:Interaction .
+    # }
+}
+# ORDER BY DESC(?count)
+

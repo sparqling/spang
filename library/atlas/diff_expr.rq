@@ -1,0 +1,14 @@
+# @title Get differentially expressed human genes for a specific experimental condition, e.g. EFO_0000249 ("Alzheimer's disease")
+# @param arg1=EFO_0000249 
+
+SELECT ?uniprot ?probe ?experiment ?pubmed ?expr_label
+WHERE {
+    ?experiment atlas:pubmedid ?pubmed ;
+            atlas:hasAnalysis/atlas:hasExpressionValue ?diff_expr .
+    ?diff_expr rdfs:label ?expr_label ;
+            atlas:hasFactorValue/a efo:$arg1 ;
+            atlas:isMeasurementOf ?probe .
+    ?probe atlas:dbXref ?uniprot .
+    ?uniprot a atlas:UniprotDatabaseReference .
+}
+

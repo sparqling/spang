@@ -1,0 +1,12 @@
+# @title List proteins of a specific organism
+
+SELECT ?protein ?OMA_link
+WHERE {
+    ?protein a oo:Protein ;
+             oo:organism ?organism ;
+             rdfs:seeAlso ?OMA_link .
+    ?organism ?inTaxon ?taxid .
+    ?inTaxon rdfs:label 'in taxon'@en.
+    ?taxid up:scientificName 'Rattus norvegicus'.
+}
+

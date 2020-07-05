@@ -1,0 +1,19 @@
+# @title Selected genomes within taxon range
+# @param arg1=tax1117 
+
+SELECT ?order_name ?organism ?organism_id
+WHERE {
+    # ?taxid rdfs:subClassOf* tax:1117 .
+    # # ?organism_id a orth:Organism .
+    # ?organism_id a mbgd:CompleteGenome .
+    mbgdr:$arg1 orth:organism ?organism_id .
+    ?organism_id dct:description ?organism ;
+                 orth:taxon ?taxid .
+    OPTIONAL {
+        ?taxid rdfs:subClassOf* ?order .
+        ?order up:rank up:Order ;
+               up:scientificName ?order_name .
+    }
+}
+ORDER BY ?order_name ?organism
+

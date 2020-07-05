@@ -1,0 +1,15 @@
+# @title Count genes for each organism
+
+SELECT ?taxid ?taxid_label (COUNT(DISTINCT ?gene) AS ?gene_count)
+FROM <http://www.southgreen.fr/agrold/gramene.genes>
+FROM <http://www.southgreen.fr/agrold/qtaro.genes>
+FROM <http://www.southgreen.fr/agrold/msu.genes>
+FROM <http://www.southgreen.fr/agrold/rap.msu>
+FROM <http://www.southgreen.fr/agrold/ncbitaxon>
+WHERE {
+    ?gene a agrold_resource:Gene ;
+          agrold:taxon ?taxid .
+    ?taxid rdfs:label ?taxid_label .
+}
+ORDER BY DESC(?gene_count)
+

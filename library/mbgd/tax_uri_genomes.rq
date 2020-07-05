@@ -1,0 +1,24 @@
+# @title Genomes in a taxonomic range
+# @param arg1=tax:1117 
+# @param arg2=Complete 
+
+SELECT ?taxid ?mbgd_genome ?genus ?name ?genome_release_date ?reference
+{
+    $arg1 orth:taxon? ?tax_org . # tax:1117, tax:562, org:syn, org:eco, etc.
+    ?tax_org up:replacedBy* ?tax . # taxid can be replaced with a new one.
+    ?taxid rdfs:subClassOf* ?tax .
+    ?taxid up:scientificName ?name .
+    ?mbgd_genome orth:taxon ?taxid ;
+           dct:issued ?genome_release_date ;
+           a mbgd:$arg2Genome . # CompleteGenome or DraftGenome
+    OPTIONAL {
+        ?mbgd_genome dct:references ?reference .
+    }
+    OPTIONAL {
+        ?taxid rdfs:subClassOf* ?genus_id .
+        ?genus_id up:rank up:Genus ;
+            up:scientificName ?genus
+    }
+}
+ORDER BY ?genus ?name
+

@@ -1,0 +1,26 @@
+# Organisms of cluster
+#param 1702
+SELECT ?phylum ?num_all (COUNT(DISTINCT ?organism) AS ?num) ((xsd:decimal(?num) / ?num_all) AS ?ratio)
+WHERE {
+    ?group a orth:OrthologGroup ;
+           orth:inDataset mbgdr:default ;
+           dct:identifier "$1";
+           orth:member ?member .
+    ?member orth:organism ?organism .
+    ?organism orth:taxon ?taxid .
+    ?taxid rdfs:subClassOf* ?taxon .
+    ?taxon up:rank up:Phylum ;
+           up:scientificName ?phylum .
+#    ?taxid rdfs:subClassOf* ?taxon2 .
+#    ?taxon2 up:rank up:Superkingdom ;
+#           up:scientificName ?superkingdom .
+    {
+        SELECT ?taxon (COUNT(?org) AS ?num_all)
+        WHERE {
+            mbgdr:default orth:organism ?org .
+            ?org orth:taxon ?tax .
+            ?tax rdfs:subClassOf* ?taxon .
+        }
+    }
+}
+ORDER BY ?phylum

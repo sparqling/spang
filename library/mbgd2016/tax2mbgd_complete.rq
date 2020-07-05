@@ -1,0 +1,9 @@
+# @title 
+
+SELECT DISTINCT ?taxon ?org
+WHERE {
+    VALUES (?taxon) { $STDIN }
+    ?org a mbgd:CompleteGenome .
+    ?org mbgd:inTaxon ?taxon .
+}
+

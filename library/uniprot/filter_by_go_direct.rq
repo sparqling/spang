@@ -1,0 +1,12 @@
+# @title SELECT ?uniprot ?uniprot_label
+# @param arg1=GO_0045202 
+
+SELECT ?uniprot
+FROM <http://sparql.uniprot.org/uniprot/>
+WHERE {
+    ?uniprot up:classifiedWith obo:$arg1 .
+    # ?uniprot up:classifiedWith obo:$arg1 ;
+    #          rdfs:label ?uniprot_label .
+    VALUES (?uniprot) { $STDIN }
+}
+

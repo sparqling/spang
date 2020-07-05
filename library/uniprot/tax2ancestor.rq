@@ -1,0 +1,13 @@
+# @title TaxID to ancestor
+# @param arg1=Phylum 
+
+SELECT ?taxon (COUNT(DISTINCT ?taxid) AS ?num)
+WHERE {
+    VALUES (?taxid) { $STDIN }
+    ?taxid a up:Taxon .
+    ?taxid rdfs:subClassOf+ ?ancestor .
+    ?ancestor up:rank up:$arg1 ;
+              up:scientificName ?taxon .
+}
+ORDER BY ?taxon
+

@@ -1,0 +1,20 @@
+# @title GO annotation for orthologs of
+# @param arg1=uniprot:K9Z723 
+
+define input:inference "mbgd"
+SELECT DISTINCT ?organism ?gene ?go_term ?evidence
+WHERE {
+    ?group a orth:OrthologGroup ;
+         orth:inDataset mbgdr:default ;
+         orth:member/orth:crossReference* $arg1 ; # or ncbiprotein:YP_007162988.1
+         orth:member/orth:gene ?gene_id .
+    ?gene_id mbgd:uniprot ?uniprot ;
+         dct:identifier ?gene ;
+         orth:organism/dct:description ?organism .
+    ?uniprot ?goa ?go_id .
+    ?goa rdfs:subPropertyOf+ goa:goaExperimental ;
+         rdfs:comment ?evidence .
+    ?go_id skos:prefLabel ?go_term .
+}
+ORDER BY ?gene
+

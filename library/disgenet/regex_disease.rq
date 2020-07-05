@@ -1,0 +1,11 @@
+# @title Search the NCI Thesaurus for specific diseases
+# @endpoint http://rdf.disgenet.org/sparql/
+# @param pattern=breast.*cancer
+# @out ncit:C7057 xsd:string
+
+SELECT ?disease ?disease_name
+WHERE {
+    ?disease a ncit:C7057 ;
+        dct:title ?disease_name .
+    FILTER (regex(?disease_name, "{{pattern}}", "i"))
+}

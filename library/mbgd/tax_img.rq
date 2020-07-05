@@ -1,0 +1,10 @@
+# @title 
+
+SELECT ?org ?tax ?img
+WHERE {
+    ?org orth:taxon ?tax ;
+         a mbgd:CompleteGenome .
+    ?tax a up:Taxon ;
+         foaf:depiction ?img .
+}
+

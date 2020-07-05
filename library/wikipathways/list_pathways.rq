@@ -1,0 +1,10 @@
+# @title List of pathways
+
+SELECT ?pathway ?organism ?name ?title
+WHERE {
+    ?pathway wp:organism ?organism ;
+             wp:organismName ?name ;
+             dc:title ?title .
+}
+ORDER BY ?organism
+

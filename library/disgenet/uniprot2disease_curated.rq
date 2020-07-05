@@ -1,0 +1,31 @@
+# @title Get diseases associated with given UniProt IDs
+
+#stdin uniprot:P05067
+PREFIX disgenet_source: <http://rdf.disgenet.org/v4.0.0/void/>
+
+SELECT DISTINCT ?uniprot ?disease_label ?score ?gene_label ?source
+# ?pmid ?sentence
+WHERE {
+    ?gda sio:SIO_000628 ?gene ,
+                        ?disease ;
+          a ?type ;
+          sio:SIO_000253 ?source ;
+          sio:SIO_000216/sio:SIO_000300 ?score .
+    ?gene a ncit:C16612 ;
+          rdfs:label ?gene_label ;
+          sio:SIO_010078/skos:exactMatch ?uniprot .
+    ?disease a ncit:C7057 ;
+          rdfs:label ?disease_label .
+    OPTIONAL {
+        ?gda sio:SIO_000772 ?pmid ;
+             dct:description ?sentence .
+    }
+    VALUES (?uniprot) { $STDIN }
+    VALUES (?source) { (disgenet_source:uniprot-2016)
+                       (disgenet_source:ctd_human-2016)
+                       (disgenet_source:clinvar-2016)
+                       (disgenet_source:orphanet-2016)
+                       (disgenet_source:gwascat-2016) }
+}
+ORDER BY DESC(?score) ?source ?pmid
+

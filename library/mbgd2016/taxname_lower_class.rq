@@ -1,0 +1,16 @@
+# @title 
+# @param arg1=Escherichia 
+# @param arg2=Species 
+
+SELECT ?label ?taxon (COUNT(?genome) AS ?count)
+WHERE {
+    ?taxid_new taxont:merged* ?taxid .
+    ?taxid taxont:scientificName "$arg1" .
+    ?taxon rdfs:subClassOf+ ?taxid_new ;
+           taxont:rank taxont:$arg2 ;
+           rdfs:label ?label .
+    ?genome a mbgd:CompleteGenome ;
+            mbgd:inTaxon ?taxon .
+}
+ORDER BY DESC(?count)
+

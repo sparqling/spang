@@ -1,0 +1,15 @@
+# @title Taxonomic hierarchy for
+# @param arg1=taxid:511145 
+
+SELECT ?taxon ?name ?rank
+{
+    $arg1 up:replacedBy* ?taxid . # taxid can be replaced with a new ID
+    ?taxid rdfs:subClassOf ?taxon option(transitive, t_direction 1, t_min 0, t_step("step_no") as ?level) . # only for Virtuoso
+    ?taxon rdfs:label ?name .
+    OPTIONAL {
+        ?taxon taxont:rank ?rank .
+    }
+    # FILTER (?taxon != taxid:131567) # Omit the top level "cellular organisms"
+}
+ORDER BY DESC(?level)
+

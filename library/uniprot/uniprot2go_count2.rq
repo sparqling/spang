@@ -1,0 +1,16 @@
+# @title 
+
+SELECT ?go ?go_label (count(?uniprot) as ?count)
+WHERE {
+    ?go rdfs:label ?go_label .
+    {
+	SELECT DISTINCT ?uniprot ?go
+	WHERE {
+	    VALUES (?uniprot) { $STDIN }
+	    ?uniprot up:classifiedWith ?go .
+	    ?go up:database <http://purl.uniprot.org/database/go> .
+	}
+    }
+}
+ORDER BY DESC(?count)
+

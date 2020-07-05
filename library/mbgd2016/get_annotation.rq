@@ -1,0 +1,10 @@
+# @title 
+
+#stdin eco:B0002
+SELECT DISTINCT ?s ?label ?descr
+WHERE {
+    VALUES (?s) { $STDIN }
+    ?s rdfs:label ?label ;
+       dct:description ?descr .
+}
+

@@ -1,0 +1,14 @@
+# @title Cluster IDs for each gene of
+# @param arg1=syn 
+
+SELECT DISTINCT ?gene_id ?cluster_id
+WHERE {
+    ?group a orth:OrthologGroup ;
+           orth:inDataset mbgdr:default ;
+           dct:identifier ?cluster_id ;
+           orth:member/orth:gene ?gene .
+    ?gene orth:organism org:$arg1 ;
+          dct:identifier ?gene_id .
+}
+ORDER BY ?gene_id
+

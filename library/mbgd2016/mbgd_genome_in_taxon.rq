@@ -1,0 +1,12 @@
+# @title MBGD genomes in taxon
+
+SELECT ?genome mbgd:inTaxon ?taxon
+WHERE {
+    ?genome a mbgd:Genome .
+    ?genome mbgd:taxon ?taxid .
+    ?taxid_new taxont:merged* ?taxid . # taxid can be replaced with a new ID
+    ?taxid_new rdfs:subClassOf* ?taxon . 
+    FILTER (?taxon != taxid:1) # Omit the top level "root"
+    # FILTER (?taxon != taxid:1 && ?taxon != taxid:131567) # Omit the top level "root" and "cellular organisms"
+}
+

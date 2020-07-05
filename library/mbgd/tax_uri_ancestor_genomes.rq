@@ -1,0 +1,23 @@
+# @title Genomes above TaxID
+# @param arg1=tax:511145 
+# @param arg2=Complete 
+
+SELECT ?genome ?description ?taxid ?rank ?name ?date ?reference
+{
+    $arg1 orth:taxon? ?tax_org .
+    ?tax_org up:replacedBy* ?tax . # taxid can be replaced with a new ID
+    ?tax rdfs:subClassOf ?taxid option(transitive, t_direction 1, t_min 0, t_step("step_no") as ?level) . # only for Virtuoso
+    ?taxid up:scientificName ?name .
+    OPTIONAL {
+        ?taxid up:rank ?rank .
+    }
+    ?genome dct:description ?description .
+    ?genome orth:taxon ?taxid .
+    ?genome a mbgd:$arg2Genome . # CompleteGenome or DraftGenome
+    ?genome dct:issued ?date .
+    OPTIONAL {
+        ?genome dct:references ?reference .
+    }
+}
+ORDER BY DESC(?level)
+

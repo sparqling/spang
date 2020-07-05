@@ -1,0 +1,15 @@
+# @title List genomes in MBGD
+# @param arg1=Complete 
+
+SELECT ?taxid ?mbgd_genome ?name ?genome_release_date ?reference
+{
+    ?mbgd_genome orth:taxon ?taxid ;
+        dct:description ?name ;
+        dct:issued ?genome_release_date .
+    ?mbgd_genome a mbgd:$arg1Genome . # CompleteGenome or DraftGenome
+    OPTIONAL {
+        ?mbgd_genome dct:references ?reference .
+    }
+}
+ORDER BY ?name
+

@@ -1,0 +1,15 @@
+# @title Get pathway from gene name
+# @param arg1=1577 
+
+# SELECT ?source (COUNT(?gene) AS ?count)
+# SELECT ?type (COUNT(?pathway) AS ?count)
+SELECT ?gene_label ?organism_name ?pathway_label ?pathway
+WHERE {
+    geneid:$arg1 rdfs:label ?gene_label ;
+                dct:isPartOf ?pathway .
+    ?pathway a wp:Pathway ;
+             dc:title ?pathway_label ;
+             wp:organismName ?organism_name .
+}
+# ORDER BY DESC(?count)
+

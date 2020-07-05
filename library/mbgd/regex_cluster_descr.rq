@@ -1,0 +1,14 @@
+# @title Search clusters (description regex)
+# @param arg1=RNA 
+# @param arg2=polymerase 
+
+SELECT ?group (COUNT(?member) AS ?size) ?label ?description
+WHERE {
+    ?group a orth:OrthologGroup ;
+           rdfs:label ?label ;
+           dct:description ?description ;
+           orth:member ?member .
+    FILTER (regex(?description, "$arg1"))
+}
+ORDER BY ?description ?label DESC(?size)
+

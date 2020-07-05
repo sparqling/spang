@@ -1,0 +1,18 @@
+# @title Cluster IDs for each gene of
+# @param arg1=syn 
+
+SELECT DISTINCT ?gene ?gene_id ?gene_name ?domain_no ?cluster ?cluster_id ?cluster_descr
+WHERE {
+    ?cluster a orth:OrthologGroup ;
+          orth:inDataset mbgdr:default ;
+          dct:identifier ?cluster_id ;
+          dct:description ?cluster_descr ;
+          orth:member ?domain .
+    ?domain dct:identifier ?domain_no ;
+          orth:gene ?gene .
+    ?gene orth:organism org:$arg1 ;
+          rdfs:label ?gene_name ;
+          dct:identifier ?gene_id .
+}
+ORDER BY ?gene_id
+

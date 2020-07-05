@@ -1,0 +1,13 @@
+# @title Names in a specific taxonomic rank for MBGD organisms
+# @param arg1=Superkingdom 
+
+SELECT DISTINCT ?organism ?name
+WHERE {
+    VALUES (?organism) { $STDIN }
+    ?organism mbgd:taxon ?taxid .
+    ?taxid_new taxont:merged* ?taxid .
+    ?taxid_new rdfs:subClassOf* ?ancestor .
+    ?ancestor taxont:rank taxont:$arg1 .
+    ?ancestor rdfs:label ?name .
+}
+

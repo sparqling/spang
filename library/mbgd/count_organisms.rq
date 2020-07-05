@@ -1,0 +1,11 @@
+# @title MBGD default organisms (count)
+
+SELECT ?superkingdom (COUNT(?organism) AS ?count)
+WHERE {
+    mbgdr:default orth:organism ?organism .
+    ?organism orth:taxon ?taxid .
+    ?taxid rdfs:subClassOf* ?super .
+    ?super up:rank up:Superkingdom ;
+           up:scientificName ?superkingdom .
+}
+

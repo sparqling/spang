@@ -1,0 +1,12 @@
+# @title 
+
+#stdin dbpedia:Escherichia
+#stdin dbpedia:Escherichia_coli
+#stdin dbpedia:Salmonella
+SELECT ?dbpedia_resource ?label
+WHERE {
+    VALUES (?dbpedia_resource) { $STDIN }
+    ?dbpedia_resource rdfs:label ?label .
+    FILTER(lang(?label) = "ja")
+}
+

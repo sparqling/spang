@@ -1,0 +1,29 @@
+# @title ORDER BY DESC(?sum_length)
+
+#stdin org:eco
+#stdin org:bsu
+SELECT ?code ?phylum ?organism ?sum_genes ?sum_length ?date ?pubmed
+WHERE {
+    VALUES (?genome) { $STDIN }
+    ?genome
+        rdfs:label ?organism ;
+        dct:identifier ?code ;
+        mbgd:inTaxon ?tax_phylum ;
+        dct:issued ?date .
+    ?tax_phylum taxont:rank taxont:Phylum ;
+        rdfs:label ?phylum .
+    OPTIONAL {
+	?genome dct:references ?pubmed .
+    }
+    {
+	SELECT ?genome (SUM(?genes) AS ?sum_genes) (SUM(?length) AS ?sum_length)
+	WHERE {
+	    ?genome mbgd:nucSeq ?seq .
+	    ?seq mbgd:geneCount ?genes ;
+                 mbgd:nucLength ?length .
+	}
+    }
+}
+# ORDER BY DESC(?sum_genes)
+ORDER BY ?phylum ?organism
+

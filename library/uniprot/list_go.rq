@@ -1,0 +1,8 @@
+# @title List of GO IDs
+
+SELECT ?go ?go_label
+WHERE {
+    ?go up:database <http://purl.uniprot.org/database/go> ;
+        rdfs:label ?go_label .
+}
+

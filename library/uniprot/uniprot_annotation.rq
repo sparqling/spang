@@ -1,0 +1,21 @@
+# @title 
+# @param arg1=K9Z723 
+
+SELECT ?annot_type ?begin_pos ?end_pos ?property ?val ?conflict_seq
+WHERE {
+    uniprot:$arg1 up:annotation ?annot .
+    ?annot a ?type ;
+           ?property ?val .
+    ?type rdfs:label ?annot_type .
+    OPTIONAL {
+        ?annot up:range ?range .
+        ?range faldo:begin/faldo:position ?begin_pos ;
+               faldo:end/faldo:position ?end_pos .
+    }
+    OPTIONAL {
+        ?annot up:conflictingSequence ?conflict_seq .
+    }
+    FILTER (?property != rdf:type && ?property != up:range && ?property != up:conflictingSequence)
+}
+ORDER BY ?annot_type ?begin_pos
+

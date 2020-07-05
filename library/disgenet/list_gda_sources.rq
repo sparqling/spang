@@ -1,0 +1,12 @@
+# @title List sources of gene-disease association
+# @endpoint http://rdf.disgenet.org/sparql/
+# @prefix https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio
+
+SELECT ?source (COUNT(?source) AS ?count)
+WHERE {
+    ?gda sio:SIO_000253 ?source ; # has source
+         sio:SIO_000628 ?gene , ?disease . # refers to
+    ?gene a ncit:C16612 .
+    ?disease a ncit:C7057 .
+}
+ORDER BY DESC(?count)

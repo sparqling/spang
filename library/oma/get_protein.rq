@@ -1,0 +1,12 @@
+# @title Get proteins having specific label
+# @param arg1=INS 
+
+PREFIX lscr: <http://purl.org/lscr#>
+SELECT *
+WHERE {
+    ?proteinOMA a oo:Protein ;
+        oo:organism/obo:RO_0002162/up:scientificName ?species ;
+        rdfs:label '$arg1' .
+    ?proteinOMA lscr:xrefUniprot ?UniProt_URI .
+}
+

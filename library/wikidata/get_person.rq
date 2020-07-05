@@ -1,0 +1,29 @@
+# @title Get information of a specific person
+# @param arg1=wd:Q171977 
+
+SELECT ($arg1 AS ?person) ?gender_en ?label_en ?descr_en ?birth_date ?death_date ?img
+WHERE {
+    OPTIONAL {
+        $arg1 wdt:P21 ?gender .
+        ?gender rdfs:label ?gender_en .
+        FILTER (lang(?gender_en) = "en")
+    }
+    OPTIONAL {
+        $arg1 rdfs:label ?label_en .
+        FILTER (lang(?label_en) = "en")
+    }
+    OPTIONAL {
+        $arg1 schema:description ?descr_en .
+        FILTER (lang(?descr_en) = "en")
+    }
+    OPTIONAL {
+        $arg1 wdt:P569 ?birth_date .
+    }
+    OPTIONAL {
+        $arg1 wdt:P570 ?death_date .
+    }
+    OPTIONAL {
+        $arg1 wdt:P18 ?img .
+    }
+}
+

@@ -1,0 +1,13 @@
+# @title 
+# @param arg1=2 
+
+SELECT ?rank ?name (COUNT(?organism) AS ?count)
+WHERE {
+    ?taxid mbgd:parentTaxonShown taxid:$arg1 ;
+           taxont:scientificName ?name ;
+	   taxont:rank ?rank .
+    ?organism mbgd:inTaxon ?taxid ;
+	   a mbgd:CompleteGenome .   
+}
+ORDER BY ?name
+

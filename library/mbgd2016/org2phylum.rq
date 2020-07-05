@@ -1,0 +1,14 @@
+# @title 
+# @param arg1=Phylum 
+
+SELECT DISTINCT ?org ?org_label ?tax ?tax_label
+WHERE {
+    ?org rdfs:label ?org_label
+    OPTIONAL {
+	?org mbgd:inTaxon ?tax .
+	?tax rdfs:label ?tax_label .
+    	?tax taxont:rank taxont:$arg1 .
+    }
+    VALUES (?org) { $STDIN }
+}
+

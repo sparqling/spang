@@ -1,0 +1,26 @@
+# @title Members of cluster
+# @param arg1=2000 
+
+SELECT ?superkingdom ?phylum ?organism_name ?domain ?gene_description
+WHERE {
+    ?cluster a orth:OrthologGroup ;
+            orth:inDataset mbgdr:default ;
+            dct:identifier "$arg1";
+            orth:member ?member .
+    ?member orth:gene ?gene ;
+            orth:organism ?organism ;
+            rdfs:label ?domain .
+    ?organism dct:description ?organism_name ;
+            orth:taxon ?tax_id .   
+    ?gene dct:description ?gene_description .
+    ?tax_id rdfs:subClassOf+ ?taxon .
+    ?taxon up:rank up:Superkingdom ;
+           up:scientificName ?superkingdom .
+    OPTIONAL {
+        ?tax_id rdfs:subClassOf+ ?phylum_id .
+        ?phylum_id up:rank up:Phylum ;
+                   up:scientificName ?phylum .
+    }
+}
+ORDER BY ?superkingdom ?phylum ?organism_name ?domain
+

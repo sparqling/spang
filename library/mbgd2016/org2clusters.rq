@@ -1,0 +1,16 @@
+# @title 
+
+#stdin org:eco
+#stdin org:bsu
+SELECT ?organism GROUP_CONCAT(?cluster_id; separator=" ")
+WHERE {
+    ?cluster a oo:OrthologsCluster ;
+             void:inDataset mbgdr:default ;
+             dct:identifier ?cluster_id ;
+             oo:hasHomologous ?gene .
+    ?gene a oo:Gene ;
+          mbgd:organism ?organism .
+    VALUES (?organism) { $STDIN }
+    VALUES (?cluster_id) { ("1025") ("1") ("10") }
+}
+

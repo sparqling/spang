@@ -1,0 +1,17 @@
+# @title Regex seach for specific diseases that have gene-disease association information
+# @endpoint http://rdf.disgenet.org/sparql/
+# @param pattern=alzheimer
+# @out ncit:C7067 xsd:string xsd:integer
+
+PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
+
+SELECT ?disease ?disease_name (COUNT(?disease) AS ?count)
+WHERE {
+    ?gda sio:SIO_000628 ?gene , ?disease ;
+         sio:SIO_000253 ?source .
+    ?gene a ncit:C16612 .
+    ?disease a ncit:C7057 ;
+          dct:title ?disease_name
+    FILTER regex(?disease_name, "{{pattern}}", "i")
+}
+ORDER BY DESC(?count)

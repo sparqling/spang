@@ -1,0 +1,18 @@
+# @title 
+# @param arg1=2 
+# @param arg2=29 
+# @param arg3=1117 
+
+SELECT ?code
+WHERE {
+    mbgdr:default
+         mbgd:organism ?genome .
+    ?genome
+        mbgd:inTaxon taxid:$arg1 ;
+        rdfs:label ?organism ;
+        dct:identifier ?code ;
+        dct:issued ?date .
+}
+ORDER BY ?date
+LIMIT 1
+

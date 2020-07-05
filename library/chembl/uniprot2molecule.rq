@@ -1,0 +1,11 @@
+# @title Get molecule from target UniProt ID
+
+#stdin uniprot:Q05397
+SELECT DISTINCT ?uniprot ?molecule ?molecule_label
+WHERE {
+    ?act chembl:hasAssay/chembl:hasTarget/chembl:hasTargetComponent/chembl:targetCmptXref ?uniprot .
+    ?act chembl:hasMolecule ?molecule .
+    ?molecule rdfs:label ?molecule_label .
+    VALUES (?uniprot) { $STDIN }
+}
+

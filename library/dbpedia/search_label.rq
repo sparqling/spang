@@ -1,0 +1,12 @@
+# @title Free text search in Virtuoso (count instances of each class)
+# @param arg1=okazaki 
+
+SELECT DISTINCT ?class ?instance ?label
+WHERE {
+    ?instance rdfs:label ?label .
+    ?instance a ?class .
+    ?class rdfs:subClassOf+ owl:Thing .
+    ?label bif:contains '"$arg1"' .
+}
+ORDER BY ?class ?instance ?label
+

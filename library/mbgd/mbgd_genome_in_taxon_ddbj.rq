@@ -1,0 +1,11 @@
+# @title MBGD complete genomes in taxon
+
+SELECT ?genome mbgd:inTaxon ?taxon
+WHERE {
+    # ?genome a mbgd:CompleteGenome .
+    ?genome a mbgd:DraftGenome .
+    ?genome rdfs:seeAlso ?taxid .
+    ?taxid rdfs:subClassOf* ?taxon . 
+    FILTER (?taxon != taxid:1) # Omit the top level "root"
+}
+

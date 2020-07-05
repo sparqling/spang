@@ -1,0 +1,15 @@
+# @title 
+# @param arg1=Salmonella 
+
+SELECT ?label ?abst
+WHERE {
+    dbpedia:$arg1 rdfs:label ?label .
+    dbpedia:$arg1 dbo:abstract ?abst .
+
+    BIND(lang(?label) AS ?lang)
+    BIND(lang(?abst) AS ?abst_lang)
+
+    VALUES (?lang) { ("en") ("ja") }
+    VALUES (?abst_lang) { ("en") ("ja") }
+}
+

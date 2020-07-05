@@ -1,0 +1,11 @@
+# @title UniProt information
+# @param arg1=P0C127 
+
+SELECT ?p ?o ?label
+WHERE {
+    uniprot:$arg1 ?p ?o
+    OPTIONAL {
+	?o rdfs:label ?label
+    }
+}
+

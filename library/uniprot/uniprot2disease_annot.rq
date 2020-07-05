@@ -1,0 +1,22 @@
+# @title 
+
+#stdin uniprot:P00918
+SELECT ?uniprot ?gene
+?protein_label
+?annot_comment
+?disease_label
+?disease_comment
+WHERE {
+    ?uniprot up:encodedBy/skos:prefLabel ?gene ;
+	     rdfs:label ?protein_label ;
+	     up:annotation ?annot .
+    ?annot a up:Disease_Annotation ;
+	     rdfs:comment ?annot_comment .
+    OPTIONAL {
+	?annot up:disease ?disease .
+	?disease skos:prefLabel ?disease_label ;
+	         rdfs:comment ?disease_comment .
+    }
+    VALUES (?uniprot) { $STDIN }
+}
+

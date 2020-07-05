@@ -1,0 +1,11 @@
+# @title 
+
+SELECT DISTINCT ?taxon ?org ?org_label
+WHERE {
+    VALUES (?taxon) { $STDIN }
+    mbgdr:default mbgd:organism ?org .
+    ?org a mbgd:Genome .
+    ?org mbgd:inTaxon ?taxon .
+    ?org rdfs:label ?org_label .
+}
+

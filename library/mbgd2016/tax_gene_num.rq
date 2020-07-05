@@ -1,0 +1,30 @@
+# @title ORDER BY DESC(?sum_length)
+# @param arg1=2 
+# @param arg2=CompleteGenome 
+# @param arg3=29 
+# @param arg4=CompleteGenome 
+# @param arg5=1117 
+# @param arg6=CompleteGenome 
+
+SELECT ?code ?organism ?sum_genes ?sum_length ?date ?pubmed
+WHERE {
+    ?genome a mbgd:$arg2 ;
+        mbgd:inTaxon taxid:$arg1 ;
+        rdfs:label ?organism ;
+        dct:identifier ?code ;
+        dct:issued ?date .
+    OPTIONAL {
+	?genome dct:references ?pubmed .
+    }
+    {
+	SELECT ?genome (SUM(?genes) AS ?sum_genes) (SUM(?length) AS ?sum_length)
+	WHERE {
+	    ?genome mbgd:nucSeq ?seq .
+	    ?seq mbgd:geneCount ?genes ;
+                 mbgd:nucLength ?length .
+	}
+    }
+}
+# ORDER BY DESC(?sum_genes)
+ORDER BY ?organism
+

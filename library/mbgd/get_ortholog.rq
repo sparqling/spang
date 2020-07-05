@@ -1,0 +1,11 @@
+# @title Get orthologs in UniProt IDs
+# @param arg1=K9Z723 
+
+SELECT ?uniprot
+WHERE {
+    ?group a orth:OrthologGroup ;
+           orth:member/orth:gene/mbgd:uniprot uniprot:$arg1 ;
+           orth:member/orth:gene/mbgd:uniprot ?uniprot ;
+           orth:inDataset mbgdr:default .
+}
+

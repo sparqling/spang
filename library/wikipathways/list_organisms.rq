@@ -1,0 +1,9 @@
+# @title List of organisms
+
+SELECT ?organism ?name (COUNT(?s) AS ?count)
+WHERE {
+    ?s wp:organism ?organism;
+       wp:organismName ?name .
+}
+ORDER BY DESC(?count)
+

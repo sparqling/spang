@@ -1,0 +1,22 @@
+# Datasets and their basic information
+define input:inference "mbgd"
+SELECT ?dataset (str(?created) AS ?date_time_created) ?title ?description ?data_dump ?derived_from
+WHERE {
+    ?dataset a void:Dataset .
+    OPTIONAL {
+        ?dataset dct:title ?title .
+    }
+    OPTIONAL {
+        ?dataset dct:description ?description .
+    }
+    OPTIONAL {
+        ?dataset dct:created ?created .
+    }
+    OPTIONAL {
+        ?dataset void:dataDump ?data_dump .
+    }
+    OPTIONAL {
+        ?dataset pav:derivedFrom ?derived_from .
+    }
+}
+ORDER BY ?dataset

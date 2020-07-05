@@ -1,0 +1,9 @@
+# @title 
+
+SELECT ?tax (COUNT(?org) AS ?count)
+WHERE {
+    VALUES (?tax) { $STDIN }
+    ?org mbgd:inTaxon ?tax .
+    mbgdr:default mbgd:organism ?org .
+}
+

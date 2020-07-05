@@ -1,0 +1,11 @@
+# @title Cluster in Newick tree format
+# @param arg1=2000 
+
+SELECT ?cluster ?tree
+WHERE {
+    ?cluster a orth:OrthologGroup ;
+             orth:inDataset mbgdr:default ;
+             dct:identifier "$arg1";
+	     mbgd:newickTree ?tree .
+}
+

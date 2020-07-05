@@ -1,0 +1,16 @@
+# @title GO annotation for cluster
+# @param arg1=2000 
+
+define input:inference "mbgd"
+SELECT ?go_id (COUNT (?go_id) AS ?go_count) (xsd:decimal(?go_count) / ?member_count AS ?go_ratio) ?go_label
+WHERE {
+    ?cluster a orth:OrthologGroup ;
+             orth:inDataset mbgdr:default ;
+             dct:identifier "$arg1";
+             mbgd:memberCount ?member_count ;
+             orth:member ?member .
+    ?member orth:gene/mbgd:uniprot/goa:goa ?go_id .
+    ?go_id skos:prefLabel ?go_label .
+}
+ORDER BY DESC(?go_count)
+

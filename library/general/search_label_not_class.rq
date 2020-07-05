@@ -1,0 +1,12 @@
+# @title Free text search in Virtuoso (count instances of each class)
+
+SELECT ?instance ?text
+WHERE {
+    ?instance rdfs:label ?text .
+    ?text bif:contains '"$1"' .
+    MINUS {
+        ?instance a ?class .
+    }
+}
+ORDER BY ?instance
+

@@ -1,0 +1,10 @@
+# @title Regex search fo GO
+# @param arg1=photosys 
+
+SELECT ?go ?label
+WHERE {
+    ?go a up:Concept ;
+         skos:prefLabel ?label .
+    FILTER (regex(?label, "$arg1"))
+}
+

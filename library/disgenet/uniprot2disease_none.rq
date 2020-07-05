@@ -1,0 +1,16 @@
+# @title Get diseases associated with given UniProt IDs
+
+#stdin uniprot:P05067
+
+SELECT DISTINCT ?uniprot ?gene ?gene_label
+WHERE {
+    ?gene a ncit:C16612 ;
+          rdfs:label ?gene_label ;
+          sio:SIO_010078/skos:exactMatch ?uniprot .
+    OPTIONAL {
+    	?gda sio:SIO_000628 ?gene .
+    }
+    VALUES (?uniprot) { $STDIN }
+    FILTER (! bound(?gda))
+}
+

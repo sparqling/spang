@@ -1,0 +1,23 @@
+# @title 
+
+SELECT ?count ?count_all ((xsd:decimal(?count)/?count_all) AS ?ratio) ?go ?go_label
+WHERE {
+    ?go up:database <http://purl.uniprot.org/database/go> ;
+        rdfs:label ?go_label .
+    {
+        SELECT (COUNT(?uniprot_all) AS ?count_all) ?go
+        WHERE {
+            ?uniprot_all up:classifiedWith ?go ;
+                up:organism tax:9606 .
+        }
+    }
+    {
+        SELECT (COUNT(?uniprot) AS ?count) ?go
+        WHERE {
+            VALUES (?uniprot) { $STDIN }
+            ?uniprot up:classifiedWith ?go .
+    	}
+    }
+}
+ORDER BY DESC(?ratio)
+

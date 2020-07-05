@@ -1,0 +1,12 @@
+# @title 
+# @param arg1=Actinobacteria 
+
+SELECT ?taxid ?rank (COUNT(?organism) AS ?count)
+WHERE {
+    ?taxid taxont:scientificName "$arg1" ;
+           taxont:rank ?rank .
+    ?organism mbgd:inTaxon ?taxid ;
+           a mbgd:CompleteGenome .
+}
+ORDER BY DESC(?count)
+

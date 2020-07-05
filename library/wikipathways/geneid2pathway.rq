@@ -1,0 +1,16 @@
+# @title Get pathway from gene name
+
+#stdin geneid:1577
+# SELECT ?source (COUNT(?gene) AS ?count)
+# SELECT ?type (COUNT(?pathway) AS ?count)
+SELECT ?gene_label ?organism_name ?pathway_label ?pathway
+WHERE {
+    ?gene rdfs:label ?gene_label ;
+             dct:isPartOf ?pathway .
+    ?pathway a wp:Pathway ;
+             dc:title ?pathway_label ;
+             wp:organismName ?organism_name .
+    VALUES (?gene) { $STDIN }
+}
+# ORDER BY DESC(?count)
+

@@ -1,0 +1,14 @@
+# @title 
+# @param arg1=543 
+# @param arg2=Species 
+
+SELECT ?label ?taxon (COUNT(?genome) AS ?count)
+WHERE {
+    ?taxon rdfs:subClassOf+ taxid:$arg1 ;
+           taxont:rank taxont:$arg2 ;
+           rdfs:label ?label .
+    ?genome a mbgd:CompleteGenome ;
+            mbgd:inTaxon ?taxon .
+}
+ORDER BY DESC(?count)
+
