@@ -1,0 +1,2 @@
+PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
+PREFIX ncbigene: <http://identifiers.org/ncbigene/>
