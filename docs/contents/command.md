@@ -1,7 +1,8 @@
 # Command line usage
 
 ## Installation
-    $ cd spang2
+    $ git clone git@github.com/hchiba1/spang.git
+    $ cd spang
     $ npm install
     $ npm link
 
@@ -24,3 +25,11 @@
       -l, --list_nick_name         list up available nicknames and quit
       --param <PARAMS>             parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")
       -h, --help                   output usage information
+
+## Shotcut mode
+```
+spang2 -L 10
+```
+```
+spang2 -G
+```
