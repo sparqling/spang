@@ -27,9 +27,11 @@
       -h, --help                   output usage information
 
 ## Shotcut mode
+Only ten triples are obtained from the target endpoint.
 ```
 spang2 -L 10
 ```
+List of graphs are obtained.
 ```
 spang2 -G
 ```
