@@ -35,3 +35,7 @@ List of graphs are obtained.
 ```
 spang2 -G
 ```
+To obatain the list of target endpoints,
+```
+spang2 -l
+```
