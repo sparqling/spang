@@ -30,9 +30,7 @@ The results is shown below as JSON format.
 ]
 ```
 
-```
 The following command returns the list of query in a library.
-```
 
 ```
 curl https://spang-portal.dbcls.jp/api/library/disgenet
