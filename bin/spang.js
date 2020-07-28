@@ -14,6 +14,7 @@ const syncRequest = require('sync-request');
 
 let sparqlTemplate;
 let db;
+let params = [];
 let parameterMap = {};
 let retrieveByGet = true;
 const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
@@ -40,7 +41,7 @@ const commander = require('commander')
       .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
       .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
       .version(version)
-      .arguments('[SPARQL_TEMPLATE]')
+      .arguments('[SPARQL_TEMPLATE] [par1=val1,par2=val2,...]')
       .action((s) => {
         sparqlTemplate = s;
       });
@@ -90,13 +91,17 @@ if(commander.args.length < 1) {
   }
 }
 
-if(commander.param) {
-  params = commander.param.split(',');
-  params.forEach((par) => {
-    [k, v] = par.split('=');
-    parameterMap[k] = v;
-  });
-}
+if(commander.param)
+  params = params.concat(commander.param.split(','));
+
+if(commander.args.length > 1)
+  params = params.concat(commander.args.slice(1).map((txt) => txt.split(',')).flat());
+
+params.forEach((par) => {
+  [k, v] = par.split('=');
+  parameterMap[k] = v;
+});
+
 
 if(commander.subject || commander.predicate || commander.object || commander.limit ||
    commander.number || commander.graph || commander.from) {
