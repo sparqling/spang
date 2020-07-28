@@ -39,3 +39,42 @@ To obatain the list of target endpoints,
 ```
 spang2 -l
 ```
+
+```
+spang2 -F http://ddbj.nig.ac.jp/ontologies/taxonomy/ -L 10
+```
+
+```
+spang2 -S http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon
+```
+
+```
+spang2 -O http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon -L 10
+```
+
+```
+spang2 -O http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon -P rdf:type -L 10
+```
+
+
+```
+spang2 -O http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon -P rdf:type -N
+```
+
+
+```
+spang -S taxon:Taxon
+```
+
+
+```
+spang -S taxon:Taxon -a
+```
+
+```
+spang2 -S taxon:Taxon -P rdf:type -L10 -a
+```
+
+```
+spang2 test/tax/count_species.rq -a --param name=Primates
+```
