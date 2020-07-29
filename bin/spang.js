@@ -14,7 +14,7 @@ const syncRequest = require('sync-request');
 
 let sparqlTemplate;
 let db;
-let params = [];
+let parameterArr = [];
 let parameterMap = {};
 let retrieveByGet = true;
 const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
@@ -91,13 +91,17 @@ if(commander.args.length < 1) {
   }
 }
 
-if(commander.param)
-  params = params.concat(commander.param.split(','));
+if (commander.param) {
+  const params = commander.param.split(',')
+  parameterArr = parameterArr.concat(params);
+}
 
-if(commander.args.length > 1)
-  params = params.concat(commander.args.slice(1).map((txt) => txt.split(',')).flat());
+if (commander.args.length > 1) {
+  const params = commander.args.slice(1).map((par) => par.split(','))
+  parameterArr = parameterArr.concat(params.flat());
+}
 
-params.forEach((par) => {
+parameterArr.forEach((par) => {
   [k, v] = par.split('=');
   parameterMap[k] = v;
 });
