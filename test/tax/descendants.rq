@@ -11,9 +11,9 @@ WHERE {
       rdfs:subClassOf+ taxid:{{taxid}} ;
       rdfs:subClassOf+ ?family ;
       rdfs:subClassOf+ ?order .
-  ?family taxon:rank taxon:Family ;
-      rdfs:label ?family_name .
   ?order taxon:rank taxon:Order ;
       rdfs:label ?order_name .
+  ?family taxon:rank taxon:Family ;
+      rdfs:label ?family_name .
 }
-ORDER BY ?order_name ?family_name ?species_name
+ORDER BY ?order_name ?family_name
