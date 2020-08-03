@@ -7,3 +7,4 @@ WHERE {
 	?s ?p ?o
   }
 }
+ORDER BY ?g
