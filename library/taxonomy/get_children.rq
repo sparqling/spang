@@ -4,10 +4,10 @@
 # @endpoint test
 # @param taxid=40674
 
-SELECT ?order ?order_name ?family ?family_name ?species ?species_name
+SELECT ?order ?order_name ?family ?family_name ?species ?name
 WHERE {
   ?species taxon:rank taxon:Species ;
-      rdfs:label ?species_name ;
+      rdfs:label ?name ;
       rdfs:subClassOf+ taxid:{{taxid}} ;
       rdfs:subClassOf+ ?family ;
       rdfs:subClassOf+ ?order .
@@ -16,4 +16,4 @@ WHERE {
   ?order taxon:rank taxon:Order ;
       rdfs:label ?order_name .
 }
-ORDER BY ?order_name ?family_name ?species_name
+ORDER BY ?order_name ?family_name ?name
