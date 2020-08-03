@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @title Count instances of Taxon class
+
+PREFIX taxon: <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
+
+SELECT (COUNT(?taxid) AS ?count)
+WHERE {
+  ?taxid a taxon:Taxon .
+}
