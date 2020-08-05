@@ -6,6 +6,7 @@
 
 SELECT (COUNT(DISTINCT ?species) AS ?count) ?taxon
 WHERE {
-  ?species rdfs:subClassOf* ?taxon .
+  ?species taxon:rank taxon:Species ;
+      rdfs:subClassOf* ?taxon .
   ?taxon rdfs:label "{{name}}" .
 }
