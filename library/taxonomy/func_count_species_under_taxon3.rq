@@ -1,0 +1,31 @@
+#!/usr/bin/env spang2
+
+# @title Count species under taxon
+# @endpoint test
+# @param taxid=40674
+
+_:countSpeciesFor(?taxon, ?count) {
+  {
+    SELECT (COUNT(DISTINCT ?species) AS ?count) ?taxon
+    WHERE {
+      ?species taxon:rank taxon:Species ;
+          rdfs:subClassOf+ ?taxon .
+    }
+  }
+}
+
+SELECT ?order ?order_name ?order_count ?family ?family_name ?family_count ?species ?species_name
+WHERE {
+  ?species taxon:rank taxon:Species ;
+      rdfs:label ?species_name ;
+      rdfs:subClassOf+ taxid:{{taxid}} ;
+      rdfs:subClassOf+ ?family ;
+      rdfs:subClassOf+ ?order .
+  ?family taxon:rank taxon:Family ;
+      rdfs:label ?family_name .
+  ?order taxon:rank taxon:Order ;
+      rdfs:label ?order_name .
+  _:countSpeciesFor(?family, ?family_count)
+  _:countSpeciesFor(?order, ?order_count)
+}
+ORDER BY DESC(?order_count) ?order_name DESC(?family_count) ?family_name ?species_name
