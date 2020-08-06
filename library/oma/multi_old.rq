@@ -1,0 +1,19 @@
+#!/usr/bin/env spang2
+
+# @endpoint oma
+# @param uniprot=Q96C23
+
+PREFIX lscr: <http://purl.org/lscr#>
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX up: <http://purl.uniprot.org/uniprot/>
+PREFIX uptax: <http://purl.uniprot.org/taxonomy/>
+
+SELECT DISTINCT ?up ?uptax
+WHERE {
+  ?cluster orth:hasHomologousMember*/lscr:xrefUniprot up:{{uniprot}} ;
+           orth:hasHomologous*/orth:hasHomologousMember ?protein .
+  ?protein a orth:Protein ;
+           lscr:xrefUniprot ?up ;
+           orth:organism/obo:RO_0002162 ?uptax .
+}
