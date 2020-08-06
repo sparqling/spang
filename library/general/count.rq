@@ -1,0 +1,8 @@
+#!/usr/bin/env spang2
+
+# @endpint test
+
+SELECT (COUNT(*) AS ?count)
+WHERE {
+  ?s ?p ?o .
+}
