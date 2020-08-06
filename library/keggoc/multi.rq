@@ -1,0 +1,25 @@
+#!/usr/bin/env spang2
+
+# @endpoint keggoc
+# @param uniprot=Q96C23
+
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX sio: <http://semanticscience.org/resource/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX idup: <http://identifiers.org/uniprot/>
+PREFIX idtax: <http://identifiers.org/taxonomy/>
+
+SELECT DISTINCT ?idup ?idtax
+WHERE {
+  ?cluster a orth:OrthologsCluster ;
+      orth:hasHomologous ?node1 ;
+      orth:hasHomologous ?node2 .
+  ?node1 orth:hasHomologous* ?query .
+  ?node2 orth:hasHomologous* ?ortholog .
+  ?query sio:SIO_010078 idup:{{uniprot}} .
+  ?ortholog a orth:Gene ;
+      sio:SIO_010078 ?idup ;
+      obo:RO_0002162 ?idtax .
+  FILTER (REGEX (STR (?idup), idup:))
+  FILTER(?node1 != ?node2) 
+}
