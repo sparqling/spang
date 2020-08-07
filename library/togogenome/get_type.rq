@@ -1,0 +1,13 @@
+#!/usr/bin/env spang2
+# @title Get type
+# @endpoint togogenome
+# @param text=MET
+
+SELECT DISTINCT ?label
+WHERE {
+  ?s ?p "{{text}}" .
+  ?s a ?type .
+  GRAPH <http://togogenome.org/graph/insdc> {
+    ?type rdfs:label ?label .
+  }
+}
