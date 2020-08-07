@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @endpoint uniprot
+
+PREFIX enst: <http://rdf.ebi.ac.uk/resource/ensembl.transcript/>
+
+SELECT *
+WHERE {
+  enst:ENST00000376279 ?p ?o .
+}
