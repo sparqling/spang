@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @param text=Homo
+
+SELECT ?s ?o
+WHERE {
+  ?s rdfs:label ?o .
+  ?o bif:contains "{{text}}" .
+}
