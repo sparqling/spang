@@ -39,8 +39,9 @@ bind_trailing_args = (fn, ...bound_args) =>
 spang.shortcut = bind_trailing_args(spang.shortcut, spang.prefix.getPrefixMap());
 
 spang.query = (sparqlTemplate, endpoint, options, callback) => {
+  const param = options.param === undefined? {} : options.param;
   var sparql, metadata;
-  [sparql, metadata] = spang.constructSparql(sparqlTemplate, options.param || '');
+  [sparql, metadata] = spang.constructSparql(sparqlTemplate, param);
   if(!endpoint) {
     endpoint = metadata.endpoint;
   }
