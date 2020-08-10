@@ -114,7 +114,7 @@ exports.embedParameter = (sparql, parameterMap) => {
   replacements = [];
   util.traverse(objectTree, (key, value) => {
     if(value && value.token == 'var' 
-       && value.prefix == '$' // only $var is replaced by parameter
+       // && value.prefix == '$' // only $var is replaced by parameter
        && parameterMap[value.value]) {
       replacements.push({start: value.location.start.offset,
                         end: value.location.end.offset - 1,
@@ -459,30 +459,28 @@ exports.expandPrefixedUri = (arg) => {
 }).call(this,"/lib")
 },{"./template_parser":9,"expand-home-dir":163,"fs":116,"sync-request":361}],7:[function(require,module,exports){
 request = require('request')
-var version = require("../package.json").version;
-
-const acceptHeaderMap = {
-  "xml"      : "application/sparql-results+xml",
-  "json"     : "application/sparql-results+json",
-  "tsv"      : "application/sparql-results+json", // receive as json and format to tsv afterward
-  "text/tsv" : "text/tab-separated-values",
-  "n-triples": "text/plain",
-  "nt"       : "text/plain",
-  "n3"       : "text/rdf+n3",
-  "html"     : "text/html",
-  "bool"     : "text/boolean",
-  "turtle"   : "application/x-turtle",
-  "ttl"      : "application/x-turtle",
-  "rdf/xml"  : "application/rdf+xml",
-  "rdfxml"   : "application/rdf+xml",
-  "rdfjson"  : "application/rdf+json",
-  "rdfbin"   : "application/x-binary-rdf",
-  "rdfbint"  : "application/x-binary-rdf-results-table",
-  "js"       : "application/javascript",
-};
-
+const version = require("../package.json").version;
 
 module.exports = (endpoint, query, format, byGet, callback) => {
+  const acceptHeaderMap = {
+    "xml"      : "application/sparql-results+xml",
+    "json"     : "application/sparql-results+json",
+    "tsv"      : "application/sparql-results+json", // receive as json and format to tsv afterward
+    "text/tsv" : "text/tab-separated-values",
+    "n-triples": "text/plain",
+    "nt"       : "text/plain",
+    "n3"       : "text/rdf+n3",
+    "html"     : "text/html",
+    "bool"     : "text/boolean",
+    "turtle"   : "application/x-turtle",
+    "ttl"      : "application/x-turtle",
+    "rdf/xml"  : "application/rdf+xml",
+    "rdfxml"   : "application/rdf+xml",
+    "rdfjson"  : "application/rdf+json",
+    "rdfbin"   : "application/x-binary-rdf",
+    "rdfbint"  : "application/x-binary-rdf-results-table",
+    "js"       : "application/javascript",
+  };
   const accept = acceptHeaderMap[format];
   var options = {
     uri: endpoint, 
