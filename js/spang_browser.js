@@ -39,12 +39,8 @@ bind_trailing_args = (fn, ...bound_args) =>
 spang.shortcut = bind_trailing_args(spang.shortcut, spang.prefix.getPrefixMap());
 
 spang.query = (sparqlTemplate, endpoint, options, callback) => {
-  let param = {};
-  if (options.param) {
-    param = options.param
-  }
   var sparql, metadata;
-  [sparql, metadata] = spang.constructSparql(sparqlTemplate, param);
+  [sparql, metadata] = spang.constructSparql(sparqlTemplate, options.param);
   if(!endpoint) {
     endpoint = metadata.endpoint;
   }
@@ -52,5 +48,5 @@ spang.query = (sparqlTemplate, endpoint, options, callback) => {
   //   [endpoint, retrieveByGet] = require('./search_db_name.js').searchDBName(endpoint, syncRequest("GET", url).getBody('utf8'));
   // }
   console.log(sparql);
-  require('../lib/query_sparql.js')(endpoint, sparql, 'json', options.get, callback);
+  require('../lib/query_sparql.js')(endpoint, sparql, options.format, options.get, callback);
 };
