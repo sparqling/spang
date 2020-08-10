@@ -52,5 +52,5 @@ spang.query = (sparqlTemplate, endpoint, options, callback) => {
   //   [endpoint, retrieveByGet] = require('./search_db_name.js').searchDBName(endpoint, syncRequest("GET", url).getBody('utf8'));
   // }
   console.log(sparql);
-  require('../lib/query_sparql.js')(endpoint, sparql, options.format, options.get, callback);
+  require('../lib/query_sparql.js')(endpoint, sparql, 'json', options.get, callback);
 };

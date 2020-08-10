@@ -53,7 +53,7 @@ spang.query = (sparqlTemplate, endpoint, options, callback) => {
   //   [endpoint, retrieveByGet] = require('./search_db_name.js').searchDBName(endpoint, syncRequest("GET", url).getBody('utf8'));
   // }
   console.log(sparql);
-  require('../lib/query_sparql.js')(endpoint, sparql, options.format, options.get, callback);
+  require('../lib/query_sparql.js')(endpoint, sparql, 'json', options.get, callback);
 };
 
 },{"../lib/construct_sparql.js":2,"../lib/embed_parameter.js":3,"../lib/prefix.js":6,"../lib/query_sparql.js":7,"../lib/shortcut.js":8,"../package.json":386,"request":290,"sync-request":361}],2:[function(require,module,exports){
