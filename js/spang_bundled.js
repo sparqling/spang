@@ -457,7 +457,7 @@ exports.expandPrefixedUri = (arg) => {
 request = require('request')
 const version = require("../package.json").version;
 
-module.exports = (endpoint, query, format="json", byGet, callback) => {
+module.exports = (endpoint, query, format, byGet, callback) => {
   const acceptHeaderMap = {
     "xml"      : "application/sparql-results+xml",
     "json"     : "application/sparql-results+json",
@@ -480,7 +480,7 @@ module.exports = (endpoint, query, format="json", byGet, callback) => {
   const accept = acceptHeaderMap[format];
   var options = {
     uri: endpoint, 
-    form: {query: query},
+    // form: {query: query},
     qs: {query: query},
     followAllRedirects: true,
     headers:{ 
@@ -488,6 +488,7 @@ module.exports = (endpoint, query, format="json", byGet, callback) => {
       "Accept": accept
     }
   };
+  console.log(options);
   if(byGet) {
     request.get(options, callback);
   } else {
