@@ -1,4 +1,7 @@
+#!/usr/bin/env spang2
+
 # @title Count proteins for each organism
+# @endpoint uniprot
 
 SELECT ?org (COUNT(?org) AS ?count) ?org_name
 WHERE {
