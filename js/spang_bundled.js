@@ -40,12 +40,8 @@ bind_trailing_args = (fn, ...bound_args) =>
 spang.shortcut = bind_trailing_args(spang.shortcut, spang.prefix.getPrefixMap());
 
 spang.query = (sparqlTemplate, endpoint, options, callback) => {
-  let param = {};
-  if (options.param) {
-    param = options.param
-  }
   var sparql, metadata;
-  [sparql, metadata] = spang.constructSparql(sparqlTemplate, param);
+  [sparql, metadata] = spang.constructSparql(sparqlTemplate, options.param);
   if(!endpoint) {
     endpoint = metadata.endpoint;
   }
@@ -53,7 +49,7 @@ spang.query = (sparqlTemplate, endpoint, options, callback) => {
   //   [endpoint, retrieveByGet] = require('./search_db_name.js').searchDBName(endpoint, syncRequest("GET", url).getBody('utf8'));
   // }
   console.log(sparql);
-  require('../lib/query_sparql.js')(endpoint, sparql, 'json', options.get, callback);
+  require('../lib/query_sparql.js')(endpoint, sparql, options.format, options.get, callback);
 };
 
 },{"../lib/construct_sparql.js":2,"../lib/embed_parameter.js":3,"../lib/prefix.js":6,"../lib/query_sparql.js":7,"../lib/shortcut.js":8,"../package.json":386,"request":290,"sync-request":361}],2:[function(require,module,exports){
@@ -461,7 +457,7 @@ exports.expandPrefixedUri = (arg) => {
 request = require('request')
 const version = require("../package.json").version;
 
-module.exports = (endpoint, query, format, byGet, callback) => {
+module.exports = (endpoint, query, format="json", byGet, callback) => {
   const acceptHeaderMap = {
     "xml"      : "application/sparql-results+xml",
     "json"     : "application/sparql-results+json",
