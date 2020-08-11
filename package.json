@@ -16,11 +16,12 @@
     "sync-request": "^6.1.0"
   },
   "devDependencies": {
+    "browserify": "^16.5.0",
     "chai": "^4.1.2",
     "chai-fs": "^2.0.0",
     "mocha": "^7.1.2",
-    "browserify": "^16.5.0",
-    "pegjs": "^0.10.0"
+    "pegjs": "^0.10.0",
+    "terser": "^5.0.0"
   },
   "bin": {
     "spang2": "./bin/spang.js",
@@ -34,6 +35,6 @@
   "scripts": {
     "test": "mocha",
     "pegjs": "pegjs -o lib/parser.js syntax/spang.pegjs",
-    "browserify": "browserify js/spang_browser.js > js/spang_bundled.js && browserify js/spfmt_browser.js > js/spfmt_bundled.js"
+    "browserify": "browserify js/spang_browser.js > js/spang_bundled.js && browserify js/spfmt_browser.js > js/spfmt_bundled.js && terser js/spang_bundled.js > js/spang_bundled.min.js"
   }
 }

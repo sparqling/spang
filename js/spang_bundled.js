@@ -104,6 +104,8 @@ const util = require('./util.js');
 const parser = require('./template_parser.js');
 const mustache = require('mustache');
 
+mustache.escape = (text) => { return text; };
+
 exports.embedParameter = (sparql, parameterMap) => {
   sparql = mustache.render(sparql, parameterMap);
   const objectTree = parser.parse(sparql);
@@ -25648,11 +25650,24 @@ function getLength(buf, p) {
     return initial;
   }
   var octetLen = initial & 0xf;
+
+  // Indefinite length or overflow
+  if (octetLen === 0 || octetLen > 4) {
+    return false;
+  }
+
   var val = 0;
   for (var i = 0, off = p.place; i < octetLen; i++, off++) {
     val <<= 8;
     val |= buf[off];
+    val >>>= 0;
   }
+
+  // Leading zeroes
+  if (val <= 0x7f) {
+    return false;
+  }
+
   p.place = off;
   return val;
 }
@@ -25676,6 +25691,9 @@ Signature.prototype._importDER = function _importDER(data, enc) {
     return false;
   }
   var len = getLength(data, p);
+  if (len === false) {
+    return false;
+  }
   if ((len + p.place) !== data.length) {
     return false;
   }
@@ -25683,21 +25701,37 @@ Signature.prototype._importDER = function _importDER(data, enc) {
     return false;
   }
   var rlen = getLength(data, p);
+  if (rlen === false) {
+    return false;
+  }
   var r = data.slice(p.place, rlen + p.place);
   p.place += rlen;
   if (data[p.place++] !== 0x02) {
     return false;
   }
   var slen = getLength(data, p);
+  if (slen === false) {
+    return false;
+  }
   if (data.length !== slen + p.place) {
     return false;
   }
   var s = data.slice(p.place, slen + p.place);
-  if (r[0] === 0 && (r[1] & 0x80)) {
-    r = r.slice(1);
+  if (r[0] === 0) {
+    if (r[1] & 0x80) {
+      r = r.slice(1);
+    } else {
+      // Leading zeroes
+      return false;
+    }
   }
-  if (s[0] === 0 && (s[1] & 0x80)) {
-    s = s.slice(1);
+  if (s[0] === 0) {
+    if (s[1] & 0x80) {
+      s = s.slice(1);
+    } else {
+      // Leading zeroes
+      return false;
+    }
   }
 
   this.r = new BN(r);
@@ -26940,34 +26974,34 @@ utils.intFromLE = intFromLE;
 module.exports={
   "_args": [
     [
-      "elliptic@6.5.2",
-      "/home/chiba/github/hchiba1/sparql-utils"
+      "elliptic@6.5.3",
+      "/Users/matsumoto_mini/workspace/spang"
     ]
   ],
   "_development": true,
-  "_from": "elliptic@6.5.2",
-  "_id": "elliptic@6.5.2",
+  "_from": "elliptic@6.5.3",
+  "_id": "elliptic@6.5.3",
   "_inBundle": false,
-  "_integrity": "sha512-f4x70okzZbIQl/NSRLkI/+tteV/9WqL98zx+SQ69KbXxmVrmjwsNUPn/gYJJ0sHvEak24cZgHIPegRePAtA/xw==",
+  "_integrity": "sha512-IMqzv5wNQf+E6aHeIqATs0tOLeOTwj1QKbRcS3jBbYkl5oLAserA8yJTT7/VyHUYG91PRmPyeQDObKLPpeS4dw==",
   "_location": "/elliptic",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "elliptic@6.5.2",
+    "raw": "elliptic@6.5.3",
     "name": "elliptic",
     "escapedName": "elliptic",
-    "rawSpec": "6.5.2",
+    "rawSpec": "6.5.3",
     "saveSpec": null,
-    "fetchSpec": "6.5.2"
+    "fetchSpec": "6.5.3"
   },
   "_requiredBy": [
     "/browserify-sign",
     "/create-ecdh"
   ],
-  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.5.2.tgz",
-  "_spec": "6.5.2",
-  "_where": "/home/chiba/github/hchiba1/sparql-utils",
+  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.5.3.tgz",
+  "_spec": "6.5.3",
+  "_where": "/Users/matsumoto_mini/workspace/spang",
   "author": {
     "name": "Fedor Indutny",
     "email": "fedor@indutny.com"
@@ -27026,7 +27060,7 @@ module.exports={
     "unit": "istanbul test _mocha --reporter=spec test/index.js",
     "version": "grunt dist && git add dist/"
   },
-  "version": "6.5.2"
+  "version": "6.5.3"
 }
 
 },{}],161:[function(require,module,exports){
@@ -86157,11 +86191,12 @@ module.exports={
     "sync-request": "^6.1.0"
   },
   "devDependencies": {
+    "browserify": "^16.5.0",
     "chai": "^4.1.2",
     "chai-fs": "^2.0.0",
     "mocha": "^7.1.2",
-    "browserify": "^16.5.0",
-    "pegjs": "^0.10.0"
+    "pegjs": "^0.10.0",
+    "terser": "^5.0.0"
   },
   "bin": {
     "spang2": "./bin/spang.js",
@@ -86175,7 +86210,7 @@ module.exports={
   "scripts": {
     "test": "mocha",
     "pegjs": "pegjs -o lib/parser.js syntax/spang.pegjs",
-    "browserify": "browserify js/spang_browser.js > js/spang_bundled.js && browserify js/spfmt_browser.js > js/spfmt_bundled.js"
+    "browserify": "browserify js/spang_browser.js > js/spang_bundled.js && browserify js/spfmt_browser.js > js/spfmt_bundled.js && terser js/spang_bundled.js > js/spang_bundled.min.js"
   }
 }
 
