@@ -1,4 +1,4 @@
-# JavaScript library usage
+# Use in JavaScript
 
 * Download `spfmt_bundled.js` and use it in your HTML.
 
