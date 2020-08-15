@@ -1,4 +1,4 @@
-# Command line usage
+# Use in command line
 
 ## Installation
     $ git clone git@github.com/hchiba1/spang.git
