@@ -40,6 +40,7 @@ const commander = require('commander')
       .option('-i, --indent <DEPTH>', "indent depth; use with --fmt", 2)
       .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
       .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
+      .option('--time', 'measure time of query execution (exluding construction of query)')
       .version(version)
       .arguments('[SPARQL_TEMPLATE] [par1=val1,par2=val2,...]')
       .action((s) => {
@@ -150,8 +151,13 @@ if(/^\w/.test(db)) {
   } else if (/^post$/i.test(commander.method)) {
     retrieveByGet = false
   }
+  let start = new Date();
   querySparql(db, sparqlTemplate, commander.outfmt, retrieveByGet, (error, response, body) => {
     if (!error && response.statusCode == 200) {
+      if(commander.time) {
+        let end = new Date() - start;
+        console.log('Time of query: %dms', end);
+      }
       if(commander.outfmt == 'tsv') {
         const obj = JSON.parse(body);
         const vars = obj.head.vars;
