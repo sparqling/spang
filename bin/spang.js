@@ -103,12 +103,17 @@ if (commander.args.length > 1) {
 }
 
 let positionalArguments = [];
-
+let inPositional = true;
 parameterArr.forEach((par) => {
-  [k, v] = par.split('=');
+  [k, v] = par.split(/=(.+)/);
   if(v) {
+    inPositional = false;
     parameterMap[k] = v;
   } else {
+    if(!inPositional) {
+      console.log(`Positional arguments must precede named arguments: ${parameterArr}`);
+      process.exit(-1);
+    }
     positionalArguments.push(par);
   }
 });
