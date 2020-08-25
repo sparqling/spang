@@ -102,11 +102,16 @@ if (commander.args.length > 1) {
   parameterArr = parameterArr.concat(params.flat());
 }
 
+let positionalArguments = [];
+
 parameterArr.forEach((par) => {
   [k, v] = par.split('=');
-  parameterMap[k] = v;
+  if(v) {
+    parameterMap[k] = v;
+  } else {
+    positionalArguments.push(par);
+  }
 });
-
 
 if(commander.subject || commander.predicate || commander.object || commander.limit ||
    commander.number || commander.graph || commander.from) {
@@ -119,7 +124,7 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
   } else {
     sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8');
   }
-  [sparqlTemplate, metadata] = constructSparql(sparqlTemplate, parameterMap, input);
+  [sparqlTemplate, metadata] = constructSparql(sparqlTemplate, parameterMap, positionalArguments, input);
 }
 
 if(commander.show_query) {
