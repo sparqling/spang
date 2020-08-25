@@ -2,10 +2,8 @@
 
 # @title count number of species under a taxon
 # @endpoint test
-# @param name=Primates
 
-SELECT (COUNT(DISTINCT ?species) AS ?count) ?taxon
+SELECT (COUNT(DISTINCT ?taxid) AS ?count)
 WHERE {
-  ?species rdfs:subClassOf* ?taxon .
-  ?taxon rdfs:label "{{name}}" .
+  ?taxid rdfs:subClassOf* taxid:9443 .
 }
