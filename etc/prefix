@@ -38,6 +38,7 @@ PREFIX tax: <http://purl.uniprot.org/taxonomy/>
 PREFIX taxid: <http://identifiers.org/taxonomy/>
 PREFIX taxon: <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
 PREFIX taxonomy: <http://www.ncbi.nlm.nih.gov/taxonomy/>
+PREFIX ncbigene: <http://identifiers.org/ncbigene/>
 PREFIX pdb: <http://rdf.wwpdb.org/pdb/>
 PREFIX PDBo: <http://rdf.wwpdb.org/schema/pdbx-v40.owl#>
 PREFIX chembl: <http://rdf.ebi.ac.uk/terms/chembl#>
