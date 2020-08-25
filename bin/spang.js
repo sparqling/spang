@@ -154,10 +154,7 @@ if(/^\w/.test(db)) {
   let start = new Date();
   querySparql(db, sparqlTemplate, commander.outfmt, retrieveByGet, (error, response, body) => {
     if (!error && response.statusCode == 200) {
-      if(commander.time) {
-        let end = new Date() - start;
-        console.log('Time of query: %dms', end);
-      }
+      let end = new Date() - start;
       if(commander.outfmt == 'tsv') {
         const obj = JSON.parse(body);
         const vars = obj.head.vars;
@@ -169,6 +166,9 @@ if(/^\w/.test(db)) {
         });
       } else {
         console.log(body);
+      }
+      if(commander.time) {
+        console.log('Time of query: %dms', end);
       }
     } else {
       console.log('Error: '+ response.statusCode);
