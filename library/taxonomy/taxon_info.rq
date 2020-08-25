@@ -1,0 +1,4 @@
+SELECT ?p ?o
+WHERE {
+  taxid:9606 ?p ?o .
+}
