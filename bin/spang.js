@@ -54,7 +54,7 @@ if (commander.fmt) {
   if(commander.args[0]) {
     sparqlQuery = fs.readFileSync(commander.args[0], "utf8").toString();
   } else if (process.stdin.isTTY) {
-    console.log('Format SPARQL query: input is required');
+    console.error('Format SPARQL query: input is required');
     process.exit(-1)
   } else {
     sparqlQuery = input;
@@ -84,10 +84,10 @@ if(commander.list_nick_name) {
 
 if(commander.args.length < 1) {
   if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
-    console.log(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
+    console.error(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
     commander.help();
   } else if(!commander.endpoint && !dbMap['default']) {
-    console.log(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
+    console.error(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
     commander.help();
   }
 }
@@ -111,7 +111,7 @@ parameterArr.forEach((par) => {
     parameterMap[k] = v;
   } else {
     if(!inPositional) {
-      console.log(`Positional arguments must precede named arguments: ${parameterArr}`);
+      console.error(`Positional arguments must precede named arguments: ${parameterArr}`);
       process.exit(-1);
     }
     positionalArguments.push(par);
@@ -144,14 +144,14 @@ if(commander.endpoint) {
 } else if(dbMap['default']) {
   db = dbMap['default'].url;
 } else {
-  console.log('Endpoint is required');
+  console.error('Endpoint is required');
   process.exit(-1);
 }
 
 if(/^\w/.test(db)) {
   if (!(/^(http|https):\/\//.test(db))) {
     if (!dbMap[db]) {
-      console.log(`${db}: no such endpoint`);
+      console.error(`${db}: no such endpoint`);
       process.exit(-1);
     }
     [db, retrieveByGet] = search_db_name.searchDBName(db);
@@ -178,18 +178,18 @@ if(/^\w/.test(db)) {
         console.log(body);
       }
       if(commander.time) {
-        console.log('Time of query: %dms', end);
+        console.error('Time of query: %dms', end);
       }
     } else {
-      console.log('Error: '+ response.statusCode);
-      console.log(body);
+      console.error('Error: '+ response.statusCode);
+      console.error(body);
     }
   });
 } else {
   if (db == '-') {
     // TODO: save input as a temporary file name
   } else if(!fs.existsSync(db)) {
-    console.log(`${db}: no such file`);
+    console.error(`${db}: no such file`);
     process.exit(-1);
   }
   // TODO: use Jena or other JS implementation
