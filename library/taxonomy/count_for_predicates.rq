@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# Count instances for each class
+SELECT (COUNT(?p) AS ?count) ?p
+FROM <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
+WHERE {
+  ?s ?p ?o .
+}
+GROUP BY ?p
+ORDER BY DESC(?count)
