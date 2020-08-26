@@ -7,24 +7,36 @@
     $ npm link
 
 ## Usage
-    Usage: spang2 [options] <SPARQL_TEMPLATE>
-    
-    Options:
-      -V, --version                output the version number
-      -f, --format <FORMAT>        tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html (default: "tsv")
-      -e, --endpoint <ENDPOINT>    target endpoint
-      -S, --subject <SUBJECT>      shortcut to specify subject
-      -P, --predicate <PREDICATE>  shortcut to specify predicate
-      -O, --object <OBJECT>        shortcut to specify object
-      -F, --from <FROM>            shortcut to search FROM specific graph (use alone or with -[SPOLN])
-      -N, --number                 shortcut of COUNT query (use alone or with -[SPO])
-      -G, --graph                  shortcut to search Graph names (use alone or with -[SPO])
-      -a, --abbr                   abbreviate results using predefined prefixes
-      -q, --show_query             show query and quit
-      -L, --limit <LIMIT>          LIMIT output (use alone or with -[SPOF])
-      -l, --list_nick_name         list up available nicknames and quit
-      --param <PARAMS>             parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")
-      -h, --help                   output usage information
+```
+SPANG v2.0.0: Specify a SPARQL query (template or shortcut).
+
+Usage: spang2 [options] [SPARQL_TEMPLATE] [par1=val1,par2=val2,...]
+
+Options:
+  -e, --endpoint <ENDPOINT>    target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)
+  -p, --param <PARAMS>         parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")
+  -o, --outfmt <FORMAT>        tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html (default: "tsv")
+  -a, --abbr                   abbreviate results using predefined prefixes
+  -v, --vars                   variable names are included in output (in the case of tsv format)
+  -S, --subject <SUBJECT>      shortcut to specify subject
+  -P, --predicate <PREDICATE>  shortcut to specify predicate
+  -O, --object <OBJECT>        shortcut to specify object
+  -L, --limit <LIMIT>          LIMIT output (use alone or with -[SPOF])
+  -F, --from <FROM>            shortcut to search FROM specific graph (use alone or with -[SPOLN])
+  -N, --number                 shortcut to COUNT results (use alone or with -[SPO])
+  -G, --graph                  shortcut to search for graph names (use alone or with -[SPO])
+  -r, --prefix <PREFIX_FILES>  read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)
+  -n, --ignore                 ignore user-specific file (~/.spang/prefix) for test purpose
+  -m, --method <METHOD>        GET or POST (default: "GET")
+  -q, --show_query             show query and quit
+  -f, --fmt                    format the query
+  -i, --indent <DEPTH>         indent depth; use with --fmt (default: 2)
+  -l, --list_nick_name         list up available nicknames of endpoints and quit
+  -d, --debug                  debug (output query embedded in URL, or output AST with --fmt)
+  --time                       measure time of query execution (exluding construction of query)
+  -V, --version                output the version number
+  -h, --help                   display help for command
+```
 
 ## Shotcut mode
 Only ten triples are obtained from the target endpoint.
