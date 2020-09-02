@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @title Count triples from graph
+
+SELECT (COUNT(*) AS ?count)
+WHERE {
+  GRAPH <http://ddbj.nig.ac.jp/ontologies/taxonomy/> { 
+    ?s ?p ?o
+  }
+}

@@ -1,0 +1,8 @@
+#!/usr/bin/env spang2
+
+SELECT DISTINCT ?graph
+WHERE {
+  GRAPH ?graph {
+    ?s ?p ?o
+  }
+}

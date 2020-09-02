@@ -1,0 +1,5 @@
+SELECT *
+WHERE {
+  taxid:9606 ?p ?o .
+}
+ORDER BY ?p ?o
