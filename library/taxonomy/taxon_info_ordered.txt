@@ -1,0 +1,17 @@
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/authority>	"Homo sapiens Linnaeus, 1758"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/commonName>	"man"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/genbankCommonName>	"human"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCode>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode1>
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCodeMt>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode2>
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/rank>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Species>
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/scientificName>	"Homo sapiens"
+<http://purl.org/dc/terms/identifier>	"9606"^^<http://www.w3.org/2001/XMLSchema#integer>
+<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon>
+<http://www.w3.org/2000/01/rdf-schema#label>	"Homo sapiens"
+<http://www.w3.org/2000/01/rdf-schema#seeAlso>	<http://purl.uniprot.org/taxonomy/9606>
+<http://www.w3.org/2000/01/rdf-schema#subClassOf>	<http://identifiers.org/taxonomy/9605>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/9606>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://purl.obolibrary.org/obo/NCBITaxon_9606>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://purl.org/obo/owl/NCBITaxon#9606>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://www.berkeleybop.org/ontologies/owl/NCBITaxon#9606>
+<http://www.w3.org/2002/07/owl#sameAs>	<http://www.ncbi.nlm.nih.gov/taxonomy/9606>
