@@ -10,6 +10,7 @@ let jsonPath;
 
 const commander = require('commander')
       .option('-i, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
+      .option('-d, --delimiter <DELIMITER>', 'delimiter of output', ',')
       .arguments('[json_path]')
       .action((s) => {
         jsonPath = s;
@@ -62,6 +63,6 @@ header = ['name']
 header = header.concat(Array.from({length:commander.iteration},(_,k)=>k+1));
 header.push('average');
 
-csv = convertArrayToCSV(rows, { header });
+csv = convertArrayToCSV(rows, { header, separator: commander.delimiter });
 
 console.log(csv);
