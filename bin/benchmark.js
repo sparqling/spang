@@ -3,6 +3,7 @@
 const fs = require('fs');
 const { spawnSync } = require("child_process");
 const { convertArrayToCSV } = require('convert-array-to-csv');
+const ls = require('ls');
 
 
 let jsonPath;
@@ -22,21 +23,22 @@ json = JSON.parse(readFile(commander.args[0]));
 
 let rows = [];
 
-for(let benchmark of json)
-{
-  const queryPath = benchmark.query;
-  const expected = benchmark.expected ? readFile(benchmark.expected) : null;
+function measureQuery(queryPath, expected){
+  console.error(`${queryPath} started...`);
   let row = [queryPath];
   let times = [];
   for(let i = 0; i < commander.iteration; i++) {
+    console.error(`${i}...`);
     let result = spawnSync('spang2', ['--time', queryPath]);
     if(result.status) // error
     {
-      
+      console.error("error!");
+      row.push(result.stderr.toString());
     } else {
       let time = result.stderr.toString().match(/(\d+)ms/)[1];
       times.push(time);
       if(!expected || expected === result.stdout.toString()) {
+        console.error(time);
         row.push(time);
       } else {
         row.push(`${time}_wrong`);
@@ -46,6 +48,14 @@ for(let benchmark of json)
   const average = times.map((t) => parseInt(t)).reduce((a, b) => a+b, 0) / times.length;
   row.push(average.toString());
   rows.push(row);
+};
+
+for(let benchmark of json)
+{
+  const expected = benchmark.expected ? readFile(benchmark.expected) : null;
+  for(let file of ls(benchmark.query)) {
+    measureQuery(file.full, expected);
+  }
 }
 
 header = ['name']
