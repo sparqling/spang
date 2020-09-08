@@ -1,4 +1,4 @@
-SELECT COUNT(?o)
+SELECT (COUNT(?o) AS ?count)
 WHERE {
   ?s ?p ?o .
   FILTER(isLITERAL(?o))
