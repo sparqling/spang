@@ -8,6 +8,7 @@
   "description": "JavaScript implementation of SPANG",
   "dependencies": {
     "commander": "^5.1.0",
+    "convert-array-to-csv": "^2.0.0",
     "expand-home-dir": "0.0.3",
     "fs": "0.0.1-security",
     "mustache": "4.0.0",

@@ -1,0 +1,12 @@
+[
+  {
+    "query": "library/taxonomy/count_in_taxon.rq"
+  },
+  { 
+    "query": "library/taxonomy/count*"
+  },
+  {
+    "query": "library/taxonomy/common_ancestor.rq",
+    "expected": "benchmarks/common_ancestor.txt"
+  }
+]
