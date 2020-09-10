@@ -1,0 +1,8 @@
+#!/usr/bin/env spang2
+
+SELECT ?ancestor ?label
+WHERE {
+  FILTER ((?human) in (taxid:9606) )
+  ?human rdfs:subClassOf* ?ancestor .
+  ?ancestor rdfs:label ?label .
+}
