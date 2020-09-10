@@ -49,12 +49,17 @@ function measureQuery(queryPath, expected){
     {
       row[column] = result.stderr.toString();
     } else {
-      let time = result.stderr.toString().match(/(\d+)ms/)[1];
-      times.push(time);
-      if(!expected || expected === result.stdout.toString()) {
-        row[column] = time;
+      let matched = result.stderr.toString().match(/(\d+)ms/);
+      if(matched) {
+        time = matched[1];
+        times.push(time);
+        if(!expected || expected === result.stdout.toString()) {
+          row[column] = time;
+        } else {
+          row[column] = `${time}_wrong`;
+        }
       } else {
-        row[column] = `${time}_wrong`;
+        row[column] = `no_time`;
       }
     }
     if(commander.verbose) console.error(row[column]);
