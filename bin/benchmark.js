@@ -11,6 +11,7 @@ let jsonPath;
 const commander = require('commander')
       .option('-i, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
       .option('-d, --delimiter <DELIMITER>', 'delimiter of output', ',')
+      .option('-e, --endpoint <ENDPOINT>', 'url of target endpoint')
       .option('-v, --verbose', 'output progress to stderr')
       .arguments('[json_path]')
       .action((s) => {
@@ -44,7 +45,10 @@ function measureQuery(queryPath, expected){
   for(let i = 0; i < commander.iteration; i++) {
     let column = (i+1).toString();
     if(commander.verbose) console.error(`query: ${column}`);
-    let result = spawnSync('spang2', ['--time', queryPath]);
+    let arguments =  ['--time', queryPath];
+    if(commander.endpoint)
+      arguments = arguments.concat(['--endpoint', commander.endpoint]);
+    let result = spawnSync('spang2', arguments);
     if(result.status) // error
     {
       row[column] = result.stderr.toString();
