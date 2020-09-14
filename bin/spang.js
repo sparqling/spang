@@ -162,26 +162,30 @@ if(/^\w/.test(db)) {
     retrieveByGet = false
   }
   let start = new Date();
-  querySparql(db, sparqlTemplate, commander.outfmt, retrieveByGet, (error, response, body) => {
-    if (!error && response.statusCode == 200) {
+  querySparql(db, sparqlTemplate, commander.outfmt, retrieveByGet, (error, statusCode, bodies) => {
+    if (!error && statusCode == 200) {
       let end = new Date() - start;
-      if(commander.outfmt == 'tsv') {
-        const obj = JSON.parse(body);
-        const vars = obj.head.vars;
-        if (commander.vars) {
-          console.log(vars.join("\t"))
+      if(bodies.length == 1) {
+        let body = bodies[0];
+        if(commander.outfmt == 'tsv') {
+          console.log(jsonToTsv(body));
+        } else {
+          console.log(body);
         }
-        obj.results.bindings.forEach(b => {
-          console.log(vars.map(v => toString(b[v])).join("\t"));
-        });
+        if(commander.time) {
+          console.error('Time of query: %dms', end);
+        }
       } else {
-        console.log(body);
-      }
-      if(commander.time) {
-        console.error('Time of query: %dms', end);
+        console.error('The results are paginated. Those pages are saved as result1.out, result2.out,....');
+        for(let i = 0; i < bodies.length; i++) {
+          if(commander.outfmt == 'tsv')
+            fs.writeFileSync(`result${i+1}.out`, jsonToTsv(bodies[i]));
+          else
+            fs.writeFileSync(`result${i+1}.out`, bodies[i]);
+        }
       }
     } else {
-      console.error('Error: '+ response.statusCode);
+      console.error('Error: '+ statusCode);
       console.error(body);
     }
   });
@@ -213,3 +217,16 @@ toString = (resource) => {
     return `"${resource.value}"`;
   }
 }
+
+jsonToTsv = (body) => {
+  const obj = JSON.parse(body);
+  const vars = obj.head.vars;
+  let tsv = '';
+  if (commander.vars) {
+    tsv += vars.join("\t") + "\n";
+  }
+  obj.results.bindings.forEach(b => {
+    tsv += vars.map(v => toString(b[v])).join("\t") + "\n";
+  });
+  return tsv;
+};
