@@ -225,8 +225,8 @@ jsonToTsv = (body) => {
   if (commander.vars) {
     tsv += vars.join("\t") + "\n";
   }
-  obj.results.bindings.forEach(b => {
-    tsv += vars.map(v => toString(b[v])).join("\t") + "\n";
-  });
+  tsv += obj.results.bindings.map(b => {
+    return vars.map(v => toString(b[v])).join("\t");
+  }).join("\n");
   return tsv;
 };
