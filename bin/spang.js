@@ -186,7 +186,7 @@ if(/^\w/.test(db)) {
       }
     } else {
       console.error('Error: '+ statusCode);
-      console.error(body);
+      console.error(bodies);
     }
   });
 } else {
