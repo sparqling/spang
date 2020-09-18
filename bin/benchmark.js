@@ -93,7 +93,7 @@ for(let benchmark of json)
         else {
           const matched = files.find((file) => file.file === basename);
           if(matched) {
-            expected = readFile(matched);
+            expected = readFile(matched.full);
           }
         }
       }
