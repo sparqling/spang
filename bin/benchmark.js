@@ -13,6 +13,7 @@ const commander = require('commander')
       .option('-i, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
       .option('-d, --delimiter <DELIMITER>', 'delimiter of output', ',')
       .option('-e, --endpoint <ENDPOINT>', 'url of target endpoint')
+      .option('-m, --method <METHOD>', 'method of HTTP requers (GET or POST)', 'GET')
       .option('-s, --skip_comparison', 'skip comparison with expected result')
       .option('-v, --verbose', 'output progress to stderr')
       .arguments('[json_path]')
@@ -47,7 +48,7 @@ function measureQuery(queryPath, expected){
   for(let i = 0; i < commander.iteration; i++) {
     let column = (i+1).toString();
     if(commander.verbose) console.error(`query: ${column}`);
-    let arguments =  ['--time', queryPath];
+    let arguments =  ['--time', queryPath, '--method', commander.method];
     if(commander.endpoint)
       arguments = arguments.concat(['--endpoint', commander.endpoint]);
     let result = spawnSync('spang2', arguments);
