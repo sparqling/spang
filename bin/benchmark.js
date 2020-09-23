@@ -7,7 +7,6 @@ const ls = require('ls');
 const path = require('path');
 
 
-let jsonPath;
 
 const commander = require('commander')
       .option('-i, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
@@ -18,10 +17,7 @@ const commander = require('commander')
       .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
       .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
       .option('-v, --verbose', 'output progress to stderr')
-      .arguments('[json_path]')
-      .action((s) => {
-        jsonPath = s;
-      });
+      .arguments('[json or queries...]')
 
 commander.parse(process.argv);
 
@@ -39,7 +35,18 @@ let writer = csvWriter({
 writer.pipe(process.stdout);
 readFile = (path) => fs.readFileSync(path, "utf8").toString();
 
-json = JSON.parse(readFile(commander.args[0]));
+benchmarks = [];
+for(let arg of commander.args) {
+  if(arg.endsWith(".json")) {
+    benchmarks = benchmarks.concat(JSON.parse(readFile(arg)));
+  } else {
+    benchmarks.push({
+      query: arg
+    });
+  }
+}
+ 
+
 
 let rows = [];
 
@@ -81,7 +88,7 @@ function measureQuery(queryPath, expected){
 const pattern = commander.pattern ? new RegExp(commander.pattern) : null;
 const exclude = commander.exclude ? new RegExp(commander.exclude) : null;
 
-for(let benchmark of json)
+for(let benchmark of benchmarks)
 {
   const queries = ls(benchmark.query);
   
