@@ -15,6 +15,8 @@ const commander = require('commander')
       .option('-e, --endpoint <ENDPOINT>', 'url of target endpoint')
       .option('-m, --method <METHOD>', 'method of HTTP requers (GET or POST)', 'GET')
       .option('-s, --skip_comparison', 'skip comparison with expected result')
+      .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
+      .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
       .option('-v, --verbose', 'output progress to stderr')
       .arguments('[json_path]')
       .action((s) => {
@@ -76,10 +78,16 @@ function measureQuery(queryPath, expected){
   writer.write(row);
 };
 
+const pattern = commander.pattern ? new RegExp(commander.pattern) : null;
+const exclude = commander.exclude ? new RegExp(commander.exclude) : null;
+
 for(let benchmark of json)
 {
   const queries = ls(benchmark.query);
+  
   for(let file of queries) {
+    if(pattern && !file.full.match(pattern)) continue;
+    if(exclude && file.full.match(exclude)) continue;
     let expected = null;
     const defaultExpectedName = file.full.replace(/\.[^/.]+$/, "") + '.txt'
     if(!commander.skip_comparison) {
