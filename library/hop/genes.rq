@@ -1,0 +1,11 @@
+#!/usr/bin/env spang2
+# @endpoint ortho
+
+PREFIX orth: <http://purl.jp/bio/11/orth#>
+
+SELECT *
+WHERE {
+  ?gene a orth:Gene ;
+      hop:symbol ?symbol ;
+      hop:description ?descr .
+}
