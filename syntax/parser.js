@@ -222,6 +222,7 @@ function peg$parse(input, options) {
         query.projection = s.vars;
         query.modifier = s.modifier;
         query.pattern = w;
+        query.location = location();
         
         if(sm!=null && sm.limit!=null) {
           query.limit = sm.limit;
@@ -343,6 +344,7 @@ function peg$parse(input, options) {
         query.dataset = dataset;
         query.template = t;
         query.pattern = w;
+        query.location = location();
         
         if(sm!=null && sm.limit!=null) {
           query.limit = sm.limit;
@@ -392,6 +394,7 @@ function peg$parse(input, options) {
           token: "basicgraphpattern",
           triplesContext: t.triplesContext
         };
+        query.location = location();    
         
         if(sm!=null && sm.limit!=null) {
           query.limit = sm.limit;
@@ -433,7 +436,8 @@ function peg$parse(input, options) {
         query.kind = 'ask';
         query.token = 'executableunit'
         query.dataset = dataset;
-        query.pattern = w
+        query.pattern = w;
+        query.location = location();
         
         return query
       },

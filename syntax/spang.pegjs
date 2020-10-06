@@ -139,6 +139,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
   query.projection = s.vars;
   query.modifier = s.modifier;
   query.pattern = w;
+  query.location = location();
   
   if(sm!=null && sm.limit!=null) {
     query.limit = sm.limit;
@@ -245,6 +246,7 @@ ConstructQuery = WS* ('CONSTRUCT'/'construct') WS* t:ConstructTemplate WS* gs:Da
   query.dataset = dataset;
   query.template = t;
   query.pattern = w;
+  query.location = location();
   
   if(sm!=null && sm.limit!=null) {
     query.limit = sm.limit;
@@ -287,6 +289,7 @@ ConstructQuery = WS* ('CONSTRUCT'/'construct') WS* t:ConstructTemplate WS* gs:Da
     token: "basicgraphpattern",
     triplesContext: t.triplesContext
   };
+  query.location = location();    
   
   if(sm!=null && sm.limit!=null) {
     query.limit = sm.limit;
@@ -328,7 +331,8 @@ AskQuery = WS* ('ASK'/'ask') WS* gs:DatasetClause* WS* w:WhereClause
   query.kind = 'ask';
   query.token = 'executableunit'
   query.dataset = dataset;
-  query.pattern = w
+  query.pattern = w;
+  query.location = location();
   
   return query
 }
