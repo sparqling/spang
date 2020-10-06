@@ -168,20 +168,35 @@ if(/^\w/.test(db)) {
       if(bodies.length == 1) {
         let body = bodies[0];
         if(commander.outfmt == 'tsv') {
-          console.log(jsonToTsv(body));
+          console.log(jsonToTsv(body, true));
         } else {
           console.log(body);
         }
         if(commander.time) {
           console.error('Time of query: %dms', end);
         }
+      } else if(['tsv', 'text/tsv', 'n-triples', 'nt', 'turtle', 'ttl'].includes(commander.outfmt)) {
+        switch(commander.outfmt) {
+        case 'tsv':
+          for(let i = 0; i < bodies.length; i++) {
+            console.log(jsonToTsv(bodies[i], i == 0));
+          }
+          break;
+        case 'text/tsv':
+          console.log(bodies[0]);
+          for(let i = 1; i < bodies.length; i++) {
+            console.log(bodies[i].substring(bodies[i].indexOf("\n")));
+          }
+          break;
+        default:
+          for(let i = 0; i < bodies.length; i++) {
+            console.log(bodies[i]);
+          }          
+        }
       } else {
         console.error('The results are paginated. Those pages are saved as result1.out, result2.out,....');
         for(let i = 0; i < bodies.length; i++) {
-          if(commander.outfmt == 'tsv')
-            fs.writeFileSync(`result${i+1}.out`, jsonToTsv(bodies[i]));
-          else
-            fs.writeFileSync(`result${i+1}.out`, bodies[i]);
+          fs.writeFileSync(`result${i+1}.out`, bodies[i]);
         }
       }
     } else {
@@ -218,11 +233,11 @@ toString = (resource) => {
   }
 }
 
-jsonToTsv = (body) => {
+jsonToTsv = (body, withHeader) => {
   const obj = JSON.parse(body);
   const vars = obj.head.vars;
   let tsv = '';
-  if (commander.vars) {
+  if (commander.vars && withHeader) {
     tsv += vars.join("\t") + "\n";
   }
   tsv += obj.results.bindings.map(b => {
