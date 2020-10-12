@@ -16,6 +16,7 @@ const commander = require('commander')
       .option('-s, --skip_comparison', 'skip comparison with expected result')
       .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
       .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
+      .option('-a, --average', 'calculate average')
       .option('-v, --verbose', 'output progress to stderr')
       .arguments('[json or queries...]')
 
@@ -23,7 +24,9 @@ commander.parse(process.argv);
 
 header = ['name'];
 header = header.concat(Array.from({length:commander.iteration},(_,k)=>k+1));
-header.push('average');
+if (commander.average) {
+  header.push('average');
+}
 
 let writer = csvWriter({
   separator: commander.delimiter,
@@ -80,8 +83,10 @@ function measureQuery(queryPath, expected){
     }
     if(commander.verbose) console.error(row[column]);
   }
-  const average = times.map((t) => parseInt(t)).reduce((a, b) => a+b, 0) / times.length;
-  row['average'] = average.toString();
+  if (commander.average) {
+    const average = times.map((t) => parseInt(t)).reduce((a, b) => a+b, 0) / times.length;
+    row['average'] = average.toString();
+  }
   writer.write(row);
 };
 
