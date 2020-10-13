@@ -9,3 +9,4 @@ WHERE {
   ?species rdfs:subClassOf* ?taxon .
   ?taxon rdfs:label "{{name}}" .
 }
+GROUP BY ?taxon
