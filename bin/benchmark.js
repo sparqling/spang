@@ -16,6 +16,7 @@ const commander = require('commander')
       .option('-s, --skip_comparison', 'skip comparison with expected result')
       .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
       .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
+      .option('--sec', 'output in "sec" (default: in "ms")')
       .option('-a, --average', 'calculate average')
       .option('-v, --verbose', 'output progress to stderr')
       .arguments('[json or queries...]')
@@ -71,6 +72,9 @@ function measureQuery(queryPath, expected){
       let matched = result.stderr.toString().match(/(\d+)ms/);
       if(matched) {
         time = matched[1];
+        if (commander.sec) {
+          time = time / 1000;
+        }
         times.push(time);
         if(!expected || expected === result.stdout.toString()) {
           row[column] = time;
