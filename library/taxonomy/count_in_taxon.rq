@@ -2,8 +2,9 @@
 
 # @title count number of species under a taxon
 # @endpoint test
+# @param id=9443
 
 SELECT (COUNT(DISTINCT ?taxid) AS ?count)
 WHERE {
-  ?taxid rdfs:subClassOf* taxid:9443 .
+  ?taxid rdfs:subClassOf* taxid:{{id}} .
 }
