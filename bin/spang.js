@@ -183,9 +183,11 @@ if(/^\w/.test(db)) {
           }
           break;
         case 'text/tsv':
-          console.log(bodies[0]);
+          process.stdout.write(bodies[0]);
           for(let i = 1; i < bodies.length; i++) {
-            console.log(bodies[i].substring(bodies[i].indexOf("\n")));
+            if(!bodies[i-1].endsWith("\n")) console.log('');
+            process.stdout.write(bodies[i].substring(bodies[i].indexOf("\n") + 1));
+
           }
           break;
         default:
