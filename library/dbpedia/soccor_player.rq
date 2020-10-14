@@ -1,0 +1,14 @@
+#!/usr/bin/env spang2
+# @title Get instances of a class
+# @endpoint dbpedia
+
+SELECT ?s ?birth_date ?birth_place ?team
+WHERE {
+  ?s a dbo:SoccerPlayer .
+  ?s dbo:birthPlace ?birth_place .
+  ?s dbo:birthDate ?birth_date .
+  ?s dbo:team ?team .
+  FILTER(xsd:date(?birth_date) >= "1980"^^xsd:date )
+  FILTER(?team = <http://dbpedia.org/resource/Real_Madrid_C.F.> )
+}
+ORDER BY ?birth_date

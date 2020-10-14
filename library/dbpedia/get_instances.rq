@@ -1,0 +1,10 @@
+#!/usr/bin/env spang2
+# @title Get instances of a type
+# @endpoint dbpedia
+# @param type=SoccerPlayer
+
+SELECT ?s
+WHERE {
+  ?s a dbo:{{type}} .
+}
+LIMIT 10
