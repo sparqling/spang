@@ -1,10 +1,12 @@
+#!/usr/bin/env spang2
 # @title Free text search in Virtuoso (count instances of each class)
+# @endpoint dbpedia
 # @param arg1=okazaki 
 
 SELECT ?class (COUNT(DISTINCT ?instance) AS ?count)
 WHERE {
     ?instance rdfs:label ?text .
-    ?text bif:contains '"$arg1"' .
+    ?text bif:contains '"{{arg1}}"' .
     ?instance a ?class .
     ?class rdfs:subClassOf+ owl:Thing .
 }
