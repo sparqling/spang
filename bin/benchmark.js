@@ -19,7 +19,7 @@ const commander = require('commander')
       .option('--sec', 'output in "sec" (default: in "ms")')
       .option('-a, --average', 'calculate average')
       .option('-v, --verbose', 'output progress to stderr')
-      .arguments('[json or queries...]')
+      .arguments('[json_or_queries...]')
 
 commander.parse(process.argv);
 
