@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @endpoint disgenet
+
+SELECT *
+WHERE {
+  ?s a ncit:C16612 .
+  ?s skos:exactMatch ?o .
+  ?o a ncit:C16612 .
+}
