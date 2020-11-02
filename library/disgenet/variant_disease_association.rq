@@ -1,0 +1,10 @@
+#!/usr/bin/env spang2
+# @endpoint disgenet
+
+SELECT ?s ?disease ?variant
+WHERE {
+  ?s a sio:SIO_000897 ;
+      sio:SIO_000628 ?disease, ?variant .
+  ?disease a ncit:C7057 .
+  ?variant a so:0001060 .
+}
