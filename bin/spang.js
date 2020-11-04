@@ -36,6 +36,7 @@ const commander = require('commander')
       .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
       .option('-m, --method <METHOD>', 'GET or POST', 'GET')
       .option('-q, --show_query', 'show query and quit')
+      .option('--show_metadata', 'show metadata and quit')
       .option('-f, --fmt', 'format the query')
       .option('-i, --indent <DEPTH>', "indent depth; use with --fmt", 2)
       .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
@@ -134,6 +135,11 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
 
 if(commander.show_query) {
   console.log(sparqlTemplate);
+  process.exit(0);
+}
+
+if(commander.show_metadata) {
+  console.log(JSON.stringify(metadata));
   process.exit(0);
 }
 
