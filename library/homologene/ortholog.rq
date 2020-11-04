@@ -1,0 +1,17 @@
+#!/usr/bin/env spang2
+# @endpoint ortho
+# @param id=3
+
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX homologene: <https://ncbi.nlm.nih.gov/homologene/>
+PREFIX ncbigene: <http://identifiers.org/ncbigene/>
+
+SELECT DISTINCT ?taxid ?organism_label ?gene ?gene_label ?protein
+WHERE {
+  homologene:{{id}} a orth:OrthologsCluster ;
+      orth:hasHomologousMember ?gene .
+  ?gene rdfs:label ?gene_label ;
+      orth:protein ?protein ;
+      orth:taxon ?taxid .
+  ?taxid rdfs:label ?organism_label .
+}
