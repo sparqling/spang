@@ -11,6 +11,8 @@ const shortcut = require('../lib/shortcut.js').shortcut;
 const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
 const syncRequest = require('sync-request');
+const columnify = require('columnify')
+const csvParse = require('csv-parse/lib/sync')
 
 let sparqlTemplate;
 let db;
@@ -20,6 +22,7 @@ let retrieveByGet = true;
 const input = process.stdin.isTTY ? "" : fs.readFileSync(process.stdin.fd, "utf8");
 
 const commander = require('commander')
+      .option('-c, --align_column', 'align output columns (only valid for tsv)')
       .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
       .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
       .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
@@ -174,27 +177,30 @@ if(/^\w/.test(db)) {
       if(bodies.length == 1) {
         let body = bodies[0];
         if(commander.outfmt == 'tsv') {
-          console.log(jsonToTsv(body, true));
+          console.log(alignTsvIfPreferred(jsonToTsv(body), true));
         } else {
-          console.log(body);
+          console.log(alignTsvIfPreferred(body));
         }
         if(commander.time) {
           console.error('Time of query: %dms', end);
         }
       } else if(['tsv', 'text/tsv', 'n-triples', 'nt', 'turtle', 'ttl'].includes(commander.outfmt)) {
+        let outputStr = "";
         switch(commander.outfmt) {
         case 'tsv':
           for(let i = 0; i < bodies.length; i++) {
-            console.log(jsonToTsv(bodies[i], i == 0));
+            outputStr += jsonToTsv(bodies[i], i == 0);
           }
+          console.log(alignTsvIfPreferred(outputStr));
           break;
         case 'text/tsv':
+          outputStr += bodies[0];
           process.stdout.write(bodies[0]);
           for(let i = 1; i < bodies.length; i++) {
-            if(!bodies[i-1].endsWith("\n")) console.log('');
-            process.stdout.write(bodies[i].substring(bodies[i].indexOf("\n") + 1));
-
+            if(!bodies[i-1].endsWith("\n")) outputStr += "\n";
+            outputStr += bodies[i].substring(bodies[i].indexOf("\n") + 1);
           }
+          console.log(alignTsvIfPreferred(outputStr));
           break;
         default:
           for(let i = 0; i < bodies.length; i++) {
@@ -253,3 +259,10 @@ jsonToTsv = (body, withHeader) => {
   }).join("\n");
   return tsv;
 };
+
+alignTsvIfPreferred = (tsv) => {
+  if (commander.align_column) {
+    return columnify(csvParse(tsv, {columns: true, delimiter: "\t", relax:true })).replace(/\s+$/gm, '');
+  }
+  return tsv;
+}
