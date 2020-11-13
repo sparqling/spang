@@ -1,0 +1,10 @@
+#!/usr/bin/env spang2
+# @endpoint ortho
+
+SELECT *
+WHERE {
+  GRAPH <https://orth.dbcls.jp/data/hop> {
+    ?s a orth:OrthologGroup .
+  }
+}
+LIMIT 10
