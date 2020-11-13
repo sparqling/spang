@@ -1,4 +1,5 @@
 # @title Count genes for each organism
+# @endpoint http://agrold.southgreen.fr/sparql
 
 SELECT ?taxid ?taxid_label (COUNT(DISTINCT ?gene) AS ?gene_count)
 FROM <http://www.southgreen.fr/agrold/gramene.genes>
