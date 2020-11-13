@@ -1,0 +1,15 @@
+#!/usr/bin/env spang2
+# @endpoint ortho
+
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX homologene: <https://ncbi.nlm.nih.gov/homologene/>
+
+SELECT DISTINCT ?taxid ?id ?label
+WHERE {
+  GRAPH homologene: {
+    ?s a orth:Gene .
+    ?s orth:taxon ?taxid .
+  }
+  ?taxid rdfs:label ?label .
+  ?taxid dct:identifier ?id .
+}
