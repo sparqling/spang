@@ -2,6 +2,7 @@
 # @endpoint ortho
 
 PREFIX hop: <http://purl.org/net/orthordf/hOP/ontology#>
+PREFIX orth: <http://purl.jp/bio/11/orth#>
 
 SELECT ?gene ?max ?cat
 WHERE {
