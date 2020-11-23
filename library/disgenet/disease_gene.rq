@@ -1,3 +1,4 @@
+#!/usr/bin/env spang2
 # @title Get genes associated with a specific disease, e.g. C0751955 ("Brain Infarction")
 # @endpoint http://rdf.disgenet.org/sparql/
 # @prefix https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio
