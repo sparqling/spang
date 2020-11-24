@@ -134,7 +134,8 @@ if(commander.subject || commander.predicate || commander.object || (commander.li
     sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8');
   }
   [sparqlTemplate, metadata] = constructSparql(sparqlTemplate, parameterMap, positionalArguments, input);
-  sparqlTemplate += `LIMIT ${commander.limit}`; 
+  if(commander.limit)
+    sparqlTemplate += `LIMIT ${commander.limit}`; 
 }
 
 if(commander.show_query) {
