@@ -139,7 +139,7 @@ if(commander.subject || commander.predicate || commander.object || (commander.li
 }
 
 if(commander.show_query) {
-  console.log(sparqlTemplate);
+  process.stdout.write(sparqlTemplate);
   process.exit(0);
 }
 
