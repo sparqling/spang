@@ -1,0 +1,16 @@
+#!/usr/bin/env spang2
+# @endpoint ortho
+
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+PREFIX homologene: <https://ncbi.nlm.nih.gov/homologene/>
+PREFIX hop: <http://purl.org/net/orthordf/hOP/ontology#>
+
+SELECT ?human_gene (max(?time) as ?max)
+WHERE {
+  ?grp orth:inDataset homologene: ;
+      orth:hasHomologousMember ?human_gene, ?gene .
+  ?human_gene orth:taxon taxid:9606 .
+  ?gene orth:taxon ?taxid .
+  ?taxid hop:branchTimeMya ?time .
+} 
