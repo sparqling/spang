@@ -182,7 +182,7 @@ if(/^\w/.test(db)) {
       if(bodies.length == 1) {
         let body = bodies[0];
         if(commander.outfmt == 'tsv') {
-          console.log(alignTsvIfPreferred(jsonToTsv(body), true));
+          console.log(alignTsvIfPreferred(jsonToTsv(body, true)));
         } else {
           console.log(alignTsvIfPreferred(body));
         }
