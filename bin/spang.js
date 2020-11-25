@@ -31,7 +31,7 @@ const commander = require('commander')
       .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
       .option('-P, --predicate <PREDICATE>', 'shortcut to specify predicate')
       .option('-O, --object <OBJECT>', 'shortcut to specify object')
-      .option('-L, --limit <LIMIT>', 'LIMIT output (use alone or with -[SPOF])')
+      .option('-L, --limit <LIMIT>', 'LIMIT output')
       .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
       .option('-N, --number', 'shortcut to COUNT results (use alone or with -[SPO])')
       .option('-G, --graph', 'shortcut to search for graph names (use alone or with -[SPO])')
@@ -122,7 +122,7 @@ parameterArr.forEach((par) => {
   }
 });
 
-if(commander.subject || commander.predicate || commander.object || commander.limit ||
+if(commander.subject || commander.predicate || commander.object || (commander.limit && !sparqlTemplate) ||
    commander.number || commander.graph || commander.from) {
   sparqlTemplate = shortcut({S: commander.subject, P: commander.predicate, O: commander.object,
                              L: commander.limit, N: commander.number, G: commander.graph, F: commander.from}, prefixModule.getPrefixMap());
@@ -134,10 +134,15 @@ if(commander.subject || commander.predicate || commander.object || commander.lim
     sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8');
   }
   [sparqlTemplate, metadata] = constructSparql(sparqlTemplate, parameterMap, positionalArguments, input);
+  if(commander.limit) {
+    if(!sparqlTemplate.endsWith("\n"))
+      sparqlTemplate += "\n";
+    sparqlTemplate += `LIMIT ${commander.limit}\n`;
+  }
 }
 
 if(commander.show_query) {
-  console.log(sparqlTemplate);
+  process.stdout.write(sparqlTemplate);
   process.exit(0);
 }
 
