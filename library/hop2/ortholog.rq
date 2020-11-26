@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @endpoint orthodev
+
+PREFIX orth: <http://purl.org/net/orth#>
+
+SELECT *
+WHERE {
+  ?grp orth:hasHomologousMember geneid:34 .
+}
