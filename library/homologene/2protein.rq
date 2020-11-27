@@ -1,0 +1,12 @@
+#!/usr/bin/env spang2
+# @endpoint ortho
+
+PREFIX homologene: <https://ncbi.nlm.nih.gov/homologene/>
+PREFIX orth: <http://purl.org/net/orth#>
+
+SELECT ?protein
+WHERE {
+  VALUES ?homologene { homologene:3 }
+  ?homologene orth:hasHomologousMember ?gene .
+  ?gene orth:protein ?protein .
+}
