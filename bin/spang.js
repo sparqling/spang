@@ -11,8 +11,9 @@ const shortcut = require('../lib/shortcut.js').shortcut;
 const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
 const syncRequest = require('sync-request');
-const columnify = require('columnify')
-const csvParse = require('csv-parse/lib/sync')
+const columnify = require('columnify');
+const csvParse = require('csv-parse/lib/sync');
+const metadataModule = require('../lib/metadata.js');
 
 let sparqlTemplate;
 let db;
@@ -52,6 +53,30 @@ const commander = require('commander')
       });
 
 commander.parse(process.argv);
+
+let metadata, templateSpecified;
+if(commander.subject || commander.predicate || commander.object || (commander.limit && !sparqlTemplate) ||
+   commander.number || commander.graph || commander.from) {
+  sparqlTemplate = shortcut({S: commander.subject, P: commander.predicate, O: commander.object,
+                             L: commander.limit, N: commander.number, G: commander.graph, F: commander.from}, prefixModule.getPrefixMap());
+  templateSpecified = false;
+  metadata = {};
+} else {
+  if(/^(http|https):\/\//.test(sparqlTemplate)) {
+    sparqlTemplate = syncRequest("GET", sparqlTemplate).getBody("utf8");
+  } else {
+    sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8');
+  }  
+  metadata = metadataModule.retrieveMetadata(sparqlTemplate);
+  if(metadata.option) {
+    let args = process.argv;
+    let tmp = sparqlTemplate; // remember template
+    args = args.concat(metadata.option.split(/\s+/));
+    commander.parse(args);
+    sparqlTemplate = tmp; // restore
+  }
+  templateSpecified = true;
+}
 
 if (commander.fmt) {
   var sparqlQuery;
@@ -122,18 +147,8 @@ parameterArr.forEach((par) => {
   }
 });
 
-if(commander.subject || commander.predicate || commander.object || (commander.limit && !sparqlTemplate) ||
-   commander.number || commander.graph || commander.from) {
-  sparqlTemplate = shortcut({S: commander.subject, P: commander.predicate, O: commander.object,
-                             L: commander.limit, N: commander.number, G: commander.graph, F: commander.from}, prefixModule.getPrefixMap());
-  metadata = {};
-} else {
-  if(/^(http|https):\/\//.test(sparqlTemplate)) {
-    sparqlTemplate = syncRequest("GET", sparqlTemplate).getBody("utf8");
-  } else {
-    sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8');
-  }
-  [sparqlTemplate, metadata] = constructSparql(sparqlTemplate, parameterMap, positionalArguments, input);
+if(templateSpecified) {
+  sparqlTemplate = constructSparql(sparqlTemplate, metadata, parameterMap, positionalArguments, input);
   if(commander.limit) {
     if(!sparqlTemplate.endsWith("\n"))
       sparqlTemplate += "\n";
