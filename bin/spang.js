@@ -267,7 +267,12 @@ jsonToTsv = (body, withHeader) => {
 
 alignTsvIfPreferred = (tsv) => {
   if (commander.align_column) {
-    return columnify(csvParse(tsv, {columns: true, delimiter: "\t", relax:true })).replace(/\s+$/gm, '');
+    return columnify(csvParse(tsv, {columns: !!commander.vars, delimiter: "\t", relax:true }),
+                     {
+                       showHeaders: !!commander.vars,
+                       headingTransform: x => x,
+                     }
+                    ).replace(/\s+$/gm, '');
   }
   return tsv;
 }
