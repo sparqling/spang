@@ -15,6 +15,7 @@ const columnify = require('columnify');
 const csvParse = require('csv-parse/lib/sync');
 const metadataModule = require('../lib/metadata.js');
 
+let templatePath;
 let sparqlTemplate;
 let db;
 let parameterArr = [];
@@ -49,7 +50,7 @@ const commander = require('commander')
       .version(version)
       .arguments('[SPARQL_TEMPLATE] [par1=val1,par2=val2,...]')
       .action((s) => {
-        sparqlTemplate = s;
+        templatePath = s;
       });
 
 commander.parse(process.argv);
@@ -62,18 +63,16 @@ if(commander.subject || commander.predicate || commander.object || (commander.li
   templateSpecified = false;
   metadata = {};
 } else {
-  if(/^(http|https):\/\//.test(sparqlTemplate)) {
-    sparqlTemplate = syncRequest("GET", sparqlTemplate).getBody("utf8");
+  if(/^(http|https):\/\//.test(templatePath)) {
+    sparqlTemplate = syncRequest("GET", templatePath).getBody("utf8");
   } else {
-    sparqlTemplate = fs.readFileSync(sparqlTemplate, 'utf8');
+    sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
   }  
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
   if(metadata.option) {
     let args = process.argv;
-    let tmp = sparqlTemplate; // remember template
     args = args.concat(metadata.option.split(/\s+/));
     commander.parse(args);
-    sparqlTemplate = tmp; // restore
   }
   templateSpecified = true;
 }
