@@ -6,4 +6,3 @@ WHERE {
     ?s rdf:type ?o .
 }
 LIMIT 10
-
