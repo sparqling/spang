@@ -56,7 +56,7 @@ const commander = require('commander')
 commander.parse(process.argv);
 
 let metadata, templateSpecified;
-if(commander.subject || commander.predicate || commander.object || (commander.limit && !sparqlTemplate) ||
+if(commander.subject || commander.predicate || commander.object || (commander.limit && !templatePath) ||
    commander.number || commander.graph || commander.from) {
   sparqlTemplate = shortcut({S: commander.subject, P: commander.predicate, O: commander.object,
                              L: commander.limit, N: commander.number, G: commander.graph, F: commander.from}, prefixModule.getPrefixMap());
