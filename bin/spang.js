@@ -56,6 +56,21 @@ const commander = require('commander')
 commander.parse(process.argv);
 
 let metadata, templateSpecified;
+
+if (commander.fmt) {
+  var sparqlQuery;
+  if(commander.args[0]) {
+    sparqlQuery = fs.readFileSync(commander.args[0], "utf8").toString();
+  } else if (process.stdin.isTTY) {
+    console.error('Format SPARQL query: input is required');
+    process.exit(-1)
+  } else {
+    sparqlQuery = input;
+  }
+  console.log(spfmt.reformat(sparqlQuery, commander.indent, commander.debug));
+  process.exit(0)
+}
+
 if(commander.subject || commander.predicate || commander.object || (commander.limit && !templatePath) ||
    commander.number || commander.graph || commander.from) {
   sparqlTemplate = shortcut({S: commander.subject, P: commander.predicate, O: commander.object,
@@ -75,20 +90,6 @@ if(commander.subject || commander.predicate || commander.object || (commander.li
     commander.parse(args);
   }
   templateSpecified = true;
-}
-
-if (commander.fmt) {
-  var sparqlQuery;
-  if(commander.args[0]) {
-    sparqlQuery = fs.readFileSync(commander.args[0], "utf8").toString();
-  } else if (process.stdin.isTTY) {
-    console.error('Format SPARQL query: input is required');
-    process.exit(-1)
-  } else {
-    sparqlQuery = input;
-  }
-  console.log(spfmt.reformat(sparqlQuery, commander.indent, commander.debug));
-  process.exit(0)
 }
 
 if(commander.prefix) {
