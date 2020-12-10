@@ -1,0 +1,8 @@
+#!/usr/bin/env spang2
+# @endpoint ortho
+
+SELECT ?group (COUNT(DISTINCT ?org) AS ?count)
+WHERE {
+  ?group orth:organism ?org .
+}
+ORDER BY DESC(?count)
