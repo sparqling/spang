@@ -16,7 +16,9 @@ const csvParse = require('csv-parse/lib/sync');
 const metadataModule = require('../lib/metadata.js');
 
 let templatePath;
+let templateSpecified;
 let sparqlTemplate;
+let metadata;
 let db;
 let parameterArr = [];
 let parameterMap = {};
@@ -54,8 +56,6 @@ const commander = require('commander')
       });
 
 commander.parse(process.argv);
-
-let metadata, templateSpecified;
 
 if (commander.fmt) {
   var sparqlQuery;
