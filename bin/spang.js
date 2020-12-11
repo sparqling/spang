@@ -71,6 +71,18 @@ if (commander.fmt) {
   process.exit(0)
 }
 
+const dbMap = search_db_name.listup();
+
+if (commander.args.length < 1) {
+  if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
+    console.error(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
+    commander.help();
+  } else if (!commander.endpoint && !dbMap['default']) {
+    console.error(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
+    commander.help();
+  }
+}
+
 if(commander.subject || commander.predicate || commander.object || (commander.limit && !templatePath) ||
    commander.number || commander.graph || commander.from) {
   sparqlTemplate = shortcut({S: commander.subject, P: commander.predicate, O: commander.object,
@@ -100,8 +112,6 @@ if(commander.prefix) {
   prefixModule.setPrefixFiles([`${__dirname}/../etc/prefix`, `${require('os').homedir()}/.spang/prefix`]);
 }
 
-const dbMap = search_db_name.listup();
-
 if(commander.list_nick_name) {
   console.log('SPARQL endpoints');
   const maxLen = Object.keys(dbMap).map(key => key.length).reduce((a, b) => Math.max(a, b));
@@ -109,16 +119,6 @@ if(commander.list_nick_name) {
     console.log(` ${entry.padEnd(maxLen, ' ')} ${dbMap[entry].url}`);
   }
   process.exit(0);
-}
-
-if(commander.args.length < 1) {
-  if(!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
-    console.error(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
-    commander.help();
-  } else if(!commander.endpoint && !dbMap['default']) {
-    console.error(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
-    commander.help();
-  }
 }
 
 if (commander.param) {
