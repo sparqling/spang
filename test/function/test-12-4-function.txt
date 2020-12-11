@@ -9,4 +9,3 @@ WHERE {
   ?ancestor rdfs:label ?label .
 }
 ORDER BY ?ancestor
-
