@@ -26,10 +26,10 @@ let retrieveByGet = true;
 const input = process.stdin.isTTY ? '' : fs.readFileSync(process.stdin.fd, 'utf8');
 
 const commander = require('commander')
-  .option('-c, --align_column', 'align output columns (only valid for tsv)')
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
   .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
   .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
+  .option('-c, --align_column', 'align output columns (only valid for tsv)')
   .option('-a, --abbr', 'abbreviate results using predefined prefixes')
   .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
   .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
@@ -201,11 +201,10 @@ if (/^\w/.test(db)) {
     if (!error && statusCode == 200) {
       let end = new Date() - start;
       if (bodies.length == 1) {
-        let body = bodies[0];
         if (commander.outfmt == 'tsv') {
-          console.log(alignTsvIfPreferred(jsonToTsv(body, true)));
+          printTsv(jsonToTsv(bodies[0], Boolean(commander.vars)));
         } else {
-          console.log(alignTsvIfPreferred(body));
+          console.log(bodies[0]);
         }
         if (commander.time) {
           console.error('Time of query: %dms', end);
@@ -215,18 +214,19 @@ if (/^\w/.test(db)) {
         switch (commander.outfmt) {
           case 'tsv':
             for (let i = 0; i < bodies.length; i++) {
-              outputStr += jsonToTsv(bodies[i], i == 0);
+              outputStr += jsonToTsv(bodies[i], Boolean(commander.vars && i == 0));
             }
-            console.log(alignTsvIfPreferred(outputStr));
+            printTsv(outputStr);
             break;
           case 'text/tsv':
             outputStr += bodies[0];
-            process.stdout.write(bodies[0]);
+            // process.stdout.write(bodies[0]);
             for (let i = 1; i < bodies.length; i++) {
               if (!bodies[i - 1].endsWith('\n')) outputStr += '\n';
               outputStr += bodies[i].substring(bodies[i].indexOf('\n') + 1);
+              // remove header line for i > 0
             }
-            console.log(alignTsvIfPreferred(outputStr));
+            printTsv(outputStr);
             break;
           default:
             for (let i = 0; i < bodies.length; i++) {
@@ -277,7 +277,7 @@ jsonToTsv = (body, withHeader) => {
   const obj = JSON.parse(body);
   const vars = obj.head.vars;
   let tsv = '';
-  if (commander.vars && withHeader) {
+  if (withHeader) {
     tsv += vars.join('\t') + '\n';
   }
   tsv += obj.results.bindings
@@ -288,13 +288,16 @@ jsonToTsv = (body, withHeader) => {
   return tsv;
 };
 
-alignTsvIfPreferred = (tsv) => {
+printTsv = (tsv) => {
   if (commander.align_column) {
-    return columnify(csvParse(tsv, { columns: Boolean(commander.vars), delimiter: '\t', relax: true }), {
-      // relax csvParse to accept "hoge"^^xsd:string
-      showHeaders: Boolean(commander.vars),
-      headingTransform: (x) => x,
-    }).replace(/\s+$/gm, '');
+    console.log(
+      columnify(csvParse(tsv, { columns: Boolean(commander.vars), delimiter: '\t', relax: true }), {
+        // relax csvParse to accept "hoge"^^xsd:string
+        showHeaders: Boolean(commander.vars),
+        headingTransform: (x) => x,
+      }).replace(/\s+$/gm, '')
+    );
+  } else {
+    console.log(tsv);
   }
-  return tsv;
 };
