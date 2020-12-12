@@ -58,7 +58,7 @@ const commander = require('commander')
 commander.parse(process.argv);
 
 if (commander.fmt) {
-  var sparqlQuery;
+  let sparqlQuery;
   if (commander.args[0]) {
     sparqlQuery = fs.readFileSync(commander.args[0], 'utf8').toString();
   } else if (process.stdin.isTTY) {
@@ -290,8 +290,9 @@ jsonToTsv = (body, withHeader) => {
 
 alignTsvIfPreferred = (tsv) => {
   if (commander.align_column) {
-    return columnify(csvParse(tsv, { columns: !!commander.vars, delimiter: '\t', relax: true }), {
-      showHeaders: !!commander.vars,
+    return columnify(csvParse(tsv, { columns: Boolean(commander.vars), delimiter: '\t', relax: true }), {
+      // relax csvParse to accept "hoge"^^xsd:string
+      showHeaders: Boolean(commander.vars),
       headingTransform: (x) => x,
     }).replace(/\s+$/gm, '');
   }
