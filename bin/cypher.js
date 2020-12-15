@@ -29,18 +29,18 @@ const commander = require('commander')
   .option('-f, --format <FORMAT>', 'tsv, json', 'tsv')
   .option('-c, --align_column', 'align output columns (only valid for tsv)')
   .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
-  .option('-n, --node <LABEL>', 'shortcut to search for node with LABEL')
-  .option('-P, --props <PROP,...>', 'shortcut to select output properties')
-  .option('-F, --filter <PROP:VAL,...>', 'shortcut to filter by property values for nodes')
-  .option('-L, --limit <LIMIT>', 'LIMIT output')
-  .option('-N, --count', 'shortcut to COUNT results')
-  .option('-G, --graph', 'count relations in the whole graph')
   .option('-r, --relation <LABEL>', 'shortcut to search for relation with LABEL')
-  .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
+  .option('-n, --node <LABEL>', 'shortcut to search for node with LABEL')
+  .option('-i, --id <ID>', 'specify id of node')
+  .option('-p, --props <PROP:VAL,...>', 'shortcut to filter by property values for nodes')
+  .option('-R, --ret <PROP,...>', 'shortcut to select output node properties')
+  .option('-L, --limit <LIMIT>', 'LIMIT output')
+  .option('-C, --count', 'shortcut to COUNT results')
   .option('-q, --show_query', 'show query and quit')
   .option('--show_metadata', 'show metadata and quit')
-  .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
+  .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
   .option('--time', 'measure time of query execution (exluding construction of query)')
+  .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
   .arguments('[QUERY_TEMPLATE] [par1=val1,par2=val2,...]')
   .action((s) => {
     templatePath = s;
@@ -51,7 +51,7 @@ commander.parse(process.argv);
 const dbMap = search_db_name.listup();
 
 if (commander.args.length < 1) {
-  if (!commander.node && !commander.filter && !commander.props && !commander.count && !commander.relation && !commander.graph && !commander.limit) {
+  if (!commander.node && !commander.props && !commander.ret && !commander.count && !commander.relation && !commander.id && !commander.limit) {
     console.error('Specify a query (template or shortcut).\n');
     commander.help();
   } else if (!commander.endpoint && !dbMap['default']) {
@@ -60,9 +60,9 @@ if (commander.args.length < 1) {
   }
 }
 
-if (commander.node || commander.filter || commander.props || (commander.limit && !templatePath) || commander.count || commander.graph || commander.relation) {
+if (commander.node || commander.props || commander.ret || (commander.limit && !templatePath) || commander.count || commander.id || commander.relation) {
   queryTemplate = shortcut(
-    { S: commander.node, F: commander.filter, P: commander.props, L: commander.limit, N: commander.count, G: commander.graph, R: commander.relation },
+    { n: commander.node, p: commander.props, R: commander.ret, L: commander.limit, C: commander.count, i: commander.id, r: commander.relation },
     prefixModule.getPrefixMap()
   );
   templateSpecified = false;
