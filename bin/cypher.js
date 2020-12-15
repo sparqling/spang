@@ -23,7 +23,7 @@ let retrieveByGet = false;
 const input = process.stdin.isTTY ? '' : fs.readFileSync(process.stdin.fd, 'utf8');
 
 const commander = require('commander')
-  .option('-e, --endpoint <ENDPOINT>', 'target endpoint', 'http://localhost:7474/db/data/transaction/commit')
+  .option('-e, --endpoint <ENDPOINT>', 'target endpoint (alias in ~/.spang/endpoints)', 'http://localhost:7474/db/data/transaction/commit')
   .option('--user <USER>', 'username', 'neo4j')
   .option('--pass <PASS>', 'password', 'neo4j')
   .option('-f, --format <FORMAT>', 'tsv, json', 'tsv')
@@ -200,18 +200,21 @@ jsonToTsv = (body, withHeader) => {
     if (withHeader) {
       tsv += obj.results[0].columns.join('\t') + '\n';
     }
-    tsv += obj.results[0].data
-      .map((elem) => {
-        row = elem.row.map(JSON.stringify);
-        meta = elem.meta
-          .filter(Boolean) // remove null elements
-          .map(JSON.stringify);
-        return row.concat(meta).join('\t')
-      })
-      .join('\n');
+    data = obj.results[0].data;
+    if (data.length > 0) {
+      tsv += data
+        .map((elem) => {
+          row = elem.row.map(JSON.stringify);
+          meta = elem.meta
+            .filter(Boolean) // remove null elements
+            .map(JSON.stringify);
+          return row.concat(meta).join('\t')
+        })
+        .join('\n') + '\n';
+    }
   }
   if (obj.errors.length > 0) {
-    tsv += obj.errors.map(JSON.stringify).join('\n');
+    tsv += obj.errors.map(JSON.stringify).join('\n') + '\n';
   }
 
   return tsv;
@@ -227,6 +230,6 @@ printTsv = (tsv) => {
       }).replace(/\s+$/gm, '')
     );
   } else {
-    console.log(tsv);
+    process.stdout.write(tsv);
   }
 };
