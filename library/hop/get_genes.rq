@@ -1,0 +1,12 @@
+SELECT DISTINCT ?group_id ?group_name ?query_gene_id ?gene_id ?gene_name
+WHERE {
+    ?group a orth:OrthologGroup ;
+           dct:identifier ?group_id ;
+           rdfs:label ?group_name ;
+           orth:member ?query_gene ;
+           orth:member ?gene .
+    ?query_gene dct:identifier ?query_gene_id ;
+           rdfs:label "TTC21B" .
+    ?gene dct:identifier ?gene_id ;
+           rdfs:label ?gene_name .
+}

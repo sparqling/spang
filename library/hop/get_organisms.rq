@@ -1,0 +1,16 @@
+SELECT ?group_id ?group_name ?query_gene_id ?organism_id ?organism_name ?time
+WHERE {
+    ?group a orth:OrthologGroup ;
+           dct:identifier ?group_id ;
+           rdfs:label ?group_name ;
+           orth:member ?query_gene ;
+           orth:organism ?organism .
+    ?query_gene dct:identifier ?query_gene_id ;
+           rdfs:label "TTC21B" .
+    ?organism dct:identifier ?organism_id ;
+           rdfs:label ?organism_name .
+    OPTIONAL {
+	?organism hop:branchTimeMya ?time .
+    }
+}
+ORDER BY ?group DESC(?organism_id)
