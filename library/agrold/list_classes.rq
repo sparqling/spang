@@ -3,7 +3,7 @@
 # @endpoint agrold
 # @option -ac --time
 
-SELECT (COUNT(?s) AS ?count) ?label ?class
+SELECT (COUNT(?s) AS ?count) ?class ?label
 WHERE {
   ?s a ?class .
   OPTIONAL {
