@@ -63,6 +63,7 @@ agrold:
     - list_graphs.rq
     - list_predicates.rq
     - list_annotations.rq
+    - list_resources.rq
     - count_annotations.rq
 general:
   title: general use
