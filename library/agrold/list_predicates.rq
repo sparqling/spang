@@ -1,11 +1,13 @@
+#!/usr/bin/env spang2
 # @title List predicates in a graph
-# @param arg1=gramene.genes 
+# @endpoint agrold
+# @param graph=protein.annotations
+# @option -ac --time
 
-SELECT ?p count(?p) as ?count
+SELECT ?p (COUNT(?p) as ?count)
 WHERE {
-    GRAPH <http://www.southgreen.fr/agrold/$arg1> {
+  GRAPH <http://www.southgreen.fr/agrold/{{graph}}> {
 	?s ?p ?o .
-    }
+  }
 }
 ORDER BY DESC(?count)
-

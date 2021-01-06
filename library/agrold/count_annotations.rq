@@ -1,4 +1,7 @@
-# @title 
+#!/usr/bin/env spang2
+# @title Count annotations
+# @endpoint agrold
+# @option -a --time
 
 SELECT ?type (COUNT(?s) AS ?count)
 WHERE {
@@ -6,4 +9,3 @@ WHERE {
        a ?type .
 }
 ORDER BY DESC(?count)
-

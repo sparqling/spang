@@ -1,4 +1,7 @@
-# @title 
+#!/usr/bin/env spang2
+# @title Get annotations
+# @endpoint agrold
+# @option -a --time
 
 SELECT ?s ?annotation
 WHERE {
@@ -6,4 +9,4 @@ WHERE {
        a owl:Class .
 }
 ORDER BY ?s
-
+LIMIT 100
