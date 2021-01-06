@@ -1,5 +1,5 @@
 #!/usr/bin/env spang2
-# @title Get annotations
+# @title List annotations
 # @endpoint agrold
 # @option -a --time
 
