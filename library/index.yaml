@@ -58,6 +58,12 @@ agrold:
   sparql_editor: yasgui
   endpoint: http://agrold.southgreen.fr/sparql
   # schema: http://spang.dbcls.jp/library/agrold/schema/
+  queries:
+    - uniprot_info.rq
+    - list_graphs.rq
+    - list_predicates.rq
+    - list_annotations.rq
+    - count_annotations.rq
 general:
   title: general use
   endpoint: http://dbpedia.org/sparql
