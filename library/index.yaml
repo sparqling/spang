@@ -53,11 +53,11 @@ togogenome:
   title: TogoGenome
   sparql_editor: yasgui
   endpoint: http://togogenome.org/sparql
-agrold:
-  title: AgroLD
-  sparql_editor: yasgui
-  endpoint: http://volvestre.cirad.fr:8890/sparql
-  schema: http://spang.dbcls.jp/library/agrold/schema/
+# agrold:
+#   title: AgroLD
+#   sparql_editor: yasgui
+#   endpoint: http://volvestre.cirad.fr:8890/sparql
+#   schema: http://spang.dbcls.jp/library/agrold/schema/
 general:
   title: general use
   endpoint: http://dbpedia.org/sparql
