@@ -1,0 +1,64 @@
+disgenet:
+  title: DisGenet
+  sparql_editor: yasgui
+  endpoint: http://rdf.disgenet.org/sparql/
+  queries:
+    - disease_gene.rq
+    - disease_uniprot.rq
+  schema: http://www.disgenet.org/web/DisGeNET/menu/rdf#schema
+wikipathways:
+  title: WikiPathways
+  endpoint: http://sparql.wikipathways.org/
+dbpedia:
+  title: DBpedia
+  sparql_editor: yasgui
+  endpoint: http://dbpedia.org/sparql
+uniprot:
+  title: UniProt
+  sparql_editor: yasgui
+  endpoint: http://sparql.uniprot.org
+atlas:
+  title: Expression Atlas
+  sparql_editor: yasgui
+  endpoint: http://www.ebi.ac.uk/rdf/services/sparql
+  schema: http://www.ebi.ac.uk/rdf/documentation/atlas
+chembl:
+  title: ChEMBL
+  sparql_editor: yasgui
+  endpoint: http://www.ebi.ac.uk/rdf/services/sparql
+  schema: http://www.ebi.ac.uk/rdf/documentation/chembl
+ensembl:
+  title: Ensembl
+  sparql_editor: yasgui
+  endpoint: http://www.ebi.ac.uk/rdf/services/sparql
+  schema: http://www.ebi.ac.uk/rdf/documentation/chembl
+mbgd:
+  title: MBGD
+  sparql_editor: mbgd2015
+  endpoint: http://mbgd.genome.ad.jp:8047/sparql
+  legend: 0
+coxpresdb:
+  title: ATTED-II/COXPRESdb
+  sparql_editor: yasgui
+  endpoint: http://coxpresdb.jp/sparql
+wikidata:
+  title: Wikidata
+  sparql_editor: yasgui
+  endpoint: https://query.wikidata.org/
+oma:
+  title: OMA
+  sparql_editor: yasgui
+  endpoint: https://sparql.omabrowser.org/sparql
+togogenome:
+  title: TogoGenome
+  sparql_editor: yasgui
+  endpoint: http://togogenome.org/sparql
+agrold:
+  title: AgroLD
+  sparql_editor: yasgui
+  endpoint: http://volvestre.cirad.fr:8890/sparql
+  schema: http://spang.dbcls.jp/library/agrold/schema/
+general:
+  title: general use
+  endpoint: http://dbpedia.org/sparql
+
