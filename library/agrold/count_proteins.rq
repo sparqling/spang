@@ -1,4 +1,6 @@
+#!/usr/bin/env spang2
 # @title Count proteins for each organism
+# @endpoint agrold
 
 SELECT ?taxid ?taxid_label (COUNT(?protein) AS ?protein_count)
 FROM <http://www.southgreen.fr/agrold/uniprot.plants>

@@ -1,10 +1,11 @@
+#!/usr/bin/env spang2
 # @title Search terms by label
+# @endpoint agrold
 
 SELECT DISTINCT ?term_id ?term_name ?graph
 WHERE { 
-    GRAPH ?graph { 
+  GRAPH ?graph { 
 	?term_id rdfs:label ?term_name . 
 	FILTER regex(str(?term_name), 'plant growth') 
-    } 
+  } 
 }
-

@@ -1,11 +1,9 @@
+#!/usr/bin/env spang2
 # @title UniProt information
-# @param arg1=P0C127 
+# @endpoint agrold
+# @param id=P0C127 
 
-SELECT ?p ?o ?label
+SELECT ?p ?o
 WHERE {
-    uniprot:$arg1 ?p ?o
-    OPTIONAL {
-	?o rdfs:label ?label
-    }
+  uniprot:{{id}} ?p ?o .
 }
-

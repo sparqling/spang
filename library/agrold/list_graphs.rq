@@ -1,4 +1,7 @@
+#!/usr/bin/env spang2
 # @title Count triples for each graph
+# @endpoint agrold
+# @option -c --time
 
 SELECT ?graph (COUNT(?graph) AS ?triples)
 WHERE {
@@ -8,4 +11,3 @@ WHERE {
 }
 GROUP BY ?graph
 ORDER BY DESC(?triples)
-

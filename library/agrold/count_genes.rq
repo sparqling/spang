@@ -1,3 +1,4 @@
+#!/usr/bin/env spang2
 # @title Count genes for each organism
 # @endpoint http://agrold.southgreen.fr/sparql
 
