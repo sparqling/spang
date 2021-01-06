@@ -1,0 +1,203 @@
+"7074475"^^xsd:integer  "Exact position"^^xsd:string                                                                                   faldo:ExactPosition
+"5132496"^^xsd:integer                                                                                                                 <http://identifiers.org/ensembl>
+"4755313"^^xsd:integer  "ordered list item"@en                                                                                         sio:SIO_001261
+"4707795"^^xsd:integer  "Class"                                                                                                        owl:Class
+"4345664"^^xsd:integer  "Region"^^xsd:string                                                                                           faldo:Region
+"3552004"^^xsd:integer  "Forward/positive strand position"^^xsd:string                                                                 faldo:ForwardStrandPosition
+"3522471"^^xsd:integer  "Negative/reverse strand position"^^xsd:string                                                                 faldo:ReverseStrandPosition
+"3388989"^^xsd:integer  "SO:0000147"^^xsd:string                                                                                       obo:SO_0000147
+"3388989"^^xsd:integer  "exon"^^xsd:string                                                                                             obo:SO_0000147
+"2235522"^^xsd:integer                                                                                                                 agrold:Protein
+"1783728"^^xsd:integer                                                                                                                 agrold:Gene
+"783129"^^xsd:integer   "mRNA"^^xsd:string                                                                                             obo:SO_0000234
+"783129"^^xsd:integer   "SO:0000234"^^xsd:string                                                                                       obo:SO_0000234
+"596633"^^xsd:integer   "protein_coding_gene"^^xsd:string                                                                              obo:SO_0001217
+"572286"^^xsd:integer                                                                                                                  agrold:mRNA
+"566089"^^xsd:integer                                                                                                                  owl:Axiom
+"350261"^^xsd:integer                                                                                                                  rdf:Statement
+"68952"^^xsd:integer    "Restriction"                                                                                                  owl:Restriction
+"28667"^^xsd:integer    "ncRNA_gene"^^xsd:string                                                                                       obo:SO_0001263
+"17674"^^xsd:integer                                                                                                                   agrold:tRNA
+"9873"^^xsd:integer                                                                                                                    agrold:Protein_Domain
+"9288"^^xsd:integer                                                                                                                    agrold:nontranslating_CDS
+"8837"^^xsd:integer     "tRNA"^^xsd:string                                                                                             obo:SO_0000253
+"8290"^^xsd:integer                                                                                                                    agrold:snoRNA
+"7360"^^xsd:integer                                                                                                                    agrold:lncRNA
+"7155"^^xsd:integer     "lnc_RNA"^^xsd:string                                                                                          obo:SO_0001877
+"5064"^^xsd:integer                                                                                                                    agrold:lincRNA
+"4807"^^xsd:integer                                                                                                                    agrold:ncRNA
+"4348"^^xsd:integer                                                                                                                    agrold:rRNA
+"4176"^^xsd:integer                                                                                                                    agrold:pre_miRNA
+"4145"^^xsd:integer     "snoRNA"^^xsd:string                                                                                           obo:SO_0000275
+"3248"^^xsd:integer                                                                                                                    agrold:snRNA
+"2710"^^xsd:integer     "ncRNA"^^xsd:string                                                                                            obo:SO_0000655
+"2320"^^xsd:integer                                                                                                                    agrold:pseudogene
+"2174"^^xsd:integer     "rRNA"^^xsd:string                                                                                             obo:SO_0000252
+"2088"^^xsd:integer     "pre_miRNA"^^xsd:string                                                                                        obo:SO_0001244
+"1624"^^xsd:integer     "snRNA"^^xsd:string                                                                                            obo:SO_0000274
+"1428"^^xsd:integer                                                                                                                    agrold:miRNA
+"1386"^^xsd:integer                                                                                                                    agrold:sense_intronic
+"1174"^^xsd:integer     "pseudogene"^^xsd:string                                                                                       obo:SO_0000336
+"1174"^^xsd:integer     "pseudogenic_transcript"^^xsd:string                                                                           obo:SO_0000516
+"1008"^^xsd:integer     "Gene"^^xsd:string                                                                                             agrold_resource:Gene
+"957"^^xsd:integer      "ObjectProperty"                                                                                               owl:ObjectProperty
+"714"^^xsd:integer      "miRNA"^^xsd:string                                                                                            obo:SO_0000276
+"714"^^xsd:integer      "SO:0000276"^^xsd:string                                                                                       obo:SO_0000276
+"439"^^xsd:integer      "AnnotationProperty"                                                                                           owl:AnnotationProperty
+"426"^^xsd:integer                                                                                                                     agrold:SRP_RNA
+"383"^^xsd:integer                                                                                                                     agrold:transposable_element
+"286"^^xsd:integer                                                                                                                     owl:NamedIndividual
+"220"^^xsd:integer      "transposable_element"^^xsd:string                                                                             obo:SO_0000101
+"213"^^xsd:integer      "SRP_RNA"^^xsd:string                                                                                          obo:SO_0000590
+"170"^^xsd:integer                                                                                                                     rdf:Property
+"163"^^xsd:integer      "transposable_element_gene"^^xsd:string                                                                        obo:SO_0000111
+"130"^^xsd:integer                                                                                                                     virt:QuadMapFormat
+"102"^^xsd:integer                                                                                                                     agrold:Chromosome
+"102"^^xsd:integer      "TransitiveProperty"                                                                                           owl:TransitiveProperty
+"98"^^xsd:integer                                                                                                                      virt:array-of-QuadMapFormat
+"86"^^xsd:integer                                                                                                                      agrold:antisense_RNA
+"74"^^xsd:integer                                                                                                                      <http://www.w3.org/2003/11/swrl#AtomList>
+"61"^^xsd:integer                                                                                                                      <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom>
+"58"^^xsd:integer                                                                                                                      agrold:Transcription_Factor
+"56"^^xsd:integer                                                                                                                      rdfs:Class
+"51"^^xsd:integer       "SymmetricProperty"                                                                                            owl:SymmetricProperty
+"37"^^xsd:integer       "organization"@en                                                                                              obo:OBI_0000245
+"36"^^xsd:integer                                                                                                                      agrold:RNase_MRP_RNA
+"33"^^xsd:integer       "DatatypeProperty"                                                                                             owl:DatatypeProperty
+"31"^^xsd:integer                                                                                                                      agrold:Reaction
+"28"^^xsd:integer                                                                                                                      agrold:tRNA_pseudogene
+"21"^^xsd:integer                                                                                                                      agrold:Metabolic_Pathway
+"20"^^xsd:integer                                                                                                                      <http://www.w3.org/2003/11/swrl#Imp>
+"20"^^xsd:integer                                                                                                                      <http://www.w3.org/2003/11/swrl#Variable>
+"19"^^xsd:integer       "FunctionalProperty"                                                                                           owl:FunctionalProperty
+"19"^^xsd:integer                                                                                                                      owl:AllDisjointClasses
+"18"^^xsd:integer       "RNase_MRP_RNA"^^xsd:string                                                                                    obo:SO_0000385
+"17"^^xsd:integer       "QTL"^^xsd:string                                                                                              agrold_resource:QTL
+"16"^^xsd:integer                                                                                                                      agrold:ribozyme
+"15"^^xsd:integer       "concentration unit"^^xsd:string                                                                               obo:UO_0000051
+"14"^^xsd:integer       "Ontology"                                                                                                     owl:Ontology
+"14"^^xsd:integer       "International Federation of Gynecology and Obstetrics ovarian cancer stage value specification"^^xsd:string   obo:OBI_0002341
+"14"^^xsd:integer       "International Federation of Gynecology and Obstetrics cervical cancer stage value specification"^^xsd:string  obo:OBI_0002326
+"13"^^xsd:integer       "pathologic primary tumor stage for ovary according to AJCC 7th edition"^^xsd:string                           obo:OBI_0002256
+"13"^^xsd:integer                                                                                                                      <http://www.w3.org/2003/11/swrl#ClassAtom>
+"12"^^xsd:integer       "pathologic primary tumor stage for kidney according to AJCC 7th edition"^^xsd:string                          obo:OBI_0002243
+"11"^^xsd:integer       "clinical tumor stage group according to AJCC 7th edition"^^xsd:string                                         obo:OBI_0002314
+"11"^^xsd:integer       "InverseFunctionalProperty"                                                                                    owl:InverseFunctionalProperty
+"10"^^xsd:integer       "data format specification"@en                                                                                 obo:IAO_0000098
+"10"^^xsd:integer       "pathologic primary tumor stage for lung according to AJCC 7th edition"^^xsd:string                            obo:OBI_0002232
+"10"^^xsd:integer                                                                                                                      owl:IrreflexiveProperty
+"10"^^xsd:integer       "GenePattern software"^^xsd:string                                                                             obo:OBI_0000713
+"9"^^xsd:integer        "curation status specification"@en                                                                             obo:IAO_0000078
+"8"^^xsd:integer                                                                                                                       virt:QuadMapColumn
+"8"^^xsd:integer                                                                                                                       virt:array-of-QuadMapColumn
+"8"^^xsd:integer        "pathologic lymph node stage for colon and rectum according to AJCC 7th edition"^^xsd:string                   obo:OBI_0002270
+"8"^^xsd:integer                                                                                                                       virt:QuadMapValue
+"7"^^xsd:integer        "pathologic distant metastases stage for lung according to AJCC 7th edition"^^xsd:string                       obo:OBI_0002298
+"7"^^xsd:integer        "pathologic distant metastases stage for colon according to AJCC 7th edition"^^xsd:string                      obo:OBI_0002290
+"7"^^xsd:integer        "volume unit"^^xsd:string                                                                                      obo:UO_0000095
+"7"^^xsd:integer        "pathologic primary tumor stage for colon and rectum according to AJCC 7th edition"^^xsd:string                obo:OBI_0002224
+"7"^^xsd:integer        "time unit"^^xsd:string                                                                                        obo:UO_0000003
+"6"^^xsd:integer                                                                                                                       rdfs:Datatype
+"6"^^xsd:integer        "obsolescence reason specification"@en                                                                         obo:IAO_0000225
+"6"^^xsd:integer        "mass unit"^^xsd:string                                                                                        obo:UO_0000002
+"6"^^xsd:integer        "length unit"^^xsd:string                                                                                      obo:UO_0000001
+"5"^^xsd:integer        "Eastern Cooperative Oncology Group score value specification"^^xsd:string                                     obo:OBI_0002357
+"4"^^xsd:integer                                                                                                                       virt:QuadMapFText
+"4"^^xsd:integer        "histologic grade according to AJCC 7th edition"^^xsd:string                                                   obo:OBI_0002205
+"4"^^xsd:integer        "Karnofsky score vaue specification"^^xsd:string                                                               obo:OBI_0002363
+"4"^^xsd:integer                                                                                                                       owl:inverseFunctionalProperty
+"4"^^xsd:integer        "histologic grade according to the Fuhrman Nuclear Grading System"^^xsd:string                                 obo:OBI_0002210
+"4"^^xsd:integer                                                                                                                       owl:AsymmetricProperty
+"4"^^xsd:integer        "histologic grade for ovarian tumor according to the World Health Organization"^^xsd:string                    obo:OBI_0002219
+"4"^^xsd:integer        "pathologic lymph node stage for lung according to AJCC 7th edition"^^xsd:string                               obo:OBI_0002279
+"4"^^xsd:integer        "OntologyProperty"                                                                                             owl:OntologyProperty
+"4"^^xsd:integer        "rate unit"^^xsd:string                                                                                        obo:UO_0000280
+"3"^^xsd:integer        "denotator type"^^xsd:string                                                                                   obo:IAO_0000409
+"3"^^xsd:integer                                                                                                                       owl:ReflexiveProperty
+"3"^^xsd:integer                                                                                                                       <http://purl.org/goodrelations/v1#Offering>
+"3"^^xsd:integer                                                                                                                       virt:array-of-QuadMap
+"3"^^xsd:integer                                                                                                                       <http://purl.org/goodrelations/v1#ProductOrServicesSomeInstancesPlaceholder>
+"3"^^xsd:integer                                                                                                                       <http://purl.org/goodrelations/v1#TypeAndQuantityNode>
+"3"^^xsd:integer        "pathologic distant metastases stage for ovary according to AJCC 7th edition"^^xsd:string                      obo:OBI_0002310
+"3"^^xsd:integer        "pathologic distant metastases stage for kidney according to AJCC 7th edition"^^xsd:string                     obo:OBI_0002306
+"3"^^xsd:integer        "categorical label"^^xsd:string                                                                                obo:OBI_0000963
+"3"^^xsd:integer                                                                                                                       virt:QuadStorage
+"3"^^xsd:integer        "substance unit"^^xsd:string                                                                                   obo:UO_0000006
+"2"^^xsd:integer                                                                                                                       virt:array-of-QuadMapATable
+"2"^^xsd:integer        "pathologic lymph node stage for kidney according to AJCC 7th edition"^^xsd:string                             obo:OBI_0002284
+"2"^^xsd:integer                                                                                                                       virt:QuadMap
+"2"^^xsd:integer                                                                                                                       virt:array-of-string
+"2"^^xsd:integer        "histologic grade for ovarian tumor according to a two-tier grading system"^^xsd:string                        obo:OBI_0002216
+"2"^^xsd:integer                                                                                                                       virt:QuadMapATable
+"2"^^xsd:integer        "temperature unit"^^xsd:string                                                                                 obo:UO_0000005
+"2"^^xsd:integer        "AllDifferent"                                                                                                 owl:AllDifferent
+"2"^^xsd:integer        "pathologic lymph node stage for ovary according to AJCC 7th edition"^^xsd:string                              obo:OBI_0002287
+"2"^^xsd:integer                                                                                                                       <http://www.w3.org/2001/vcard-rdf/3.0#work>
+"2"^^xsd:integer                                                                                                                       <http://www.w3.org/2001/vcard-rdf/3.0#internet>
+"2"^^xsd:integer        "clustered data visualization"^^xsd:string                                                                     obo:OBI_0200190
+"2"^^xsd:integer                                                                                                                       <http://www.w3.org/2001/vcard-rdf/3.0#voice>
+"1"^^xsd:integer                                                                                                                       <http://purl.org/goodrelations/v1#PriceSpecification>
+"1"^^xsd:integer        "peak matching"^^xsd:string                                                                                    obo:OBI_0000726
+"1"^^xsd:integer        "questionnaire"^^xsd:string                                                                                    obo:OBI_0001000
+"1"^^xsd:integer        "k-means clustering"@en                                                                                        obo:OBI_0200041
+"1"^^xsd:integer                                                                                                                       <nodeID://b28944>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28954>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28962>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28963>
+"1"^^xsd:integer        "volumetric flow rate unit"^^xsd:string                                                                        obo:UO_0000270
+"1"^^xsd:integer                                                                                                                       <http://purl.org/goodrelations/v1#BusinessEntity>
+"1"^^xsd:integer                                                                                                                       <http://purl.org/goodrelations/v1#ProductOrServiceSomeInstancePlaceholder>
+"1"^^xsd:integer                                                                                                                       <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#C_AAB316003-tax>
+"1"^^xsd:integer                                                                                                                       <http://www.openlinksw.com/ontology/acl#Scope>
+"1"^^xsd:integer        "leave one out cross validation method"@en                                                                     obo:OBI_0200033
+"1"^^xsd:integer                                                                                                                       <nodeID://b28946>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28949>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28953>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28957>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28970>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28952>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28968>
+"1"^^xsd:integer                                                                                                                       <http://purl.org/goodrelations/v1#Manufacturer>
+"1"^^xsd:integer        "k-nearest neighbors"@en                                                                                       obo:OBI_0000727
+"1"^^xsd:integer        "hierarchical clustering"@en                                                                                   obo:OBI_0200042
+"1"^^xsd:integer                                                                                                                       <nodeID://b28948>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28950>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28955>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28960>
+"1"^^xsd:integer                                                                                                                       <http://www.openlinksw.com/schemas/VAD#>
+"1"^^xsd:integer                                                                                                                       <http://purl.org/goodrelations/v1#LocationOfSalesOrServiceProvisioning>
+"1"^^xsd:integer                                                                                                                       <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#C_AKJ315005-tax>
+"1"^^xsd:integer                                                                                                                       oboInOwl:Subset
+"1"^^xsd:integer                                                                                                                       <nodeID://b28940>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28945>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28973>
+"1"^^xsd:integer                                                                                                                       void:Dataset
+"1"^^xsd:integer        "CART"@en                                                                                                      obo:OBI_0000749
+"1"^^xsd:integer                                                                                                                       <nodeID://b28937>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28961>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28976>
+"1"^^xsd:integer                                                                                                                       sd:Service
+"1"^^xsd:integer                                                                                                                       <nodeID://b28941>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28943>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28947>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28967>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28969>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28971>
+"1"^^xsd:integer                                                                                                                       <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#C_AKE112003-tax>
+"1"^^xsd:integer        "support vector machine"^^xsd:string                                                                           obo:OBI_0000700
+"1"^^xsd:integer        "principal components analysis dimensionality reduction"@en                                                    obo:OBI_0200051
+"1"^^xsd:integer                                                                                                                       <nodeID://b28939>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28942>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28956>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28965>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28975>
+"1"^^xsd:integer                                                                                                                       <http://purl.org/goodrelations/v1#ActualProductOrServicesInstance>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28964>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28951>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28958>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28966>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28972>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28974>
+"1"^^xsd:integer        "frequency unit"^^xsd:string                                                                                   obo:UO_0000105
+"1"^^xsd:integer                                                                                                                       <nodeID://b28938>
+"1"^^xsd:integer                                                                                                                       <nodeID://b28959>

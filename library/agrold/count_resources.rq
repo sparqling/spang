@@ -1,0 +1,31 @@
+#!/usr/bin/env spang2
+# @title 
+# @endpoint agrold
+# @option -vac --time
+
+# SELECT (COUNT(?s) AS ?count) ?class
+SELECT (COUNT(?s) AS ?count) ?class ?graph
+WHERE {
+  VALUES ?class { agrold:Protein
+                  agrold:Gene
+                  agrold:mRNA
+                  agrold:tRNA
+                  agrold:Protein_Domain
+                  agrold:notranslating_CDS
+                  agrold:snoRNA
+                  agrold:lncRNA
+                  agrold:lincRNA
+                  agrold:ncRNA
+                  agrold:rRNA
+                  agrold:pre_miRNA
+                  agrold:snRNA
+                  agrold:pseudogene
+                  agrold:miRNA
+                  agrold_resource:Gene
+                  agrold:Chromosome
+                }
+  GRAPH ?graph {
+    ?s a ?class .
+  }
+}
+ORDER BY ?graph DESC(?count)

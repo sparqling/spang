@@ -1,0 +1,13 @@
+#!/usr/bin/env spang2
+# @title 
+# @endpoint agrold
+# @option -ac --time
+
+SELECT (COUNT(?s) AS ?count) ?label ?class
+WHERE {
+  ?s a ?class .
+  OPTIONAL {
+    ?class rdfs:label ?label
+  }
+}
+ORDER BY DESC(?count)

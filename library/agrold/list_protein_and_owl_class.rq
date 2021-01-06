@@ -1,0 +1,12 @@
+#!/usr/bin/env spang2
+# @endpoint agrold
+# @option -ac --time
+
+SELECT ?s
+# SELECT ?s ?p ?o
+WHERE {
+  ?s a agrold:Protein .
+  ?s a owl:Class .
+  # ?s ?p ?o
+}
+LIMIT 1000

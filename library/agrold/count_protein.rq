@@ -1,0 +1,10 @@
+#!/usr/bin/env spang2
+# @endpoint agrold
+# @option -ac --time
+
+SELECT (COUNT(?s) AS ?count) ?class
+WHERE {
+  ?s a agrold:Protein .
+  ?s a ?class .
+}
+LIMIT 10
