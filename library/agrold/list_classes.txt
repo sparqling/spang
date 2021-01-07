@@ -1,203 +1,201 @@
-"7074475"^^xsd:integer  faldo:ExactPosition                                                           "Exact position"^^xsd:string
-"5132496"^^xsd:integer  <http://identifiers.org/ensembl>
-"4755313"^^xsd:integer  sio:SIO_001261                                                                "ordered list item"@en
-"4707795"^^xsd:integer  owl:Class                                                                     "Class"
-"4345664"^^xsd:integer  faldo:Region                                                                  "Region"^^xsd:string
-"3552004"^^xsd:integer  faldo:ForwardStrandPosition                                                   "Forward/positive strand position"^^xsd:string
-"3522471"^^xsd:integer  faldo:ReverseStrandPosition                                                   "Negative/reverse strand position"^^xsd:string
-"3388989"^^xsd:integer  obo:SO_0000147                                                                "exon"^^xsd:string
-"3388989"^^xsd:integer  obo:SO_0000147                                                                "SO:0000147"^^xsd:string
-"2235522"^^xsd:integer  agrold:Protein
-"1783728"^^xsd:integer  agrold:Gene
-"783129"^^xsd:integer   obo:SO_0000234                                                                "SO:0000234"^^xsd:string
-"783129"^^xsd:integer   obo:SO_0000234                                                                "mRNA"^^xsd:string
-"596633"^^xsd:integer   obo:SO_0001217                                                                "protein_coding_gene"^^xsd:string
-"572286"^^xsd:integer   agrold:mRNA
-"566089"^^xsd:integer   owl:Axiom
-"350261"^^xsd:integer   rdf:Statement
-"68952"^^xsd:integer    owl:Restriction                                                               "Restriction"
-"28667"^^xsd:integer    obo:SO_0001263                                                                "ncRNA_gene"^^xsd:string
-"17674"^^xsd:integer    agrold:tRNA
-"9873"^^xsd:integer     agrold:Protein_Domain
-"9288"^^xsd:integer     agrold:nontranslating_CDS
-"8837"^^xsd:integer     obo:SO_0000253                                                                "tRNA"^^xsd:string
-"8290"^^xsd:integer     agrold:snoRNA
-"7360"^^xsd:integer     agrold:lncRNA
-"7155"^^xsd:integer     obo:SO_0001877                                                                "lnc_RNA"^^xsd:string
-"5064"^^xsd:integer     agrold:lincRNA
-"4807"^^xsd:integer     agrold:ncRNA
-"4348"^^xsd:integer     agrold:rRNA
-"4176"^^xsd:integer     agrold:pre_miRNA
-"4145"^^xsd:integer     obo:SO_0000275                                                                "snoRNA"^^xsd:string
-"3248"^^xsd:integer     agrold:snRNA
-"2710"^^xsd:integer     obo:SO_0000655                                                                "ncRNA"^^xsd:string
-"2320"^^xsd:integer     agrold:pseudogene
-"2174"^^xsd:integer     obo:SO_0000252                                                                "rRNA"^^xsd:string
-"2088"^^xsd:integer     obo:SO_0001244                                                                "pre_miRNA"^^xsd:string
-"1624"^^xsd:integer     obo:SO_0000274                                                                "snRNA"^^xsd:string
-"1428"^^xsd:integer     agrold:miRNA
-"1386"^^xsd:integer     agrold:sense_intronic
-"1174"^^xsd:integer     obo:SO_0000336                                                                "pseudogene"^^xsd:string
-"1174"^^xsd:integer     obo:SO_0000516                                                                "pseudogenic_transcript"^^xsd:string
-"1008"^^xsd:integer     agrold_resource:Gene                                                          "Gene"^^xsd:string
-"957"^^xsd:integer      owl:ObjectProperty                                                            "ObjectProperty"
-"714"^^xsd:integer      obo:SO_0000276                                                                "miRNA"^^xsd:string
-"714"^^xsd:integer      obo:SO_0000276                                                                "SO:0000276"^^xsd:string
-"439"^^xsd:integer      owl:AnnotationProperty                                                        "AnnotationProperty"
-"426"^^xsd:integer      agrold:SRP_RNA
-"383"^^xsd:integer      agrold:transposable_element
-"286"^^xsd:integer      owl:NamedIndividual
-"220"^^xsd:integer      obo:SO_0000101                                                                "transposable_element"^^xsd:string
-"213"^^xsd:integer      obo:SO_0000590                                                                "SRP_RNA"^^xsd:string
-"170"^^xsd:integer      rdf:Property
-"163"^^xsd:integer      obo:SO_0000111                                                                "transposable_element_gene"^^xsd:string
-"130"^^xsd:integer      virt:QuadMapFormat
-"102"^^xsd:integer      agrold:Chromosome
-"102"^^xsd:integer      owl:TransitiveProperty                                                        "TransitiveProperty"
-"98"^^xsd:integer       virt:array-of-QuadMapFormat
-"86"^^xsd:integer       agrold:antisense_RNA
-"74"^^xsd:integer       <http://www.w3.org/2003/11/swrl#AtomList>
-"61"^^xsd:integer       <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom>
-"58"^^xsd:integer       agrold:Transcription_Factor
-"56"^^xsd:integer       rdfs:Class
-"51"^^xsd:integer       owl:SymmetricProperty                                                         "SymmetricProperty"
-"37"^^xsd:integer       obo:OBI_0000245                                                               "organization"@en
-"36"^^xsd:integer       agrold:RNase_MRP_RNA
-"33"^^xsd:integer       owl:DatatypeProperty                                                          "DatatypeProperty"
-"31"^^xsd:integer       agrold:Reaction
-"28"^^xsd:integer       agrold:tRNA_pseudogene
-"21"^^xsd:integer       agrold:Metabolic_Pathway
-"20"^^xsd:integer       <http://www.w3.org/2003/11/swrl#Variable>
-"20"^^xsd:integer       <http://www.w3.org/2003/11/swrl#Imp>
-"19"^^xsd:integer       owl:AllDisjointClasses
-"19"^^xsd:integer       owl:FunctionalProperty                                                        "FunctionalProperty"
-"18"^^xsd:integer       obo:SO_0000385                                                                "RNase_MRP_RNA"^^xsd:string
-"17"^^xsd:integer       agrold_resource:QTL                                                           "QTL"^^xsd:string
-"16"^^xsd:integer       agrold:ribozyme
-"15"^^xsd:integer       obo:UO_0000051                                                                "concentration unit"^^xsd:string
-"14"^^xsd:integer       owl:Ontology                                                                  "Ontology"
-"14"^^xsd:integer       obo:OBI_0002326                                                               "International Federation of Gynecology and Obstetrics cervical cancer stage value specification"^^xsd:string
-"14"^^xsd:integer       obo:OBI_0002341                                                               "International Federation of Gynecology and Obstetrics ovarian cancer stage value specification"^^xsd:string
-"13"^^xsd:integer       <http://www.w3.org/2003/11/swrl#ClassAtom>
-"13"^^xsd:integer       obo:OBI_0002256                                                               "pathologic primary tumor stage for ovary according to AJCC 7th edition"^^xsd:string
-"12"^^xsd:integer       obo:OBI_0002243                                                               "pathologic primary tumor stage for kidney according to AJCC 7th edition"^^xsd:string
-"11"^^xsd:integer       obo:OBI_0002314                                                               "clinical tumor stage group according to AJCC 7th edition"^^xsd:string
-"11"^^xsd:integer       owl:InverseFunctionalProperty                                                 "InverseFunctionalProperty"
-"10"^^xsd:integer       owl:IrreflexiveProperty
-"10"^^xsd:integer       obo:OBI_0000713                                                               "GenePattern software"^^xsd:string
-"10"^^xsd:integer       obo:IAO_0000098                                                               "data format specification"@en
-"10"^^xsd:integer       obo:OBI_0002232                                                               "pathologic primary tumor stage for lung according to AJCC 7th edition"^^xsd:string
-"9"^^xsd:integer        obo:IAO_0000078                                                               "curation status specification"@en
-"8"^^xsd:integer        virt:QuadMapValue
-"8"^^xsd:integer        obo:OBI_0002270                                                               "pathologic lymph node stage for colon and rectum according to AJCC 7th edition"^^xsd:string
-"8"^^xsd:integer        virt:array-of-QuadMapColumn
-"8"^^xsd:integer        virt:QuadMapColumn
-"7"^^xsd:integer        obo:OBI_0002290                                                               "pathologic distant metastases stage for colon according to AJCC 7th edition"^^xsd:string
-"7"^^xsd:integer        obo:OBI_0002224                                                               "pathologic primary tumor stage for colon and rectum according to AJCC 7th edition"^^xsd:string
-"7"^^xsd:integer        obo:UO_0000003                                                                "time unit"^^xsd:string
-"7"^^xsd:integer        obo:UO_0000095                                                                "volume unit"^^xsd:string
-"7"^^xsd:integer        obo:OBI_0002298                                                               "pathologic distant metastases stage for lung according to AJCC 7th edition"^^xsd:string
-"6"^^xsd:integer        obo:UO_0000001                                                                "length unit"^^xsd:string
-"6"^^xsd:integer        obo:IAO_0000225                                                               "obsolescence reason specification"@en
-"6"^^xsd:integer        obo:UO_0000002                                                                "mass unit"^^xsd:string
-"6"^^xsd:integer        rdfs:Datatype
-"5"^^xsd:integer        obo:OBI_0002357                                                               "Eastern Cooperative Oncology Group score value specification"^^xsd:string
-"4"^^xsd:integer        obo:UO_0000280                                                                "rate unit"^^xsd:string
-"4"^^xsd:integer        obo:OBI_0002210                                                               "histologic grade according to the Fuhrman Nuclear Grading System"^^xsd:string
-"4"^^xsd:integer        obo:OBI_0002219                                                               "histologic grade for ovarian tumor according to the World Health Organization"^^xsd:string
-"4"^^xsd:integer        virt:QuadMapFText
-"4"^^xsd:integer        owl:inverseFunctionalProperty
-"4"^^xsd:integer        obo:OBI_0002363                                                               "Karnofsky score vaue specification"^^xsd:string
-"4"^^xsd:integer        obo:OBI_0002279                                                               "pathologic lymph node stage for lung according to AJCC 7th edition"^^xsd:string
-"4"^^xsd:integer        owl:OntologyProperty                                                          "OntologyProperty"
-"4"^^xsd:integer        obo:OBI_0002205                                                               "histologic grade according to AJCC 7th edition"^^xsd:string
-"4"^^xsd:integer        owl:AsymmetricProperty
-"3"^^xsd:integer        virt:QuadStorage
-"3"^^xsd:integer        <http://purl.org/goodrelations/v1#ProductOrServicesSomeInstancesPlaceholder>
-"3"^^xsd:integer        obo:UO_0000006                                                                "substance unit"^^xsd:string
-"3"^^xsd:integer        obo:IAO_0000409                                                               "denotator type"^^xsd:string
-"3"^^xsd:integer        obo:OBI_0002306                                                               "pathologic distant metastases stage for kidney according to AJCC 7th edition"^^xsd:string
-"3"^^xsd:integer        owl:ReflexiveProperty
-"3"^^xsd:integer        <http://purl.org/goodrelations/v1#Offering>
-"3"^^xsd:integer        virt:array-of-QuadMap
-"3"^^xsd:integer        <http://purl.org/goodrelations/v1#TypeAndQuantityNode>
-"3"^^xsd:integer        obo:OBI_0000963                                                               "categorical label"^^xsd:string
-"3"^^xsd:integer        obo:OBI_0002310                                                               "pathologic distant metastases stage for ovary according to AJCC 7th edition"^^xsd:string
-"2"^^xsd:integer        obo:OBI_0002216                                                               "histologic grade for ovarian tumor according to a two-tier grading system"^^xsd:string
-"2"^^xsd:integer        obo:OBI_0200190                                                               "clustered data visualization"^^xsd:string
-"2"^^xsd:integer        owl:AllDifferent                                                              "AllDifferent"
-"2"^^xsd:integer        obo:UO_0000005                                                                "temperature unit"^^xsd:string
-"2"^^xsd:integer        virt:array-of-QuadMapATable
-"2"^^xsd:integer        obo:OBI_0002287                                                               "pathologic lymph node stage for ovary according to AJCC 7th edition"^^xsd:string
-"2"^^xsd:integer        virt:QuadMap
-"2"^^xsd:integer        virt:array-of-string
-"2"^^xsd:integer        <http://www.w3.org/2001/vcard-rdf/3.0#work>
-"2"^^xsd:integer        obo:OBI_0002284                                                               "pathologic lymph node stage for kidney according to AJCC 7th edition"^^xsd:string
-"2"^^xsd:integer        <http://www.w3.org/2001/vcard-rdf/3.0#voice>
-"2"^^xsd:integer        virt:QuadMapATable
-"2"^^xsd:integer        <http://www.w3.org/2001/vcard-rdf/3.0#internet>
-"1"^^xsd:integer        obo:OBI_0200033                                                               "leave one out cross validation method"@en
-"1"^^xsd:integer        <nodeID://b28957>
-"1"^^xsd:integer        <nodeID://b28976>
-"1"^^xsd:integer        <http://purl.org/goodrelations/v1#ProductOrServiceSomeInstancePlaceholder>
-"1"^^xsd:integer        <http://purl.org/goodrelations/v1#Manufacturer>
-"1"^^xsd:integer        <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#C_AAB316003-tax>
-"1"^^xsd:integer        <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#C_AKE112003-tax>
-"1"^^xsd:integer        <nodeID://b28940>
-"1"^^xsd:integer        <nodeID://b28959>
-"1"^^xsd:integer        <nodeID://b28961>
-"1"^^xsd:integer        <nodeID://b28967>
-"1"^^xsd:integer        <nodeID://b28969>
-"1"^^xsd:integer        <nodeID://b28971>
-"1"^^xsd:integer        <nodeID://b28975>
-"1"^^xsd:integer        obo:UO_0000105                                                                "frequency unit"^^xsd:string
-"1"^^xsd:integer        obo:OBI_0200041                                                               "k-means clustering"@en
-"1"^^xsd:integer        <nodeID://b28937>
-"1"^^xsd:integer        <nodeID://b28953>
-"1"^^xsd:integer        <nodeID://b28954>
-"1"^^xsd:integer        <nodeID://b28960>
-"1"^^xsd:integer        <nodeID://b28962>
-"1"^^xsd:integer        <nodeID://b28963>
-"1"^^xsd:integer        <nodeID://b28968>
-"1"^^xsd:integer        <nodeID://b28970>
-"1"^^xsd:integer        <http://purl.org/goodrelations/v1#BusinessEntity>
-"1"^^xsd:integer        <nodeID://b28946>
-"1"^^xsd:integer        <nodeID://b28951>
-"1"^^xsd:integer        <nodeID://b28973>
-"1"^^xsd:integer        void:Dataset
-"1"^^xsd:integer        obo:OBI_0000726                                                               "peak matching"^^xsd:string
-"1"^^xsd:integer        <nodeID://b28938>
-"1"^^xsd:integer        <nodeID://b28939>
-"1"^^xsd:integer        <nodeID://b28942>
-"1"^^xsd:integer        <http://purl.org/goodrelations/v1#PriceSpecification>
-"1"^^xsd:integer        <http://www.openlinksw.com/ontology/acl#Scope>
-"1"^^xsd:integer        oboInOwl:Subset
-"1"^^xsd:integer        obo:OBI_0000727                                                               "k-nearest neighbors"@en
-"1"^^xsd:integer        obo:OBI_0000749                                                               "CART"@en
-"1"^^xsd:integer        <nodeID://b28941>
-"1"^^xsd:integer        <nodeID://b28952>
-"1"^^xsd:integer        <nodeID://b28964>
-"1"^^xsd:integer        <nodeID://b28972>
-"1"^^xsd:integer        <nodeID://b28974>
-"1"^^xsd:integer        <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#C_AKJ315005-tax>
-"1"^^xsd:integer        obo:OBI_0001000                                                               "questionnaire"^^xsd:string
-"1"^^xsd:integer        obo:OBI_0200042                                                               "hierarchical clustering"@en
-"1"^^xsd:integer        <nodeID://b28944>
-"1"^^xsd:integer        <nodeID://b28949>
-"1"^^xsd:integer        <nodeID://b28956>
-"1"^^xsd:integer        <http://www.openlinksw.com/schemas/VAD#>
-"1"^^xsd:integer        <http://purl.org/goodrelations/v1#ActualProductOrServicesInstance>
-"1"^^xsd:integer        <nodeID://b28943>
-"1"^^xsd:integer        <nodeID://b28945>
-"1"^^xsd:integer        <nodeID://b28947>
-"1"^^xsd:integer        <nodeID://b28950>
-"1"^^xsd:integer        <nodeID://b28966>
-"1"^^xsd:integer        sd:Service
-"1"^^xsd:integer        <http://purl.org/goodrelations/v1#LocationOfSalesOrServiceProvisioning>
-"1"^^xsd:integer        obo:OBI_0000700                                                               "support vector machine"^^xsd:string
-"1"^^xsd:integer        obo:OBI_0200051                                                               "principal components analysis dimensionality reduction"@en
-"1"^^xsd:integer        <nodeID://b28948>
-"1"^^xsd:integer        <nodeID://b28955>
-"1"^^xsd:integer        <nodeID://b28958>
-"1"^^xsd:integer        obo:UO_0000270                                                                "volumetric flow rate unit"^^xsd:string
-"1"^^xsd:integer        <nodeID://b28965>
+?count                  ?so_label                                ?class
+"7074475"^^xsd:integer                                           faldo:ExactPosition
+"5132496"^^xsd:integer                                           <http://identifiers.org/ensembl>
+"4755313"^^xsd:integer                                           sio:SIO_001261
+"4707795"^^xsd:integer                                           owl:Class
+"4345664"^^xsd:integer                                           faldo:Region
+"3552004"^^xsd:integer                                           faldo:ForwardStrandPosition
+"3522471"^^xsd:integer                                           faldo:ReverseStrandPosition
+"3388989"^^xsd:integer  "exon"^^xsd:string                       obo:SO_0000147
+"2235522"^^xsd:integer                                           agrold:Protein
+"1783728"^^xsd:integer                                           agrold:Gene
+"783129"^^xsd:integer   "mRNA"^^xsd:string                       obo:SO_0000234
+"596633"^^xsd:integer   "protein_coding_gene"^^xsd:string        obo:SO_0001217
+"572286"^^xsd:integer                                            agrold:mRNA
+"566089"^^xsd:integer                                            owl:Axiom
+"350261"^^xsd:integer                                            rdf:Statement
+"68952"^^xsd:integer                                             owl:Restriction
+"28667"^^xsd:integer    "ncRNA_gene"^^xsd:string                 obo:SO_0001263
+"17674"^^xsd:integer                                             agrold:tRNA
+"9873"^^xsd:integer                                              agrold:Protein_Domain
+"9288"^^xsd:integer                                              agrold:nontranslating_CDS
+"8837"^^xsd:integer     "tRNA"^^xsd:string                       obo:SO_0000253
+"8290"^^xsd:integer                                              agrold:snoRNA
+"7360"^^xsd:integer                                              agrold:lncRNA
+"7155"^^xsd:integer     "lnc_RNA"^^xsd:string                    obo:SO_0001877
+"5064"^^xsd:integer                                              agrold:lincRNA
+"4807"^^xsd:integer                                              agrold:ncRNA
+"4348"^^xsd:integer                                              agrold:rRNA
+"4176"^^xsd:integer                                              agrold:pre_miRNA
+"4145"^^xsd:integer     "snoRNA"^^xsd:string                     obo:SO_0000275
+"3248"^^xsd:integer                                              agrold:snRNA
+"2710"^^xsd:integer     "ncRNA"^^xsd:string                      obo:SO_0000655
+"2320"^^xsd:integer                                              agrold:pseudogene
+"2174"^^xsd:integer     "rRNA"^^xsd:string                       obo:SO_0000252
+"2088"^^xsd:integer     "pre_miRNA"^^xsd:string                  obo:SO_0001244
+"1624"^^xsd:integer     "snRNA"^^xsd:string                      obo:SO_0000274
+"1428"^^xsd:integer                                              agrold:miRNA
+"1386"^^xsd:integer                                              agrold:sense_intronic
+"1174"^^xsd:integer     "pseudogene"^^xsd:string                 obo:SO_0000336
+"1174"^^xsd:integer     "pseudogenic_transcript"^^xsd:string     obo:SO_0000516
+"1008"^^xsd:integer                                              agrold_resource:Gene
+"957"^^xsd:integer                                               owl:ObjectProperty
+"714"^^xsd:integer      "miRNA"^^xsd:string                      obo:SO_0000276
+"439"^^xsd:integer                                               owl:AnnotationProperty
+"426"^^xsd:integer                                               agrold:SRP_RNA
+"383"^^xsd:integer                                               agrold:transposable_element
+"286"^^xsd:integer                                               owl:NamedIndividual
+"220"^^xsd:integer      "transposable_element"^^xsd:string       obo:SO_0000101
+"213"^^xsd:integer      "SRP_RNA"^^xsd:string                    obo:SO_0000590
+"170"^^xsd:integer                                               rdf:Property
+"163"^^xsd:integer      "transposable_element_gene"^^xsd:string  obo:SO_0000111
+"130"^^xsd:integer                                               virt:QuadMapFormat
+"102"^^xsd:integer                                               agrold:Chromosome
+"102"^^xsd:integer                                               owl:TransitiveProperty
+"98"^^xsd:integer                                                virt:array-of-QuadMapFormat
+"86"^^xsd:integer                                                agrold:antisense_RNA
+"74"^^xsd:integer                                                <http://www.w3.org/2003/11/swrl#AtomList>
+"61"^^xsd:integer                                                <http://www.w3.org/2003/11/swrl#IndividualPropertyAtom>
+"58"^^xsd:integer                                                agrold:Transcription_Factor
+"56"^^xsd:integer                                                rdfs:Class
+"51"^^xsd:integer                                                owl:SymmetricProperty
+"37"^^xsd:integer                                                obo:OBI_0000245
+"36"^^xsd:integer                                                agrold:RNase_MRP_RNA
+"33"^^xsd:integer                                                owl:DatatypeProperty
+"31"^^xsd:integer                                                agrold:Reaction
+"28"^^xsd:integer                                                agrold:tRNA_pseudogene
+"21"^^xsd:integer                                                agrold:Metabolic_Pathway
+"20"^^xsd:integer                                                <http://www.w3.org/2003/11/swrl#Imp>
+"20"^^xsd:integer                                                <http://www.w3.org/2003/11/swrl#Variable>
+"19"^^xsd:integer                                                owl:AllDisjointClasses
+"19"^^xsd:integer                                                owl:FunctionalProperty
+"18"^^xsd:integer       "RNase_MRP_RNA"^^xsd:string              obo:SO_0000385
+"17"^^xsd:integer                                                agrold_resource:QTL
+"16"^^xsd:integer                                                agrold:ribozyme
+"15"^^xsd:integer                                                obo:UO_0000051
+"14"^^xsd:integer                                                obo:OBI_0002326
+"14"^^xsd:integer                                                obo:OBI_0002341
+"14"^^xsd:integer                                                owl:Ontology
+"13"^^xsd:integer                                                obo:OBI_0002256
+"13"^^xsd:integer                                                <http://www.w3.org/2003/11/swrl#ClassAtom>
+"12"^^xsd:integer                                                obo:OBI_0002243
+"11"^^xsd:integer                                                obo:OBI_0002314
+"11"^^xsd:integer                                                owl:InverseFunctionalProperty
+"10"^^xsd:integer                                                obo:IAO_0000098
+"10"^^xsd:integer                                                obo:OBI_0000713
+"10"^^xsd:integer                                                obo:OBI_0002232
+"10"^^xsd:integer                                                owl:IrreflexiveProperty
+"9"^^xsd:integer                                                 obo:IAO_0000078
+"8"^^xsd:integer                                                 obo:OBI_0002270
+"8"^^xsd:integer                                                 virt:QuadMapColumn
+"8"^^xsd:integer                                                 virt:QuadMapValue
+"8"^^xsd:integer                                                 virt:array-of-QuadMapColumn
+"7"^^xsd:integer                                                 obo:OBI_0002224
+"7"^^xsd:integer                                                 obo:OBI_0002290
+"7"^^xsd:integer                                                 obo:OBI_0002298
+"7"^^xsd:integer                                                 obo:UO_0000003
+"7"^^xsd:integer                                                 obo:UO_0000095
+"6"^^xsd:integer                                                 obo:IAO_0000225
+"6"^^xsd:integer                                                 obo:UO_0000001
+"6"^^xsd:integer                                                 obo:UO_0000002
+"6"^^xsd:integer                                                 rdfs:Datatype
+"5"^^xsd:integer                                                 obo:OBI_0002357
+"4"^^xsd:integer                                                 obo:OBI_0002205
+"4"^^xsd:integer                                                 obo:OBI_0002210
+"4"^^xsd:integer                                                 obo:OBI_0002219
+"4"^^xsd:integer                                                 obo:OBI_0002279
+"4"^^xsd:integer                                                 obo:OBI_0002363
+"4"^^xsd:integer                                                 obo:UO_0000280
+"4"^^xsd:integer                                                 virt:QuadMapFText
+"4"^^xsd:integer                                                 owl:AsymmetricProperty
+"4"^^xsd:integer                                                 owl:OntologyProperty
+"4"^^xsd:integer                                                 owl:inverseFunctionalProperty
+"3"^^xsd:integer                                                 obo:IAO_0000409
+"3"^^xsd:integer                                                 obo:OBI_0000963
+"3"^^xsd:integer                                                 obo:OBI_0002306
+"3"^^xsd:integer                                                 obo:OBI_0002310
+"3"^^xsd:integer                                                 obo:UO_0000006
+"3"^^xsd:integer                                                 <http://purl.org/goodrelations/v1#Offering>
+"3"^^xsd:integer                                                 <http://purl.org/goodrelations/v1#ProductOrServicesSomeInstancesPlaceholder>
+"3"^^xsd:integer                                                 <http://purl.org/goodrelations/v1#TypeAndQuantityNode>
+"3"^^xsd:integer                                                 virt:QuadStorage
+"3"^^xsd:integer                                                 virt:array-of-QuadMap
+"3"^^xsd:integer                                                 owl:ReflexiveProperty
+"2"^^xsd:integer                                                 obo:OBI_0002216
+"2"^^xsd:integer                                                 obo:OBI_0002284
+"2"^^xsd:integer                                                 obo:OBI_0002287
+"2"^^xsd:integer                                                 obo:OBI_0200190
+"2"^^xsd:integer                                                 obo:UO_0000005
+"2"^^xsd:integer                                                 virt:QuadMap
+"2"^^xsd:integer                                                 virt:QuadMapATable
+"2"^^xsd:integer                                                 virt:array-of-QuadMapATable
+"2"^^xsd:integer                                                 virt:array-of-string
+"2"^^xsd:integer                                                 <http://www.w3.org/2001/vcard-rdf/3.0#internet>
+"2"^^xsd:integer                                                 <http://www.w3.org/2001/vcard-rdf/3.0#voice>
+"2"^^xsd:integer                                                 <http://www.w3.org/2001/vcard-rdf/3.0#work>
+"2"^^xsd:integer                                                 owl:AllDifferent
+"1"^^xsd:integer                                                 obo:OBI_0000700
+"1"^^xsd:integer                                                 obo:OBI_0000726
+"1"^^xsd:integer                                                 obo:OBI_0000727
+"1"^^xsd:integer                                                 obo:OBI_0000749
+"1"^^xsd:integer                                                 obo:OBI_0001000
+"1"^^xsd:integer                                                 obo:OBI_0200033
+"1"^^xsd:integer                                                 obo:OBI_0200041
+"1"^^xsd:integer                                                 obo:OBI_0200042
+"1"^^xsd:integer                                                 obo:OBI_0200051
+"1"^^xsd:integer                                                 obo:UO_0000105
+"1"^^xsd:integer                                                 obo:UO_0000270
+"1"^^xsd:integer                                                 <http://purl.org/goodrelations/v1#ActualProductOrServicesInstance>
+"1"^^xsd:integer                                                 <http://purl.org/goodrelations/v1#BusinessEntity>
+"1"^^xsd:integer                                                 <http://purl.org/goodrelations/v1#LocationOfSalesOrServiceProvisioning>
+"1"^^xsd:integer                                                 <http://purl.org/goodrelations/v1#Manufacturer>
+"1"^^xsd:integer                                                 <http://purl.org/goodrelations/v1#PriceSpecification>
+"1"^^xsd:integer                                                 <http://purl.org/goodrelations/v1#ProductOrServiceSomeInstancePlaceholder>
+"1"^^xsd:integer                                                 void:Dataset
+"1"^^xsd:integer                                                 <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#C_AAB316003-tax>
+"1"^^xsd:integer                                                 <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#C_AKE112003-tax>
+"1"^^xsd:integer                                                 <http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#C_AKJ315005-tax>
+"1"^^xsd:integer                                                 oboInOwl:Subset
+"1"^^xsd:integer                                                 <http://www.openlinksw.com/ontology/acl#Scope>
+"1"^^xsd:integer                                                 <http://www.openlinksw.com/schemas/VAD#>
+"1"^^xsd:integer                                                 sd:Service
+"1"^^xsd:integer                                                 <nodeID://b28937>
+"1"^^xsd:integer                                                 <nodeID://b28938>
+"1"^^xsd:integer                                                 <nodeID://b28939>
+"1"^^xsd:integer                                                 <nodeID://b28940>
+"1"^^xsd:integer                                                 <nodeID://b28941>
+"1"^^xsd:integer                                                 <nodeID://b28942>
+"1"^^xsd:integer                                                 <nodeID://b28943>
+"1"^^xsd:integer                                                 <nodeID://b28944>
+"1"^^xsd:integer                                                 <nodeID://b28945>
+"1"^^xsd:integer                                                 <nodeID://b28946>
+"1"^^xsd:integer                                                 <nodeID://b28947>
+"1"^^xsd:integer                                                 <nodeID://b28948>
+"1"^^xsd:integer                                                 <nodeID://b28949>
+"1"^^xsd:integer                                                 <nodeID://b28950>
+"1"^^xsd:integer                                                 <nodeID://b28951>
+"1"^^xsd:integer                                                 <nodeID://b28952>
+"1"^^xsd:integer                                                 <nodeID://b28953>
+"1"^^xsd:integer                                                 <nodeID://b28954>
+"1"^^xsd:integer                                                 <nodeID://b28955>
+"1"^^xsd:integer                                                 <nodeID://b28956>
+"1"^^xsd:integer                                                 <nodeID://b28957>
+"1"^^xsd:integer                                                 <nodeID://b28958>
+"1"^^xsd:integer                                                 <nodeID://b28959>
+"1"^^xsd:integer                                                 <nodeID://b28960>
+"1"^^xsd:integer                                                 <nodeID://b28961>
+"1"^^xsd:integer                                                 <nodeID://b28962>
+"1"^^xsd:integer                                                 <nodeID://b28963>
+"1"^^xsd:integer                                                 <nodeID://b28964>
+"1"^^xsd:integer                                                 <nodeID://b28965>
+"1"^^xsd:integer                                                 <nodeID://b28966>
+"1"^^xsd:integer                                                 <nodeID://b28967>
+"1"^^xsd:integer                                                 <nodeID://b28968>
+"1"^^xsd:integer                                                 <nodeID://b28969>
+"1"^^xsd:integer                                                 <nodeID://b28970>
+"1"^^xsd:integer                                                 <nodeID://b28971>
+"1"^^xsd:integer                                                 <nodeID://b28972>
+"1"^^xsd:integer                                                 <nodeID://b28973>
+"1"^^xsd:integer                                                 <nodeID://b28974>
+"1"^^xsd:integer                                                 <nodeID://b28975>
+"1"^^xsd:integer                                                 <nodeID://b28976>

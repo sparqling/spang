@@ -2,8 +2,10 @@
 # @endpoint agrold
 # @option -ac --time
 
-SELECT (COUNT(?s) AS ?count) ?class
+SELECT (COUNT(?s) AS ?count) ?graph
 WHERE {
-  ?s a agrold:Protein .
+  GRAPH ?graph {
+    ?s a agrold:Protein .
+  }
   ?s a owl:Class .
 }

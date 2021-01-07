@@ -3,11 +3,13 @@
 # @endpoint agrold
 # @option -ac --time
 
-SELECT (COUNT(?s) AS ?count) ?class ?label
+SELECT (COUNT(?s) AS ?count) ?so_label ?class
 WHERE {
   ?s a ?class .
   OPTIONAL {
-    ?class rdfs:label ?label
+    GRAPH agro:so {
+      ?class rdfs:label ?so_label
+    }
   }
 }
-ORDER BY DESC(?count)
+ORDER BY DESC(?count) ?class
