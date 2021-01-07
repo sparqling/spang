@@ -65,6 +65,7 @@ agrold:
     - list_annotations.rq
     - count_resources.rq
     - count_annotations.rq
+    - count_protein.rq
 general:
   title: general use
   endpoint: http://dbpedia.org/sparql
