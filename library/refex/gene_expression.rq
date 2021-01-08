@@ -1,0 +1,14 @@
+#!/usr/bin/env spang2
+# @endpoint nbdc
+# @param geneid=161
+
+PREFIX refexo: <http://purl.jp/bio/01/refexo#>
+
+SELECT *
+WHERE {
+  # GRAPH <http://refex.dbcls.jp/rdf/fantom5> {
+  GRAPH ?graph {
+    ?entry rdfs:seeAlso ncbigene:{{geneid}} .
+    ?entry refexo:expValue ?val .
+  }
+}

@@ -1,0 +1,21 @@
+#!/usr/bin/env spang2
+# @endpoint nbdc
+
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX refexo: <http://purl.jp/bio/01/refexo#>
+
+SELECT ?entry_id ?entry ?sample_id ?sample ?age (?desc AS ?description) (?ev AS ?expression_value)
+FROM <http://refex.dbcls.jp/rdf/fantom5>
+WHERE {
+  ?entry refexo:refexSample ?sample .
+  ?sample dcterms:identifier ?sample_id .
+  ?entry dcterms:identifier ?entry_id .
+  ?sample refexo:sex obo:PATO_0000383 .
+  ?sample refexo:age ?age .
+  ?sample refexo:refexRefinedDescription ?desc .
+  ?entry refexo:expValue ?ev .
+  FILTER(REGEX(?desc, "Smooth Muscle Cells"))
+  FILTER(xsd:integer(?age) > 55)
+  FILTER(xsd:float(?ev) > 7.0)
+}

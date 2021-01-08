@@ -1,0 +1,17 @@
+#!/usr/bin/env spang2
+# @endpoint nbdc
+
+PREFIX refexo: <http://purl.jp/bio/01/refexo#>
+
+SELECT *
+WHERE {
+  GRAPH ?graph {
+    ?sample refexo:refexRefinedDescription ?desc .
+    ?sample refexo:refexSampleCategory ?category .
+    ?sample refexo:refexTissueClass10 ?class10 .
+    ?sample refexo:refexTissueClass40 ?class40 .
+  }
+  ?class10 skos:prefLabel ?class10_label .
+  ?class40 skos:prefLabel ?class40_label .
+}
+ORDER BY ?class40

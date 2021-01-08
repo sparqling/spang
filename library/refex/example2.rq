@@ -1,0 +1,29 @@
+#!/usr/bin/env spang2
+# @endpoint nbdc
+
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dc: <http://purl.org/dc/elements/1.1/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX refexs: <http://refex.dbcls.jp/sample/>
+PREFIX refexo: <http://purl.jp/bio/01/refexo#>
+PREFIX ff: <http://fantom.gsc.riken.jp/5/sstar/FF:>
+PREFIX bs: <http://identifiers.org/biosample/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?refexid ?refex ?gene (?ev AS ?expression_value) ?sample ?age
+FROM <http://refex.dbcls.jp/rdf/fantom5>
+WHERE {
+    ?sample ?p ?bn .
+    ?bn refexo:belongsToAnatomy obo:UBERON_0000468 .
+    ?sample refexo:sex obo:PATO_0000384 .
+    ?sample refexo:age ?age_dat .
+    ?refex a refexo:RefExEntry .
+    ?refex dcterms:identifier ?refexid .
+    ?refex refexo:refexSample ?sample .
+    ?refex refexo:expValue ?val .
+    ?refex rdfs:seeAlso ?gene .
+    BIND(xsd:decimal(?age_dat) AS ?age)
+    BIND(xsd:float(?val) AS ?ev)
+    FILTER(?age > 20 && ?ev > 2 && REGEX(?gene, "identifiers.org", "i"))
+} LIMIT 100
