@@ -76,6 +76,11 @@ homologene:
     - list_organisms.rq
     - category.rq
     - category_all.rq
+keggoc:
+  title: KEGG OC
+  endpoint: https://www.genome.jp/oc/proxy/sparql/
+  queries:
+    - multi.rq
 general:
   title: general use
   endpoint: http://dbpedia.org/sparql
