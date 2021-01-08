@@ -68,6 +68,14 @@ agrold:
     - list_annotations.rq
     - count_annotations.rq
     - list_pathway.rq
+homologene:
+  title: HomoloGene
+  endpoint: https://orth.dbcls.jp/sparql
+  queries:
+    - get_ortholog.rq
+    - list_organisms.rq
+    - category.rq
+    - category_all.rq
 general:
   title: general use
   endpoint: http://dbpedia.org/sparql
