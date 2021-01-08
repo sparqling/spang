@@ -1,0 +1,14 @@
+#!/usr/bin/env spang2
+# @title List protein in a graph
+# @endpoint agrold
+# @param graph=agro:genome.hub
+
+SELECT *
+WHERE {
+  GRAPH {{graph}} {
+    ?resource a agrold:Protein ;
+        dct:description ?description ;
+        obo:RO_0002162 ?taxid .
+  }
+}
+LIMIT 100

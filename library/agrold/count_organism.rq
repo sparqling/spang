@@ -1,0 +1,14 @@
+#!/usr/bin/env spang2
+# @title Count organism in a graph
+# @endpoint agrold
+
+SELECT ?graph ?class (COUNT(DISTINCT ?taxid) AS ?count)
+WHERE {
+  GRAPH ?graph {
+    ?s obo:RO_0002162 ?taxid .
+    OPTIONAL {
+      ?s a ?class .
+    }
+  }
+}
+ORDER BY ?graph DESC(?count) ?class

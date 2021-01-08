@@ -1,0 +1,22 @@
+#!/usr/bin/env spang2
+# @title List metabolic pathway
+# @endpoint agrold
+
+SELECT ?pwy ?pathway ?agent ?gene ?reaction ?ec
+WHERE {
+  ?pwy a agrold:Metabolic_Pathway ;
+  rdfs:label ?pathway .
+  OPTIONAL {
+    ?pwy agrold:has_agent ?agent .
+  }
+  OPTIONAL {
+    ?agent agrold:encoded_by ?gene .
+  }
+  OPTIONAL {
+    ?pwy agrold:has_reaction ?reaction .
+  }
+  OPTIONAL {
+    ?reaction agrold:has_ec_code ?ec .
+  }
+}
+ORDER BY ?pwy
