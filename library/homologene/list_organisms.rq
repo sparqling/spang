@@ -1,5 +1,7 @@
 #!/usr/bin/env spang2
+# @title List organisms included in HomoloGene
 # @endpoint ortho
+# @option -a
 
 PREFIX orth: <http://purl.org/net/orth#>
 PREFIX homologene: <https://ncbi.nlm.nih.gov/homologene/>
@@ -13,3 +15,4 @@ WHERE {
   ?taxid rdfs:label ?label .
   ?taxid dct:identifier ?id .
 }
+ORDER BY ?label

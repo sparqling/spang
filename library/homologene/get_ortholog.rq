@@ -1,4 +1,5 @@
 #!/usr/bin/env spang2
+# @title Get ortholog information by HomoloGene group ID
 # @endpoint ortho
 # @param id=3
 

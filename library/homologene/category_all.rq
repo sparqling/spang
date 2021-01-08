@@ -1,4 +1,5 @@
 #!/usr/bin/env spang2
+# @title Categorize phylogenetic profile of human genes
 # @endpoint ortho
 
 PREFIX taxid: <http://identifiers.org/taxonomy/>
