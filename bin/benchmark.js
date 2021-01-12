@@ -21,6 +21,10 @@ const commander = require('commander')
 
 commander.parse(process.argv);
 
+if (commander.args.length < 1) {
+  commander.help();
+}
+
 header = ['name'];
 header = header.concat(Array.from({ length: commander.iteration }, (_, k) => k + 1));
 if (commander.average) {
