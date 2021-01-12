@@ -1,4 +1,24 @@
-?graph                ?class                       ?so_label                                ?count
+?graph                ?class                       ?label                                   ?count
+agro:uniprot.plants   agrold:Protein                                                        "1405444"^^xsd:integer
+agro:rapdb            agrold:mRNA                                                           "52807"^^xsd:integer
+agro:rap.msu          agrold:Gene                                                           "66100"^^xsd:integer
+agro:rap.msu          agrold:mRNA                                                           "43099"^^xsd:integer
+agro:qtaro.qtl        agrold_resource:QTL                                                   "17"^^xsd:integer
+agro:qtaro.genes      agrold_resource:Gene                                                  "1008"^^xsd:integer
+agro:plantftdb        agrold:Transcription_Factor                                           "58"^^xsd:integer
+agro:oryzabase.genes  agrold:Gene                                                           "17879"^^xsd:integer
+agro:msu.genes        agrold:mRNA                                                           "66338"^^xsd:integer
+agro:msu.genes        agrold:Gene                                                           "55986"^^xsd:integer
+agro:msu.genes        agrold:Chromosome                                                     "14"^^xsd:integer
+agro:interprodb       agrold:Protein_Domain                                                 "9873"^^xsd:integer
+agro:gramene.cyc      agrold:Reaction                                                       "31"^^xsd:integer
+agro:gramene.cyc      agrold:Metabolic_Pathway                                              "21"^^xsd:integer
+agro:gramene.cyc      agrold:Protein                                                        "19"^^xsd:integer
+agro:gramene.cyc      agrold:Gene                                                           "7"^^xsd:integer
+agro:genome.hub       agrold:mRNA                                                           "410042"^^xsd:integer
+agro:genome.hub       agrold:Gene                                                           "273282"^^xsd:integer
+agro:genome.hub       agrold:Protein                                                        "52424"^^xsd:integer
+agro:genome.hub       agrold:Chromosome                                                     "88"^^xsd:integer
 agro:ensembl.plants   obo:SO_0000147               "exon"^^xsd:string                       "3388989"^^xsd:integer
 agro:ensembl.plants   agrold:Gene                                                           "1370474"^^xsd:integer
 agro:ensembl.plants   obo:SO_0000234               "mRNA"^^xsd:string                       "783129"^^xsd:integer
@@ -37,23 +57,3 @@ agro:ensembl.plants   agrold:RNase_MRP_RNA                                      
 agro:ensembl.plants   agrold:tRNA_pseudogene                                                "28"^^xsd:integer
 agro:ensembl.plants   obo:SO_0000385               "RNase_MRP_RNA"^^xsd:string              "18"^^xsd:integer
 agro:ensembl.plants   agrold:ribozyme                                                       "16"^^xsd:integer
-agro:genome.hub       agrold:mRNA                                                           "410042"^^xsd:integer
-agro:genome.hub       agrold:Gene                                                           "273282"^^xsd:integer
-agro:genome.hub       agrold:Protein                                                        "52424"^^xsd:integer
-agro:genome.hub       agrold:Chromosome                                                     "88"^^xsd:integer
-agro:gramene.cyc      agrold:Reaction                                                       "31"^^xsd:integer
-agro:gramene.cyc      agrold:Metabolic_Pathway                                              "21"^^xsd:integer
-agro:gramene.cyc      agrold:Protein                                                        "19"^^xsd:integer
-agro:gramene.cyc      agrold:Gene                                                           "7"^^xsd:integer
-agro:interprodb       agrold:Protein_Domain                                                 "9873"^^xsd:integer
-agro:msu.genes        agrold:mRNA                                                           "66338"^^xsd:integer
-agro:msu.genes        agrold:Gene                                                           "55986"^^xsd:integer
-agro:msu.genes        agrold:Chromosome                                                     "14"^^xsd:integer
-agro:oryzabase.genes  agrold:Gene                                                           "17879"^^xsd:integer
-agro:plantftdb        agrold:Transcription_Factor                                           "58"^^xsd:integer
-agro:qtaro.genes      agrold_resource:Gene                                                  "1008"^^xsd:integer
-agro:qtaro.qtl        agrold_resource:QTL                                                   "17"^^xsd:integer
-agro:rap.msu          agrold:Gene                                                           "66100"^^xsd:integer
-agro:rap.msu          agrold:mRNA                                                           "43099"^^xsd:integer
-agro:rapdb            agrold:mRNA                                                           "52807"^^xsd:integer
-agro:uniprot.plants   agrold:Protein                                                        "1405444"^^xsd:integer
