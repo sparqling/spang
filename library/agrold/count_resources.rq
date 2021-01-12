@@ -1,6 +1,6 @@
 #!/usr/bin/env spang2
 # @title Count for each resource type
-# @endpoint agrold
+# @endpoint http://agrold.southgreen.fr/sparql
 # @option -vac --time
 
 SELECT ?graph ?class ?so_label (COUNT(?s) AS ?count)
