@@ -1,0 +1,6 @@
+graph                    class          count
+agro:uniprot.plants      agrold:Protein "1405444"^^xsd:integer
+agro:ensembl.plants      agrold:Protein "777635"^^xsd:integer
+agro:genome.hub          agrold:Protein "52424"^^xsd:integer
+agro:gramene.cyc         agrold:Protein "19"^^xsd:integer
+agro:protein.annotations owl:Class      "133535"^^xsd:integer
