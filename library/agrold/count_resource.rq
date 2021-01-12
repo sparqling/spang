@@ -1,9 +1,9 @@
 #!/usr/bin/env spang2
-# @title Count for each resource type
+# @title Count each resource type
 # @endpoint http://agrold.southgreen.fr/sparql
 # @option -vac --time
 
-SELECT ?graph ?class ?so_label (COUNT(?s) AS ?count)
+SELECT ?graph ?class ?label (COUNT(?s) AS ?count)
 WHERE {
   VALUES ?class { agrold:Protein
                   agrold:Gene
@@ -57,8 +57,8 @@ WHERE {
   }
   OPTIONAL {
     GRAPH agro:so {
-      ?class rdfs:label ?so_label
+      ?class rdfs:label ?label
     }
   }
 }
-ORDER BY ?graph DESC(?count)
+ORDER BY DESC(?graph) DESC(?count)
