@@ -1,6 +1,7 @@
 #!/usr/bin/env spang2
-# @title Count organism in a graph
+# @title List taxonomy IDs used in AgroLD
 # @endpoint agrold
+# @option -a
 
 SELECT ?graph ?taxid ?class (COUNT(DISTINCT ?s) AS ?count)
 WHERE {
