@@ -59,7 +59,7 @@ agrold:
   endpoint: http://agrold.southgreen.fr/sparql
   # schema: http://spang.dbcls.jp/library/agrold/schema/
   queries:
-    - count_resources.rq
+    - count_resource.rq
     - count_protein.rq
     - list_protein.rq
     - uniprot_info.rq
