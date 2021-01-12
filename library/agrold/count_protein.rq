@@ -1,9 +1,9 @@
 #!/usr/bin/env spang2
-# @title Count protein resources
+# @title Count proteins
 # @endpoint agrold
 # @option -vac --time
 
-SELECT (COUNT(?s) AS ?count) ?graph ?class
+SELECT ?graph ?class (COUNT(?s) AS ?count)
 WHERE {
   ?s a agrold:Protein .
   GRAPH ?graph {
