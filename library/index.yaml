@@ -59,14 +59,14 @@ agrold:
   endpoint: http://agrold.southgreen.fr/sparql
   # schema: http://spang.dbcls.jp/library/agrold/schema/
   queries:
-    - count_resource.rq
-    - count_protein.rq
-    - list_protein.rq
     - uniprot_info.rq
+    - count_protein.rq
+    - count_annotations.rq
+    - count_resource.rq
+    - list_protein.rq
     - list_graphs.rq
     - list_predicates.rq
     - list_annotations.rq
-    - count_annotations.rq
     - list_pathway.rq
 homologene:
   title: HomoloGene
