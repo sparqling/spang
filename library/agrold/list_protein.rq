@@ -1,11 +1,11 @@
 #!/usr/bin/env spang2
 # @title List protein in a graph
 # @endpoint agrold
-# @param graph=agro:genome.hub
+# @param graph=genome.hub
 
 SELECT *
 WHERE {
-  GRAPH {{graph}} {
+  GRAPH agro:{{graph}} {
     ?resource a agrold:Protein ;
         dct:description ?description ;
         obo:RO_0002162 ?taxid .
