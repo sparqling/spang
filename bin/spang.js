@@ -49,6 +49,7 @@ const commander = require('commander')
   .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
   .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
   .option('--time', 'measure time of query execution (exluding construction of query)')
+  .option('--reset_option', 'ignore options specified in query file')
   .version(version)
   .arguments('[SPARQL_TEMPLATE] [par1=val1,par2=val2,...]')
   .action((s) => {
@@ -107,7 +108,7 @@ if (commander.subject || commander.predicate || commander.object || (commander.l
     sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
   }
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
-  if (metadata.option) {
+  if (metadata.option && !commander.reset_option) {
     let args = process.argv;
     args = args.concat(metadata.option.split(/\s+/));
     commander.parse(args);
