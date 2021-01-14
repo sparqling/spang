@@ -41,6 +41,7 @@
   "scripts": {
     "test": "mocha",
     "pegjs": "pegjs -o syntax/parser.js syntax/spang.pegjs",
-    "browserify": "browserify js/spang_browser.js > js/spang_bundled.js && browserify js/spfmt_browser.js > js/spfmt_bundled.js && terser js/spang_bundled.js > js/spang_bundled.min.js"
+    "browserify": "browserify js/spang_browser.js > js/spang_bundled.js && browserify js/spfmt_browser.js > js/spfmt_bundled.js && terser js/spang_bundled.js > js/spang_bundled.min.js",
+    "prettier": "prettier --single-quote --trailing-comma none --print-width 180"
   }
 }
