@@ -1,0 +1,8 @@
+rdf:type            refexo:AnatomicalClassification40
+rdfs:label          "Prostate"@en
+rdfs:label          "胎盤"@ja
+rdfs:subClassOf     refexo:v04_10
+dcterms:identifier  "v22_40"^^xsd:string
+skos:exactMatch     obo:UBERON_0002367
+skos:definition     "Prostate"@en
+skos:prefLabel      "Placenta"@en
