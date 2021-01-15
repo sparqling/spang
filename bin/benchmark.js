@@ -15,6 +15,7 @@ const commander = require('commander')
   .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
   .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
   .option('--sec', 'output in "sec" (default: in "ms")')
+  .option('--output_error', 'output to stderr')
   .option('-a, --average', 'calculate average')
   .option('-v, --verbose', 'output progress to stderr')
   .arguments('[json_or_queries...]');
@@ -79,6 +80,9 @@ function measureQuery(queryPath, expected) {
           row[column] = time;
         } else {
           row[column] = `${time}_wrong`;
+          if (commander.output_error) {
+            console.error(result.stdout.toString());
+          }
         }
       } else {
         row[column] = `no_time`;
