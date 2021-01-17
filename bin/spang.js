@@ -105,7 +105,13 @@ if (commander.subject || commander.predicate || commander.object || (commander.l
   if (/^(http|https):\/\//.test(templatePath)) {
     sparqlTemplate = syncRequest('GET', templatePath).getBody('utf8');
   } else {
-    sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
+    let match = /^github:\/\/([^\/]+)\/([^\/]+)\/(.+)/.exec(templatePath);
+    if(match) {
+      templatePath = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/master/${match[3]}`;
+      sparqlTemplate = syncRequest('GET', templatePath).getBody('utf8');
+    } else {
+      sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
+    }
   }
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
   if (metadata.option && !commander.reset_option) {
