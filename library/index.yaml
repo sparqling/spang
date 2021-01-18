@@ -52,10 +52,10 @@ mbgd:
   sparql_editor: mbgd2015
   endpoint: http://mbgd.genome.ad.jp:8047/sparql
   legend: 0
-coxpresdb:
-  title: ATTED-II/COXPRESdb
-  sparql_editor: yasgui
-  endpoint: http://coxpresdb.jp/sparql
+# coxpresdb:
+#   title: ATTED-II/COXPRESdb
+#   sparql_editor: yasgui
+#   endpoint: http://coxpresdb.jp/sparql
 wikidata:
   title: Wikidata
   sparql_editor: yasgui
