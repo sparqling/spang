@@ -1,3 +1,18 @@
+agrold:
+  title: AgroLD
+  sparql_editor: yasgui
+  endpoint: http://agrold.southgreen.fr/sparql
+  # schema: http://spang.dbcls.jp/library/agrold/schema/
+  queries:
+    - uniprot_info.rq
+    - count_protein.rq
+    - count_annotations.rq
+    - count_resource.rq
+    - list_protein.rq
+    - list_graphs.rq
+    - list_predicates.rq
+    - list_annotations.rq
+    - list_pathway.rq
 disgenet:
   title: DisGenet
   sparql_editor: yasgui
@@ -53,21 +68,6 @@ togogenome:
   title: TogoGenome
   sparql_editor: yasgui
   endpoint: http://togogenome.org/sparql
-agrold:
-  title: AgroLD
-  sparql_editor: yasgui
-  endpoint: http://agrold.southgreen.fr/sparql
-  # schema: http://spang.dbcls.jp/library/agrold/schema/
-  queries:
-    - uniprot_info.rq
-    - count_protein.rq
-    - count_annotations.rq
-    - count_resource.rq
-    - list_protein.rq
-    - list_graphs.rq
-    - list_predicates.rq
-    - list_annotations.rq
-    - list_pathway.rq
 homologene:
   title: HomoloGene
   endpoint: https://orth.dbcls.jp/sparql
