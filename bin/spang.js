@@ -10,7 +10,6 @@ const prefixModule = require('../lib/prefix.js');
 const shortcut = require('../lib/shortcut.js').shortcut;
 const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
-const syncRequest = require('sync-request');
 const columnify = require('columnify');
 const csvParse = require('csv-parse/lib/sync');
 const metadataModule = require('../lib/metadata.js');
@@ -103,10 +102,12 @@ if (commander.subject || commander.predicate || commander.object || (commander.l
   metadata = {};
 } else {
   if (/^(http|https):\/\//.test(templatePath)) {
+    const syncRequest = require('sync-request');
     sparqlTemplate = syncRequest('GET', templatePath).getBody('utf8');
   } else {
     let match = /^github:\/\/([^\/]+)\/([^\/]+)\/(.+)/.exec(templatePath);
     if(match) {
+      const syncRequest = require('sync-request');
       templatePath = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/master/${match[3]}`;
       sparqlTemplate = syncRequest('GET', templatePath).getBody('utf8');
     } else {
