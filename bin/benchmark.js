@@ -64,7 +64,7 @@ function measureQuery(queryPath, expected) {
     if (commander.verbose) console.error(`query: ${column}`);
     let arguments = ['--time', queryPath, '--method', commander.method];
     if (commander.endpoint) arguments = arguments.concat(['--endpoint', commander.endpoint]);
-    let result = spawnSync('spang2', arguments);
+    let result = spawnSync('spang2', arguments, { maxBuffer: Infinity });
     if (result.status) {
       // error
       row[column] = result.stderr.toString();
