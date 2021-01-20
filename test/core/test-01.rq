@@ -1,4 +1,4 @@
-# @endpoint https://sparql-test.spang.dbcls.jp/sparql
+# @endpoint https://spang.dbcls.jp/sparql-test
 SELECT *
 WHERE {
     ?s ?p ?o .
