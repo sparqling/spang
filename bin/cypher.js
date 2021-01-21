@@ -150,14 +150,6 @@ if (commander.endpoint) {
   process.exit(-1);
 }
 
-let auth = {};
-if (commander.user && commander.pass) {
-  auth = {
-    user: commander.user,
-    password: commander.pass
-  };
-}
-
 if (/^\w/.test(db)) {
   if (!/^(http|https):\/\//.test(db)) {
     if (!dbMap[db]) {
@@ -166,7 +158,7 @@ if (/^\w/.test(db)) {
     }
     [db, retrieveByGet] = search_db_name.searchDBName(db);
   }
-  queryCypher(db, queryTemplate, auth);
+  queryCypher(db, queryTemplate);
 } else {
   console.error(`${db}: no such file`);
   process.exit(-1);
@@ -214,7 +206,7 @@ printTsv = (tsv) => {
   }
 };
 
-function queryCypher(endpoint, query, auth) {
+function queryCypher(endpoint, query) {
   const options = {
     uri: endpoint,
     followAllRedirects: true,
@@ -223,8 +215,12 @@ function queryCypher(endpoint, query, auth) {
     },
     body: query
   };
-  if (auth.hasOwnProperty('user') && auth.hasOwnProperty('password')) {
-    options.auth = auth;
+
+  if (commander.user && commander.pass) {
+    options.auth = {
+      user: commander.user,
+      password: commander.pass
+    };
   }
 
   let start = new Date();
