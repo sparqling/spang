@@ -166,18 +166,7 @@ if (/^\w/.test(db)) {
     }
     [db, retrieveByGet] = search_db_name.searchDBName(db);
   }
-  let start = new Date();
-  queryCypher(db, queryTemplate, auth, (body) => {
-    let end = new Date() - start;
-    if (commander.format == 'tsv') {
-      printTsv(jsonToTsv(body, Boolean(commander.vars)));
-    } else {
-      console.log(body);
-    }
-    if (commander.time) {
-      console.error('Time of query: %dms', end);
-    }
-  });
+  queryCypher(db, queryTemplate, auth);
 } else {
   console.error(`${db}: no such file`);
   process.exit(-1);
@@ -225,7 +214,7 @@ printTsv = (tsv) => {
   }
 };
 
-function queryCypher(endpoint, query, auth, callback) {
+function queryCypher(endpoint, query, auth) {
   const options = {
     uri: endpoint,
     followAllRedirects: true,
@@ -238,6 +227,7 @@ function queryCypher(endpoint, query, auth, callback) {
     options.auth = auth;
   }
 
+  let start = new Date();
   request.post(options, (error, response, body) => {
     if (error !== null) {
       console.error(error);
@@ -247,7 +237,15 @@ function queryCypher(endpoint, query, auth, callback) {
       console.error('Error: ' + response.statusCode);
       console.error(body);
     } else {
-      callback(body);
+      let end = new Date() - start;
+      if (commander.format == 'tsv') {
+        printTsv(jsonToTsv(body, Boolean(commander.vars)));
+      } else {
+        console.log(body);
+      }
+      if (commander.time) {
+        console.error('Time of query: %dms', end);
+      }
     }
   });
 }
