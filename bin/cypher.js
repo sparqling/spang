@@ -170,17 +170,13 @@ if (/^\w/.test(db)) {
   queryCypher(db, queryTemplate, commander.format, auth, (error, statusCode, bodies) => {
     if (!error && statusCode == 200) {
       let end = new Date() - start;
-      if (bodies.length == 1) {
-        if (commander.format == 'tsv') {
-          printTsv(jsonToTsv(bodies[0], Boolean(commander.vars)));
-        } else {
-          console.log(bodies[0]);
-        }
-        if (commander.time) {
-          console.error('Time of query: %dms', end);
-        }
+      if (commander.format == 'tsv') {
+        printTsv(jsonToTsv(bodies[0], Boolean(commander.vars)));
       } else {
-        console.error('The results are paginated.');
+        console.log(bodies[0]);
+      }
+      if (commander.time) {
+        console.error('Time of query: %dms', end);
       }
     } else {
       console.error('Error: ' + statusCode);
