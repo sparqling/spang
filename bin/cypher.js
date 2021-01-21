@@ -168,19 +168,14 @@ if (/^\w/.test(db)) {
   }
   let start = new Date();
   queryCypher(db, queryTemplate, commander.format, auth, (error, statusCode, body) => {
-    if (error || statusCode != 200) {
-      console.error('Error: ' + statusCode);
-      console.error(body);
+    let end = new Date() - start;
+    if (commander.format == 'tsv') {
+      printTsv(jsonToTsv(body, Boolean(commander.vars)));
     } else {
-      let end = new Date() - start;
-      if (commander.format == 'tsv') {
-        printTsv(jsonToTsv(body, Boolean(commander.vars)));
-      } else {
-        console.log(body);
-      }
-      if (commander.time) {
-        console.error('Time of query: %dms', end);
-      }
+      console.log(body);
+    }
+    if (commander.time) {
+      console.error('Time of query: %dms', end);
     }
   });
 } else {
