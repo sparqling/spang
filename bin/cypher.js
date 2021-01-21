@@ -168,7 +168,10 @@ if (/^\w/.test(db)) {
   }
   let start = new Date();
   queryCypher(db, queryTemplate, commander.format, auth, (error, statusCode, body) => {
-    if (!error && statusCode == 200) {
+    if (error || statusCode != 200) {
+      console.error('Error: ' + statusCode);
+      console.error(body);
+    } else {
       let end = new Date() - start;
       if (commander.format == 'tsv') {
         printTsv(jsonToTsv(body, Boolean(commander.vars)));
@@ -178,9 +181,6 @@ if (/^\w/.test(db)) {
       if (commander.time) {
         console.error('Time of query: %dms', end);
       }
-    } else {
-      console.error('Error: ' + statusCode);
-      console.error(body);
     }
   });
 } else {
