@@ -167,7 +167,7 @@ if (/^\w/.test(db)) {
     [db, retrieveByGet] = search_db_name.searchDBName(db);
   }
   let start = new Date();
-  queryCypher(db, queryTemplate, commander.format, auth, (error, statusCode, body) => {
+  queryCypher(db, queryTemplate, auth, (body) => {
     let end = new Date() - start;
     if (commander.format == 'tsv') {
       printTsv(jsonToTsv(body, Boolean(commander.vars)));
