@@ -174,15 +174,16 @@ jsonToTsv = (body, withHeader) => {
     }
     data = obj.results[0].data;
     if (data.length > 0) {
-      tsv += data
-        .map((elem) => {
-          row = elem.row.map(JSON.stringify);
-          meta = elem.meta
-            .filter(Boolean) // remove null elements
-            .map(JSON.stringify);
-          return row.concat(meta).join('\t')
-        })
-        .join('\n') + '\n';
+      tsv +=
+        data
+          .map((elem) => {
+            row = elem.row.map(JSON.stringify);
+            meta = elem.meta
+              .filter(Boolean) // remove null elements
+              .map(JSON.stringify);
+            return row.concat(meta).join('\t');
+          })
+          .join('\n') + '\n';
     }
   }
   if (obj.errors.length > 0) {
@@ -198,7 +199,7 @@ printTsv = (tsv) => {
       columnify(csvParse(tsv, { columns: Boolean(commander.vars), delimiter: '\t', relax: true }), {
         // relax csvParse to accept "hoge"^^xsd:string
         showHeaders: Boolean(commander.vars),
-        headingTransform: (x) => x,
+        headingTransform: (x) => x
       }).replace(/\s+$/gm, '')
     );
   } else {
