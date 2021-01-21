@@ -167,20 +167,20 @@ if (/^\w/.test(db)) {
     [db, retrieveByGet] = search_db_name.searchDBName(db);
   }
   let start = new Date();
-  queryCypher(db, queryTemplate, commander.format, auth, (error, statusCode, bodies) => {
+  queryCypher(db, queryTemplate, commander.format, auth, (error, statusCode, body) => {
     if (!error && statusCode == 200) {
       let end = new Date() - start;
       if (commander.format == 'tsv') {
-        printTsv(jsonToTsv(bodies[0], Boolean(commander.vars)));
+        printTsv(jsonToTsv(body, Boolean(commander.vars)));
       } else {
-        console.log(bodies[0]);
+        console.log(body);
       }
       if (commander.time) {
         console.error('Time of query: %dms', end);
       }
     } else {
       console.error('Error: ' + statusCode);
-      console.error(bodies);
+      console.error(body);
     }
   });
 } else {
