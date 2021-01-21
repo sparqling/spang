@@ -6,7 +6,7 @@ const search_db_name = require('../lib/search_db_name');
 const prefixModule = require('../lib/prefix.js');
 const shortcut = require('../lib/cypher_shortcut.js').shortcut;
 const constructCypher = require('../lib/construct_cypher.js').constructCypher;
-const queryCypher = require('../lib/query_cypher.js');
+const request = require('request');
 const syncRequest = require('sync-request');
 const columnify = require('columnify');
 const csvParse = require('csv-parse/lib/sync');
@@ -224,3 +224,30 @@ printTsv = (tsv) => {
     process.stdout.write(tsv);
   }
 };
+
+function queryCypher(endpoint, query, auth, callback) {
+  const options = {
+    uri: endpoint,
+    followAllRedirects: true,
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: query
+  };
+  if (auth.hasOwnProperty('user') && auth.hasOwnProperty('password')) {
+    options.auth = auth;
+  }
+
+  request.post(options, (error, response, body) => {
+    if (error !== null) {
+      console.error(error);
+      return false;
+    }
+    if (error || response.statusCode != 200) {
+      console.error('Error: ' + response.statusCode);
+      console.error(body);
+    } else {
+      callback(body);
+    }
+  });
+}
