@@ -17,7 +17,6 @@ let db;
 let parameterArr = [];
 let parameterMap = {};
 let retrieveByGet = false;
-const input = process.stdin.isTTY ? '' : fs.readFileSync(process.stdin.fd, 'utf8');
 
 const commander = require('commander')
   .option('-e, --endpoint <ENDPOINT>', 'target endpoint (alias in ~/.spang/endpoints)', 'http://localhost:7474/db/data/transaction/commit')
@@ -114,7 +113,7 @@ parameterArr.forEach((par) => {
 });
 
 if (templateSpecified) {
-  queryTemplate = constructCypher(queryTemplate, metadata, parameterMap, positionalArguments, input);
+  queryTemplate = constructCypher(queryTemplate, metadata, parameterMap, positionalArguments);
   if (commander.limit) {
     if (!queryTemplate.endsWith('\n')) {
       queryTemplate += '\n';
@@ -241,7 +240,7 @@ function queryCypher(endpoint, query) {
   });
 }
 
-function constructCypher(queryTemplate, metadata, parameterMap, positionalArguments, input = '') {
+function constructCypher(queryTemplate, metadata, parameterMap, positionalArguments) {
   if (metadata.param) {
     parameterMap = { ...Object.fromEntries(metadata.param.entries()), ...parameterMap };
     let i = 0;
@@ -249,17 +248,6 @@ function constructCypher(queryTemplate, metadata, parameterMap, positionalArgume
       if (i >= positionalArguments.length) break;
       parameterMap[param] = positionalArguments[i++];
     }
-  }
-
-  // get input, or use metadata by default
-  if (input) {
-    parameterMap['INPUT'] = input
-      .split('\n')
-      .filter((line) => line.length > 0)
-      .map((line) => '(' + line + ')')
-      .join(' ');
-  } else if (metadata.input) {
-    parameterMap['INPUT'] = '(' + metadata.input.join(' ') + ')';
   }
 
   let cypher = '';
