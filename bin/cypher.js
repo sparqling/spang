@@ -56,8 +56,9 @@ if (commander.args.length < 1) {
   }
 }
 
-if (commander.node || commander.props || commander.ret || (commander.limit && !templatePath) || commander.count || commander.id || commander.relation) {
-  queryTemplate = shortcut({ n: commander.node, p: commander.props, R: commander.ret, L: commander.limit, C: commander.count, i: commander.id, r: commander.relation });
+if (commander.node || commander.props || commander.ret || (commander.limit && !templatePath) ||
+    commander.count || commander.id || commander.relation) {
+  queryTemplate = shortcut();
   templateSpecified = false;
   metadata = {};
 } else {
@@ -265,54 +266,54 @@ function constructCypher(queryTemplate, metadata, parameterMap, positionalArgume
   return json;
 }
 
-function shortcut(options) {
+function shortcut() {
   let cypher = 'MATCH ';
 
   let node = 'n';
-  if (options.n) {
-    node += ` ${options.n}`;
+  if (commander.node) {
+    node += ` ${commander.node}`;
   }
-  if (options.p) {
-    node += ` { ${options.p} }`;
+  if (commander.props) {
+    node += ` { ${commander.props} }`;
   }
 
   let where = '';
-  if (options.i) {
-    where = ` WHERE id(n)=${options.i}`;
+  if (commander.id) {
+    where = ` WHERE id(n)=${commander.id}`;
   }
 
   let limit = ' LIMIT 10';
-  if (options.L) {
-    limit = ` LIMIT ${options.L}`;
+  if (commander.limit) {
+    limit = ` LIMIT ${commander.limit}`;
   }
 
   let retNode = 'n';
-  if (options.R) {
-    retNode = options.R.split(',').map(v => {
+  if (commander.ret) {
+    retNode = commander.ret.split(',').map(v => {
       return v.includes('.') ? v : `n.${v}`;
     }).join(',');
   }
   retNode += limit;
-  if (options.C) {
+  if (commander.count) {
     retNode = 'COUNT(n)';
   }
 
-  if (options.r) {
-    cypher += `(n1)-[r:${options.r}]->(n2)`;
+  if (commander.relation) {
+    cypher += `(n1)-[r:${commander.relation}]->(n2)`;
     cypher += ' RETURN ';
-    if (options.C) {
+    if (commander.count) {
       cypher += 'COUNT(r)';
     } else {
-      if (options.R) {
-        const vars1 = options.R.split(',').map(v => `n1.${v}`).join(',');
-        const vars2 = options.R.split(',').map(v => `n2.${v}`).join(',');
+      if (commander.ret) {
+        const vars1 = commander.ret.split(',').map(v => `n1.${v}`).join(',');
+        const vars2 = commander.ret.split(',').map(v => `n2.${v}`).join(',');
         cypher += `${vars1},${vars2}`;
       } else {
         cypher += `n1,n2`;
       }
       cypher += limit;
     }
-  // } else if (options.G) {
+  // } else if (commander.edges) {
   //   cypher += '(n)-[r]->() RETURN COUNT(r)';
   } else {
     cypher += `(${node})${where} RETURN ${retNode}`;
