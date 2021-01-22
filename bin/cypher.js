@@ -3,7 +3,6 @@
 fs = require('fs');
 
 const search_db_name = require('../lib/search_db_name');
-const prefixModule = require('../lib/prefix.js');
 const request = require('request');
 const syncRequest = require('sync-request');
 const columnify = require('columnify');
@@ -60,8 +59,7 @@ if (commander.args.length < 1) {
 
 if (commander.node || commander.props || commander.ret || (commander.limit && !templatePath) || commander.count || commander.id || commander.relation) {
   queryTemplate = shortcut(
-    { n: commander.node, p: commander.props, R: commander.ret, L: commander.limit, C: commander.count, i: commander.id, r: commander.relation },
-    prefixModule.getPrefixMap()
+    { n: commander.node, p: commander.props, R: commander.ret, L: commander.limit, C: commander.count, i: commander.id, r: commander.relation }
   );
   templateSpecified = false;
   metadata = {};
@@ -281,7 +279,7 @@ function constructCypher(queryTemplate, metadata, parameterMap, positionalArgume
   return json;
 }
 
-function shortcut(options, prefixMap) {
+function shortcut(options) {
   let cypher = 'MATCH ';
 
   let node = 'n';
