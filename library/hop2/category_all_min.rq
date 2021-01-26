@@ -1,0 +1,35 @@
+#!/usr/bin/env spang2
+# @endpoint orthodev
+
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX hop: <http://purl.org/net/orthordf/hOP/ontology#>
+
+SELECT ?gene ?min ?cat
+WHERE {
+  {
+    SELECT ?gene (min(?max) as ?min)
+    WHERE {
+      {
+        SELECT ?grp ?gene (max(?time) as ?max)
+        WHERE {
+          ?grp orth:hasHomologousMember ?gene .
+          ?grp orth:organism ?org .
+          ?org hop:branchTimeMya ?time .
+        } 
+      }
+    }
+  }
+
+  BIND(IF(?min<180, "M",
+       IF(?min<430, "V",
+       IF(?min<735, "LT",
+       IF(?min<750, "EH",
+       IF(?min<850, "A",
+       IF(?min<940, "C",
+       IF(?min<1000, "CF",
+       IF(?min<1400, "F",
+       IF(?min<1520, "P",
+       IF(?min<1660, "AB",
+          "O"))))))))))
+       AS ?cat)
+}
