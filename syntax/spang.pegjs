@@ -2308,7 +2308,7 @@ StrReplaceExpression = ('REPLACE'i) WS* '(' WS* arg:Expression WS* ',' WS* patte
   return {
       token: 'expression',
       expressionType: 'builtincall',
-      builtincall: 'substr',
+      builtincall: 'replace',
       args: [arg, pattern, replacement, flagsPart ? flagsPart[2] : null]
   };
 }

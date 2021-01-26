@@ -2099,7 +2099,7 @@ function peg$parse(input, options) {
         return {
             token: 'expression',
             expressionType: 'builtincall',
-            builtincall: 'substr',
+            builtincall: 'replace',
             args: [arg, pattern, replacement, flagsPart ? flagsPart[2] : null]
         };
       },
