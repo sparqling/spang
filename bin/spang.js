@@ -13,6 +13,7 @@ const querySparql = require('../lib/query_sparql.js');
 const columnify = require('columnify');
 const csvParse = require('csv-parse/lib/sync');
 const metadataModule = require('../lib/metadata.js');
+const util = require('../lib/util.js');
 
 let templatePath;
 let templateSpecified;
@@ -242,8 +243,9 @@ if (/^\w/.test(db)) {
         }
       }
     } else {
-      console.error('Error: ' + statusCode);
-      console.error(bodies);
+      console.error(util.makeRed('Error: ' + statusCode));
+      for(let body of bodies)
+        console.error(util.makeRed(body));
     }
   });
 } else {
