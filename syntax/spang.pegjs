@@ -2097,6 +2097,8 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 //                    |  'IRI' '(' Expression ')'
 //                    |  'URI' '(' Expression ')'
 //                    |  'BNODE' ( '(' Expression ')' | NIL )
+//                    |  SubstringExpression
+//                    |  StrReplaceExpression
 //                    |  'COALESCE' ExpressionList
 //                    |  'IF' '(' Expression ',' Expression ',' Expression ')'
 //                    |  'STRLANG' '(' Expression ',' Expression ')'
@@ -2195,6 +2197,8 @@ BuiltInCall = ('STR'/'str') WS* '(' WS* e:Expression WS* ')'
 
   return ex;
 }
+/ SubstringExpression
+/ StrReplaceExpression
 / ('COALESCE'/'coalesce') WS* args:ExpressionList
 {
   var ex = {};
@@ -2286,6 +2290,28 @@ RegexExpression = ('REGEX'/'regex') WS* '(' WS* e1:Expression WS* ',' WS* e2:Exp
   
   return regex;
 }
+// [123]  	SubstringExpression	  ::=  	'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
+SubstringExpression = ('SUBSTR'/'substr') WS* '(' WS* source:Expression WS* ',' WS* startingLoc:Expression WS* lenPart:(',' WS* len:Expression)? WS* ')'
+{
+  return {
+      token: 'expression',
+      expressionType: 'builtincall',
+      builtincall: 'substr',
+      args: [source, startingLoc, lenPart ? lenPart[2] : null]
+  };
+}
+  
+
+// [124]  	StrReplaceExpression	  ::=  	'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
+StrReplaceExpression = ('REPLACE'i) WS* '(' WS* arg:Expression WS* ',' WS* pattern:Expression WS* ',' WS* replacement:Expression WS* flagsPart:(',' WS* Expression)? ')'
+{
+  return {
+      token: 'expression',
+      expressionType: 'builtincall',
+      builtincall: 'substr',
+      args: [arg, pattern, replacement, flagsPart ? flagsPart[2] : null]
+  };
+}
 
 // [125] ExistsFunc ::= 'EXISTS' GroupGraphPattern
 ExistsFunc = ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
@@ -2330,7 +2356,7 @@ Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*
   
   return exp;
 }
-/ ('GROUP_CONCAT'/'group_concat') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:Expression s:(';' WS* 'SEPARATOR' WS* '=' WS* String WS*)? ')' WS*
+/ ('GROUP_CONCAT'/'group_concat') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:Expression s:(';' WS* 'SEPARATOR'i WS* '=' WS* String WS*)? ')' WS*
 {
   var exp = {};
   exp.token = 'expression';
