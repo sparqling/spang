@@ -7,7 +7,7 @@
 
 SELECT ?tissue_40 ?tissue_10_ja ?tissue_10_en ?tissue_40_ja ?tissue_40_en (COUNT(DISTINCT ?gene) AS ?count)
 WHERE {
-  VALUES (?gene) { {{INPUT}} }
+  VALUES (?gene) { {{INUPT}} }
   ?gene refexo:{{idref}} ?seq .
   ?seq refexo:is{{sign}}lySpecificTo ?tissue_40 .
   ?tissue_40 skos:prefLabel ?tissue_40_en ;

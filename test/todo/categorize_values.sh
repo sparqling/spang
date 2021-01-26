@@ -1,2 +1,2 @@
 #!/bin/sh
-cat ../../library/hop2/select_vertebrate_genes.rq | ./categorize_values.rq
+cat ../../library/hop2/select_vertebrate_genes.txt | ./categorize_values.rq
