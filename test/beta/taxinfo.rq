@@ -1,0 +1,8 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @param id=9606
+
+SELECT ?o
+WHERE {
+  taxid:${id} rdfs:label ?o .
+}
