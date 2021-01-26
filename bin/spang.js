@@ -101,22 +101,10 @@ if (commander.subject || commander.predicate || commander.object || (commander.l
   templateSpecified = false;
   metadata = {};
 } else {
-  let match = /^github:\/\/([^\/]+)\/([^\/]+)\/(.+)/.exec(templatePath);
-  let remoteURL = null;
-  if (match) {
-    remoteURL = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/master/${match[3]}`;
-  } else {
-    match = /^https:\/\/github.com\/([^\/]+)\/([^\/]+)\/blob\/(.+)/.exec(templatePath);
-    if (match) {
-      remoteURL = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
-    }
-  }
-  if (!remoteURL && /^(http|https):\/\//.test(templatePath)) {
-    remoteURL = templatePath;
-  }
-  if (remoteURL) {
+  const templateURL = getTemplateURL(templatePath);
+  if (templateURL) {
     const syncRequest = require('sync-request');
-    sparqlTemplate = syncRequest('GET', remoteURL).getBody('utf8');
+    sparqlTemplate = syncRequest('GET', templateURL).getBody('utf8');
   } else {
     sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
   }
@@ -318,3 +306,20 @@ printTsv = (tsv) => {
     console.log(tsv);
   }
 };
+
+function getTemplateURL(templatePath) {
+
+  let match = /^github:\/\/([^\/]+)\/([^\/]+)\/(.+)/.exec(templatePath);
+  if (match) {
+    return `https://raw.githubusercontent.com/${match[1]}/${match[2]}/master/${match[3]}`;
+  }
+
+  match = /^https:\/\/github.com\/([^\/]+)\/([^\/]+)\/blob\/(.+)/.exec(templatePath);
+  if (match) {
+    return `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
+  }
+
+  if (/^(http|https):\/\//.test(templatePath)) {
+    return templatePath;
+  }
+}
