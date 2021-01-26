@@ -264,6 +264,9 @@ if (/^\w/.test(db)) {
 }
 
 toString = (resource) => {
+  if (!resource) {
+    return "";
+  }
   if (resource.type == 'uri') {
     if (commander.abbr) {
       return prefixModule.abbreviateURL(resource.value);
