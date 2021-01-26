@@ -1198,6 +1198,8 @@ PropertyListPathNotEmpty = v:(VerbPath / VerbSimple) WS* ol:ObjectListPath rest:
   
   for(var i=0; i<rest.length; i++) {
     var tok = rest[i][3];
+    if(!tok)
+      continue;
     var newVerb  = tok[0];
     var newObjsList = tok[2] || [];
     
@@ -1424,6 +1426,8 @@ PropertyListNotEmptyPath = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath res
   
   for(var i=0; i<rest.length; i++) {
     var tok = rest[i][3];
+    if(!tok)
+      continue;
     var newVerb  = tok[0];
     var newObjsList = tok[1] || [];
     
