@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @option -ac
+# @param id=9606
+
+SELECT ?p ?o
+WHERE {
+  taxid:{{id}} ?p ?o .
+}

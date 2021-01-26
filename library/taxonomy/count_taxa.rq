@@ -1,5 +1,6 @@
 #!/usr/bin/env spang2
 # @title Count instances of Taxon class
+# @endpoint test
 
 PREFIX taxon: <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
 
