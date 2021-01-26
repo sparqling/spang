@@ -57,3 +57,4 @@ agro:ensembl.plants  agrold:RNase_MRP_RNA                                       
 agro:ensembl.plants  agrold:tRNA_pseudogene                                              "28"^^xsd:integer
 agro:ensembl.plants  obo:SO_0000385              "RNase_MRP_RNA"^^xsd:string             "18"^^xsd:integer
 agro:ensembl.plants  agrold:ribozyme                                                     "16"^^xsd:integer
+
