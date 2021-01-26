@@ -103,11 +103,11 @@ if (commander.subject || commander.predicate || commander.object || (commander.l
 } else {
   let match = /^github:\/\/([^\/]+)\/([^\/]+)\/(.+)/.exec(templatePath);
   let remoteURL = null;
-  if(match) {
+  if (match) {
     remoteURL = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/master/${match[3]}`;
   } else {
     match = /^https:\/\/github.com\/([^\/]+)\/([^\/]+)\/blob\/(.+)/.exec(templatePath);
-    if(match) {
+    if (match) {
       remoteURL = `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
     }
   }
@@ -117,9 +117,7 @@ if (commander.subject || commander.predicate || commander.object || (commander.l
   if (remoteURL) {
     const syncRequest = require('sync-request');
     sparqlTemplate = syncRequest('GET', remoteURL).getBody('utf8');
-  }
-  else
-  {
+  } else {
     sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
   }
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
@@ -273,7 +271,7 @@ if (/^\w/.test(db)) {
 
 toString = (resource) => {
   if (!resource) {
-    return "";
+    return '';
   }
   if (resource.type == 'uri') {
     if (commander.abbr) {
@@ -313,7 +311,7 @@ printTsv = (tsv) => {
       columnify(csvParse(tsv, { columns: Boolean(commander.vars), delimiter: '\t', relax: true }), {
         // relax csvParse to accept "hoge"^^xsd:string
         showHeaders: Boolean(commander.vars),
-        headingTransform: (x) => x,
+        headingTransform: (x) => x
       }).replace(/\s+$/gm, '')
     );
   } else {
