@@ -556,6 +556,10 @@ Create = ('CREATE'/'create') WS* ('SILENT'/'silent')? WS* ref:GraphRef
   return query;
 }
 
+// [35]  	Add	  ::=  	'ADD' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+// [36]  	Move	  ::=  	'MOVE' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+// [37]  	Copy	  ::=  	'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+
 // [38] InsertData ::= 'INSERT' <WS*> ',DATA' QuadData
 InsertData = ('INSERT'/'insert') WS* ('DATA'/'data') WS* qs:QuadData
 {
@@ -770,8 +774,7 @@ TriplesTemplate = b:TriplesSameSubject bs:(WS* '.' WS* TriplesTemplate? )?
   };
 }
 
-// [50] GroupGraphPattern ::= '{' ( SubSelect | GroupGraphPatternSub ) '}'
-// incomplete??
+// [53] GroupGraphPattern ::= '{' ( SubSelect | GroupGraphPatternSub ) '}'
 GroupGraphPattern = '{' WS* p:SubSelect  WS* '}'
 {
   return p;
@@ -781,7 +784,7 @@ GroupGraphPattern = '{' WS* p:SubSelect  WS* '}'
   return p;
 }
 
-// [51] GroupGraphPatternSub ::= TriplesBlock? ( GraphPatternNotTriples '.'? TriplesBlock? )*
+// [54] GroupGraphPatternSub ::= TriplesBlock? ( GraphPatternNotTriples '.'? TriplesBlock? )*
 GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'? WS* TriplesBlock? )*
 {
   var subpatterns = [];
@@ -856,7 +859,7 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
 //      }
 }
 
-// [52] TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
+// [55] TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
 // warning??
 // rewritten??
 TriplesBlock = b:TriplesSameSubjectPath bs:(WS*  '.' TriplesBlock? )?
@@ -875,10 +878,10 @@ TriplesBlock = b:TriplesSameSubjectPath bs:(WS*  '.' TriplesBlock? )?
           triplesContext: triples}
 }
 
-// [53] GraphPatternNotTriples ::= GroupOrUnionGraphPattern | OptionalGraphPattern | MinusGraphPattern | GraphGraphPattern | ServiceGraphPattern | Filter | Bind | InlineData
+// [56] GraphPatternNotTriples ::= GroupOrUnionGraphPattern | OptionalGraphPattern | MinusGraphPattern | GraphGraphPattern | ServiceGraphPattern | Filter | Bind | InlineData
 GraphPatternNotTriples = GroupOrUnionGraphPattern / OptionalGraphPattern / MinusGraphPattern / GraphGraphPattern / ServiceGraphPattern / Filter / Bind / InlineData / FunctionCall
 
-// [54] OptionalGraphPattern ::= 'OPTIONAL' GroupGraphPattern
+// [57] OptionalGraphPattern ::= 'OPTIONAL' GroupGraphPattern
 OptionalGraphPattern = WS* ('OPTIONAL'/'optional') WS* v:GroupGraphPattern
 {
   return { token: 'optionalgraphpattern',
@@ -886,7 +889,7 @@ OptionalGraphPattern = WS* ('OPTIONAL'/'optional') WS* v:GroupGraphPattern
            value: v }
 }
 
-// [55] GraphGraphPattern ::= 'GRAPH' VarOrIRIref GroupGraphPattern
+// [58] GraphGraphPattern ::= 'GRAPH' VarOrIRIref GroupGraphPattern
 GraphGraphPattern = WS* ('GRAPH'/'graph') WS* g:VarOrIRIref WS* gg:GroupGraphPattern
 {
   for(var i=0; i<gg.patterns.length; i++) {
@@ -902,58 +905,13 @@ GraphGraphPattern = WS* ('GRAPH'/'graph') WS* g:VarOrIRIref WS* gg:GroupGraphPat
   return gg;
 }
 
-// [56] ServiceGraphPattern ::= 'SERVICE' VarOrIRIref GroupGraphPattern
+// [59] ServiceGraphPattern ::= 'SERVICE' VarOrIRIref GroupGraphPattern
 ServiceGraphPattern = 'SERVICE' v:VarOrIRIref ts:GroupGraphPattern
 {
   return {token: 'servicegraphpattern',
           location: location(),
           status: 'todo',
           value: [v,ts] }
-}
-
-// [57] MinusGraphPattern ::= 'MINUS' GroupGraphPattern
-MinusGraphPattern = ('MINUS'/'minus') WS* ts:GroupGraphPattern
-{
-  return {token: 'minusgraphpattern',
-          location: location(),
-          status: 'todo',
-          value: ts}
-}
-
-// [58] GroupOrUnionGraphPattern ::= GroupGraphPattern ( 'UNION' GroupGraphPattern )*
-// incomplete??
-GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* ('UNION'/'union') WS* GroupGraphPattern )*
-{
-  if(b.length === 0) {
-    return a;
-  } else {
-    var lastToken = {token: 'graphunionpattern',
-                     location: location(),
-                     value: [a]};
-    
-    for(var i=0; i<b.length; i++) {
-      if(i==b.length-1) {
-        lastToken.value.push(b[i][3]);
-      } else {
-        lastToken.value.push(b[i][3]);
-        var newToken = {token: 'graphunionpattern',
-                        location: location(),
-                        value: [lastToken]}
-        
-        lastToken = newToken;
-      }
-    }
-    
-    return lastToken;
-  }
-}
-
-// [59] Filter ::= 'FILTER' Constraint
-Filter = WS* ('FILTER'/'filter') WS* c:Constraint
-{
-  return {token: 'filter',
-          location: location(),
-          value: c}
 }
 
 // [60] Bind ::= 'BIND' '(' Expression 'AS' Var ')'
@@ -964,9 +922,6 @@ Bind = WS* ('BIND'/'bind') WS* '(' WS* ex:Expression WS* ('as'/'AS') WS* v:Var W
           expression: ex,
           as: v};
 }
-
-// [60] Constraint ::= BrackettedExpression | BuiltInCall | FunctionCall
-Constraint = BrackettedExpression / BuiltInCall / FunctionCall
 
 // [61] InlineData ::= 'VALUES' DataBlock
 InlineData = WS* ('VALUES'/'values') WS* d:DataBlock
@@ -1017,6 +972,54 @@ DataBlockValue = WS* v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 
 {
   return v;
 }
+
+// [66] MinusGraphPattern ::= 'MINUS' GroupGraphPattern
+MinusGraphPattern = ('MINUS'/'minus') WS* ts:GroupGraphPattern
+{
+  return {token: 'minusgraphpattern',
+          location: location(),
+          status: 'todo',
+          value: ts}
+}
+
+// [67] GroupOrUnionGraphPattern ::= GroupGraphPattern ( 'UNION' GroupGraphPattern )*
+// incomplete??
+GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* ('UNION'/'union') WS* GroupGraphPattern )*
+{
+  if(b.length === 0) {
+    return a;
+  } else {
+    var lastToken = {token: 'graphunionpattern',
+                     location: location(),
+                     value: [a]};
+    
+    for(var i=0; i<b.length; i++) {
+      if(i==b.length-1) {
+        lastToken.value.push(b[i][3]);
+      } else {
+        lastToken.value.push(b[i][3]);
+        var newToken = {token: 'graphunionpattern',
+                        location: location(),
+                        value: [lastToken]}
+        
+        lastToken = newToken;
+      }
+    }
+    
+    return lastToken;
+  }
+}
+
+// [68] Filter ::= 'FILTER' Constraint
+Filter = WS* ('FILTER'/'filter') WS* c:Constraint
+{
+  return {token: 'filter',
+          location: location(),
+          value: c}
+}
+
+// [69] Constraint ::= BrackettedExpression | BuiltInCall | FunctionCall
+Constraint = BrackettedExpression / BuiltInCall / FunctionCall
 
 // [70] FunctionCall ::= IRIref ArgList
 FunctionCall = i:IRIref WS* args:ArgList
@@ -2526,24 +2529,24 @@ BlankNode = l:BLANK_NODE_LABEL
   return {token:'blank', value:'_:'+GlobalBlankNodeCounter, location: location()}
 }
 
-// [122] IRI_REF ::= '<' ([^<>"{}|^`\]-[#x00-#x20])* '>'
+// [139] IRI_REF ::= '<' ([^<>"{}|^`\]-[#x00-#x20])* '>'
 // incomplete??
 IRI_REF = '<' iri_ref:[^<>\"\{\}|^`\\]* '>' { return iri_ref.join('') }
 
-// [123] PNAME_NS ::= PN_PREFIX? ':'
+// [140] PNAME_NS ::= PN_PREFIX? ':'
 PNAME_NS = p:PN_PREFIX? ':'
 {
   return p
 }
 
-// [124] PNAME_LN ::= PNAME_NS PN_LOCAL
+// [141] PNAME_LN ::= PNAME_NS PN_LOCAL
 PNAME_LN = p:PNAME_NS s:PN_LOCAL
 {
   return [p, s]
 }
 
 // [142] BLANK_NODE_LABEL ::= ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
-// [142] BLANK_NODE_LABEL ::= '_:' PN_LOCAL
+// BLANK_NODE_LABEL ::= '_:' PN_LOCAL
 BLANK_NODE_LABEL = '_:' l:PN_LOCAL 
 {
   return l
