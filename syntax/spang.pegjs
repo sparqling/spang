@@ -1504,7 +1504,8 @@ PathEltOrInverse = PathElt
     return path;
 }
 
-// [93] PathMod ::= ( '*' | '?' | '+' | '{' ( Integer ( ',' ( '}' | Integer '}' ) | '}' ) | ',' Integer '}' ) )
+// [93] PathMod ::= '?' | '*' | '+'
+// PathMod ::= ( '*' | '?' | '+' | '{' ( Integer ( ',' ( '}' | Integer '}' ) | '}' ) | ',' Integer '}' ) )
 // an extension??
 // PathMod = ( '*' / '?' / '+' / '{' ( Integer ( ',' ( '}' / Integer '}' ) / '}' ) / ',' Integer '}' ) )
 PathMod = m:('?' / '*' / '+')
@@ -2057,7 +2058,8 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
   return e;
 }
 
-// [121] BuiltInCall ::= 'STR' '(' Expression ')'
+// [121] BuiltInCall ::= Aggregate
+//                    |  'STR' '(' Expression ')'
 //                    |  'LANG' '(' Expression ')'
 //                    |  'LANGMATCHES' '(' Expression ',' Expression ')'
 //                    |  'DATATYPE' '(' Expression ')'
@@ -2065,8 +2067,39 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 //                    |  'IRI' '(' Expression ')'
 //                    |  'URI' '(' Expression ')'
 //                    |  'BNODE' ( '(' Expression ')' | NIL )
+//   | 'RAND' NIL
+//   | 'ABS' '(' Expression ')'
+//   | 'CEIL' '(' Expression ')'
+//   | 'FLOOR' '(' Expression ')'
+//   | 'ROUND' '(' Expression ')'
+//   | 'CONCAT' ExpressionList
 //                    |  SubstringExpression
+//   | 'STRLEN' '(' Expression ')'
 //                    |  StrReplaceExpression
+//   | 'UCASE' '(' Expression ')'
+//   | 'LCASE' '(' Expression ')'
+//   | 'ENCODE_FOR_URI' '(' Expression ')'
+//   | 'CONTAINS' '(' Expression ',' Expression ')'
+//   | 'STRSTARTS' '(' Expression ',' Expression ')'
+//   | 'STRENDS' '(' Expression ',' Expression ')'
+//   | 'STRBEFORE' '(' Expression ',' Expression ')'
+//   | 'STRAFTER' '(' Expression ',' Expression ')'
+//   | 'YEAR' '(' Expression ')'
+//   | 'MONTH' '(' Expression ')'
+//   | 'DAY' '(' Expression ')'
+//   | 'HOURS' '(' Expression ')'
+//   | 'MINUTES' '(' Expression ')'
+//   | 'SECONDS' '(' Expression ')'
+//   | 'TIMEZONE' '(' Expression ')'
+//   | 'TZ' '(' Expression ')'
+//   | 'NOW' NIL
+//   | 'UUID' NIL
+//   | 'STRUUID' NIL
+//   | 'MD5' '(' Expression ')'
+//   | 'SHA1' '(' Expression ')'
+//   | 'SHA256' '(' Expression ')'
+//   | 'SHA384' '(' Expression ')'
+//   | 'SHA512' '(' Expression ')'
 //                    |  'COALESCE' ExpressionList
 //                    |  'IF' '(' Expression ',' Expression ',' Expression ')'
 //                    |  'STRLANG' '(' Expression ',' Expression ')'
