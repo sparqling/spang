@@ -76,7 +76,8 @@ Function = h:FunctionCall WS* b:GroupGraphPattern WS*
 // [3] UpdateUnit ::= Update
 UpdateUnit = Update
 
-// [4] Prologue  ::=  BaseDecl? PrefixDecl*
+// [4] Prologue  ::= ( BaseDecl | PrefixDecl )*
+// Prologue  ::=  BaseDecl? PrefixDecl*
 Prologue = b:BaseDecl? WS* p:PrefixDecl*
 {
   return {
@@ -86,8 +87,8 @@ Prologue = b:BaseDecl? WS* p:PrefixDecl*
   }
 }
 
-// [5] BaseDecl  ::=  'BASE' IRI_REF
-BaseDecl = WS* ('BASE'/'base') WS* i:IRI_REF
+// [5] BaseDecl  ::=  'BASE' IRIREF
+BaseDecl = WS* ('BASE'/'base') WS* i:IRIREF
 {
   registerDefaultPrefix(i);
   
@@ -98,8 +99,8 @@ BaseDecl = WS* ('BASE'/'base') WS* i:IRI_REF
   return base;
 }
 
-// [6] PrefixDecl ::= 'PREFIX' PNAME_NS IRI_REF
-PrefixDecl = WS* ('PREFIX'/'prefix')  WS* p:PNAME_NS  WS* l:IRI_REF
+// [6] PrefixDecl ::= 'PREFIX' PNAME_NS IRIREF
+PrefixDecl = WS* ('PREFIX'/'prefix')  WS* p:PNAME_NS  WS* l:IRIREF
 {
   registerPrefix(p,l);
   
@@ -157,7 +158,8 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
   return query;
 }
 
-// [8] SubSelect ::= SelectClause WhereClause SolutionModifier
+// [8] SubSelect ::= SelectClause WhereClause SolutionModifier ValuesClause
+// SubSelect ::= SelectClause WhereClause SolutionModifier
 SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 {
   var query = {};
@@ -392,7 +394,7 @@ GroupClause = ('GROUP'/'group') WS* ('BY'/'by') WS* conds:GroupCondition+
   return conds;
 }
 
-// [20] GroupCondition ::= ( BuiltInCall | FunctionCall | '(' Expression ( 'AS' Var )? ')' | Var )
+// [20] GroupCondition ::= BuiltInCall | FunctionCall | '(' Expression ( 'AS' Var )? ')' | Var
 GroupCondition = WS* b:BuiltInCall WS* 
 {
   return b;
@@ -446,7 +448,7 @@ OrderCondition = direction:( 'ASC'/ 'asc' / 'DESC'/ 'desc' ) WS* e:BrackettedExp
   return { direction: 'ASC', expression:e };
 }
 
-// [25] LimitOffsetClauses ::= ( LimitClause OffsetClause? | OffsetClause LimitClause? )
+// [25] LimitOffsetClauses ::= LimitClause OffsetClause? | OffsetClause LimitClause?
 LimitOffsetClauses = cls:( LimitClause OffsetClause? / OffsetClause LimitClause? )
 {
   var acum = {};
@@ -560,7 +562,7 @@ Create = ('CREATE'/'create') WS* ('SILENT'/'silent')? WS* ref:GraphRef
 // [36]  	Move	  ::=  	'MOVE' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
 // [37]  	Copy	  ::=  	'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
 
-// [38] InsertData ::= 'INSERT' <WS*> ',DATA' QuadData
+// [38] InsertData ::= 'INSERT DATA' QuadData
 InsertData = ('INSERT'/'insert') WS* ('DATA'/'data') WS* qs:QuadData
 {
   var query = {};
@@ -571,7 +573,7 @@ InsertData = ('INSERT'/'insert') WS* ('DATA'/'data') WS* qs:QuadData
   return query;
 }
 
-// [39] DeleteData ::= 'DELETE' <WS*> 'DATA' QuadData
+// [39] DeleteData ::= 'DELETE DATA' QuadData
 DeleteData = ('DELETE'/'delete') WS* ('DATA'/'data') qs:QuadData
 {
   var query = {};
@@ -583,7 +585,7 @@ DeleteData = ('DELETE'/'delete') WS* ('DATA'/'data') qs:QuadData
   return query;
 }
 
-// [40] DeleteWhere ::= 'DELETE' <WS*> 'WHERE' QuadPattern
+// [40] DeleteWhere ::= 'DELETE WHERE' QuadPattern
 DeleteWhere = ('DELETE'/'delete') WS* ('WHERE'/'where') WS* p:GroupGraphPattern
 {
   var query = {};
@@ -1173,55 +1175,6 @@ TriplesSameSubject = WS* s:VarOrTerm WS* pairs:PropertyListNotEmpty
   return token;
 }
 
-// [83] PropertyListPathNotEmpty ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
-PropertyListPathNotEmpty = v:(VerbPath / VerbSimple) WS* ol:ObjectListPath rest:( WS* ';' WS* ( (VerbPath / VerbSimple) WS* ObjectList)? )*
-{
-  var tokenParsed = {};
-  tokenParsed.token = 'propertylist';
-  var triplesContext = [];
-  var pairs = [];
-  var test = [];
-  
-  for( var i=0; i<ol.length; i++) {
-    
-    if(ol[i].triplesContext != null) {
-      triplesContext = triplesContext.concat(ol[i].triplesContext);
-      if(ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
-        pairs.push([v, ol[i].chainSubject[0]]);
-      } else {
-        pairs.push([v, ol[i].chainSubject]);
-      }
-      
-    } else {
-      pairs.push([v, ol[i]])
-    }
-    
-  }
-  
-  
-  for(var i=0; i<rest.length; i++) {
-    var tok = rest[i][3];
-    if(!tok)
-      continue;
-    var newVerb  = tok[0];
-    var newObjsList = tok[2] || [];
-    
-    for(var j=0; j<newObjsList.length; j++) {
-      if(newObjsList[j].triplesContext != null) {
-        triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
-        pairs.push([newVerb, newObjsList[j].chainSubject]);
-      } else {
-        pairs.push([newVerb, newObjsList[j]])
-      }
-    }
-  }
-  
-  tokenParsed.pairs = pairs;
-  tokenParsed.triplesContext = triplesContext;
-  
-  return tokenParsed;
-}
-
 // [67] PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
 PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* ObjectList )? )*
 {
@@ -1453,21 +1406,6 @@ PropertyListNotEmptyPath = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath res
 // [74] PropertyListPath ::= PropertyListNotEmpty?
 PropertyListPath = PropertyListPathNotEmpty?
 
-// [75] VerbPath ::= Path
-VerbPath = p:Path
-{
-  var path = {};
-  path.token = 'path';
-  path.kind = 'element';
-  path.value = p;
-  path.location = location();
-  
-  return p; // return path?
-}
-
-// [76] VerbSimple ::= Var
-VerbSimple = Var
-
 // [77] Path ::= PathAlternative
 // to fix??
 Path = PathAlternative
@@ -1553,7 +1491,71 @@ PathMod = m:('?' / '*' / '+')
   return m;
 }
 
-// [83] PathPrimary ::= ( IRIref | 'a' | '!' PathNegatedPropertySet | '(' Path ')' )
+// [83] PropertyListPathNotEmpty ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
+PropertyListPathNotEmpty = v:(VerbPath / VerbSimple) WS* ol:ObjectListPath rest:( WS* ';' WS* ( (VerbPath / VerbSimple) WS* ObjectList)? )*
+{
+  var tokenParsed = {};
+  tokenParsed.token = 'propertylist';
+  var triplesContext = [];
+  var pairs = [];
+  var test = [];
+  
+  for( var i=0; i<ol.length; i++) {
+    
+    if(ol[i].triplesContext != null) {
+      triplesContext = triplesContext.concat(ol[i].triplesContext);
+      if(ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
+        pairs.push([v, ol[i].chainSubject[0]]);
+      } else {
+        pairs.push([v, ol[i].chainSubject]);
+      }
+      
+    } else {
+      pairs.push([v, ol[i]])
+    }
+    
+  }
+  
+  
+  for(var i=0; i<rest.length; i++) {
+    var tok = rest[i][3];
+    if(!tok)
+      continue;
+    var newVerb  = tok[0];
+    var newObjsList = tok[2] || [];
+    
+    for(var j=0; j<newObjsList.length; j++) {
+      if(newObjsList[j].triplesContext != null) {
+        triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
+        pairs.push([newVerb, newObjsList[j].chainSubject]);
+      } else {
+        pairs.push([newVerb, newObjsList[j]])
+      }
+    }
+  }
+  
+  tokenParsed.pairs = pairs;
+  tokenParsed.triplesContext = triplesContext;
+  
+  return tokenParsed;
+}
+
+// [84] VerbPath ::= Path
+VerbPath = p:Path
+{
+  var path = {};
+  path.token = 'path';
+  path.kind = 'element';
+  path.value = p;
+  path.location = location();
+  
+  return p; // return path?
+}
+
+// [85] VerbSimple ::= Var
+VerbSimple = Var
+
+// [94] PathPrimary ::= ( IRIref | 'a' | '!' PathNegatedPropertySet | '(' Path ')' )
 PathPrimary = IRIref
 / 'a'
 {
@@ -1565,13 +1567,13 @@ PathPrimary = IRIref
   return p;
 }
 
-// [84]   PathNegatedPropertySet    ::=   ( PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')' )
+// [95]   PathNegatedPropertySet    ::=   ( PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')' )
 PathNegatedPropertySet    = ( PathOneInPropertySet / '(' ( PathOneInPropertySet        ('|' PathOneInPropertySet)* )? ')' )
 
-// [85]   PathOneInPropertySet      ::=   ( IRIref | 'a' | '^' ( IRIref | 'a' ) )
+// [96]   PathOneInPropertySet      ::=   ( IRIref | 'a' | '^' ( IRIref | 'a' ) )
 PathOneInPropertySet = ( IRIref / 'a' / '^' (IRIref / 'a') )
 
-// [86]   Integer   ::=   INTEGER
+// [97]   Integer   ::=   INTEGER
 Integer = INTEGER
 
 // [100]          TriplesNodePath   ::=   CollectionPath | BlankNodePropertyListPath
@@ -2498,8 +2500,8 @@ String = s:STRING_LITERAL_LONG1
   return {token:'string', value:s, location: location()}
 }
 
-// [136] IRIref ::= IRI_REF | PrefixedName
-IRIref = iri:IRI_REF
+// [136] IRIref ::= IRIREF | PrefixedName
+IRIref = iri:IRIREF
 {
   return {token: 'uri', prefix:null, suffix:null, value:iri, location: location()}
 }
@@ -2529,9 +2531,9 @@ BlankNode = l:BLANK_NODE_LABEL
   return {token:'blank', value:'_:'+GlobalBlankNodeCounter, location: location()}
 }
 
-// [139] IRI_REF ::= '<' ([^<>"{}|^`\]-[#x00-#x20])* '>'
+// [139] IRIREF ::= '<' ([^<>"{}|^`\]-[#x00-#x20])* '>'
 // incomplete??
-IRI_REF = '<' iri_ref:[^<>\"\{\}|^`\\]* '>' { return iri_ref.join('') }
+IRIREF = '<' iri_ref:[^<>\"\{\}|^`\\]* '>' { return iri_ref.join('') }
 
 // [140] PNAME_NS ::= PN_PREFIX? ':'
 PNAME_NS = p:PN_PREFIX? ':'
