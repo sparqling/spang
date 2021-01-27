@@ -305,10 +305,11 @@ ConstructQuery = WS* ('CONSTRUCT'/'construct') WS* t:ConstructTemplate WS* gs:Da
   return query
 }
 
-// [11] DescribeQuery ::= 'DESCRIBE' ( VarOrIRIref+ | '*' ) DatasetClause* WhereClause? SolutionModifier
-DescribeQuery = 'DESCRIBE' ( VarOrIRIref+ / '*' ) DatasetClause* WhereClause? SolutionModifier
+// [11] DescribeQuery ::= 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
+DescribeQuery = 'DESCRIBE' ( VarOrIri+ / '*' ) DatasetClause* WhereClause? SolutionModifier
 
-// [12] AskQuery ::= 'ASK' DatasetClause* WhereClause
+// [12] AskQuery ::= 'ASK' DatasetClause* WhereClause SolutionModifier
+// AskQuery ::= 'ASK' DatasetClause* WhereClause
 AskQuery = WS* ('ASK'/'ask') WS* gs:DatasetClause* WS* w:WhereClause 
 {
   var dataset = {'named':[], 'implicit':[]};
@@ -492,7 +493,8 @@ ValuesClause = b:(('VALUES'/'values') DataBlock)?
   }
 }
 
-// [29] Update ::= Prologue Update1 ( ';' Update? )?
+// [29] Update ::= Prologue ( Update1 ( ';' Update )? )?
+// Update ::= Prologue Update1 ( ';' Update? )?
 Update = p:Prologue WS* u:Update1 us:(WS* ';' WS* Update? )?
 {
   var query = {};
@@ -509,10 +511,12 @@ Update = p:Prologue WS* u:Update1 us:(WS* ';' WS* Update? )?
   return query;
 }
 
-// [30] Update1 ::= Load | Clear | Drop | Create | InsertData | DeleteData | DeleteWhere | Modify
+// [30] Update1 ::= Load | Clear | Drop | Add | Move | Copy | Create | InsertData | DeleteData | DeleteWhere | Modify
+// Update1 ::= Load | Clear | Drop | Create | InsertData | DeleteData | DeleteWhere | Modify
 Update1 = Load / Clear / Drop / Create / InsertData / DeleteData / DeleteWhere / Modify
 
-// [31] Load ::= 'LOAD' IRIref ( 'INTO' GraphRef )?
+// [31] Load ::= 'LOAD' 'SILENT'? IRIref ( 'INTO' GraphRef )?
+// Load ::= 'LOAD' IRIref ( 'INTO' GraphRef )?
 Load = ('LOAD'/'load') WS* sg:IRIref WS* dg:( ('INTO'/'into') WS* GraphRef)?
 {
   var query = {};
@@ -675,6 +679,8 @@ UsingClause = WS* ('USING'/'using') WS* g:( IRIref / ('NAMED'/'named') WS* IRIre
   }
 }
 
+// [45] GraphOrDefault	  ::=  	'DEFAULT' | 'GRAPH'? iri
+
 // [46] GraphRef ::= 'GRAPH' IRIref
 GraphRef = ('GRAPH'/'graph') WS* i:IRIref
 {
@@ -740,8 +746,8 @@ Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
           quadsContext: quads}
 }
 
-// [51] QuadsNotTriples ::= 'GRAPH' VarOrIRIref '{' TriplesTemplate? '}'
-QuadsNotTriples = WS* ('GRAPH'/'graph') WS* g:VarOrIRIref WS* '{' WS* ts:TriplesTemplate? WS* '}' WS*
+// [51] QuadsNotTriples ::= 'GRAPH' VarOrIri '{' TriplesTemplate? '}'
+QuadsNotTriples = WS* ('GRAPH'/'graph') WS* g:VarOrIri WS* '{' WS* ts:TriplesTemplate? WS* '}' WS*
 {
   var quads = [];
   if(ts!=null) {
@@ -891,8 +897,8 @@ OptionalGraphPattern = WS* ('OPTIONAL'/'optional') WS* v:GroupGraphPattern
            value: v }
 }
 
-// [58] GraphGraphPattern ::= 'GRAPH' VarOrIRIref GroupGraphPattern
-GraphGraphPattern = WS* ('GRAPH'/'graph') WS* g:VarOrIRIref WS* gg:GroupGraphPattern
+// [58] GraphGraphPattern ::= 'GRAPH' VarOrIri GroupGraphPattern
+GraphGraphPattern = WS* ('GRAPH'/'graph') WS* g:VarOrIri WS* gg:GroupGraphPattern
 {
   for(var i=0; i<gg.patterns.length; i++) {
     var quads = []
@@ -907,8 +913,9 @@ GraphGraphPattern = WS* ('GRAPH'/'graph') WS* g:VarOrIRIref WS* gg:GroupGraphPat
   return gg;
 }
 
-// [59] ServiceGraphPattern ::= 'SERVICE' VarOrIRIref GroupGraphPattern
-ServiceGraphPattern = 'SERVICE' v:VarOrIRIref ts:GroupGraphPattern
+// [59] ServiceGraphPattern ::= 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern
+// ServiceGraphPattern ::= 'SERVICE' VarOrIri GroupGraphPattern
+ServiceGraphPattern = 'SERVICE' v:VarOrIri ts:GroupGraphPattern
 {
   return {token: 'servicegraphpattern',
           location: location(),
@@ -1035,7 +1042,7 @@ FunctionCall = i:IRIref WS* args:ArgList
   return fcall;
 }
 
-// [71] ArgList ::= ( NIL | '(' 'DISTINCT'? Expression ( ',' Expression )* ')' )
+// [71] ArgList ::= NIL | '(' 'DISTINCT'? Expression ( ',' Expression )* ')'
 ArgList = NIL
 {
   var args = {};
@@ -1063,7 +1070,7 @@ ArgList = NIL
   return args;
 }
 
-// [72] ExpressionList ::= ( NIL | '(' Expression ( WS* ',' WS* Expression )* ')' )
+// [72] ExpressionList ::= NIL | '(' Expression ( ',' Expression )* ')'
 ExpressionList = NIL
 {
   var args = {};
@@ -1222,9 +1229,6 @@ PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* Ob
   return tokenParsed;
 }
 
-// [68] PropertyList ::= PropertyListNotEmpty?
-PropertyList = PropertyListNotEmpty?
-
 // [86] ObjectListPath ::= ObjectPath ( ',' ObjectPath )*
 ObjectListPath = obj:ObjectPath WS* objs:(',' WS* ObjectPath)*
 {
@@ -1267,8 +1271,8 @@ ObjectPath = GraphNodePath
 // [70] Object ::= GraphNode
 Object = GraphNode
 
-// [71] Verb ::= VarOrIRIref | 'a'
-Verb = VarOrIRIref
+// [71] Verb ::= VarOrIri | 'a'
+Verb = VarOrIri
 / 'a'
 {
   return {token: 'uri', 
@@ -1405,6 +1409,9 @@ PropertyListNotEmptyPath = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath res
 
 // [74] PropertyListPath ::= PropertyListNotEmpty?
 PropertyListPath = PropertyListPathNotEmpty?
+
+// [76] PropertyList ::= PropertyListNotEmpty?
+PropertyList = PropertyListNotEmpty?
 
 // [77] Path ::= PathAlternative
 // to fix??
@@ -1779,8 +1786,8 @@ GraphNodePath =gn:(WS* VarOrTerm WS* / WS* TriplesNodePath WS*)
 // [106] VarOrTerm ::= Var | GraphTerm
 VarOrTerm = (Var / GraphTerm)
 
-// [107] VarOrIRIref ::= Var | IRIref
-VarOrIRIref = (Var /IRIref)
+// [107] VarOrIri ::= Var | IRIref
+VarOrIri = (Var /IRIref)
 
 // [108] Var ::= VAR1 | VAR2
 Var = WS* v:(VAR1 / VAR2 / VAR3) WS*
@@ -1843,7 +1850,7 @@ GraphTerm = IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / BlankNode / 
  }
  */
 
-// [119] Expression ::= ConditionalOrExpression
+// [110] Expression ::= ConditionalOrExpression
 Expression = ConditionalOrExpression
 
 // [111] ConditionalOrExpression ::= ConditionalAndExpression ( '||' ConditionalAndExpression )*
@@ -2334,7 +2341,7 @@ ExistsFunc = ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
   return ex;
 }
 
-// [126] NotExistsFunc ::=   'NOT EXISTS' GroupGraphPattern
+// [126] NotExistsFunc ::=   'NOT' 'EXISTS' GroupGraphPattern
 NotExistsFunc = ('NOT'/'not') WS* ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
 {
   var ex = {};
@@ -2346,13 +2353,13 @@ NotExistsFunc = ('NOT'/'not') WS* ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
   return ex;
 }
 
-// [127] Aggregate ::= ( 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')' |
-//       'SUM' '(' 'DISTINCT'? Expression ')' |
-//       'MIN' '(' 'DISTINCT'? Expression ')' |
-//       'MAX' '(' 'DISTINCT'? Expression ')' |
-//       'AVG' '(' 'DISTINCT'? Expression ')' |
-//       'SAMPLE' '(' 'DISTINCT'? Expression ')' |
-//       'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')' )
+// [127] Aggregate ::= 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
+//       | 'SUM' '(' 'DISTINCT'? Expression ')'
+//       | 'MIN' '(' 'DISTINCT'? Expression ')'
+//       | 'MAX' '(' 'DISTINCT'? Expression ')'
+//       | 'AVG' '(' 'DISTINCT'? Expression ')'
+//       | 'SAMPLE' '(' 'DISTINCT'? Expression ')'
+//       | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
 // incomplete??
 Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*'/Expression) WS* ')' WS*
 {
@@ -2547,7 +2554,8 @@ PNAME_LN = p:PNAME_NS s:PN_LOCAL
   return [p, s]
 }
 
-// [142] BLANK_NODE_LABEL ::= ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
+// [142] BLANK_NODE_LABEL ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
+// BLANK_NODE_LABEL ::= ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
 // BLANK_NODE_LABEL ::= '_:' PN_LOCAL
 BLANK_NODE_LABEL = '_:' l:PN_LOCAL 
 {
@@ -2595,7 +2603,8 @@ INTEGER = d:[0-9]+
   return lit;
 }
 
-// [147] DECIMAL ::= [0-9]+ '.' [0-9]* | '.' [0-9]+
+// [147] DECIMAL ::= [0-9]* '.' [0-9]+
+// DECIMAL ::= [0-9]+ '.' [0-9]* | '.' [0-9]+
 DECIMAL = a:[0-9]+ b:'.' c:[0-9]*
 {
   var lit = {};
