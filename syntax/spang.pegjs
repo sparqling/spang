@@ -1181,6 +1181,9 @@ TriplesSameSubject = WS* s:VarOrTerm WS* pairs:PropertyListNotEmpty
   return token;
 }
 
+// [76] PropertyList ::= PropertyListNotEmpty?
+PropertyList = PropertyListNotEmpty?
+
 // [77] PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
 PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* ObjectList )? )*
 {
@@ -1256,6 +1259,9 @@ ObjectList = obj:Object WS* objs:( ',' WS* Object )*
   
   return toReturn;
 }
+
+// [80] Object ::= GraphNode
+Object = GraphNode
 
 // [81] TriplesSameSubjectPath ::= VarOrTerm PropertyListNotEmptyPath | TriplesNodePath PropertyListPath
 // incomplete??
@@ -1333,6 +1339,9 @@ TriplesSameSubjectPath = WS* s:VarOrTerm WS* pairs:PropertyListNotEmptyPath
   return tokenParsed;
 }
 
+// [82] PropertyListPath ::= PropertyListPathNotEmpty?
+PropertyListPath = PropertyListPathNotEmpty?
+
 // [73] PropertyListNotEmptyPath ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
 PropertyListNotEmptyPath = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath rest:( WS* ';' WS* ( ( VerbPath / VerbSimple ) ObjectList)? )*
 {
@@ -1382,17 +1391,8 @@ PropertyListNotEmptyPath = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath res
   return token;
 }
 
-// [74] PropertyListPath ::= PropertyListNotEmpty?
-PropertyListPath = PropertyListPathNotEmpty?
-
-// [76] PropertyList ::= PropertyListNotEmpty?
-PropertyList = PropertyListNotEmpty?
-
-// [80] Object ::= GraphNode
-Object = GraphNode
-
 // [83] PropertyListPathNotEmpty ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
-PropertyListPathNotEmpty = v:(VerbPath / VerbSimple) WS* ol:ObjectListPath rest:( WS* ';' WS* ( (VerbPath / VerbSimple) WS* ObjectList)? )*
+PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath rest:( WS* ';' WS* ( ( VerbPath / VerbSimple ) WS* ObjectList )? )*
 {
   var tokenParsed = {};
   tokenParsed.token = 'propertylist';
@@ -1422,7 +1422,7 @@ PropertyListPathNotEmpty = v:(VerbPath / VerbSimple) WS* ol:ObjectListPath rest:
     if(!tok)
       continue;
     var newVerb  = tok[0];
-    var newObjsList = tok[2] || [];
+    var newObjsList = tok[2] || []; // not 1 but 2 (?)
     
     for(var j=0; j<newObjsList.length; j++) {
       if(newObjsList[j].triplesContext != null) {
