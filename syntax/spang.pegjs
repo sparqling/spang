@@ -1263,10 +1263,10 @@ ObjectList = obj:Object WS* objs:( ',' WS* Object )*
 // [80] Object ::= GraphNode
 Object = GraphNode
 
-// [81] TriplesSameSubjectPath ::= VarOrTerm PropertyListNotEmptyPath | TriplesNodePath PropertyListPath
+// [81] TriplesSameSubjectPath ::= VarOrTerm PropertyListPathNotEmpty | TriplesNodePath PropertyListPath
 // incomplete??
 // support for property paths must be added??
-TriplesSameSubjectPath = WS* s:VarOrTerm WS* pairs:PropertyListNotEmptyPath
+TriplesSameSubjectPath = WS* s:VarOrTerm WS* pairs:PropertyListPathNotEmpty
 // This was used when property paths not supported yet :(
 //  = TriplesSameSubject
 {
@@ -1341,55 +1341,6 @@ TriplesSameSubjectPath = WS* s:VarOrTerm WS* pairs:PropertyListNotEmptyPath
 
 // [82] PropertyListPath ::= PropertyListPathNotEmpty?
 PropertyListPath = PropertyListPathNotEmpty?
-
-// [73] PropertyListNotEmptyPath ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
-PropertyListNotEmptyPath = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath rest:( WS* ';' WS* ( ( VerbPath / VerbSimple ) ObjectList)? )*
-{
-  var token = {}
-  token.token = 'propertylist';
-  var triplesContext = [];
-  var pairs = [];
-  var test = [];
-  
-  for( var i=0; i<ol.length; i++) {
-    
-    if(ol[i].triplesContext != null) {
-      triplesContext = triplesContext.concat(ol[i].triplesContext);
-      if(ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
-        pairs.push([v, ol[i].chainSubject[0]]);
-      } else {
-        pairs.push([v, ol[i].chainSubject]);
-      }
-      
-    } else {
-      pairs.push([v, ol[i]])
-    }
-    
-  }
-  
-  
-  for(var i=0; i<rest.length; i++) {
-    var tok = rest[i][3];
-    if(!tok)
-      continue;
-    var newVerb  = tok[0];
-    var newObjsList = tok[1] || [];
-    
-    for(var j=0; j<newObjsList.length; j++) {
-      if(newObjsList[j].triplesContext != null) {
-        triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
-        pairs.push([newVerb, newObjsList[j].chainSubject]);
-      } else {
-        pairs.push([newVerb, newObjsList[j]])
-      }
-    }
-  }
-  
-  token.pairs = pairs;
-  token.triplesContext = triplesContext;
-  
-  return token;
-}
 
 // [83] PropertyListPathNotEmpty ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
 PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath rest:( WS* ';' WS* ( ( VerbPath / VerbSimple ) WS* ObjectList )? )*
@@ -1732,7 +1683,7 @@ TriplesNodePath
 } / BlankNodePropertyListPath
 
 // [101] BlankNodePropertyListPath ::= '[' PropertyListPathNotEmpty ']'
-BlankNodePropertyListPath = WS* '[' WS* pl:PropertyListNotEmptyPath ']' WS*
+BlankNodePropertyListPath = WS* '[' WS* pl:PropertyListPathNotEmpty ']' WS*
 {
   GlobalBlankNodeCounter++;
   var subject = {token:'blank', value:'_:'+GlobalBlankNodeCounter};
