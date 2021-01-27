@@ -221,8 +221,7 @@ SelectClause = WS* ('SELECT'/'select') WS* mod:( ('DISTINCT'/'distinct') / ('RED
   };
 }
 
-// [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier |
-//                                    DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
+// [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
 ConstructQuery = WS* ('CONSTRUCT'/'construct') WS* t:ConstructTemplate WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
   var dataset = {'named':[], 'implicit':[]};
@@ -1644,7 +1643,7 @@ TriplesNodePath
       return {token:"triplesnodecollection", triplesContext:triplesContext, chainSubject:chainSubject,  location: location()};
 } / BlankNodePropertyListPath
 
-// [87] TriplesNode ::= Collection | BlankNodePropertyList
+// [98] TriplesNode ::= Collection | BlankNodePropertyList
 // todo??
 TriplesNode = c:Collection
 {
@@ -1705,7 +1704,7 @@ TriplesNode = c:Collection
 }
 / BlankNodePropertyList
 
-// [100] BlankNodePropertyList ::= '[' PropertyListNotEmpty ']'
+// [99] BlankNodePropertyList ::= '[' PropertyListNotEmpty ']'
 BlankNodePropertyList = WS* '[' WS* pl:PropertyListNotEmpty WS* ']' WS*
 {
   GlobalBlankNodeCounter++;
@@ -1897,7 +1896,7 @@ ConditionalAndExpression = v:ValueLogical vs:(WS* '&&' WS* ValueLogical)*
 // [113] ValueLogical ::= RelationalExpression
 ValueLogical = RelationalExpression
 
-// [114] RelationalExpression ::= NumericExpression ( '=' NumericExpression | '!=' NumericExpression | '<' NumericExpression | '>' NumericExpression | '<=' NumericExpression | '>=' NumericExpression | 'IN' ExpressionList | 'NOT IN' ExpressionList )?
+// [114] RelationalExpression ::= NumericExpression ( '=' NumericExpression | '!=' NumericExpression | '<' NumericExpression | '>' NumericExpression | '<=' NumericExpression | '>=' NumericExpression | 'IN' ExpressionList | 'NOT' 'IN' ExpressionList )?
 RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression /
                                                   WS* '!=' WS* NumericExpression /
                                                   WS* '<' WS* NumericExpression /
@@ -1956,7 +1955,8 @@ RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression 
 // [115] NumericExpression ::= AdditiveExpression
 NumericExpression = AdditiveExpression
 
-// [116] AdditiveExpression ::= MultiplicativeExpression ( '+' MultiplicativeExpression | '-' MultiplicativeExpression | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )? )*
+// [116] AdditiveExpression ::= MultiplicativeExpression ( '+' MultiplicativeExpression | '-' MultiplicativeExpression | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )* )*
+// AdditiveExpression ::= MultiplicativeExpression ( '+' MultiplicativeExpression | '-' MultiplicativeExpression | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )? )*
 AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* MultiplicativeExpression / WS* '-' WS* MultiplicativeExpression / ( NumericLiteralNegative / NumericLiteralNegative ) ( (WS* '*' WS* UnaryExpression) / (WS* '/' WS* UnaryExpression))? )*
 {
   if(ops.length === 0) {
