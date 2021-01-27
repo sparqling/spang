@@ -1181,7 +1181,7 @@ TriplesSameSubject = WS* s:VarOrTerm WS* pairs:PropertyListNotEmpty
   return token;
 }
 
-// [67] PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
+// [77] PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
 PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* ObjectList )? )*
 {
   var tokenParsed = {};
@@ -1228,25 +1228,18 @@ PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* Ob
   return tokenParsed;
 }
 
-// [86] ObjectListPath ::= ObjectPath ( ',' ObjectPath )*
-ObjectListPath = obj:ObjectPath WS* objs:(',' WS* ObjectPath)*
+// [78] Verb ::= VarOrIri | 'a'
+Verb = VarOrIri
+/ 'a'
 {
-  var toReturn = [];
-  
-  toReturn.push(obj);
-  
-  for(var i=0; i<objs.length; i++) {
-    for(var j=0; j<objs[i].length; j++) {
-      if(typeof(objs[i][j])=="object" && objs[i][j].token != null) {
-        toReturn.push(objs[i][j]);
-      }
-    }
-  }
-  
-  return toReturn;
+  return {token: 'uri', 
+          prefix:null, 
+          suffix:null,
+          location: location(),
+          value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}
 }
 
-// [69] ObjectList ::= Object ( ',' Object )*
+// [79] ObjectList ::= Object ( ',' Object )*
 ObjectList = obj:Object WS* objs:( ',' WS* Object )*
 {
   var toReturn = [];
@@ -1264,24 +1257,7 @@ ObjectList = obj:Object WS* objs:( ',' WS* Object )*
   return toReturn;
 }
 
-// [87] ObjectPath ::= GraphNodePath
-ObjectPath = GraphNodePath
-
-// [70] Object ::= GraphNode
-Object = GraphNode
-
-// [71] Verb ::= VarOrIri | 'a'
-Verb = VarOrIri
-/ 'a'
-{
-  return {token: 'uri', 
-          prefix:null, 
-          suffix:null,
-          location: location(),
-          value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}
-}
-
-// [72] TriplesSameSubjectPath ::= VarOrTerm PropertyListNotEmptyPath | TriplesNodePath PropertyListPath
+// [81] TriplesSameSubjectPath ::= VarOrTerm PropertyListNotEmptyPath | TriplesNodePath PropertyListPath
 // incomplete??
 // support for property paths must be added??
 TriplesSameSubjectPath = WS* s:VarOrTerm WS* pairs:PropertyListNotEmptyPath
@@ -1412,90 +1388,8 @@ PropertyListPath = PropertyListPathNotEmpty?
 // [76] PropertyList ::= PropertyListNotEmpty?
 PropertyList = PropertyListNotEmpty?
 
-// [77] Path ::= PathAlternative
-// to fix??
-Path = PathAlternative
-
-// [78] PathAlternative ::= PathSequence ( '|' PathSequence )*
-PathAlternative = first:PathSequence rest:( '|' PathSequence)*
-{
-  if(rest == null || rest.length === 0) {
-    return first;
-  } else {
-    var acum = [];
-    for(var i=0; i<rest.length; i++)
-      acum.push(rest[1]);
-    
-    var path = {};
-    path.token = 'path';
-    path.kind = 'alternative';
-    path.value = acum;
-    path.location = location();
-    
-    return path;
-  }
-}
-
-// [79] PathSequence ::= PathEltOrInverse ( '/' PathEltOrInverse )*
-PathSequence = first:PathEltOrInverse rest:( '/' PathEltOrInverse)*
-{
-  if(rest == null || rest.length === 0) {
-    return first;
-  } else {
-    var acum = [first];
-    
-    for(var i=0; i<rest.length; i++)
-      acum.push(rest[i][1]);
-    
-    var path = {};
-    path.token = 'path';
-    path.kind = 'sequence';
-    path.value = acum;
-    path.location = location();
-    
-    return path;
-  }
-}
-
-// [80] PathElt ::= PathPrimary PathMod?
-PathElt = p:PathPrimary mod:PathMod?
-{
-  if(p.token && p.token != 'path' && mod == '') { // uri without mod
-    p.kind = 'primary' // for debug
-    return p;
-  // } else if(p.token && p.token != path && mod != '') { // bug?
-  } else if(p.token && p.token != 'path' && mod != '') { // uri with mod
-    var path = {};
-    path.token = 'path';
-    path.kind = 'element';
-    path.value = p;
-    path.modifier = mod;
-    return path;
-  } else {
-    p.modifier = mod;
-    return p;
-  }
-}
-
-// [81] PathEltOrInverse ::= PathElt | '^' PathElt
-PathEltOrInverse = PathElt
-/ '^' elt:PathElt
-{
-    var path = {};
-    path.token = 'path';
-    path.kind = 'inversePath';
-    path.value = elt;
-    
-    return path;
-}
-
-// [82] PathMod ::= ( '*' | '?' | '+' | '{' ( Integer ( ',' ( '}' | Integer '}' ) | '}' ) | ',' Integer '}' ) )
-// an extension??
-// PathMod = ( '*' / '?' / '+' / '{' ( Integer ( ',' ( '}' / Integer '}' ) / '}' ) / ',' Integer '}' ) )
-PathMod = m:('?' / '*' / '+')
-{
-  return m;
-}
+// [80] Object ::= GraphNode
+Object = GraphNode
 
 // [83] PropertyListPathNotEmpty ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
 PropertyListPathNotEmpty = v:(VerbPath / VerbSimple) WS* ol:ObjectListPath rest:( WS* ';' WS* ( (VerbPath / VerbSimple) WS* ObjectList)? )*
@@ -1561,7 +1455,113 @@ VerbPath = p:Path
 // [85] VerbSimple ::= Var
 VerbSimple = Var
 
-// [94] PathPrimary ::= ( IRIref | 'a' | '!' PathNegatedPropertySet | '(' Path ')' )
+// [86] ObjectListPath ::= ObjectPath ( ',' ObjectPath )*
+ObjectListPath = obj:ObjectPath WS* objs:(',' WS* ObjectPath)*
+{
+  var toReturn = [];
+  
+  toReturn.push(obj);
+  
+  for(var i=0; i<objs.length; i++) {
+    for(var j=0; j<objs[i].length; j++) {
+      if(typeof(objs[i][j])=="object" && objs[i][j].token != null) {
+        toReturn.push(objs[i][j]);
+      }
+    }
+  }
+  
+  return toReturn;
+}
+
+// [87] ObjectPath ::= GraphNodePath
+ObjectPath = GraphNodePath
+
+// [88] Path ::= PathAlternative
+// to fix??
+Path = PathAlternative
+
+// [89] PathAlternative ::= PathSequence ( '|' PathSequence )*
+PathAlternative = first:PathSequence rest:( '|' PathSequence)*
+{
+  if(rest == null || rest.length === 0) {
+    return first;
+  } else {
+    var acum = [];
+    for(var i=0; i<rest.length; i++)
+      acum.push(rest[1]);
+    
+    var path = {};
+    path.token = 'path';
+    path.kind = 'alternative';
+    path.value = acum;
+    path.location = location();
+    
+    return path;
+  }
+}
+
+// [90] PathSequence ::= PathEltOrInverse ( '/' PathEltOrInverse )*
+PathSequence = first:PathEltOrInverse rest:( '/' PathEltOrInverse)*
+{
+  if(rest == null || rest.length === 0) {
+    return first;
+  } else {
+    var acum = [first];
+    
+    for(var i=0; i<rest.length; i++)
+      acum.push(rest[i][1]);
+    
+    var path = {};
+    path.token = 'path';
+    path.kind = 'sequence';
+    path.value = acum;
+    path.location = location();
+    
+    return path;
+  }
+}
+
+// [91] PathElt ::= PathPrimary PathMod?
+PathElt = p:PathPrimary mod:PathMod?
+{
+  if(p.token && p.token != 'path' && mod == '') { // uri without mod
+    p.kind = 'primary' // for debug
+    return p;
+  // } else if(p.token && p.token != path && mod != '') { // bug?
+  } else if(p.token && p.token != 'path' && mod != '') { // uri with mod
+    var path = {};
+    path.token = 'path';
+    path.kind = 'element';
+    path.value = p;
+    path.modifier = mod;
+    return path;
+  } else {
+    p.modifier = mod;
+    return p;
+  }
+}
+
+// [92] PathEltOrInverse ::= PathElt | '^' PathElt
+PathEltOrInverse = PathElt
+/ '^' elt:PathElt
+{
+    var path = {};
+    path.token = 'path';
+    path.kind = 'inversePath';
+    path.value = elt;
+    
+    return path;
+}
+
+// [93] PathMod ::= ( '*' | '?' | '+' | '{' ( Integer ( ',' ( '}' | Integer '}' ) | '}' ) | ',' Integer '}' ) )
+// an extension??
+// PathMod = ( '*' / '?' / '+' / '{' ( Integer ( ',' ( '}' / Integer '}' ) / '}' ) / ',' Integer '}' ) )
+PathMod = m:('?' / '*' / '+')
+{
+  return m;
+}
+
+// [94] PathPrimary ::= IRIref | 'a' | '!' PathNegatedPropertySet | '(' Path ')'
 PathPrimary = IRIref
 / 'a'
 {
@@ -1573,75 +1573,14 @@ PathPrimary = IRIref
   return p;
 }
 
-// [95]   PathNegatedPropertySet    ::=   ( PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')' )
+// [95]   PathNegatedPropertySet    ::=   PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
 PathNegatedPropertySet    = ( PathOneInPropertySet / '(' ( PathOneInPropertySet        ('|' PathOneInPropertySet)* )? ')' )
 
-// [96]   PathOneInPropertySet      ::=   ( IRIref | 'a' | '^' ( IRIref | 'a' ) )
+// [96]   PathOneInPropertySet      ::=   IRIref | 'a' | '^' ( IRIref | 'a' )
 PathOneInPropertySet = ( IRIref / 'a' / '^' (IRIref / 'a') )
 
 // [97]   Integer   ::=   INTEGER
 Integer = INTEGER
-
-// [100]          TriplesNodePath   ::=   CollectionPath | BlankNodePropertyListPath
-TriplesNodePath
-    = c:CollectionPath {
-    var triplesContext = [];
-    var chainSubject = [];
-
-    var triple = null;
-
-    // catch NIL
-    /*
-     if(c.length == 1 && c[0].token && c[0].token === 'nil') {
-     GlobalBlankNodeCounter++;
-     return  {token: "triplesnodecollection",
-     triplesContext:[{subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-     predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-     object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))}}],
-     chainSubject:{token:'blank', value:("_:"+GlobalBlankNodeCounter)}};
-
-     }
-     */
-
-    // other cases
-    for(var i=0; i<c.length; i++) {
-        GlobalBlankNodeCounter++;
-        //_:b0  rdf:first  1 ;
-        //rdf:rest   _:b1 .
-        var nextObject = null;
-        if(c[i].chainSubject == null && c[i].triplesContext == null) {
-            nextObject = c[i];
-        } else {
-            nextObject = c[i].chainSubject;
-            triplesContext = triplesContext.concat(c[i].triplesContext);
-        }
-        triple = {
-            subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-            predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#first'},
-            object:nextObject
-        };
-
-        if(i==0) {
-            chainSubject.push(triple.subject);
-        }
-
-        triplesContext.push(triple);
-
-        if(i===(c.length-1)) {
-            triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-                object:   {token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'}};
-        } else {
-            triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-                object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))} };
-        }
-
-        triplesContext.push(triple);
-    }
-
-      return {token:"triplesnodecollection", triplesContext:triplesContext, chainSubject:chainSubject,  location: location()};
-} / BlankNodePropertyListPath
 
 // [98] TriplesNode ::= Collection | BlankNodePropertyList
 // todo??
@@ -1730,6 +1669,67 @@ BlankNodePropertyList = WS* '[' WS* pl:PropertyListNotEmpty WS* ']' WS*
     chainSubject: subject
   };
 }
+
+// [100]          TriplesNodePath   ::=   CollectionPath | BlankNodePropertyListPath
+TriplesNodePath
+    = c:CollectionPath {
+    var triplesContext = [];
+    var chainSubject = [];
+
+    var triple = null;
+
+    // catch NIL
+    /*
+     if(c.length == 1 && c[0].token && c[0].token === 'nil') {
+     GlobalBlankNodeCounter++;
+     return  {token: "triplesnodecollection",
+     triplesContext:[{subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
+     predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
+     object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))}}],
+     chainSubject:{token:'blank', value:("_:"+GlobalBlankNodeCounter)}};
+
+     }
+     */
+
+    // other cases
+    for(var i=0; i<c.length; i++) {
+        GlobalBlankNodeCounter++;
+        //_:b0  rdf:first  1 ;
+        //rdf:rest   _:b1 .
+        var nextObject = null;
+        if(c[i].chainSubject == null && c[i].triplesContext == null) {
+            nextObject = c[i];
+        } else {
+            nextObject = c[i].chainSubject;
+            triplesContext = triplesContext.concat(c[i].triplesContext);
+        }
+        triple = {
+            subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
+            predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#first'},
+            object:nextObject
+        };
+
+        if(i==0) {
+            chainSubject.push(triple.subject);
+        }
+
+        triplesContext.push(triple);
+
+        if(i===(c.length-1)) {
+            triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
+                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
+                object:   {token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'}};
+        } else {
+            triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
+                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
+                object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))} };
+        }
+
+        triplesContext.push(triple);
+    }
+
+      return {token:"triplesnodecollection", triplesContext:triplesContext, chainSubject:chainSubject,  location: location()};
+} / BlankNodePropertyListPath
 
 // [101] BlankNodePropertyListPath ::= '[' PropertyListPathNotEmpty ']'
 BlankNodePropertyListPath = WS* '[' WS* pl:PropertyListNotEmptyPath ']' WS*
@@ -2056,7 +2056,8 @@ UnaryExpression = '!' WS* e:PrimaryExpression
 }
 / PrimaryExpression
 
-// [119] PrimaryExpression ::= BrackettedExpression | BuiltInCall | IRIrefOrFunction | RDFLiteral | NumericLiteral | BooleanLiteral | Var | Aggregate
+// [119] PrimaryExpression ::= BrackettedExpression | BuiltInCall | IRIrefOrFunction | RDFLiteral | NumericLiteral | BooleanLiteral | Var
+// PrimaryExpression ::= BrackettedExpression | BuiltInCall | IRIrefOrFunction | RDFLiteral | NumericLiteral | BooleanLiteral | Var | Aggregate
 PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RDFLiteral
 {
   var ex = {};
@@ -2099,7 +2100,7 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
   return ex;
 }
 
-// [105] BrackettedExpression ::= '(' Expression ')'
+// [120] BrackettedExpression ::= '(' Expression ')'
 BrackettedExpression = '(' WS* e:Expression WS* ')'
 {
   return e;
