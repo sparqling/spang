@@ -216,8 +216,9 @@ if (/^\w/.test(db)) {
         let outputStr = '';
         switch (commander.outfmt) {
           case 'tsv':
-            for (let i = 0; i < bodies.length; i++) {
-              outputStr += jsonToTsv(bodies[i], Boolean(commander.vars && i == 0));
+            outputStr += jsonToTsv(bodies[0], Boolean(commander.vars));
+            for (let i = 1; i < bodies.length; i++) {
+              outputStr += "\n" + jsonToTsv(bodies[i], Boolean(commander.vars && i == 0));
             }
             printTsv(outputStr);
             break;
