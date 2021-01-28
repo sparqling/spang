@@ -218,7 +218,7 @@ if (/^\w/.test(db)) {
           case 'tsv':
             outputStr += jsonToTsv(bodies[0], Boolean(commander.vars));
             for (let i = 1; i < bodies.length; i++) {
-              outputStr += "\n" + jsonToTsv(bodies[i], Boolean(commander.vars && i == 0));
+              outputStr += "\n" + jsonToTsv(bodies[i]);
             }
             printTsv(outputStr);
             break;
@@ -281,7 +281,7 @@ toString = (resource) => {
   }
 };
 
-jsonToTsv = (body, withHeader) => {
+jsonToTsv = (body, withHeader = false) => {
   const obj = JSON.parse(body);
   const vars = obj.head.vars;
   let tsv = '';
