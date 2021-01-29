@@ -30,6 +30,7 @@ PREFIX spangl: <http://purl.org/net/spang/library/>
 
 PREFIX obo: <http://purl.obolibrary.org/obo/>
 PREFIX oboOwl: <http://purl.org/obo/owl/>
+PREFIX oboInOwl: <http://www.geneontology.org/formats/oboInOwl#>
 PREFIX oboTax: <http://purl.obolibrary.org/obo/NCBITaxon_>
 PREFIX sio: <http://semanticscience.org/resource/>
 PREFIX uniprot: <http://purl.uniprot.org/uniprot/>
