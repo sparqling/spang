@@ -88,7 +88,7 @@ Prologue = b:BaseDecl? WS* p:PrefixDecl*
 }
 
 // [5] BaseDecl  ::=  'BASE' IRIREF
-BaseDecl = WS* ('BASE'/'base') WS* i:IRIREF
+BaseDecl = WS* 'BASE'i WS* i:IRIREF
 {
   registerDefaultPrefix(i);
   
@@ -100,7 +100,7 @@ BaseDecl = WS* ('BASE'/'base') WS* i:IRIREF
 }
 
 // [6] PrefixDecl ::= 'PREFIX' PNAME_NS IRIREF
-PrefixDecl = WS* ('PREFIX'/'prefix')  WS* p:PNAME_NS  WS* l:IRIREF
+PrefixDecl = WS* 'PREFIX'i  WS* p:PNAME_NS  WS* l:IRIREF
 {
   registerPrefix(p,l);
   
@@ -187,8 +187,8 @@ SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 }
 
 // [9] SelectClause ::= 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( ( Var | ( '(' Expression 'AS' Var ')' ) )+ | '*' )
-SelectClause = WS* ('SELECT'/'select') WS* mod:( ('DISTINCT'/'distinct') / ('REDUCED'/'reduced') )? WS*
-  proj:( ( ( WS* Var WS* ) / ( WS* '(' WS* Expression WS* ('AS'/'as') WS* Var WS* ')' WS* ) )+ / ( WS* '*' WS* )  ) 
+SelectClause = WS* 'SELECT'i WS* mod:( 'DISTINCT'i / 'REDUCED'i )? WS*
+  proj:( ( ( WS* Var WS* ) / ( WS* '(' WS* Expression WS* 'AS'i WS* Var WS* ')' WS* ) )+ / ( WS* '*' WS* )  ) 
 {
   var vars = [];
   if(proj.length === 3 && proj[1]==="*") {
@@ -222,7 +222,7 @@ SelectClause = WS* ('SELECT'/'select') WS* mod:( ('DISTINCT'/'distinct') / ('RED
 }
 
 // [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
-ConstructQuery = WS* ('CONSTRUCT'/'construct') WS* t:ConstructTemplate WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
+ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
   var dataset = {'named':[], 'implicit':[]};
   for(var i=0; i<gs.length; i++) {
@@ -261,7 +261,7 @@ ConstructQuery = WS* ('CONSTRUCT'/'construct') WS* t:ConstructTemplate WS* gs:Da
 
   return query
 }
-/ WS* ('CONSTRUCT'/'construct') WS* gs:DatasetClause* WS* ('WHERE'/'where') WS* '{' WS* t:TriplesTemplate? WS* '}' WS* sm:SolutionModifier
+/ WS* 'CONSTRUCT'i WS* gs:DatasetClause* WS* 'WHERE'i WS* '{' WS* t:TriplesTemplate? WS* '}' WS* sm:SolutionModifier
 {
   var dataset = {'named':[], 'implicit':[]};
   for(var i=0; i<gs.length; i++) {
@@ -305,11 +305,11 @@ ConstructQuery = WS* ('CONSTRUCT'/'construct') WS* t:ConstructTemplate WS* gs:Da
 }
 
 // [11] DescribeQuery ::= 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
-DescribeQuery = 'DESCRIBE' ( VarOrIri+ / '*' ) DatasetClause* WhereClause? SolutionModifier
+DescribeQuery = 'DESCRIBE'i ( VarOrIri+ / '*' ) DatasetClause* WhereClause? SolutionModifier
 
 // [12] AskQuery ::= 'ASK' DatasetClause* WhereClause SolutionModifier
 // AskQuery ::= 'ASK' DatasetClause* WhereClause
-AskQuery = WS* ('ASK'/'ask') WS* gs:DatasetClause* WS* w:WhereClause 
+AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause 
 {
   var dataset = {'named':[], 'implicit':[]};
   for(var i=0; i<gs.length; i++) {
@@ -340,7 +340,7 @@ AskQuery = WS* ('ASK'/'ask') WS* gs:DatasetClause* WS* w:WhereClause
 }
 
 // [13] DatasetClause ::= 'FROM' ( DefaultGraphClause | NamedGraphClause )
-DatasetClause = ('FROM'/'from') WS* gs:( DefaultGraphClause / NamedGraphClause ) WS*
+DatasetClause = 'FROM'i WS* gs:( DefaultGraphClause / NamedGraphClause ) WS*
 {
   return gs;
 }
@@ -352,7 +352,7 @@ DefaultGraphClause = WS* s:SourceSelector
 }
 
 // [15] NamedGraphClause ::= 'NAMED' SourceSelector
-NamedGraphClause = ('NAMED'/'named') WS* s:SourceSelector
+NamedGraphClause = 'NAMED'i WS* s:SourceSelector
 {
   return {graph:s, kind:'named', token:'graphCluase', location: location()};
 }
@@ -361,7 +361,7 @@ NamedGraphClause = ('NAMED'/'named') WS* s:SourceSelector
 SourceSelector = IRIref
 
 // [17] WhereClause ::= 'WHERE'? GroupGraphPattern
-WhereClause = (('WHERE'/'where'))? WS* g:GroupGraphPattern WS*
+WhereClause = ('WHERE'i)? WS* g:GroupGraphPattern WS*
 {
   return g;
 }
@@ -389,7 +389,7 @@ SolutionModifier = gc:GroupClause? HavingClause? oc:OrderClause? lo:LimitOffsetC
 }
                              
 // [19] GroupClause ::= 'GROUP' 'BY' GroupCondition+
-GroupClause = ('GROUP'/'group') WS* ('BY'/'by') WS* conds:GroupCondition+
+GroupClause = 'GROUP'i WS* 'BY'i WS* conds:GroupCondition+
 {
   return conds;
 }
@@ -426,13 +426,13 @@ HavingClause = 'HAVING' HavingCondition+
 HavingCondition = Constraint
 
 // [23] OrderClause ::= 'ORDER' 'BY' OrderCondition+
-OrderClause = ('ORDER'/'order') WS* ('BY'/'by') WS* os:OrderCondition+ WS*
+OrderClause = 'ORDER'i WS* 'BY'i WS* os:OrderCondition+ WS*
 {
   return os;
 }
 
 // [24] OrderCondition ::= ( ( 'ASC' | 'DESC' ) BrackettedExpression ) | ( Constraint | Var )
-OrderCondition = direction:( 'ASC'/ 'asc' / 'DESC'/ 'desc' ) WS* e:BrackettedExpression WS*
+OrderCondition = direction:( 'ASC'i / 'DESC'i ) WS* e:BrackettedExpression WS*
 {
   return { direction: direction.toUpperCase(), expression:e };
 }
@@ -465,13 +465,13 @@ LimitOffsetClauses = cls:( LimitClause OffsetClause? / OffsetClause LimitClause?
 }
 
 // [26] LimitClause ::= 'LIMIT' INTEGER
-LimitClause = ('LIMIT'/'limit') WS* i:INTEGER WS*
+LimitClause = 'LIMIT'i WS* i:INTEGER WS*
 {
   return { limit:parseInt(i.value) };
 }
 
 // [27] OffsetClause ::= 'OFFSET' INTEGER
-OffsetClause = ('OFFSET'/'offset') WS* i:INTEGER WS*
+OffsetClause = 'OFFSET'i WS* i:INTEGER WS*
 {
   return { offset:parseInt(i.value) };
 }
@@ -483,7 +483,7 @@ BindingsClause = ( 'BINDINGS' Var* '{' ( '(' BindingValue+ ')' / NIL )* '}' )?
 BindingValue = IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 'UNDEF'
 
 // [28] ValuesClause ::= ( 'VALUES' DataBlock )?
-ValuesClause = b:(('VALUES'/'values') DataBlock)?
+ValuesClause = b:('VALUES'i DataBlock)?
 {
   if(b != null) {
     return b[1];
@@ -516,7 +516,7 @@ Update1 = Load / Clear / Drop / Create / InsertData / DeleteData / DeleteWhere /
 
 // [31] Load ::= 'LOAD' 'SILENT'? IRIref ( 'INTO' GraphRef )?
 // Load ::= 'LOAD' IRIref ( 'INTO' GraphRef )?
-Load = ('LOAD'/'load') WS* sg:IRIref WS* dg:( ('INTO'/'into') WS* GraphRef)?
+Load = 'LOAD'i WS* sg:IRIref WS* dg:( 'INTO'i WS* GraphRef)?
 {
   var query = {};
   query.kind = 'load';
@@ -529,7 +529,7 @@ Load = ('LOAD'/'load') WS* sg:IRIref WS* dg:( ('INTO'/'into') WS* GraphRef)?
 }
 
 // [32] Clear ::= 'CLEAR' 'SILENT'? GraphRefAll
-Clear = ('CLEAR'/'clear') WS* ('SILENT'/'silent')? WS* ref:GraphRefAll
+Clear = 'CLEAR'i WS* 'SILENT'i? WS* ref:GraphRefAll
 {
   var query = {};
   query.kind = 'clear';
@@ -540,7 +540,7 @@ Clear = ('CLEAR'/'clear') WS* ('SILENT'/'silent')? WS* ref:GraphRefAll
 }
 
 // [33] Drop ::= 'DROP' 'SILENT'? GraphRefAll
-Drop = ('DROP'/'drop')  WS* ('SILENT'/'silent')? WS* ref:GraphRefAll
+Drop = 'DROP'i  WS* 'SILENT'i? WS* ref:GraphRefAll
 {
   var query = {};
   query.kind = 'drop';
@@ -551,7 +551,7 @@ Drop = ('DROP'/'drop')  WS* ('SILENT'/'silent')? WS* ref:GraphRefAll
 }
 
 // [34] Create ::= 'CREATE' 'SILENT'? GraphRef
-Create = ('CREATE'/'create') WS* ('SILENT'/'silent')? WS* ref:GraphRef
+Create = 'CREATE'i WS* 'SILENT'i? WS* ref:GraphRef
 {
   var query = {};
   query.kind = 'create';
@@ -566,7 +566,7 @@ Create = ('CREATE'/'create') WS* ('SILENT'/'silent')? WS* ref:GraphRef
 // [37]  	Copy	  ::=  	'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
 
 // [38] InsertData ::= 'INSERT DATA' QuadData
-InsertData = ('INSERT'/'insert') WS* ('DATA'/'data') WS* qs:QuadData
+InsertData = 'INSERT'i WS* 'DATA'i WS* qs:QuadData
 {
   var query = {};
   query.kind = 'insertdata';
@@ -577,7 +577,7 @@ InsertData = ('INSERT'/'insert') WS* ('DATA'/'data') WS* qs:QuadData
 }
 
 // [39] DeleteData ::= 'DELETE DATA' QuadData
-DeleteData = ('DELETE'/'delete') WS* ('DATA'/'data') qs:QuadData
+DeleteData = 'DELETE'i WS* 'DATA'i qs:QuadData
 {
   var query = {};
 
@@ -589,7 +589,7 @@ DeleteData = ('DELETE'/'delete') WS* ('DATA'/'data') qs:QuadData
 }
 
 // [40] DeleteWhere ::= 'DELETE WHERE' QuadPattern
-DeleteWhere = ('DELETE'/'delete') WS* ('WHERE'/'where') WS* p:GroupGraphPattern
+DeleteWhere = 'DELETE'i WS* 'WHERE'i WS* p:GroupGraphPattern
 {
   var query = {};
   query.kind = 'modify';
@@ -624,7 +624,7 @@ DeleteWhere = ('DELETE'/'delete') WS* ('WHERE'/'where') WS* p:GroupGraphPattern
 }
 
 // [41] Modify ::= ( 'WITH' IRIref )? ( DeleteClause InsertClause? | InsertClause ) UsingClause* 'WHERE' GroupGraphPattern
-Modify = wg:(('WITH'/'with') WS* IRIref)? WS* dic:( DeleteClause WS* InsertClause? / InsertClause ) WS* uc:UsingClause* WS* ('WHERE'/'where') WS* p:GroupGraphPattern WS*
+Modify = wg:('WITH'i WS* IRIref)? WS* dic:( DeleteClause WS* InsertClause? / InsertClause ) WS* uc:UsingClause* WS* 'WHERE'i WS* p:GroupGraphPattern WS*
 {
   var query = {};
   query.kind = 'modify';
@@ -657,19 +657,19 @@ Modify = wg:(('WITH'/'with') WS* IRIref)? WS* dic:( DeleteClause WS* InsertClaus
 }
 
 // [42] DeleteClause ::= 'DELETE' QuadPattern
-DeleteClause = ('DELETE'/'delete') q:QuadPattern
+DeleteClause = 'DELETE'i q:QuadPattern
 {
   return q;
 }
 
 // [43] InsertClause ::= 'INSERT' QuadPattern
-InsertClause = ('INSERT'/'insert') q:QuadPattern
+InsertClause = 'INSERT'i q:QuadPattern
 {
   return q;
 }
 
 // [44] UsingClause ::= 'USING' ( IRIref | 'NAMED' IRIref )
-UsingClause = WS* ('USING'/'using') WS* g:( IRIref / ('NAMED'/'named') WS* IRIref )
+UsingClause = WS* 'USING'i WS* g:( IRIref / 'NAMED'i WS* IRIref )
 {
   if(g.length!=null) {
     return {kind: 'named', uri: g[2]};
@@ -681,7 +681,7 @@ UsingClause = WS* ('USING'/'using') WS* g:( IRIref / ('NAMED'/'named') WS* IRIre
 // [45] GraphOrDefault	  ::=  	'DEFAULT' | 'GRAPH'? iri
 
 // [46] GraphRef ::= 'GRAPH' IRIref
-GraphRef = ('GRAPH'/'graph') WS* i:IRIref
+GraphRef = 'GRAPH'i WS* i:IRIref
 {
   return i;
 }
@@ -691,15 +691,15 @@ GraphRefAll = g:GraphRef
 {
   return g;
 }
-/ ('DEFAULT'/'default')
+/ 'DEFAULT'i
 {
   return 'default';
 }
-/ ('NAMED'/'named')
+/ 'NAMED'i
 {
   return 'named';
 }
-/ ('ALL'/'all')
+/ 'ALL'i
 {
   return 'all';
 }
@@ -746,7 +746,7 @@ Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
 }
 
 // [51] QuadsNotTriples ::= 'GRAPH' VarOrIri '{' TriplesTemplate? '}'
-QuadsNotTriples = WS* ('GRAPH'/'graph') WS* g:VarOrIri WS* '{' WS* ts:TriplesTemplate? WS* '}' WS*
+QuadsNotTriples = WS* 'GRAPH'i WS* g:VarOrIri WS* '{' WS* ts:TriplesTemplate? WS* '}' WS*
 {
   var quads = [];
   if(ts!=null) {
@@ -889,7 +889,7 @@ TriplesBlock = b:TriplesSameSubjectPath bs:(WS*  '.' TriplesBlock? )?
 GraphPatternNotTriples = GroupOrUnionGraphPattern / OptionalGraphPattern / MinusGraphPattern / GraphGraphPattern / ServiceGraphPattern / Filter / Bind / InlineData / FunctionCall
 
 // [57] OptionalGraphPattern ::= 'OPTIONAL' GroupGraphPattern
-OptionalGraphPattern = WS* ('OPTIONAL'/'optional') WS* v:GroupGraphPattern
+OptionalGraphPattern = WS* 'OPTIONAL'i WS* v:GroupGraphPattern
 {
   return { token: 'optionalgraphpattern',
            location: location(),
@@ -897,7 +897,7 @@ OptionalGraphPattern = WS* ('OPTIONAL'/'optional') WS* v:GroupGraphPattern
 }
 
 // [58] GraphGraphPattern ::= 'GRAPH' VarOrIri GroupGraphPattern
-GraphGraphPattern = WS* ('GRAPH'/'graph') WS* g:VarOrIri WS* gg:GroupGraphPattern
+GraphGraphPattern = WS* 'GRAPH'i WS* g:VarOrIri WS* gg:GroupGraphPattern
 {
   for(var i=0; i<gg.patterns.length; i++) {
     var quads = []
@@ -923,7 +923,7 @@ ServiceGraphPattern = 'SERVICE' v:VarOrIri ts:GroupGraphPattern
 }
 
 // [60] Bind ::= 'BIND' '(' Expression 'AS' Var ')'
-Bind = WS* ('BIND'/'bind') WS* '(' WS* ex:Expression WS* ('as'/'AS') WS* v:Var WS* ')'
+Bind = WS* 'BIND'i WS* '(' WS* ex:Expression WS* 'AS'i WS* v:Var WS* ')'
 {
   return {token: 'bind',
           location: location(),
@@ -932,7 +932,7 @@ Bind = WS* ('BIND'/'bind') WS* '(' WS* ex:Expression WS* ('as'/'AS') WS* v:Var W
 }
 
 // [61] InlineData ::= 'VALUES' DataBlock
-InlineData = WS* ('VALUES'/'values') WS* d:DataBlock
+InlineData = WS* 'VALUES'i WS* d:DataBlock
 {
   return d;
 }
@@ -982,7 +982,7 @@ DataBlockValue = WS* v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 
 }
 
 // [66] MinusGraphPattern ::= 'MINUS' GroupGraphPattern
-MinusGraphPattern = ('MINUS'/'minus') WS* ts:GroupGraphPattern
+MinusGraphPattern = 'MINUS'i WS* ts:GroupGraphPattern
 {
   return {token: 'minusgraphpattern',
           location: location(),
@@ -1019,7 +1019,7 @@ GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* ('UNION'/'union') WS* Gro
 }
 
 // [68] Filter ::= 'FILTER' Constraint
-Filter = WS* ('FILTER'/'filter') WS* c:Constraint
+Filter = WS* 'FILTER'i WS* c:Constraint
 {
   return {token: 'filter',
           location: location(),
@@ -1049,7 +1049,7 @@ ArgList = NIL
   args.value = [];
   return args;
 }
-/ '(' WS* d:('DISTINCT'/'distinct')? WS* e:Expression WS* es:( ',' WS* Expression)* ')'
+/ '(' WS* d:'DISTINCT'i? WS* e:Expression WS* es:( ',' WS* Expression)* ')'
 {
   var cleanEx = [];
   
@@ -2114,7 +2114,7 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 //                    |  ExistsFunc
 //                    |  NotExistsFunc
 // incomplete??
-BuiltInCall = ('STR'/'str') WS* '(' WS* e:Expression WS* ')'
+BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
 {
   var ex = {};
   ex.token = 'expression'
@@ -2278,7 +2278,7 @@ BuiltInCall = ('STR'/'str') WS* '(' WS* e:Expression WS* ')'
 / NotExistsFunc
 
 // [122] RegexExpression ::= 'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'
-RegexExpression = ('REGEX'/'regex') WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* eo:( ',' WS* Expression)?  WS* ')'
+RegexExpression = 'REGEX'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* eo:( ',' WS* Expression)?  WS* ')'
 {
   var regex = {};
   regex.token = 'expression';
@@ -2292,7 +2292,7 @@ RegexExpression = ('REGEX'/'regex') WS* '(' WS* e1:Expression WS* ',' WS* e2:Exp
   return regex;
 }
 // [123]  	SubstringExpression	  ::=  	'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
-SubstringExpression = ('SUBSTR'/'substr') WS* '(' WS* source:Expression WS* ',' WS* startingLoc:Expression WS* lenPart:(',' WS* len:Expression)? WS* ')'
+SubstringExpression = 'SUBSTR'i WS* '(' WS* source:Expression WS* ',' WS* startingLoc:Expression WS* lenPart:(',' WS* len:Expression)? WS* ')'
 {
   return {
       token: 'expression',
@@ -2315,7 +2315,7 @@ StrReplaceExpression = ('REPLACE'i) WS* '(' WS* arg:Expression WS* ',' WS* patte
 }
 
 // [125] ExistsFunc ::= 'EXISTS' GroupGraphPattern
-ExistsFunc = ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
+ExistsFunc = 'EXISTS'i WS* ggp:GroupGraphPattern
 {
   var ex = {};
   ex.token = 'expression';
@@ -2327,7 +2327,7 @@ ExistsFunc = ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
 }
 
 // [126] NotExistsFunc ::=   'NOT' 'EXISTS' GroupGraphPattern
-NotExistsFunc = ('NOT'/'not') WS* ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
+NotExistsFunc = 'NOT'i WS* 'EXISTS'i WS* ggp:GroupGraphPattern
 {
   var ex = {};
   ex.token = 'expression';
@@ -2346,7 +2346,7 @@ NotExistsFunc = ('NOT'/'not') WS* ('EXISTS'/'exists') WS* ggp:GroupGraphPattern
 //       | 'SAMPLE' '(' 'DISTINCT'? Expression ')'
 //       | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
 // incomplete??
-Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*'/Expression) WS* ')' WS*
+Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')' WS*
 {
   var exp = {};
   exp.token = 'expression';
@@ -2357,7 +2357,7 @@ Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*
   
   return exp;
 }
-/ ('GROUP_CONCAT'/'group_concat') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:Expression s:(';' WS* 'SEPARATOR'i WS* '=' WS* String WS*)? ')' WS*
+/ 'GROUP_CONCAT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression s:(';' WS* 'SEPARATOR'i WS* '=' WS* String WS*)? ')' WS*
 {
   var exp = {};
   exp.token = 'expression';
@@ -2369,7 +2369,7 @@ Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*
   
   return exp;
 }
-/ ('SUM'/'sum') WS* '(' WS* d:('DISTINCT'/'distinct')? WS*  e:Expression WS* ')' WS*
+/ 'SUM'i WS* '(' WS* d:('DISTINCT'i)? WS*  e:Expression WS* ')' WS*
 {
   var exp = {};
   exp.token = 'expression';
@@ -2380,7 +2380,7 @@ Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*
   
   return exp;
 }
-/ ('MIN'/'min') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:Expression WS* ')' WS*
+/ 'MIN'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {
   var exp = {};
   exp.token = 'expression';
@@ -2391,7 +2391,7 @@ Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*
   
   return exp;
 }
-/ ('MAX'/'max') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:Expression WS* ')' WS*
+/ 'MAX'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {
   var exp = {};
   exp.token = 'expression'
@@ -2402,7 +2402,7 @@ Aggregate =   ('COUNT'/'count') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:('*
   
   return exp
 }
-/ ('AVG'/'avg') WS* '(' WS* d:('DISTINCT'/'distinct')? WS* e:Expression WS* ')' WS*
+/ 'AVG'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {
   var exp = {};
   exp.token = 'expression'
@@ -2455,7 +2455,7 @@ NumericLiteralPositive = DOUBLE_POSITIVE / DECIMAL_POSITIVE / INTEGER_POSITIVE
 NumericLiteralNegative = DOUBLE_NEGATIVE / DECIMAL_NEGATIVE / INTEGER_NEGATIVE
 
 // [134] BooleanLiteral ::= 'true' | 'false'
-BooleanLiteral = ('TRUE'/'true')
+BooleanLiteral = 'TRUE'i
 {
   var lit = {};
   lit.token = "literal";
@@ -2464,7 +2464,7 @@ BooleanLiteral = ('TRUE'/'true')
   lit.value = true;
   return lit;
 }
-/ ('FALSE'/'false')
+/ 'FALSE'i
 {
   var lit = {};
   lit.token = "literal";
