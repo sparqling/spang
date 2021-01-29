@@ -201,52 +201,56 @@ if (/^\w/.test(db)) {
   }
   let start = new Date();
   querySparql(db, sparqlTemplate, commander.outfmt, retrieveByGet, (error, statusCode, bodies) => {
-    if (!error && statusCode == 200) {
-      let end = new Date() - start;
-      if (bodies.length == 1) {
-        if (commander.outfmt == 'tsv') {
-          printTsv(jsonToTsv(bodies[0], Boolean(commander.vars)));
-        } else {
-          console.log(bodies[0]);
-        }
-        if (commander.time) {
-          console.error('Time of query: %dms', end);
-        }
-      } else if (['tsv', 'text/tsv', 'n-triples', 'nt', 'turtle', 'ttl'].includes(commander.outfmt)) {
-        let outputStr = '';
-        switch (commander.outfmt) {
-          case 'tsv':
-            outputStr += jsonToTsv(bodies[0], Boolean(commander.vars));
-            for (let i = 1; i < bodies.length; i++) {
-              outputStr += "\n" + jsonToTsv(bodies[i]);
-            }
-            printTsv(outputStr);
-            break;
-          case 'text/tsv':
-            outputStr += bodies[0];
-            // process.stdout.write(bodies[0]);
-            for (let i = 1; i < bodies.length; i++) {
-              if (!bodies[i - 1].endsWith('\n')) outputStr += '\n';
-              outputStr += bodies[i].substring(bodies[i].indexOf('\n') + 1);
-              // remove header line for i > 0
-            }
-            printTsv(outputStr);
-            break;
-          default:
-            for (let i = 0; i < bodies.length; i++) {
-              console.log(bodies[i]);
-            }
-        }
+    if (error || statusCode != 200) {
+      console.error('Error: ' + statusCode);
+      for (let body of bodies) {
+        console.error(body);
+      }
+      return;
+    }
+    let end = new Date() - start;
+    if (bodies.length == 1) {
+      if (commander.outfmt == 'tsv') {
+        printTsv(jsonToTsv(bodies[0], Boolean(commander.vars)));
       } else {
-        console.error('The results are paginated. Those pages are saved as result1.out, result2.out,....');
-        for (let i = 0; i < bodies.length; i++) {
-          fs.writeFileSync(`result${i + 1}.out`, bodies[i]);
-        }
+        console.log(bodies[0]);
+      }
+      if (commander.time) {
+        console.error('Time of query: %dms', end);
+      }
+      return;
+    }
+    if (['tsv', 'text/tsv', 'n-triples', 'nt', 'turtle', 'ttl'].includes(commander.outfmt)) {
+      let outputStr = '';
+      switch (commander.outfmt) {
+        case 'tsv':
+          outputStr += jsonToTsv(bodies[0], Boolean(commander.vars));
+          for (let i = 1; i < bodies.length; i++) {
+            outputStr += "\n" + jsonToTsv(bodies[i]);
+          }
+          printTsv(outputStr);
+          break;
+        case 'text/tsv':
+          outputStr += bodies[0];
+          // remove header line for i > 0
+          for (let i = 1; i < bodies.length; i++) {
+            if (!bodies[i - 1].endsWith('\n')) {
+              outputStr += '\n';
+            }
+            outputStr += bodies[i].substring(bodies[i].indexOf('\n') + 1);
+          }
+          printTsv(outputStr);
+          break;
+        default:
+          for (let i = 0; i < bodies.length; i++) {
+            console.log(bodies[i]);
+          }
       }
     } else {
-      console.error(util.makeRed('Error: ' + statusCode));
-      for(let body of bodies)
-        console.error(util.makeRed(body));
+      console.error('The results are paginated. Those pages are saved as result1.out, result2.out,....');
+      for (let i = 0; i < bodies.length; i++) {
+        fs.writeFileSync(`result${i + 1}.out`, bodies[i]);
+      }
     }
   });
 } else {
