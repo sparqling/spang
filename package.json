@@ -30,9 +30,8 @@
   },
   "bin": {
     "spang2": "./bin/spang.js",
-    "iri": "./bin/iri.js",
-    "spfmt": "./bin/spfmt.js",
-    "cypher": "./bin/cypher.js"
+    "spang-get": "./bin/spang-get.js",
+    "spang-test": "./bin/spang-test.js"
   },
   "mocha": {
     "timeout": 15000,
