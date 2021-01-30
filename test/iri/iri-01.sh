@@ -1,2 +1,2 @@
 #!/bin/sh
-iri skos -n
+spang-get skos -n
