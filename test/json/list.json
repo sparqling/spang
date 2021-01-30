@@ -7,6 +7,6 @@
   },
   {
     "query": "library/taxonomy/common_ancestor.rq",
-    "expected": "benchmarks/common_ancestor.txt"
+    "expected": "library/taxnomy/common_ancestor.txt"
   }
 ]
