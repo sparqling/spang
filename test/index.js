@@ -5,7 +5,7 @@ const chai = require('chai');
 const assert = chai.assert;
 chai.use(require('chai-fs'));
 
-['core', 'fmt', 'iri', 'function', 'beta'].forEach((subdir) => {
+['core', 'fmt', 'function', 'beta'].forEach((subdir) => {
   describe(subdir, () => {
     fs.readdirSync(`test/${subdir}`).forEach((file) => {
       if (file.endsWith('.sh')) {
