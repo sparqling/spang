@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 fs = require('fs');
-spfmt = require('../lib/spfmt.js');
 
+const parser = require('../lib/template_parser');
+const formatter = require('../lib/formatter.js');
 const version = require('../package.json').version;
 const child_process = require('child_process');
 const search_db_name = require('../lib/search_db_name');
@@ -68,7 +69,12 @@ if (commander.fmt) {
   } else {
     sparqlQuery = input;
   }
-  console.log(spfmt.reformat(sparqlQuery, commander.indent, commander.debug));
+  const syntaxTree = parser.parse(sparqlQuery);
+  if (commander.debug) {
+    console.log(JSON.stringify(syntaxTree, undefined, 2)); // (value, replacer, space)
+  } else {
+    console.log(formatter.format(syntaxTree, commander.indent));
+  }
   process.exit(0);
 }
 
