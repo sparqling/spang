@@ -1,12 +1,18 @@
 [
   {
+    "query": "library/taxonomy/taxon_info.rq"
+  },
+  {
+    "query": "library/taxonomy/taxon_info_ordered.rq"
+  },
+  {
     "query": "library/taxonomy/count_taxa.rq"
   },
   {
-    "query": "library/taxonomy/count_in_taxon_label.rq"
+    "query": "library/taxonomy/count_in_graph.rq"
   },
   {
-    "query": "library/taxonomy/filter_regex.rq"
+    "query": "library/taxonomy/count_from_graph.rq"
   },
   {
     "query": "library/taxonomy/count_classes.rq"
@@ -15,6 +21,15 @@
     "query": "library/taxonomy/count_in_taxon.rq"
   },
   {
+    "query": "library/taxonomy/count_in_taxon_label.rq"
+  },
+  {
+    "query": "library/taxonomy/common_ancestor.rq"
+  },
+  {
     "query": "library/taxonomy/get_hierarchy.rq"
+  },
+  {
+    "query": "library/taxonomy/filter_regex.rq"
   }
 ]
