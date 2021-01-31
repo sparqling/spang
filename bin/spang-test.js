@@ -6,6 +6,8 @@ const csvWriter = require('csv-write-stream');
 const ls = require('ls');
 const path = require('path');
 
+const readFile = (path) => fs.readFileSync(path, 'utf8').toString();
+
 const commander = require('commander')
   .option('-i, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
   .option('-d, --delimiter <DELIMITER>', 'delimiter of output', ',')
@@ -21,39 +23,58 @@ const commander = require('commander')
   .arguments('[json_or_queries...]');
 
 commander.parse(process.argv);
-
 if (commander.args.length < 1) {
   commander.help();
 }
 
-header = ['name'];
+let benchmarks = [];
+for (let arg of commander.args) {
+  if (arg.endsWith('.json')) {
+    benchmarks = benchmarks.concat(JSON.parse(readFile(arg)));
+  } else {
+    benchmarks.push({ query: arg });
+  }
+}
+
+const pattern = commander.pattern ? new RegExp(commander.pattern) : null;
+const exclude = commander.exclude ? new RegExp(commander.exclude) : null;
+
+let header = ['name'];
 header = header.concat(Array.from({ length: commander.iteration }, (_, k) => k + 1));
 if (commander.average) {
   header.push('average');
 }
 
-let writer = csvWriter({
-  separator: commander.delimiter,
-  newline: '\n',
-  headers: header,
-  sendHeaders: true
-});
-
+let writer = csvWriter({ separator: commander.delimiter, newline: '\n', headers: header, sendHeaders: true });
 writer.pipe(process.stdout);
-readFile = (path) => fs.readFileSync(path, 'utf8').toString();
 
-benchmarks = [];
-for (let arg of commander.args) {
-  if (arg.endsWith('.json')) {
-    benchmarks = benchmarks.concat(JSON.parse(readFile(arg)));
-  } else {
-    benchmarks.push({
-      query: arg
-    });
+for (let benchmark of benchmarks) {
+  const queries = ls(benchmark.query);
+  for (let file of queries) {
+    if (pattern && !file.full.match(pattern)) continue;
+    if (exclude && file.full.match(exclude)) continue;
+    let expected = null;
+    const defaultExpectedName = file.full.replace(/\.[^/.]+$/, '') + '.txt';
+    if (!commander.skip_comparison) {
+      if (!benchmark.expected && fs.existsSync(defaultExpectedName)) {
+        expected = readFile(defaultExpectedName);
+      } else if (benchmark.expected) {
+        let files = ls(benchmark.expected);
+        const basename = path.basename(defaultExpectedName);
+        if (files.length == 1) {
+          expected = readFile(files[0].full);
+        } else {
+          const matched = files.find((file) => file.file === basename);
+          if (matched) {
+            expected = readFile(matched.full);
+          }
+        }
+      }
+    }
+    measureQuery(file.full, expected);
   }
 }
-
-let rows = [];
+writer.end();
 
 function measureQuery(queryPath, expected) {
   let row = { name: queryPath };
@@ -96,35 +117,3 @@ function measureQuery(queryPath, expected) {
   }
   writer.write(row);
 }
-
-const pattern = commander.pattern ? new RegExp(commander.pattern) : null;
-const exclude = commander.exclude ? new RegExp(commander.exclude) : null;
-
-for (let benchmark of benchmarks) {
-  const queries = ls(benchmark.query);
-  for (let file of queries) {
-    if (pattern && !file.full.match(pattern)) continue;
-    if (exclude && file.full.match(exclude)) continue;
-    let expected = null;
-    const defaultExpectedName = file.full.replace(/\.[^/.]+$/, '') + '.txt';
-    if (!commander.skip_comparison) {
-      if (!benchmark.expected && fs.existsSync(defaultExpectedName)) {
-        expected = readFile(defaultExpectedName);
-      } else if (benchmark.expected) {
-        let files = ls(benchmark.expected);
-        const basename = path.basename(defaultExpectedName);
-        if (files.length == 1) {
-          expected = readFile(files[0].full);
-        } else {
-          const matched = files.find((file) => file.file === basename);
-          if (matched) {
-            expected = readFile(matched.full);
-          }
-        }
-      }
-    }
-    measureQuery(file.full, expected);
-  }
-}
-
-writer.end();
