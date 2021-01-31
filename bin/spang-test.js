@@ -9,7 +9,7 @@ const path = require('path');
 const readFile = (path) => fs.readFileSync(path, 'utf8').toString();
 
 const commander = require('commander')
-  .option('-i, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
+  .option('-n, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
   .option('-d, --delimiter <DELIMITER>', 'delimiter of output', ',')
   .option('-e, --endpoint <ENDPOINT>', 'url of target endpoint')
   .option('-m, --method <METHOD>', 'method of HTTP requers (GET or POST)', 'GET')
