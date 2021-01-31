@@ -1,20 +1,19 @@
 #!/usr/bin/env node
 
-fs = require('fs');
+const fs = require('fs');
+const child_process = require('child_process');
+const csvParse = require('csv-parse/lib/sync');
+const columnify = require('columnify');
 
+const version = require('../package.json').version;
 const parser = require('../lib/template_parser');
 const formatter = require('../lib/formatter.js');
-const version = require('../package.json').version;
-const child_process = require('child_process');
-const search_db_name = require('../lib/search_db_name');
+const metadataModule = require('../lib/metadata.js');
 const prefixModule = require('../lib/prefix.js');
+const search_db_name = require('../lib/search_db_name');
 const shortcut = require('../lib/shortcut.js').shortcut;
 const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
-const columnify = require('columnify');
-const csvParse = require('csv-parse/lib/sync');
-const metadataModule = require('../lib/metadata.js');
-const util = require('../lib/util.js');
 
 let templatePath;
 let templateSpecified;
@@ -232,7 +231,7 @@ if (/^\w/.test(db)) {
         case 'tsv':
           outputStr += jsonToTsv(bodies[0], Boolean(commander.vars));
           for (let i = 1; i < bodies.length; i++) {
-            outputStr += "\n" + jsonToTsv(bodies[i]);
+            outputStr += '\n' + jsonToTsv(bodies[i]);
           }
           printTsv(outputStr);
           break;
@@ -321,7 +320,6 @@ printTsv = (tsv) => {
 };
 
 function getTemplateURL(templatePath) {
-
   let match = /^github:\/\/([^\/]+)\/([^\/]+)\/(.+)/.exec(templatePath);
   if (match) {
     return `https://raw.githubusercontent.com/${match[1]}/${match[2]}/master/${match[3]}`;
