@@ -14,6 +14,7 @@ const search_db_name = require('../lib/search_db_name');
 const shortcut = require('../lib/shortcut.js').shortcut;
 const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
+const alias = require('../lib/alias.js');
 
 let templatePath;
 let templateSpecified;
@@ -99,6 +100,8 @@ if (commander.prefix) {
   prefixModule.setPrefixFiles([`${__dirname}/../etc/prefix`, `${require('os').homedir()}/.spang/prefix`]);
 }
 
+alias.setAliasFiles([`${__dirname}/../etc/alias`, `${require('os').homedir()}/.spang/alias`]);
+
 if (commander.subject || commander.predicate || commander.object || (commander.limit && !templatePath) || commander.number || commander.graph || commander.from) {
   sparqlTemplate = shortcut(
     { S: commander.subject, P: commander.predicate, O: commander.object, L: commander.limit, N: commander.number, G: commander.graph, F: commander.from },
@@ -107,6 +110,8 @@ if (commander.subject || commander.predicate || commander.object || (commander.l
   templateSpecified = false;
   metadata = {};
 } else {
+  if(templatePath in alias.aliasMap)
+    templatePath = alias.aliasMap[templatePath];
   const templateURL = getTemplateURL(templatePath);
   if (templateURL) {
     const syncRequest = require('sync-request');
