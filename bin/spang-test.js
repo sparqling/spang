@@ -40,10 +40,14 @@ for (let arg of commander.args) {
 const pattern = commander.pattern ? new RegExp(commander.pattern) : null;
 const exclude = commander.exclude ? new RegExp(commander.exclude) : null;
 
-let header = ['name', 'time', 'valid'];
+let header = ['name', 'time'];
 if (commander.average) {
-  header.splice(2, 0, 'average');
+  header.push('average');
 }
+if (!commander.skip_comparison) {
+  header.push('valid');
+}
+
 
 let writer = csvWriter({ separator: commander.delimiter, newline: '\n', headers: header, sendHeaders: true });
 writer.pipe(process.stdout);
@@ -119,7 +123,8 @@ function measureQuery(queryPath, expected) {
     }
   }
   row['time'] = times.join(',');
-  row['valid'] = validations.join(',');
+  if (!commander.skip_comparison)
+    row['valid'] = validations.join(',');
   if (commander.average) {
     let validTimes = times.filter(time => time !== 'null');
     const average = validTimes.map((t) => parseInt(t)).reduce((a, b) => a + b, 0) / validTimes.length;
