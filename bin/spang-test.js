@@ -11,7 +11,7 @@ const readFile = (path) => fs.readFileSync(path, 'utf8').toString();
 const commander = require('commander')
   .option('-c, --command <COMMAND>', 'command', 'spang2')
   .option('-n, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
-  .option('-d, --delimiter <DELIMITER>', 'delimiter of output', ',')
+  .option('-d, --delimiter <DELIMITER>', 'delimiter of output', '\t')
   .option('-e, --endpoint <ENDPOINT>', 'url of target endpoint')
   .option('-m, --method <METHOD>', 'method of HTTP requers (GET or POST)', 'GET')
   .option('-s, --skip_comparison', 'skip comparison with expected result')
@@ -40,10 +40,9 @@ for (let arg of commander.args) {
 const pattern = commander.pattern ? new RegExp(commander.pattern) : null;
 const exclude = commander.exclude ? new RegExp(commander.exclude) : null;
 
-let header = ['name'];
-header = header.concat(Array.from({ length: commander.iteration }, (_, k) => k + 1));
+let header = ['name', 'time', 'valid'];
 if (commander.average) {
-  header.push('average');
+  header.splice(2, 0, 'average');
 }
 
 let writer = csvWriter({ separator: commander.delimiter, newline: '\n', headers: header, sendHeaders: true });
@@ -80,6 +79,7 @@ writer.end();
 function measureQuery(queryPath, expected) {
   let row = { name: queryPath };
   let times = [];
+  let validations = [];
   if (commander.verbose) console.error(queryPath);
   for (let i = 0; i < commander.iteration; i++) {
     let column = (i + 1).toString();
@@ -89,7 +89,9 @@ function measureQuery(queryPath, expected) {
     let result = spawnSync(commander.command, arguments, { maxBuffer: Infinity });
     if (result.status) {
       // error
-      row[column] = result.stderr.toString();
+      console.error(result.stderr.toString());
+      times.push('null');
+      validations.push('null');
     } else {
       let matched = result.stderr.toString().match(/(\d+)ms/);
       if (matched) {
@@ -98,22 +100,29 @@ function measureQuery(queryPath, expected) {
           time = time / 1000;
         }
         times.push(time);
-        if (!expected || expected === result.stdout.toString()) {
-          row[column] = time;
+        if (!expected) {
+          validations.push('null');
+        }
+        else if (expected === result.stdout.toString()) {
+          validations.push('true');
         } else {
-          row[column] = `${time}_wrong`;
+          validations.push('false');
           if (commander.output_error) {
             console.error(result.stdout.toString());
           }
         }
       } else {
-        row[column] = `no_time`;
+        times.push('null');
+        validations.push('null');
       }
+      if (commander.verbose) console.error(`time: ${times[times.length - 1]}, valid: ${validations[validations.length - 1]}`);
     }
-    if (commander.verbose) console.error(row[column]);
   }
+  row['time'] = times.join(',');
+  row['valid'] = validations.join(',');
   if (commander.average) {
-    const average = times.map((t) => parseInt(t)).reduce((a, b) => a + b, 0) / times.length;
+    let validTimes = times.filter(time => time !== 'null');
+    const average = validTimes.map((t) => parseInt(t)).reduce((a, b) => a + b, 0) / validTimes.length;
     row['average'] = average.toString();
   }
   writer.write(row);
