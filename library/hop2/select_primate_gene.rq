@@ -1,0 +1,20 @@
+#!/usr/bin/env spang2
+# @endpoint orthodev
+# @option -a
+
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX hop: <http://purl.org/net/orthordf/hOP/ontology#>
+
+SELECT DISTINCT ?gene
+WHERE {
+  {
+    SELECT ?gene (max(?org_id) as ?max_id)
+    WHERE {
+      ?grp orth:hasHomologousMember ?gene ;
+          orth:organism ?org .
+      ?org dct:identifier ?org_id .
+    }
+  }
+  FILTER (?max_id <= 10)
+}
+ORDER BY ?gene
