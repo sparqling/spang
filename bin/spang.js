@@ -103,10 +103,7 @@ if (commander.prefix) {
 alias.setAliasFiles([`${__dirname}/../etc/alias`, `${require('os').homedir()}/.spang/alias`]);
 
 if (commander.subject || commander.predicate || commander.object || (commander.limit && !templatePath) || commander.number || commander.graph || commander.from) {
-  sparqlTemplate = shortcut(
-    { S: commander.subject, P: commander.predicate, O: commander.object, L: commander.limit, N: commander.number, G: commander.graph, F: commander.from },
-    prefixModule.getPrefixMap()
-  );
+  sparqlTemplate = shortcut({ S: commander.subject, P: commander.predicate, O: commander.object, L: commander.limit, N: commander.number, G: commander.graph, F: commander.from });
   templateSpecified = false;
   metadata = {};
 } else {
