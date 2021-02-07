@@ -42,6 +42,7 @@ const commander = require('commander')
   .option('-G, --graph', 'shortcut to search for graph names (use alone or with -[SPO])')
   .option('-r, --prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
   .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
+  .option('--ignore_local_prefix', 'ignore local prefix files')
   .option('-m, --method <METHOD>', 'GET or POST', 'GET')
   .option('-q, --show_query', 'show query and quit')
   .option('--show_metadata', 'show metadata and quit')
@@ -95,6 +96,7 @@ if (commander.prefix) {
 } else if (commander.ignore) {
   // --prefix has priority over --ignore
   prefixModule.setPrefixFiles([`${__dirname}/../etc/prefix`]);
+} else if (commander.ignore_local_prefix) {
 } else {
   // default paths
   prefixModule.setPrefixFiles([`${__dirname}/../etc/prefix`, `${require('os').homedir()}/.spang/prefix`]);
