@@ -1,0 +1,27 @@
+#!/usr/bin/env spang2
+# @endpoint https://orth.dbcls.jp/sparql-dev
+# @option -vac --time
+# @param specific_tissue=v24_40
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX homologene: <https://ncbi.nlm.nih.gov/homologene/>
+PREFIX taxid: <http://identifiers.org/taxonomy/>
+PREFIX hop: <http://purl.org/net/orthordf/hOP/ontology#>
+
+SELECT ?branch_label ?branch_time_mya (COUNT(?human_gene) AS ?gene_count)
+WHERE {
+  ?branch a hop:HomoloGeneBranch ;
+      rdfs:label ?branch_label ;
+      hop:timeMya ?branch_time_mya .
+  {
+    SELECT ?human_gene (max(?time) as ?branch_time_mya)
+    WHERE {
+      ?grp orth:inDataset homologene: ;
+          orth:hasHomologousMember ?human_gene, ?gene .
+      ?human_gene orth:taxon taxid:9606 .
+      ?gene orth:taxon/hop:branch/hop:timeMya ?time .
+    }
+  }
+}
+ORDER BY ?branch_time_mya
