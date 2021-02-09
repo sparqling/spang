@@ -2,6 +2,8 @@
 const program = require('commander');
 const syncRequest = require('sync-request');
 const prefixModule = require('../lib/prefix.js');
+const initializeConfig = require('../lib/config.js').initialize;
+const alias = require('../lib/alias.js');
 
 program
   .option('-r, --prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
@@ -15,15 +17,10 @@ if (program.args.length == 0) {
   program.help();
 }
 
-if (program.prefix) {
-  prefixModule.setPrefixFiles(program.prefix.split(',').map(path => path.trim()));
-} else if (program.ignore) { // --prefix has priority over --ignore
-  prefixModule.setPrefixFiles([`${__dirname}/../etc/prefix`]);
-} else { // default paths
-  prefixModule.setPrefixFiles([`${__dirname}/../etc/prefix`, `${require('os').homedir()}/.spang/prefix`]);
-}
+initializeConfig(program);
 
-const uri = prefixModule.expandPrefixedUri(program.args[0]);
+const uri = prefixModule.expandPrefixedUri(alias.replaceIfAny(program.args[0]));
+
 if (uri) {
   if (program.quit) {
     console.log(uri);

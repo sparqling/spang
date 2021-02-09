@@ -16,6 +16,7 @@ const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
 const alias = require('../lib/alias.js');
 const util = require('../lib/util.js');
+const initializeConfig = require('../lib/config.js').initialize;
 const { getReasonPhrase } = require('http-status-codes');
 
 let templatePath;
@@ -82,6 +83,8 @@ if (commander.fmt) {
   process.exit(0);
 }
 
+initializeConfig(commander);
+
 const dbMap = search_db_name.listup();
 
 if (commander.args.length < 1) {
@@ -94,27 +97,14 @@ if (commander.args.length < 1) {
   }
 }
 
-if (commander.prefix) {
-  prefixModule.setPrefixFiles(commander.prefix.split(',').map((path) => path.trim()));
-} else if (commander.ignore) {
-  // --prefix has priority over --ignore
-  prefixModule.setPrefixFiles([`${__dirname}/../etc/prefix`]);
-} else if (commander.ignore_local_prefix) {
-} else {
-  // default paths
-  prefixModule.setPrefixFiles([`${__dirname}/../etc/prefix`, `${require('os').homedir()}/.spang/prefix`]);
-}
-
-alias.setAliasFiles([`${__dirname}/../etc/alias`, `${require('os').homedir()}/.spang/alias`]);
 
 if (commander.subject || commander.predicate || commander.object || (commander.limit && !templatePath) || commander.number || commander.graph || commander.from) {
   sparqlTemplate = shortcut({ S: commander.subject, P: commander.predicate, O: commander.object, L: commander.limit, N: commander.number, G: commander.graph, F: commander.from });
   templateSpecified = false;
   metadata = {};
 } else {
-  if(templatePath in alias.aliasMap)
-    templatePath = alias.aliasMap[templatePath];
-  const templateURL = getTemplateURL(templatePath);
+  templatePath = alias.replaceIfAny(templatePath);
+  const templateURL = prefixModule.expandPrefixedUri(templatePath);
   if (templateURL) {
     const syncRequest = require('sync-request');
     sparqlTemplate = syncRequest('GET', templateURL).getBody('utf8');
