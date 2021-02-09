@@ -15,6 +15,7 @@ const shortcut = require('../lib/shortcut.js').shortcut;
 const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
 const alias = require('../lib/alias.js');
+const util = require('../lib/util.js');
 
 let templatePath;
 let templateSpecified;
@@ -24,7 +25,8 @@ let db;
 let parameterArr = [];
 let parameterMap = {};
 let retrieveByGet = true;
-const input = process.stdin.isTTY ? '' : fs.readFileSync(process.stdin.fd, 'utf8');
+
+const input = process.stdin.isTTY ? '' : util.stdinReadSync()
 
 const commander = require('commander')
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
