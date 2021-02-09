@@ -1,0 +1,10 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @input taxid:2
+# @input taxid:9606
+
+SELECT *
+WHERE {
+  VALUES ?taxid { ${INPUT} }
+  ?taxid rdfs:label ?label .
+}
