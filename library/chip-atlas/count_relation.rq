@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @option -a
+# @endpoint https://orth.dbcls.jp/sparql-dev
+
+SELECT (COUNT(*) AS ?count)
+FROM <https://chip-atlas.org/>
+WHERE {
+  ?gene1 obo:RO_0002428 ?gene2 . # "involved in regulation of"
+}

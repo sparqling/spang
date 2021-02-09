@@ -1,0 +1,7 @@
+#!/usr/bin/env spang2
+# @endpoint orthodev
+SELECT *
+WHERE {
+  ?s obo:RO_0002428 ?o .
+}
+LIMIT 10
