@@ -1,6 +1,6 @@
 #!/usr/bin/env spang2
 # @endpoint test
-# @input taxid:9606
+# @input (taxid:9606)
 
 SELECT ?o
 WHERE {

@@ -1,6 +1,5 @@
 # @endpoint test
-# @input taxid:2 owl:Class
-# @input rdfs:label rdfs:Resource
+# @input (taxid:2 rdfs:label)
 
 SELECT ?label
 WHERE {

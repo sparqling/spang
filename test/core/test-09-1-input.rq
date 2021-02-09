@@ -1,5 +1,5 @@
 # @endpoint test
-# @input taxid:2
+# @input (taxid:2)
 
 SELECT ?label
 WHERE {
