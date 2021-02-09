@@ -16,6 +16,7 @@ const constructSparql = require('../lib/construct_sparql.js').constructSparql;
 const querySparql = require('../lib/query_sparql.js');
 const alias = require('../lib/alias.js');
 const util = require('../lib/util.js');
+const { getReasonPhrase } = require('http-status-codes');
 
 let templatePath;
 let templateSpecified;
@@ -213,7 +214,7 @@ if (/^\w/.test(db)) {
   let start = new Date();
   querySparql(db, sparqlTemplate, commander.outfmt, retrieveByGet, (error, statusCode, bodies) => {
     if (error || statusCode != 200) {
-      console.error('Error: ' + statusCode);
+      console.error(`Error: ${statusCode} ${getReasonPhrase(statusCode)}`);
       for (let body of bodies) {
         console.error(body);
       }
