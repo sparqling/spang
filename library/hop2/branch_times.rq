@@ -4,7 +4,6 @@
 
 PREFIX orth: <http://purl.org/net/orth#>
 PREFIX hop: <http://purl.org/net/orthordf/hOP/ontology#>
-PREFIX dct: <http://purl.org/dc/terms/>
 
 SELECT ?gene (GROUP_CONCAT(DISTINCT ?max_time; separator=",") AS ?branch_times)
 WHERE {
