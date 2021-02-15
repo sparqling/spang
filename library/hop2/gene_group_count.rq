@@ -1,0 +1,19 @@
+#!/usr/bin/env spang2
+# @endpoint orthodev
+## @option -vac
+
+PREFIX orth: <http://purl.org/net/orth#>
+PREFIX hop: <http://purl.org/net/orthordf/hOP/ontology#>
+PREFIX dct: <http://purl.org/dc/terms/>
+
+SELECT ?gene (COUNT(DISTINCT ?grp) AS ?group_count)
+WHERE {
+  {
+    SELECT ?gene ?grp
+    WHERE {
+      ?grp orth:inDataset <http://purl.org/net/orthordf/hOP/> ;
+          orth:hasHomologousMember ?gene .
+    }
+  }
+}
+ORDER BY DESC(?group_count)
