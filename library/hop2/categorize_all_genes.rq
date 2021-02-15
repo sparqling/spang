@@ -1,16 +1,18 @@
 #!/usr/bin/env spang2
 # @endpoint orthodev
+# @option -vac
 
 PREFIX orth: <http://purl.org/net/orth#>
 PREFIX hop: <http://purl.org/net/orthordf/hOP/ontology#>
+PREFIX dct: <http://purl.org/dc/terms/>
 
 SELECT ?gene (REPLACE(GROUP_CONCAT(DISTINCT ?cat; separator=","), "[a-m]_", "") AS ?categories)
 WHERE {
   {
     SELECT ?grp ?gene (max(?org_id) as ?max_id)
     WHERE {
-      ?grp orth:hasHomologousMember ?gene .
-      ?grp orth:organism ?org .
+      ?grp orth:hasHomologousMember ?gene ;
+          orth:organism ?org .
       ?org dct:identifier ?org_id .
     }
   }
