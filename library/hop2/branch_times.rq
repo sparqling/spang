@@ -12,7 +12,6 @@ WHERE {
     SELECT ?grp ?gene (max(?time) AS ?max_time)
     WHERE {
       ?grp orth:inDataset <http://purl.org/net/orthordf/hOP/> ;
-          dct:identifier ?grp_id ;
           orth:hasHomologousMember ?gene ;
           orth:organism ?org .
       ?org hop:branchTimeMya ?time .
