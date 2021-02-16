@@ -17,6 +17,7 @@
     "ls": "^0.2.1",
     "mustache": "4.0.0",
     "request": "^2.85.0",
+    "sleep": "^6.3.0",
     "sparqljs": "^3.0.0",
     "sync-request": "^6.1.0"
   },

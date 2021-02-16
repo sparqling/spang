@@ -222,7 +222,14 @@ if (/^\w/.test(db)) {
   }
   let start = new Date();
   querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
-    if (error || statusCode != 200) {
+    if (error?.code === 'ENOTFOUND') {
+      console.error(util.makeRed(`The host of endpoint ${db} cannot be found.`));
+      return;
+    } else if (error?.code === 'ECONNREFUSED') {
+      console.error(util.makeRed(`Connection is refused by the endpoint ${db}.`));
+      return;
+    }
+    else if (error || statusCode != 200) {
       console.error(util.makeRed(`Error: ${statusCode} ${getReasonPhrase(statusCode)}`));
       if(opts.show_error_body) {
         for (let body of bodies) {
