@@ -28,7 +28,7 @@ let parameterArr = [];
 let parameterMap = {};
 let retrieveByGet = true;
 
-const input = process.stdin.isTTY ? '' : util.stdinReadSync()
+const input = process.stdin.isTTY ? '' : util.stdinReadSync();
 
 const commander = require('commander')
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
@@ -102,7 +102,6 @@ if (commander.args.length < 1) {
     commander.help();
   }
 }
-
 
 if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePath) || opts.number || opts.graph || opts.from) {
   sparqlTemplate = shortcut({ S: opts.subject, P: opts.predicate, O: opts.object, L: opts.limit, N: opts.number, G: opts.graph, F: opts.from });
@@ -185,8 +184,9 @@ if (templateSpecified) {
 }
 
 if (opts.show_query) {
-  if(opts.portable)
+  if (opts.portable) {
     sparqlTemplate = metadataModule.makePortable(sparqlTemplate, dbMap);
+  }
   process.stdout.write(sparqlTemplate);
   process.exit(0);
 }
@@ -232,12 +232,12 @@ if (/^\w/.test(db)) {
     }
     if (error || statusCode != 200) {
       console.error(util.makeRed(`Error: ${statusCode} ${getReasonPhrase(statusCode)}`));
-      if(opts.show_error_body) {
+      if (opts.show_error_body) {
         for (let body of bodies) {
           console.error(body);
         }
       } else {
-        console.error(util.makeRed("The body of error response is omitted by default. If you want to check the body, please use --show_error_body option."));
+        console.error(util.makeRed('The body of error response is omitted by default. If you want to check the body, please use --show_error_body option.'));
       }
       return;
     }
