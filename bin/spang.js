@@ -58,6 +58,7 @@ const commander = require('commander')
   .option('--reset_option', 'ignore options specified in query file')
   .helpOption(false)
   .option('-h, --help', 'display help for command') // handle help explicitly
+  .option('--show_error_body', 'show body of response even if error occured')
   .version(version)
   .arguments('[SPARQL_TEMPLATE] [par1=val1,par2=val2,...]')
   .action((s) => {
@@ -219,9 +220,13 @@ if (/^\w/.test(db)) {
   let start = new Date();
   querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
     if (error || statusCode != 200) {
-      console.error(`Error: ${statusCode} ${getReasonPhrase(statusCode)}`);
-      for (let body of bodies) {
-        console.error(body);
+      console.error(util.makeRed(`Error: ${statusCode} ${getReasonPhrase(statusCode)}`));
+      if(opts.show_error_body) {
+        for (let body of bodies) {
+          console.error(body);
+        }
+      } else {
+        console.error(util.makeRed("The body of error response is omitted by default. If you want to check the body, please use --show_error_body option."));
       }
       return;
     }
