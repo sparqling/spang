@@ -13,6 +13,7 @@ const prefixModule = require('../lib/prefix.js');
 const search_db_name = require('../lib/search_db_name');
 const shortcut = require('../lib/shortcut.js').shortcut;
 const constructSparql = require('../lib/construct_sparql.js').constructSparql;
+const makePortable = require('../lib/construct_sparql.js').makePortable;
 const querySparql = require('../lib/query_sparql.js');
 const alias = require('../lib/alias.js');
 const util = require('../lib/util.js');
@@ -174,7 +175,7 @@ parameterArr.forEach((par) => {
 });
 
 if (opts.portable) {
-  process.stdout.write(metadataModule.makePortable(sparqlTemplate, dbMap));
+  process.stdout.write(makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
