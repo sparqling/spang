@@ -66,7 +66,7 @@ const commander = require('commander')
 
 commander.parse(process.argv);
 
-let opts = commander.opts()
+let opts = commander.opts();
 
 if (opts.fmt) {
   let sparqlQuery;
@@ -126,9 +126,11 @@ if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePat
 }
 
 if (templateSpecified && opts.help) {
-  console.log(JSON.stringify(metadata));
+  console.log(`${metadata.title}`);
+  console.log(`endpoint: ${metadata.endpoint}`);
+  console.log(`option: ${metadata.option}`);
   process.exit(0);
-} else if(opts.help) {
+} else if (opts.help) {
   commander.help();
   process.exit(0);
 }
