@@ -89,7 +89,7 @@ if (opts.fmt) {
   process.exit(0);
 }
 
-initializeConfig(commander);
+initializeConfig(opts);
 
 const dbMap = search_db_name.listup();
 
