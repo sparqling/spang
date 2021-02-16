@@ -120,6 +120,11 @@ if (commander.subject || commander.predicate || commander.object || (commander.l
   templateSpecified = true;
 }
 
+if (templateSpecified && commander.help) {
+  console.log(JSON.stringify(metadata));
+  process.exit(0);
+}
+
 if (commander.list_nick_name) {
   console.log('SPARQL endpoints');
   const maxLen = Object.keys(dbMap)
