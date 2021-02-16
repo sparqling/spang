@@ -56,6 +56,8 @@ const commander = require('commander')
   .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
   .option('--time', 'measure time of query execution (exluding construction of query)')
   .option('--reset_option', 'ignore options specified in query file')
+  .helpOption(false)
+  .option('-h, --help', 'display help for command') // handle help explicitly
   .version(version)
   .arguments('[SPARQL_TEMPLATE] [par1=val1,par2=val2,...]')
   .action((s) => {
@@ -64,7 +66,9 @@ const commander = require('commander')
 
 commander.parse(process.argv);
 
-if (commander.fmt) {
+let opts = commander.opts();
+
+if (opts.fmt) {
   let sparqlQuery;
   if (commander.args[0]) {
     sparqlQuery = fs.readFileSync(commander.args[0], 'utf8').toString();
@@ -75,10 +79,10 @@ if (commander.fmt) {
     sparqlQuery = input;
   }
   const syntaxTree = parser.parse(sparqlQuery);
-  if (commander.debug) {
+  if (opts.debug) {
     console.log(JSON.stringify(syntaxTree, undefined, 2)); // (value, replacer, space)
   } else {
-    console.log(formatter.format(syntaxTree, commander.indent));
+    console.log(formatter.format(syntaxTree, opts.indent));
   }
   process.exit(0);
 }
@@ -88,18 +92,18 @@ initializeConfig(commander);
 const dbMap = search_db_name.listup();
 
 if (commander.args.length < 1) {
-  if (!commander.subject && !commander.predicate && !commander.object && !commander.number && !commander.from && !commander.graph && !commander.limit) {
+  if (!opts.subject && !opts.predicate && !opts.object && !opts.number && !opts.from && !opts.graph && !opts.limit) {
     console.error(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
     commander.help();
-  } else if (!commander.endpoint && !dbMap['default']) {
+  } else if (!opts.endpoint && !dbMap['default']) {
     console.error(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
     commander.help();
   }
 }
 
 
-if (commander.subject || commander.predicate || commander.object || (commander.limit && !templatePath) || commander.number || commander.graph || commander.from) {
-  sparqlTemplate = shortcut({ S: commander.subject, P: commander.predicate, O: commander.object, L: commander.limit, N: commander.number, G: commander.graph, F: commander.from });
+if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePath) || opts.number || opts.graph || opts.from) {
+  sparqlTemplate = shortcut({ S: opts.subject, P: opts.predicate, O: opts.object, L: opts.limit, N: opts.number, G: opts.graph, F: opts.from });
   templateSpecified = false;
   metadata = {};
 } else {
@@ -112,15 +116,26 @@ if (commander.subject || commander.predicate || commander.object || (commander.l
     sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
   }
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
-  if (metadata.option && !commander.reset_option) {
+  if (metadata.option && !opts.reset_option) {
     let args = process.argv;
     args = args.concat(metadata.option.split(/\s+/));
     commander.parse(args);
+    opts = commander.opts();
   }
   templateSpecified = true;
 }
 
-if (commander.list_nick_name) {
+if (templateSpecified && opts.help) {
+  console.log(`${metadata.title}`);
+  console.log(`endpoint: ${metadata.endpoint}`);
+  console.log(`option: ${metadata.option}`);
+  process.exit(0);
+} else if (opts.help) {
+  commander.help();
+  process.exit(0);
+}
+
+if (opts.list_nick_name) {
   console.log('SPARQL endpoints');
   const maxLen = Object.keys(dbMap)
     .map((key) => key.length)
@@ -131,8 +146,8 @@ if (commander.list_nick_name) {
   process.exit(0);
 }
 
-if (commander.param) {
-  const params = commander.param.split(',');
+if (opts.param) {
+  const params = opts.param.split(',');
   parameterArr = parameterArr.concat(params);
 }
 
@@ -159,26 +174,26 @@ parameterArr.forEach((par) => {
 
 if (templateSpecified) {
   sparqlTemplate = constructSparql(sparqlTemplate, metadata, parameterMap, positionalArguments, input);
-  if (commander.limit) {
+  if (opts.limit) {
     if (!sparqlTemplate.endsWith('\n')) {
       sparqlTemplate += '\n';
     }
-    sparqlTemplate += `LIMIT ${commander.limit}\n`;
+    sparqlTemplate += `LIMIT ${opts.limit}\n`;
   }
 }
 
-if (commander.show_query) {
+if (opts.show_query) {
   process.stdout.write(sparqlTemplate);
   process.exit(0);
 }
 
-if (commander.show_metadata) {
+if (opts.show_metadata) {
   console.log(JSON.stringify(metadata));
   process.exit(0);
 }
 
-if (commander.endpoint) {
-  db = commander.endpoint;
+if (opts.endpoint) {
+  db = opts.endpoint;
 } else if (metadata.endpoint) {
   db = metadata.endpoint;
 } else if (dbMap['default']) {
@@ -196,13 +211,13 @@ if (/^\w/.test(db)) {
     }
     [db, retrieveByGet] = search_db_name.searchDBName(db);
   }
-  if (/^get$/i.test(commander.method)) {
+  if (/^get$/i.test(opts.method)) {
     retrieveByGet = true;
-  } else if (/^post$/i.test(commander.method)) {
+  } else if (/^post$/i.test(opts.method)) {
     retrieveByGet = false;
   }
   let start = new Date();
-  querySparql(db, sparqlTemplate, commander.outfmt, retrieveByGet, (error, statusCode, bodies) => {
+  querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
     if (error || statusCode != 200) {
       console.error(`Error: ${statusCode} ${getReasonPhrase(statusCode)}`);
       for (let body of bodies) {
@@ -212,21 +227,21 @@ if (/^\w/.test(db)) {
     }
     let end = new Date() - start;
     if (bodies.length == 1) {
-      if (commander.outfmt == 'tsv') {
-        printTsv(jsonToTsv(bodies[0], Boolean(commander.vars)));
+      if (opts.outfmt == 'tsv') {
+        printTsv(jsonToTsv(bodies[0], Boolean(opts.vars)));
       } else {
         console.log(bodies[0]);
       }
-      if (commander.time) {
+      if (opts.time) {
         console.error('Time of query: %dms', end);
       }
       return;
     }
-    if (['tsv', 'text/tsv', 'n-triples', 'nt', 'turtle', 'ttl'].includes(commander.outfmt)) {
+    if (['tsv', 'text/tsv', 'n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
       let outputStr = '';
-      switch (commander.outfmt) {
+      switch (opts.outfmt) {
         case 'tsv':
-          outputStr += jsonToTsv(bodies[0], Boolean(commander.vars));
+          outputStr += jsonToTsv(bodies[0], Boolean(opts.vars));
           for (let i = 1; i < bodies.length; i++) {
             outputStr += '\n' + jsonToTsv(bodies[i]);
           }
@@ -263,7 +278,7 @@ if (/^\w/.test(db)) {
     process.exit(-1);
   }
   // TODO: use Jena or other JS implementation
-  console.log(child_process.execSync(`sparql --data ${db} --results ${commander.outfmt} '${sparqlTemplate}'`).toString());
+  console.log(child_process.execSync(`sparql --data ${db} --results ${opts.outfmt} '${sparqlTemplate}'`).toString());
 }
 
 toString = (resource) => {
@@ -271,13 +286,13 @@ toString = (resource) => {
     return '';
   }
   if (resource.type == 'uri') {
-    if (commander.abbr) {
+    if (opts.abbr) {
       return prefixModule.abbreviateURL(resource.value);
     } else {
       return `<${resource.value}>`;
     }
   } else if (resource.type == 'typed-literal') {
-    if (commander.abbr) {
+    if (opts.abbr) {
       return `"${resource.value}"^^${prefixModule.abbreviateURL(resource.datatype)}`;
     } else {
       return `"${resource.value}"^^<${resource.datatype}>`;
@@ -303,11 +318,11 @@ jsonToTsv = (body, withHeader = false) => {
 };
 
 printTsv = (tsv) => {
-  if (commander.align_column) {
+  if (opts.align_column) {
     console.log(
-      columnify(csvParse(tsv, { columns: Boolean(commander.vars), delimiter: '\t', relax: true }), {
+      columnify(csvParse(tsv, { columns: Boolean(opts.vars), delimiter: '\t', relax: true }), {
         // relax csvParse to accept "hoge"^^xsd:string
-        showHeaders: Boolean(commander.vars),
+        showHeaders: Boolean(opts.vars),
         headingTransform: (x) => x
       }).replace(/\s+$/gm, '')
     );
