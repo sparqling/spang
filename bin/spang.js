@@ -56,6 +56,7 @@ const commander = require('commander')
   .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
   .option('--time', 'measure time of query execution (exluding construction of query)')
   .option('--reset_option', 'ignore options specified in query file')
+  .option('--portable', 'Show query independent of configuration in SPANG_DIR/etc and ~/.spang  (only valid with -q)')
   .helpOption(false)
   .option('-h, --help', 'display help for command') // handle help explicitly
   .option('--show_error_body', 'show body of response even if error occured')
@@ -184,6 +185,8 @@ if (templateSpecified) {
 }
 
 if (opts.show_query) {
+  if(opts.portable)
+    sparqlTemplate = metadataModule.makePortable(sparqlTemplate, dbMap);
   process.stdout.write(sparqlTemplate);
   process.exit(0);
 }
