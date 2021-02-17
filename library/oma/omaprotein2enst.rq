@@ -1,0 +1,11 @@
+#!/usr/bin/env spang2
+# @endpoint oma
+
+PREFIX omainfo: <https://omabrowser.org/oma/info/>
+PREFIX lscr: <http://purl.org/lscr#>
+
+SELECT ?enst
+WHERE {
+  VALUES ?omaprotein { omainfo:HUMAN22168 }
+  ?omaprotein lscr:xrefEnsemblTranscript ?enst .
+}

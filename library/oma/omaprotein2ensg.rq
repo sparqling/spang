@@ -1,0 +1,13 @@
+#!/usr/bin/env spang2
+# @endpoint oma
+
+PREFIX omainfo: <https://omabrowser.org/oma/info/>
+PREFIX sio: <http://semanticscience.org/resource/>
+PREFIX lscr: <http://purl.org/lscr#>
+
+SELECT ?ensg
+WHERE {
+  VALUES ?omaprotein { omainfo:HUMAN22168 }
+  ?omaprotein sio:SIO_010079/lscr:xrefEnsemblGene ?ensg .
+  # "is encoded by"
+}
