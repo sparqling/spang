@@ -2198,6 +2198,16 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
 
   return ex;
 }
+/ 'CONCAT'i WS* args:ExpressionList
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'concat';
+  ex.args = args;
+
+  return ex;
+}
 / SubstringExpression
 / StrReplaceExpression
 / ('COALESCE'/'coalesce') WS* args:ExpressionList
