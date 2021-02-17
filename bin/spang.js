@@ -128,9 +128,27 @@ if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePat
 }
 
 if (templateSpecified && opts.help) {
-  console.log(`${metadata.title}`);
-  console.log(`endpoint: ${metadata.endpoint}`);
-  console.log(`option: ${metadata.option}`);
+  if (metadata.title) {
+    console.log(`${metadata.title}`);
+  }
+  if (metadata.param) {
+    Array.from(metadata.param.entries()).forEach(([k,v]) => {
+      console.log(`parameter: ${k}=${v}`);
+    });
+  }
+  if (metadata.endpoint) {
+    if (dbMap[metadata.endpoint]) {
+      console.log(`endpoint: ${dbMap[metadata.endpoint].url}`);
+    } else {
+      console.log(`endpoint: ${metadata.endpoint}`);
+    }
+  }
+  if (metadata.input) {
+    console.log(`input: ${metadata.input}`);
+  }
+  if (metadata.option) {
+    console.log(`option: ${metadata.option}`);
+  }
   process.exit(0);
 } else if (opts.help) {
   commander.help();
