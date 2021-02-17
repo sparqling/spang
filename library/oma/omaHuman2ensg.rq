@@ -1,0 +1,14 @@
+#!/usr/bin/env spang2
+# @endpoint oma
+# @param db=EnsemblGene
+# @option -a
+
+PREFIX orth: <http://purl.org/net/orth#>
+
+SELECT ?omaprotein ?xref
+WHERE {
+  ?omaprotein orth:organism/obo:RO_0002162 <http://purl.uniprot.org/taxonomy/9606> .
+  # RO_0002162 'in taxon'
+  ?omaprotein sio:SIO_010079/lscr:xref{{db}} ?xref .
+  # SIO_1010079 'is encoded by'
+}
