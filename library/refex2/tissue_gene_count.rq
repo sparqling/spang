@@ -5,7 +5,7 @@
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX refexo: <http://purl.jp/bio/01/refexo#>
 
-SELECT (COUNT(DISTINCT ?gene) AS ?count) ?tissue ?label
+SELECT ?tissue ?label (COUNT(DISTINCT ?gene) AS ?count)
 WHERE {
   GRAPH <https://refex.dbcls.jp/rdf/tissue_specific_genes_gtex_v6> {
     ?ensg refexo:isPositivelySpecificTo ?tissue .
@@ -13,4 +13,4 @@ WHERE {
   ?ensg refexo:ncbigene ?gene .
   ?tissue rdfs:label ?label .
 }
-ORDER BY DESC(?count)
+ORDER BY ?label
