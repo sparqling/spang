@@ -28,6 +28,8 @@ if (commander.args.length < 1) {
   commander.help();
 }
 
+const opts = commander.opts();
+
 let benchmarks = [];
 for (let arg of commander.args) {
   if (arg.endsWith('.json')) {
@@ -37,19 +39,19 @@ for (let arg of commander.args) {
   }
 }
 
-const pattern = commander.pattern ? new RegExp(commander.pattern) : null;
-const exclude = commander.exclude ? new RegExp(commander.exclude) : null;
+const pattern = opts.pattern ? new RegExp(opts.pattern) : null;
+const exclude = opts.exclude ? new RegExp(opts.exclude) : null;
 
 let header = ['name', 'time'];
-if (commander.average) {
+if (opts.average) {
   header.push('average');
 }
-if (!commander.skip_comparison) {
+if (!opts.skip_comparison) {
   header.push('valid');
 }
 
 
-let writer = csvWriter({ separator: commander.delimiter, newline: '\n', headers: header, sendHeaders: true });
+let writer = csvWriter({ separator: opts.delimiter, newline: '\n', headers: header, sendHeaders: true });
 writer.pipe(process.stdout);
 
 for (let benchmark of benchmarks) {
@@ -59,7 +61,7 @@ for (let benchmark of benchmarks) {
     if (exclude && file.full.match(exclude)) continue;
     let expected = null;
     const defaultExpectedName = file.full.replace(/\.[^/.]+$/, '') + '.txt';
-    if (!commander.skip_comparison) {
+    if (!opts.skip_comparison) {
       if (!benchmark.expected && fs.existsSync(defaultExpectedName)) {
         expected = readFile(defaultExpectedName);
       } else if (benchmark.expected) {
@@ -84,13 +86,13 @@ function measureQuery(queryPath, expected) {
   let row = { name: queryPath };
   let times = [];
   let validations = [];
-  if (commander.verbose) console.error(queryPath);
-  for (let i = 0; i < commander.iteration; i++) {
+  if (opts.verbose) console.error(queryPath);
+  for (let i = 0; i < opts.iteration; i++) {
     let column = (i + 1).toString();
-    if (commander.verbose) console.error(`query: ${column}`);
-    let arguments = ['--time', queryPath, '--method', commander.method];
-    if (commander.endpoint) arguments = arguments.concat(['--endpoint', commander.endpoint]);
-    let result = spawnSync(commander.command, arguments, { maxBuffer: Infinity });
+    if (opts.verbose) console.error(`query: ${column}`);
+    let arguments = ['--time', queryPath, '--method', opts.method];
+    if (opts.endpoint) arguments = arguments.concat(['--endpoint', opts.endpoint]);
+    let result = spawnSync(opts.command, arguments, { maxBuffer: Infinity });
     if (result.status) {
       // error
       console.error(result.stderr.toString());
@@ -100,7 +102,7 @@ function measureQuery(queryPath, expected) {
       let matched = result.stderr.toString().match(/(\d+)ms/);
       if (matched) {
         time = matched[1];
-        if (commander.sec) {
+        if (opts.sec) {
           time = time / 1000;
         }
         times.push(time);
@@ -111,7 +113,7 @@ function measureQuery(queryPath, expected) {
           validations.push('true');
         } else {
           validations.push('false');
-          if (commander.output_error) {
+          if (opts.output_error) {
             console.error(result.stdout.toString());
           }
         }
@@ -119,13 +121,13 @@ function measureQuery(queryPath, expected) {
         times.push('null');
         validations.push('null');
       }
-      if (commander.verbose) console.error(`time: ${times[times.length - 1]}, valid: ${validations[validations.length - 1]}`);
+      if (opts.verbose) console.error(`time: ${times[times.length - 1]}, valid: ${validations[validations.length - 1]}`);
     }
   }
   row['time'] = times.join(',');
-  if (!commander.skip_comparison)
+  if (!opts.skip_comparison)
     row['valid'] = validations.join(',');
-  if (commander.average) {
+  if (opts.average) {
     let validTimes = times.filter(time => time !== 'null');
     const average = validTimes.map((t) => parseInt(t)).reduce((a, b) => a + b, 0) / validTimes.length;
     row['average'] = average.toString();
