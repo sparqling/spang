@@ -1,0 +1,14 @@
+#!/usr/bin/env spang2
+# @endpoint orthodev
+# @option -ac
+
+SELECT (COUNT(DISTINCT ?ensg) AS ?count) ?tissue ?tissue_label
+WHERE {
+  GRAPH <http://localhost/tissue_specific_genes_gtex_v6> {
+    ?ensg refexo:isPositivelySpecificTo ?tissue .
+  }
+  # OPTIONAL {
+    ?tissue rdfs:label ?tissue_label .
+  # }
+}
+ORDER BY DESC(?count)

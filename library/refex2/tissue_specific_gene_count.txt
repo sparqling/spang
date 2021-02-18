@@ -1,0 +1,48 @@
+"5392"^^xsd:integer obo:UBERON_0000473 "testis"^^xsd:string
+"2015"^^xsd:integer obo:UBERON_0002037 "cerebellum"^^xsd:string
+"1837"^^xsd:integer obo:UBERON_0009834 "dorsolateral prefrontal cortex"^^xsd:string
+"1773"^^xsd:integer obo:UBERON_0001870 "frontal cortex"^^xsd:string
+"1562"^^xsd:integer obo:UBERON_0009835 "anterior cingulate cortex"^^xsd:string
+"1555"^^xsd:integer obo:UBERON_0001882 "nucleus accumbens"^^xsd:string
+"1543"^^xsd:integer obo:UBERON_0001898 "hypothalamus"^^xsd:string
+"1439"^^xsd:integer obo:UBERON_0001873 "caudate nucleus"^^xsd:string
+"1375"^^xsd:integer obo:UBERON_0000007 "pituitary gland"^^xsd:string
+"1322"^^xsd:integer obo:UBERON_0001876 "amygdala"^^xsd:string
+"1307"^^xsd:integer obo:UBERON_0001954 "Ammon's horn"^^xsd:string
+"1290"^^xsd:integer obo:UBERON_0002106 "spleen"^^xsd:string
+"1259"^^xsd:integer obo:UBERON_0001874 "putamen"^^xsd:string
+"1182"^^xsd:integer obo:UBERON_0002038 "substantia nigra"^^xsd:string
+"1078"^^xsd:integer efo:EFO_0000572    "lymphoblast"^^xsd:string
+"1035"^^xsd:integer obo:UBERON_0006469 "C1 segment of cervical spinal cord"^^xsd:string
+"992"^^xsd:integer  obo:UBERON_0004264 "lower leg skin"^^xsd:string
+"966"^^xsd:integer  obo:UBERON_0036149 "suprapubic skin"^^xsd:string
+"915"^^xsd:integer  obo:UBERON_0001211 "Peyer's patch"^^xsd:string
+"859"^^xsd:integer  obo:UBERON_0008952 "upper lobe of left lung"^^xsd:string
+"839"^^xsd:integer  obo:UBERON_0006920 "esophagus squamous epithelium"^^xsd:string
+"725"^^xsd:integer  obo:UBERON_0001114 "right lobe of liver"^^xsd:string
+"671"^^xsd:integer  obo:UBERON_0001157 "transverse colon"^^xsd:string
+"667"^^xsd:integer  obo:UBERON_0001225 "cortex of kidney"^^xsd:string
+"660"^^xsd:integer  obo:UBERON_0001323 "tibial nerve"^^xsd:string
+"654"^^xsd:integer  obo:UBERON_0013756 "venous blood"^^xsd:string
+"651"^^xsd:integer  obo:UBERON_0006330 "anterior lingual gland"^^xsd:string
+"648"^^xsd:integer  obo:UBERON_0000996 "vagina"^^xsd:string
+"631"^^xsd:integer  obo:UBERON_0002046 "thyroid gland"^^xsd:string
+"562"^^xsd:integer  obo:UBERON_0002367 "prostate gland"^^xsd:string
+"559"^^xsd:integer  efo:EFO_0002009    "fibroblast derived cell line"^^xsd:string
+"479"^^xsd:integer  obo:UBERON_0001496 "ascending aorta"^^xsd:string
+"476"^^xsd:integer  obo:UBERON_0007610 "tibial artery"^^xsd:string
+"444"^^xsd:integer  obo:UBERON_0000992 "ovary"^^xsd:string
+"431"^^xsd:integer  obo:UBERON_0011907 "gastrocnemius medialis"^^xsd:string
+"428"^^xsd:integer  obo:UBERON_0001150 "body of pancreas"^^xsd:string
+"411"^^xsd:integer  obo:UBERON_0000945 "stomach"^^xsd:string
+"405"^^xsd:integer  obo:UBERON_0001159 "sigmoid colon"^^xsd:string
+"361"^^xsd:integer  obo:UBERON_0002369 "adrenal gland"^^xsd:string
+"352"^^xsd:integer  obo:UBERON_0006631 "right atrium auricular region"^^xsd:string
+"351"^^xsd:integer  obo:UBERON_0001621 "coronary artery"^^xsd:string
+"322"^^xsd:integer  obo:UBERON_0000995 "uterus"^^xsd:string
+"319"^^xsd:integer  obo:UBERON_0002190 "subcutaneous adipose tissue"^^xsd:string
+"314"^^xsd:integer  obo:UBERON_0004648 "esophagus muscularis mucosa"^^xsd:string
+"294"^^xsd:integer  obo:UBERON_0006566 "left ventricle myocardium"^^xsd:string
+"283"^^xsd:integer  obo:UBERON_0008367 "breast epithelium"^^xsd:string
+"275"^^xsd:integer  obo:UBERON_0010414 "omental fat pad"^^xsd:string
+"269"^^xsd:integer  obo:UBERON_0004550 "gastroesophageal sphincter"^^xsd:string

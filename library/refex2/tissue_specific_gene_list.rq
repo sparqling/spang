@@ -1,0 +1,14 @@
+#!/usr/bin/env spang2
+# @endpoint orthodev
+# @option -ac
+
+SELECT DISTINCT ?gene ?ensg ?tissue ?tissue_label
+WHERE {
+  GRAPH <http://localhost/tissue_specific_genes_gtex_v6> {
+    ?ensg refexo:isPositivelySpecificTo ?tissue .
+  }
+  ?ensg refexo:ncbigene ?gene .
+  OPTIONAL {
+    ?tissue rdfs:label ?tissue_label .
+  }
+}
