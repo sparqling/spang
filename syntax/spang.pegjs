@@ -2072,14 +2072,14 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 //   | 'CEIL' '(' Expression ')'
 //   | 'FLOOR' '(' Expression ')'
 //   | 'ROUND' '(' Expression ')'
-//   | 'CONCAT' ExpressionList
+//                    | 'CONCAT' ExpressionList
 //                    |  SubstringExpression
 //   | 'STRLEN' '(' Expression ')'
 //                    |  StrReplaceExpression
 //   | 'UCASE' '(' Expression ')'
 //   | 'LCASE' '(' Expression ')'
 //   | 'ENCODE_FOR_URI' '(' Expression ')'
-//   | 'CONTAINS' '(' Expression ',' Expression ')'
+//                    | 'CONTAINS' '(' Expression ',' Expression ')'
 //   | 'STRSTARTS' '(' Expression ',' Expression ')'
 //   | 'STRENDS' '(' Expression ',' Expression ')'
 //   | 'STRBEFORE' '(' Expression ',' Expression ')'
@@ -2210,6 +2210,16 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
 }
 / SubstringExpression
 / StrReplaceExpression
+/ 'CONTAINS'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression'
+  ex.expressionType = 'builtincall'
+  ex.builtincall = 'contains'
+  ex.args = [e1,e2]
+  
+  return ex;
+}
 / ('COALESCE'/'coalesce') WS* args:ExpressionList
 {
   var ex = {};
