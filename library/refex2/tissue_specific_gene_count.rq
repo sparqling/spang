@@ -1,0 +1,27 @@
+#!/usr/bin/env spang2
+# @endpoint https://orth.dbcls.jp/sparql-dev
+# @option -ac --time
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX refexo: <http://purl.jp/bio/01/refexo#>
+
+SELECT ?tissue_uri ?tissue_label (COUNT(?gene) AS ?count)
+WHERE {
+  ?tissue_uri rdfs:label ?tissue_label .
+  {
+    SELECT ?gene (URI(?tissues) AS ?tissue_uri)
+    WHERE {
+      {
+        SELECT ?gene (GROUP_CONCAT(DISTINCT ?tissue; separator=",") AS ?tissues)
+        WHERE {
+          GRAPH <https://refex.dbcls.jp/rdf/tissue_specific_genes_gtex_v6> {
+            ?ensg refexo:isPositivelySpecificTo ?tissue .
+          }
+          ?ensg refexo:ncbigene ?gene .
+        }
+      }
+      FILTER(!CONTAINS(?tissues, ','))
+    }
+  }
+}
+ORDER BY ?tissue_label

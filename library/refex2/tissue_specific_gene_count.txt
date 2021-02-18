@@ -1,0 +1,45 @@
+obo:UBERON_0001954 "Ammon's horn"^^xsd:string                       "6"^^xsd:integer
+obo:UBERON_0006469 "C1 segment of cervical spinal cord"^^xsd:string "44"^^xsd:integer
+obo:UBERON_0001211 "Peyer's patch"^^xsd:string                      "44"^^xsd:integer
+obo:UBERON_0002369 "adrenal gland"^^xsd:string                      "40"^^xsd:integer
+obo:UBERON_0001876 "amygdala"^^xsd:string                           "2"^^xsd:integer
+obo:UBERON_0006330 "anterior lingual gland"^^xsd:string             "17"^^xsd:integer
+obo:UBERON_0001496 "ascending aorta"^^xsd:string                    "32"^^xsd:integer
+obo:UBERON_0001150 "body of pancreas"^^xsd:string                   "52"^^xsd:integer
+obo:UBERON_0001873 "caudate nucleus"^^xsd:string                    "8"^^xsd:integer
+obo:UBERON_0002037 "cerebellum"^^xsd:string                         "490"^^xsd:integer
+obo:UBERON_0001621 "coronary artery"^^xsd:string                    "10"^^xsd:integer
+obo:UBERON_0001225 "cortex of kidney"^^xsd:string                   "42"^^xsd:integer
+obo:UBERON_0009834 "dorsolateral prefrontal cortex"^^xsd:string     "17"^^xsd:integer
+obo:UBERON_0004648 "esophagus muscularis mucosa"^^xsd:string        "12"^^xsd:integer
+obo:UBERON_0006920 "esophagus squamous epithelium"^^xsd:string      "33"^^xsd:integer
+efo:EFO_0002009    "fibroblast derived cell line"^^xsd:string       "137"^^xsd:integer
+obo:UBERON_0001870 "frontal cortex"^^xsd:string                     "14"^^xsd:integer
+obo:UBERON_0011907 "gastrocnemius medialis"^^xsd:string             "62"^^xsd:integer
+obo:UBERON_0001898 "hypothalamus"^^xsd:string                       "16"^^xsd:integer
+obo:UBERON_0006566 "left ventricle myocardium"^^xsd:string          "3"^^xsd:integer
+obo:UBERON_0004264 "lower leg skin"^^xsd:string                     "16"^^xsd:integer
+efo:EFO_0000572    "lymphoblast"^^xsd:string                        "200"^^xsd:integer
+obo:UBERON_0001882 "nucleus accumbens"^^xsd:string                  "8"^^xsd:integer
+obo:UBERON_0010414 "omental fat pad"^^xsd:string                    "13"^^xsd:integer
+obo:UBERON_0000992 "ovary"^^xsd:string                              "92"^^xsd:integer
+obo:UBERON_0000007 "pituitary gland"^^xsd:string                    "98"^^xsd:integer
+obo:UBERON_0002367 "prostate gland"^^xsd:string                     "38"^^xsd:integer
+obo:UBERON_0001874 "putamen"^^xsd:string                            "2"^^xsd:integer
+obo:UBERON_0006631 "right atrium auricular region"^^xsd:string      "1"^^xsd:integer
+obo:UBERON_0001114 "right lobe of liver"^^xsd:string                "184"^^xsd:integer
+obo:UBERON_0001159 "sigmoid colon"^^xsd:string                      "24"^^xsd:integer
+obo:UBERON_0002106 "spleen"^^xsd:string                             "236"^^xsd:integer
+obo:UBERON_0000945 "stomach"^^xsd:string                            "30"^^xsd:integer
+obo:UBERON_0002190 "subcutaneous adipose tissue"^^xsd:string        "44"^^xsd:integer
+obo:UBERON_0002038 "substantia nigra"^^xsd:string                   "2"^^xsd:integer
+obo:UBERON_0036149 "suprapubic skin"^^xsd:string                    "8"^^xsd:integer
+obo:UBERON_0000473 "testis"^^xsd:string                             "4440"^^xsd:integer
+obo:UBERON_0002046 "thyroid gland"^^xsd:string                      "136"^^xsd:integer
+obo:UBERON_0007610 "tibial artery"^^xsd:string                      "52"^^xsd:integer
+obo:UBERON_0001323 "tibial nerve"^^xsd:string                       "134"^^xsd:integer
+obo:UBERON_0001157 "transverse colon"^^xsd:string                   "28"^^xsd:integer
+obo:UBERON_0008952 "upper lobe of left lung"^^xsd:string            "92"^^xsd:integer
+obo:UBERON_0000995 "uterus"^^xsd:string                             "50"^^xsd:integer
+obo:UBERON_0000996 "vagina"^^xsd:string                             "4"^^xsd:integer
+obo:UBERON_0013756 "venous blood"^^xsd:string                       "41"^^xsd:integer
