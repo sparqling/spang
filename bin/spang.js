@@ -254,7 +254,7 @@ if (/^\w/.test(db)) {
     }
     if (statusCode != 200) {
       console.error(`${statusCode} ${getReasonPhrase(statusCode)}`);
-      if (statusCode != 404 && statusCode != 503) {
+      if (statusCode != 404 && statusCode != 414 && statusCode != 503) {
         for (let body of bodies) {
           console.error(body);
         }
