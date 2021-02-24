@@ -60,7 +60,6 @@ const commander = require('commander')
   .option('--portable', 'Show query independent of configuration in SPANG_DIR/etc and ~/.spang')
   .helpOption(false)
   .option('-h, --help', 'display help for command') // handle help explicitly
-  .option('--show_error_body', 'show body of response even if error occured')
   .version(version)
   .arguments('[SPARQL_TEMPLATE] [par1=val1,par2=val2,...]')
   .action((s) => {
@@ -252,13 +251,12 @@ if (/^\w/.test(db)) {
       return;
     }
     if (error || statusCode != 200) {
-      console.error(util.makeRed(`Error: ${statusCode} ${getReasonPhrase(statusCode)}`));
-      if (opts.show_error_body) {
-        for (let body of bodies) {
-          console.error(body);
-        }
-      } else {
-        console.error(util.makeRed('The body of error response is omitted by default. If you want to check the body, please use --show_error_body option.'));
+      console.error(`${statusCode} ${getReasonPhrase(statusCode)}`);
+      if (statusCode == 404 || statusCode == 503) {
+        return
+      }
+      for (let body of bodies) {
+        console.error(body);
       }
       return;
     }
