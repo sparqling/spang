@@ -52,15 +52,15 @@ const commander = require('commander')
   .option('-m, --method <METHOD>', 'GET or POST', 'GET')
   .option('-q, --show_query', 'show query and quit')
   .option('--show_metadata', 'show metadata and quit')
+  .option('-d, --debug', 'debug (output expanded template, or output AST with --fmt)')
   .option('-f, --fmt', 'format the query')
   .option('-i, --indent <DEPTH>', 'indent depth; use with --fmt', 2)
   .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
-  .option('-d, --debug', 'debug (output expanded template, or output AST with --fmt)')
   .option('--time', 'measure time of query execution (exluding construction of query)')
-  .option('-r, --reset_option', 'ignore options specified in query file')
+  .option('-r, --reset_option', 'ignore options specified in query file metadata')
+  .version(version)
   .helpOption(false)
   .option('-h, --help', 'display help for command') // handle help explicitly
-  .version(version)
   .arguments('[SPARQL_TEMPLATE] [par1=val1,par2=val2,...]')
   .action((s) => {
     templatePath = s;
