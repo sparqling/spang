@@ -13,6 +13,7 @@ const prefixModule = require('../lib/prefix.js');
 const search_db_name = require('../lib/search_db_name');
 const shortcut = require('../lib/shortcut.js').shortcut;
 const constructSparql = require('../lib/construct_sparql.js').constructSparql;
+const expandTemplate = require('../lib/construct_sparql.js').expandTemplate;
 const makePortable = require('../lib/construct_sparql.js').makePortable;
 const querySparql = require('../lib/query_sparql.js');
 const alias = require('../lib/alias.js');
@@ -54,10 +55,9 @@ const commander = require('commander')
   .option('-f, --fmt', 'format the query')
   .option('-i, --indent <DEPTH>', 'indent depth; use with --fmt', 2)
   .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
-  .option('-d, --debug', 'debug (output query embedded in URL, or output AST with --fmt)')
+  .option('-d, --debug', 'debug (output expanded template, or output AST with --fmt)')
   .option('--time', 'measure time of query execution (exluding construction of query)')
   .option('--reset_option', 'ignore options specified in query file')
-  .option('--portable', 'Show query independent of configuration in SPANG_DIR/etc and ~/.spang')
   .helpOption(false)
   .option('-h, --help', 'display help for command') // handle help explicitly
   .version(version)
@@ -191,7 +191,8 @@ parameterArr.forEach((par) => {
   }
 });
 
-if (opts.portable) {
+if (opts.debug) {
+  sparqlTemplate = expandTemplate(sparqlTemplate, metadata, parameterMap, positionalArguments, input)
   process.stdout.write(makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
@@ -207,7 +208,7 @@ if (templateSpecified) {
 }
 
 if (opts.show_query) {
-  process.stdout.write(sparqlTemplate);
+  process.stdout.write(makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
