@@ -28,7 +28,7 @@ let metadata;
 let db;
 let parameterArr = [];
 let parameterMap = {};
-let retrieveByGet = true;
+let retrieveByGet = false;
 
 const input = process.stdin.isTTY ? '' : util.stdinReadSync();
 
@@ -49,7 +49,7 @@ const commander = require('commander')
   .option('--prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
   .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
   .option('--ignore_local_prefix', 'ignore local prefix files')
-  .option('-m, --method <METHOD>', 'GET or POST', 'GET')
+  .option('-m, --method <METHOD>', 'specify GET method (default: POST method)')
   .option('-q, --show_query', 'show query and quit')
   .option('--show_metadata', 'show metadata and quit')
   .option('-d, --debug', 'debug (output expanded template, or output AST with --fmt)')
@@ -236,10 +236,8 @@ if (/^\w/.test(db)) {
     }
     [db, retrieveByGet] = search_db_name.searchDBName(db);
   }
-  if (/^get$/i.test(opts.method)) {
+  if (opts.method && /^get$/i.test(opts.method)) {
     retrieveByGet = true;
-  } else if (/^post$/i.test(opts.method)) {
-    retrieveByGet = false;
   }
   let start = new Date();
   querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
