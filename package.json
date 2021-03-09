@@ -18,7 +18,8 @@
     "mustache": "4.0.0",
     "request": "^2.85.0",
     "sparqljs": "^3.0.0",
-    "sync-request": "^6.1.0"
+    "sync-request": "^6.1.0",
+    "temp": "^0.9.4"
   },
   "devDependencies": {
     "browserify": "^16.5.0",

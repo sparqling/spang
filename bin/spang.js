@@ -4,6 +4,7 @@ const fs = require('fs');
 const child_process = require('child_process');
 const csvParse = require('csv-parse/lib/sync');
 const columnify = require('columnify');
+const temp = require('temp');
 
 const version = require('../package.json').version;
 const parser = require('../lib/template_parser');
@@ -56,6 +57,7 @@ const commander = require('commander')
   .option('-f, --fmt', 'format the query')
   .option('-i, --indent <DEPTH>', 'indent depth; use with --fmt', 2)
   .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
+  .option('--stdin', 'read rdf data source from stdin. The format must be Turtle.')
   .option('--time', 'measure time of query execution (exluding construction of query)')
   .option('-r, --reset_option', 'ignore options specified in query file metadata')
   .version(version)
@@ -217,7 +219,9 @@ if (opts.show_metadata) {
   process.exit(0);
 }
 
-if (opts.endpoint) {
+if (opts.stdin) {
+  db = '';
+} else if (opts.endpoint) {
   db = opts.endpoint;
 } else if (metadata.endpoint) {
   db = metadata.endpoint;
@@ -312,14 +316,20 @@ if(queryToRemote) {
     }
   });
 } else {
-  if (db == '-') {
-    // TODO: save input as a temporary file name
+  let tmpFile = null;
+  if (opts.stdin) {
+    // Save input as a temporary file assuming the format is turtle
+    tmpFile = temp.path({suffix: '.ttl'});
+    fs.writeFileSync(tmpFile, input);
+    db = tmpFile;
   } else if (!fs.existsSync(db)) {
     console.error(`${db}: no such file or endpoint`);
     process.exit(-1);
   }
   // TODO: use Jena or other JS implementation
   console.log(child_process.execSync(`sparql --data ${db} --results ${opts.outfmt} '${sparqlTemplate}'`).toString());
+  if(tmpFile)
+    fs.unlinkSync(tmpFile);
 }
 
 toString = (resource) => {
