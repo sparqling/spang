@@ -34,6 +34,7 @@ let benchmarks = [];
 for (let arg of commander.args) {
   if (arg.endsWith('.json')) {
     benchmarks = benchmarks.concat(JSON.parse(readFile(arg)));
+    process.chdir(path.dirname(arg));
   } else {
     benchmarks.push({ query: arg });
   }
@@ -56,6 +57,9 @@ writer.pipe(process.stdout);
 
 for (let benchmark of benchmarks) {
   const queries = ls(benchmark.query);
+  if(queries.length === 0) {
+    console.error(`Warning: Query "${benchmark.query}" is specified but no matched files are found.`);
+  }
   for (let file of queries) {
     if (pattern && !file.full.match(pattern)) continue;
     if (exclude && file.full.match(exclude)) continue;
