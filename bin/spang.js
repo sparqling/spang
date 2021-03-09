@@ -228,14 +228,20 @@ if (opts.endpoint) {
   process.exit(-1);
 }
 
+let queryToRemote = true;
 if (/^\w/.test(db)) {
   if (!/^(http|https):\/\//.test(db)) {
     if (!dbMap[db]) {
-      console.error(`${db}: no such endpoint`);
-      process.exit(-1);
+      queryToRemote = false;
+    } else {
+      [db, retrieveByGet] = search_db_name.searchDBName(db);
     }
-    [db, retrieveByGet] = search_db_name.searchDBName(db);
   }
+} else {
+  queryToRemote = false;
+}
+
+if(queryToRemote) {
   if (opts.method && /^get$/i.test(opts.method)) {
     retrieveByGet = true;
   }
@@ -309,7 +315,7 @@ if (/^\w/.test(db)) {
   if (db == '-') {
     // TODO: save input as a temporary file name
   } else if (!fs.existsSync(db)) {
-    console.error(`${db}: no such file`);
+    console.error(`${db}: no such file or endpoint`);
     process.exit(-1);
   }
   // TODO: use Jena or other JS implementation
