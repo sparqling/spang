@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const program = require('commander')
+const program = require('commander');
 const child_process = require('child_process');
 const csvParse = require('csv-parse/lib/sync');
 const columnify = require('columnify');
@@ -136,7 +136,7 @@ if (templateSpecified && opts.help) {
     console.log(`${metadata.title}`);
   }
   if (metadata.param) {
-    Array.from(metadata.param.entries()).forEach(([k,v]) => {
+    Array.from(metadata.param.entries()).forEach(([k, v]) => {
       console.log(`parameter: ${k}=${v}`);
     });
   }
@@ -197,7 +197,7 @@ parameterArr.forEach((par) => {
 });
 
 if (opts.debug) {
-  sparqlTemplate = expandTemplate(sparqlTemplate, metadata, parameterMap, positionalArguments, input)
+  sparqlTemplate = expandTemplate(sparqlTemplate, metadata, parameterMap, positionalArguments, input);
   process.stdout.write(makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
@@ -248,7 +248,7 @@ if (/^\w/.test(db)) {
   queryToRemote = false;
 }
 
-if(queryToRemote) {
+if (queryToRemote) {
   if (opts.method && /^get$/i.test(opts.method)) {
     retrieveByGet = true;
   }
@@ -322,7 +322,7 @@ if(queryToRemote) {
   let tmpFile = null;
   if (opts.stdin) {
     // Save input as a temporary file assuming the format is turtle
-    tmpFile = temp.path({suffix: '.ttl'});
+    tmpFile = temp.path({ suffix: '.ttl' });
     fs.writeFileSync(tmpFile, input);
     db = tmpFile;
   } else if (!fs.existsSync(db)) {
@@ -331,8 +331,9 @@ if(queryToRemote) {
   }
   // TODO: use Jena or other JS implementation
   console.log(child_process.execSync(`sparql --data ${db} --results ${opts.outfmt} '${sparqlTemplate}'`).toString());
-  if(tmpFile)
+  if (tmpFile) {
     fs.unlinkSync(tmpFile);
+  }
 }
 
 toString = (resource) => {
