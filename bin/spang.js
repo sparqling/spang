@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
+const commander = require('commander')
 const child_process = require('child_process');
 const csvParse = require('csv-parse/lib/sync');
 const columnify = require('columnify');
@@ -33,7 +34,7 @@ let retrieveByGet = false;
 
 const input = process.stdin.isTTY ? '' : util.stdinReadSync();
 
-const commander = require('commander')
+const opts = commander
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
   .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
   .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
@@ -63,14 +64,16 @@ const commander = require('commander')
   .version(version)
   .helpOption(false)
   .option('-h, --help', 'display help for command') // handle help explicitly
-  .arguments('[SPARQL_TEMPLATE] [par1=val1,par2=val2,...]')
+  .arguments('[SPARQL_TEMPLATE] [PARAMS]')
+  .description('', {
+    SPARQL_TEMPLATE: 'SPARQL template',
+    PARAMS: '[par1=]val1 [par2=]val2 ...'
+  })
   .action((s) => {
     templatePath = s;
-  });
-
-commander.parse(process.argv);
-
-let opts = commander.opts();
+  })
+  .parse(process.argv)
+  .opts();
 
 if (opts.fmt) {
   let sparqlQuery;
