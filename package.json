@@ -33,7 +33,8 @@
   "bin": {
     "spang2": "./bin/spang.js",
     "spang-get": "./bin/spang-get.js",
-    "spang-test": "./bin/spang-test.js"
+    "spang-bench": "./bin/spang-bench.js",
+    "spang-neo": "./bin/spang-neo.js"
   },
   "mocha": {
     "timeout": 15000,
