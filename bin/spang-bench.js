@@ -51,13 +51,12 @@ if (!opts.skip_comparison) {
   header.push('valid');
 }
 
-
 let writer = csvWriter({ separator: opts.delimiter, newline: '\n', headers: header, sendHeaders: true });
 writer.pipe(process.stdout);
 
 for (let benchmark of benchmarks) {
   const queries = ls(benchmark.query);
-  if(queries.length === 0) {
+  if (queries.length === 0) {
     console.error(`Warning: Query "${benchmark.query}" is specified but no matched files are found.`);
   }
   for (let file of queries) {
@@ -112,8 +111,7 @@ function measureQuery(queryPath, expected) {
         times.push(time);
         if (!expected) {
           validations.push('null');
-        }
-        else if (expected === result.stdout.toString()) {
+        } else if (expected === result.stdout.toString()) {
           validations.push('true');
         } else {
           validations.push('false');
@@ -129,10 +127,11 @@ function measureQuery(queryPath, expected) {
     }
   }
   row['time'] = times.join(',');
-  if (!opts.skip_comparison)
+  if (!opts.skip_comparison) {
     row['valid'] = validations.join(',');
+  }
   if (opts.average) {
-    let validTimes = times.filter(time => time !== 'null');
+    let validTimes = times.filter((time) => time !== 'null');
     const average = validTimes.map((t) => parseInt(t)).reduce((a, b) => a + b, 0) / validTimes.length;
     row['average'] = average.toString();
   }
