@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const commander = require('commander')
+const program = require('commander')
 const child_process = require('child_process');
 const csvParse = require('csv-parse/lib/sync');
 const columnify = require('columnify');
@@ -34,7 +34,7 @@ let retrieveByGet = false;
 
 const input = process.stdin.isTTY ? '' : util.stdinReadSync();
 
-const opts = commander
+const opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
   .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
   .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
@@ -77,8 +77,8 @@ const opts = commander
 
 if (opts.fmt) {
   let sparqlQuery;
-  if (commander.args[0]) {
-    sparqlQuery = fs.readFileSync(commander.args[0], 'utf8').toString();
+  if (program.args[0]) {
+    sparqlQuery = fs.readFileSync(program.args[0], 'utf8').toString();
   } else if (process.stdin.isTTY) {
     console.error('Format SPARQL query: input is required');
     process.exit(-1);
@@ -98,13 +98,13 @@ initializeConfig(opts);
 
 const dbMap = search_db_name.listup();
 
-if (commander.args.length < 1) {
+if (program.args.length < 1) {
   if (!opts.subject && !opts.predicate && !opts.object && !opts.number && !opts.from && !opts.graph && !opts.limit) {
     console.error(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
-    commander.help();
+    program.help();
   } else if (!opts.endpoint && !dbMap['default']) {
     console.error(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
-    commander.help();
+    program.help();
   }
 }
 
@@ -125,8 +125,8 @@ if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePat
   if (metadata.option && !opts.reset_option) {
     let args = process.argv;
     args = args.concat(metadata.option.split(/\s+/));
-    commander.parse(args);
-    opts = commander.opts();
+    program.parse(args);
+    opts = program.opts();
   }
   templateSpecified = true;
 }
@@ -155,7 +155,7 @@ if (templateSpecified && opts.help) {
   }
   process.exit(0);
 } else if (opts.help) {
-  commander.help();
+  program.help();
   process.exit(0);
 }
 
@@ -175,8 +175,8 @@ if (opts.param) {
   parameterArr = parameterArr.concat(params);
 }
 
-if (commander.args.length > 1) {
-  const params = commander.args.slice(1).map((par) => par.split(','));
+if (program.args.length > 1) {
+  const params = program.args.slice(1).map((par) => par.split(','));
   parameterArr = parameterArr.concat(params.flat());
 }
 
