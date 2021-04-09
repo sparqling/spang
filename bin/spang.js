@@ -38,7 +38,7 @@ const opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
   .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
   .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
-  .option('-c, --align_column', 'align output columns (only valid for tsv)')
+  .option('-c, --align-column', 'align output columns (only valid for tsv)')
   .option('-a, --abbr', 'abbreviate results using predefined prefixes')
   .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
   .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
@@ -50,17 +50,17 @@ const opts = program
   .option('-G, --graph', 'shortcut to search for graph names (use alone or with -[SPO])')
   .option('--prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
   .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
-  .option('--ignore_local_prefix', 'ignore local prefix files')
+  .option('--ignore-local-prefix', 'ignore local prefix files')
   .option('-m, --method <METHOD>', 'specify GET method (default: POST method)')
-  .option('-q, --show_query', 'show query and quit')
-  .option('--show_metadata', 'show metadata and quit')
+  .option('-q, --show-query', 'show query and quit')
+  .option('--show-metadata', 'show metadata and quit')
   .option('-d, --debug', 'debug (output expanded template, or output AST with --fmt)')
   .option('-f, --fmt', 'format the query')
   .option('-i, --indent <DEPTH>', 'indent depth; use with --fmt', 2)
-  .option('-l, --list_nick_name', 'list up available nicknames of endpoints and quit')
+  .option('-l, --list-nick-name', 'list up available nicknames of endpoints and quit')
   .option('--stdin', 'read rdf data source from stdin. The format must be Turtle.')
   .option('--time', 'measure time of query execution (exluding construction of query)')
-  .option('-r, --reset_option', 'ignore options specified in query file metadata')
+  .option('-r, --reset-option', 'ignore options specified in query file metadata')
   .version(version)
   .helpOption(false)
   .option('-h, --help', 'display help for command') // handle help explicitly
@@ -122,7 +122,7 @@ if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePat
     sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
   }
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
-  if (metadata.option && !opts.reset_option) {
+  if (metadata.option && !opts.resetOption) {
     let args = process.argv;
     args = args.concat(metadata.option.split(/\s+/));
     program.parse(args);
@@ -159,7 +159,7 @@ if (templateSpecified && opts.help) {
   process.exit(0);
 }
 
-if (opts.list_nick_name) {
+if (opts.listNickName) {
   console.log('SPARQL endpoints');
   const maxLen = Object.keys(dbMap)
     .map((key) => key.length)
@@ -212,12 +212,12 @@ if (templateSpecified) {
   }
 }
 
-if (opts.show_query) {
+if (opts.showQuery) {
   process.stdout.write(makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
-if (opts.show_metadata) {
+if (opts.showMetadata) {
   console.log(JSON.stringify(metadata));
   process.exit(0);
 }
@@ -373,7 +373,7 @@ jsonToTsv = (body, withHeader = false) => {
 };
 
 printTsv = (tsv) => {
-  if (opts.align_column) {
+  if (opts.alignColumn) {
     console.log(
       columnify(csvParse(tsv, { columns: Boolean(opts.vars), delimiter: '\t', relax: true }), {
         // relax csvParse to accept "hoge"^^xsd:string
