@@ -336,7 +336,7 @@ if (queryToRemote) {
   }
 }
 
-toString = (resource) => {
+function toString(resource) {
   if (!resource) {
     return '';
   }
@@ -357,7 +357,7 @@ toString = (resource) => {
   }
 };
 
-jsonToTsv = (body, withHeader = false) => {
+function jsonToTsv(body, withHeader = false) {
   const obj = JSON.parse(body);
   const vars = obj.head.vars;
   let tsv = '';
@@ -372,7 +372,7 @@ jsonToTsv = (body, withHeader = false) => {
   return tsv;
 };
 
-printTsv = (tsv) => {
+function printTsv(tsv) {
   if (opts.alignColumn) {
     console.log(
       columnify(csvParse(tsv, { columns: Boolean(opts.vars), delimiter: '\t', relax: true }), {
