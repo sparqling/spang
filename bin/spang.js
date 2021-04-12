@@ -171,13 +171,12 @@ if (opts.listNickName) {
 }
 
 if (opts.param) {
-  const params = opts.param.split(',');
-  parameterArr = parameterArr.concat(params);
+  parameterArr = parameterArr.concat(opts.param.split(','));
 }
 
 if (program.args.length > 1) {
-  const params = program.args.slice(1).map((par) => par.split(','));
-  parameterArr = parameterArr.concat(params.flat());
+  const params = program.args.slice(1).map((par) => par.split(',')).flat();
+  parameterArr = parameterArr.concat(params);
 }
 
 let positionalArguments = [];
