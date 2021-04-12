@@ -196,7 +196,10 @@ parameterArr.forEach((par) => {
   }
 });
 
+db = getDB();
+
 if (opts.debug) {
+  console.error(db);
   sparqlTemplate = expandTemplate(sparqlTemplate, metadata, parameterMap, positionalArguments, input);
   process.stdout.write(makePortable(sparqlTemplate, dbMap));
   process.exit(0);
@@ -220,19 +223,6 @@ if (opts.showQuery) {
 if (opts.showMetadata) {
   console.log(JSON.stringify(metadata));
   process.exit(0);
-}
-
-if (opts.stdin) {
-  db = '';
-} else if (opts.endpoint) {
-  db = opts.endpoint;
-} else if (metadata.endpoint) {
-  db = metadata.endpoint;
-} else if (dbMap['default']) {
-  db = dbMap['default'].url;
-} else {
-  console.error('Endpoint is required');
-  process.exit(-1);
 }
 
 let queryToRemote = true;
@@ -399,5 +389,20 @@ function getTemplateURL(templatePath) {
 
   if (/^(http|https):\/\//.test(templatePath)) {
     return templatePath;
+  }
+}
+
+function getDB() {
+  if (opts.stdin) {
+    return '';
+  } else if (opts.endpoint) {
+    return opts.endpoint;
+  } else if (metadata.endpoint) {
+    return metadata.endpoint;
+  } else if (dbMap['default']) {
+    return dbMap['default'].url;
+  } else {
+    console.error('Endpoint is required');
+    process.exit(-1);
   }
 }
