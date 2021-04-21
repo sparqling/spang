@@ -28,7 +28,6 @@ let templateSpecified;
 let sparqlTemplate;
 let metadata;
 let db;
-let parameterMap = {};
 let retrieveByGet = false;
 
 const input = process.stdin.isTTY ? '' : util.stdinReadSync();
@@ -168,19 +167,17 @@ if (opts.listNickName) {
   process.exit(0);
 }
 
-let positionalArguments = [];
-let inPositional = true;
-program.args.slice(1).forEach((p) => {
-  [k, v] = p.split(/=(.+)/);
+let parameterArr = [];
+let parameterMap = {};
+program.args.slice(1).forEach((arg) => {
+  [k, v] = arg.split(/=(.+)/);
   if (v) {
-    inPositional = false;
     parameterMap[k] = v;
+  } else if (Object.keys(parameterMap).length === 0) {
+    parameterArr.push(arg);
   } else {
-    if (!inPositional) {
-      console.error(`Positional arguments must precede named arguments: ${p}`);
-      process.exit(-1);
-    }
-    positionalArguments.push(p);
+    console.error(`ERROR: Unnamed parameter ${arg} must precede the named ones`);
+    process.exit(-1);
   }
 });
 
@@ -188,13 +185,13 @@ db = getDB();
 
 if (opts.debug) {
   console.error(db);
-  sparqlTemplate = expandTemplate(sparqlTemplate, metadata, parameterMap, positionalArguments, input);
+  sparqlTemplate = expandTemplate(sparqlTemplate, metadata, parameterMap, parameterArr, input);
   process.stdout.write(makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
 if (templateSpecified) {
-  sparqlTemplate = constructSparql(sparqlTemplate, metadata, parameterMap, positionalArguments, input);
+  sparqlTemplate = constructSparql(sparqlTemplate, metadata, parameterMap, parameterArr, input);
   if (opts.limit) {
     if (!sparqlTemplate.endsWith('\n')) {
       sparqlTemplate += '\n';
