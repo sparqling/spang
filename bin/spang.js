@@ -28,7 +28,6 @@ let templateSpecified;
 let sparqlTemplate;
 let metadata;
 let db;
-let parameterArr = [];
 let parameterMap = {};
 let retrieveByGet = false;
 
@@ -36,7 +35,6 @@ const input = process.stdin.isTTY ? '' : util.stdinReadSync();
 
 const opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
-  .option('-p, --param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
   .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
   .option('-c, --align-column', 'align output columns (only valid for tsv)')
   .option('-a, --abbr', 'abbreviate results using predefined prefixes')
@@ -67,7 +65,7 @@ const opts = program
   .arguments('[SPARQL_TEMPLATE] [PARAMS]')
   .description('', {
     SPARQL_TEMPLATE: 'SPARQL template',
-    PARAMS: '[par1=]val1 [par2=]val2 ...'
+    PARAMS: 'par1=val1 par2=val2 ...'
   })
   .action((s) => {
     templatePath = s;
@@ -170,28 +168,19 @@ if (opts.listNickName) {
   process.exit(0);
 }
 
-if (opts.param) {
-  parameterArr = parameterArr.concat(opts.param.split(','));
-}
-
-if (program.args.length > 1) {
-  const params = program.args.slice(1).map((par) => par.split(',')).flat();
-  parameterArr = parameterArr.concat(params);
-}
-
 let positionalArguments = [];
 let inPositional = true;
-parameterArr.forEach((par) => {
-  [k, v] = par.split(/=(.+)/);
+program.args.slice(1).forEach((p) => {
+  [k, v] = p.split(/=(.+)/);
   if (v) {
     inPositional = false;
     parameterMap[k] = v;
   } else {
     if (!inPositional) {
-      console.error(`Positional arguments must precede named arguments: ${parameterArr}`);
+      console.error(`Positional arguments must precede named arguments: ${p}`);
       process.exit(-1);
     }
-    positionalArguments.push(par);
+    positionalArguments.push(p);
   }
 });
 
