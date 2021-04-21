@@ -1,0 +1,10 @@
+#!/usr/bin/env spang2
+
+SELECT ?ancestor
+WHERE {
+  ?tax1 rdfs:subClassOf ?ancestor .
+  ?tax2 rdfs:subClassOf ?ancestor .
+  taxid:{{taxid1}} rdfs:subClassOf* ?tax1 .
+  taxid:{{taxid2}} rdfs:subClassOf* ?tax2 .
+  FILTER(?tax1 != ?tax2)
+}
