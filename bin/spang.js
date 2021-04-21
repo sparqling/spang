@@ -120,9 +120,7 @@ if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePat
   }
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
   if (metadata.option && !opts.resetOption) {
-    let args = process.argv;
-    args = args.concat(metadata.option.split(/\s+/));
-    program.parse(args);
+    program.parse(process.argv.concat(metadata.option.split(/\s+/)));
     opts = program.opts();
   }
   templateSpecified = true;
