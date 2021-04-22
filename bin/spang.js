@@ -168,9 +168,10 @@ if (opts.listNickName) {
 let paramsArr = [];
 let paramsMap = {};
 program.args.slice(1).forEach((arg) => {
-  [k, v] = arg.split(/=(.+)/);
-  if (v) {
-    paramsMap[k] = v;
+  const matched = arg.match(/^(\S+?)=(.*)$/);
+  if (matched) {
+    const [, p, v] = matched;
+    paramsMap[p] = v;
   } else if (Object.keys(paramsMap).length === 0) {
     paramsArr.push(arg);
   } else {
