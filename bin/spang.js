@@ -165,16 +165,16 @@ if (opts.listNickName) {
   process.exit(0);
 }
 
-let parameterArr = [];
-let parameterMap = {};
+let paramsArr = [];
+let paramsMap = {};
 program.args.slice(1).forEach((arg) => {
   [k, v] = arg.split(/=(.+)/);
   if (v) {
-    parameterMap[k] = v;
-  } else if (Object.keys(parameterMap).length === 0) {
-    parameterArr.push(arg);
+    paramsMap[k] = v;
+  } else if (Object.keys(paramsMap).length === 0) {
+    paramsArr.push(arg);
   } else {
-    console.error(`ERROR: Unnamed parameter ${arg} must precede the named ones`);
+    console.error(`ERROR: Unnamed '${arg}' specified after named params`);
     process.exit(-1);
   }
 });
@@ -183,13 +183,13 @@ db = getDB();
 
 if (opts.debug) {
   console.error(db);
-  sparqlTemplate = expandTemplate(sparqlTemplate, metadata, parameterMap, parameterArr, input);
+  sparqlTemplate = expandTemplate(sparqlTemplate, metadata, paramsMap, paramsArr, input);
   process.stdout.write(makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
 if (templateSpecified) {
-  sparqlTemplate = constructSparql(sparqlTemplate, metadata, parameterMap, parameterArr, input);
+  sparqlTemplate = constructSparql(sparqlTemplate, metadata, paramsMap, paramsArr, input);
   if (opts.limit) {
     if (!sparqlTemplate.endsWith('\n')) {
       sparqlTemplate += '\n';
