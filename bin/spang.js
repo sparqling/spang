@@ -32,7 +32,7 @@ let retrieveByGet = false;
 
 const input = process.stdin.isTTY ? '' : util.stdinReadSync();
 
-const opts = program
+let opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
   .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
   .option('-c, --align-column', 'align output columns (only valid for tsv)')
