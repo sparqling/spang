@@ -772,10 +772,10 @@ function peg$parse(input, options) {
                 quadsContext: quads}
       },
       peg$c137 = function(b, bs) {
-        var triples = b.triplesContext;
-        if(bs != null && typeof(bs) === 'object') {
-          if(bs.length != null) {
-            if(bs[3] != null && bs[3].triplesContext!=null) {
+        let triples = b.triplesContext;
+        if (bs != null && typeof(bs) === 'object') {
+          if (bs.length != null) {
+            if (bs[3] != null && bs[3].triplesContext!=null) {
               triples = triples.concat(bs[3].triplesContext);
             }
           }
@@ -783,117 +783,108 @@ function peg$parse(input, options) {
         
         return {
           token:'triplestemplate',
+          triplesContext: triples,
           location: location(),
-          triplesContext: triples
         };
       },
       peg$c138 = function(p) {
         return p;
       },
       peg$c139 = function(tb, tbs) {
-        var subpatterns = [];
-        if(tb != null && tb != []) {
-          subpatterns.push(tb);
+        let blocks = [];
+        if (tb != null && tb != []) {
+          blocks.push(tb);
         }
-        
-        for(var i=0; i<tbs.length; i++) {
-          for(var j=0; j< tbs[i].length; j++) {
-            if(tbs[i][j] != null && tbs[i][j].token != null) {
-              subpatterns.push(tbs[i][j]);
+        for (let i = 0; i < tbs.length; i++) {
+          for (let j = 0; j < tbs[i].length; j++) {
+            if (tbs[i][j] != null && tbs[i][j].token != null) {
+              blocks.push(tbs[i][j]);
             }
           }
         }
         
-        var compactedSubpatterns = [];
-        
-        var currentBasicGraphPatterns = [];
-        var currentFilters = [];
-        var currentBinds = [];
-        
-        for(var i=0; i<subpatterns.length; i++) {
-          if(subpatterns[i].token!=='triplespattern' && subpatterns[i].token !== 'filter' && subpatterns[i].token !== 'bind') {
-            if(currentBasicGraphPatterns.length != 0 || currentFilters.length != 0) {
-              var triplesContext = [];
-              for(var j=0; j<currentBasicGraphPatterns.length; j++) {
-                triplesContext = triplesContext.concat(currentBasicGraphPatterns[j].triplesContext);
-              }
-              if(triplesContext.length > 0) {
-                compactedSubpatterns.push(
-                          {token: 'basicgraphpattern',
-                           location: location(),
-                           triplesContext: triplesContext});
-              }
-              currentBasicGraphPatterns = [];
-            }
-            compactedSubpatterns.push(subpatterns[i]);
+        let filters = [];
+        let binds = [];
+        let patterns = [];
+        let tmpPatterns = [];
+        blocks.forEach((block) => {
+          if (block.token === 'filter') {
+            filters.push(block);
+          } else if (block.token === 'bind') {
+            binds.push(block);
+          } else if (block.token === 'triplespattern') {
+            tmpPatterns.push(block);
           } else {
-            if(subpatterns[i].token === 'triplespattern') {
-              currentBasicGraphPatterns.push(subpatterns[i]);
-            } else if(subpatterns[i].token === 'bind') {
-              currentBinds.push(subpatterns[i]);
-              
-            } else {
-              currentFilters.push(subpatterns[i]);
+            if (tmpPatterns.length != 0 || filters.length != 0) {
+              const tmpContext = tmpPatterns.map(pattern => pattern.triplesContext).flat();
+              if (tmpContext.length > 0) {
+                patterns.push({ token: 'basicgraphpattern', location: location(), triplesContext: tmpContext });
+              }
+              tmpPatterns = [];
             }
+            patterns.push(block);
+          }
+        });
+        
+        if (tmpPatterns.length != 0 || filters.length != 0) {
+          // let triplesContext = [];
+          // for (let j = 0; j < tmpPatterns.length; j++) {
+          //   triplesContext = triplesContext.concat(tmpPatterns[j].triplesContext);
+          // }
+          // if (triplesContext.length > 0) {
+          //   patterns.push({ token: 'basicgraphpattern', location: location(), triplesContext: triplesContext });
+          // }
+          const tmpContext = tmpPatterns.map(pattern => pattern.triplesContext).flat();
+          if (tmpContext.length > 0) {
+            patterns.push({ token: 'basicgraphpattern', location: location(), triplesContext: tmpContext });
           }
         }
         
-        if(currentBasicGraphPatterns.length != 0 || currentFilters.length != 0) {
-          var triplesContext = [];
-          for(var j=0; j<currentBasicGraphPatterns.length; j++) {
-            triplesContext = triplesContext.concat(currentBasicGraphPatterns[j].triplesContext);
-          }
-          if(triplesContext.length > 0) {
-            compactedSubpatterns.push({token: 'basicgraphpattern',
-                                       location: location(),
-                                       triplesContext: triplesContext});
-          }
-        }
-        
-      //      if(compactedSubpatterns.length == 1) {
-      //          compactedSubpatterns[0].filters = currentFilters;
-      //          return compactedSubpatterns[0];
+      //      if(patterns.length == 1) {
+      //          patterns[0].filters = filters;
+      //          return patterns[0];
       //      } else  {
-        return { token: 'groupgraphpattern',
-                 location: location(),
-                 patterns: compactedSubpatterns,
-                 filters: currentFilters,
-                 binds: currentBinds
-               }
+        return {
+          token: 'groupgraphpattern',
+          filters: filters,
+          binds: binds,
+          patterns: patterns,
+          location: location(),
+        }
       //      }
       },
       peg$c140 = function(b, bs) {
         var triples = b.triplesContext;
-        if(bs != null && typeof(bs) === 'object') {
-          if(bs != null && bs.length != null) {
-            if(bs[2] != null && bs[2].triplesContext!=null) {
+        if (bs != null && typeof(bs) === 'object') {
+          if (bs != null && bs.length != null) {
+            if (bs[2] != null && bs[2].triplesContext!=null) {
               triples = triples.concat(bs[2].triplesContext);
             }
           }
         }
         
-        return {token:'triplespattern',
-                location: location(),
-                triplesContext: triples}
+        return {
+          token:'triplespattern',
+          triplesContext: triples,
+          location: location(),
+        }
       },
       peg$c141 = "optional",
       peg$c142 = peg$literalExpectation("OPTIONAL", true),
       peg$c143 = function(v) {
-        return { token: 'optionalgraphpattern',
-                 location: location(),
-                 value: v }
+        return {
+          token: 'optionalgraphpattern',
+          value: v,
+          location: location(),
+        }
       },
       peg$c144 = function(g, gg) {
-        for(var i=0; i<gg.patterns.length; i++) {
-          var quads = []
-          var ts = gg.patterns[i];
-          for(var j=0; j<ts.triplesContext.length; j++) {
-            var triple = ts.triplesContext[j]
-            triple.graph = g;
+        for (let i = 0; i < gg.patterns.length; i++) {
+          for (let j = 0; j < gg.patterns[i].triplesContext.length; j++) {
+            gg.patterns[i].triplesContext[j].graph = g;
           }
         }
-        
-        gg.token = 'groupgraphpattern'
+
         return gg;
       },
       peg$c145 = "SERVICE",
@@ -1034,46 +1025,43 @@ function peg$parse(input, options) {
         return ts;
       },
       peg$c173 = function(b, bs) {
-        var triples = b.triplesContext;
-        var toTest = null;
-        if(bs != null && typeof(bs) === 'object') {
-          if(bs.length != null) {
-            if(bs[3] != null && bs[3].triplesContext!=null) {
+        let triples = b.triplesContext;
+        if (bs != null && typeof(bs) === 'object') {
+          if (bs.length != null) {
+            if (bs[3] != null && bs[3].triplesContext != null) {
               triples = triples.concat(bs[3].triplesContext);
             }
           }
         }
         
-        return {token:'triplestemplate',
-                location: location(),
-                triplesContext: triples}
+        return {
+          token:'triplestemplate',
+          triplesContext: triples,
+          location: location(),
+        }
       },
       peg$c174 = function(s, pairs) {
-        var triplesContext = pairs.triplesContext;
-        var subject = s;
-        if(pairs.pairs) {
-          for(var i=0; i< pairs.pairs.length; i++) {
-            var pair = pairs.pairs[i];
-            var triple = null;
-            if(pair[1].length != null)
+        let triplesContext = pairs.triplesContext;
+        if (pairs.pairs) {
+          for (let i=0; i < pairs.pairs.length; i++) {
+            let pair = pairs.pairs[i];
+            if (pair[1].length != null) {
               pair[1] = pair[1][0]
-            if(subject.token && subject.token==='triplesnodecollection') {
-              triple = {subject: subject.chainSubject[0], predicate: pair[0], object: pair[1]}
-              triplesContext.push(triple);
-              triplesContext = triplesContext.concat(subject.triplesContext);
+            }
+            if (s.token && s.token === 'triplesnodecollection') {
+              triplesContext.push({ subject: s.chainSubject[0], predicate: pair[0], object: pair[1] });
+              triplesContext = triplesContext.concat(s.triplesContext);
             } else {
-              triple = {subject: subject, predicate: pair[0], object: pair[1]}
-              triplesContext.push(triple);
+              triplesContext.push({ subject: s, predicate: pair[0], object: pair[1] });
             }
           }
         }
         
-        var token = {};
-        token.token = "triplessamesubject";
-        token.triplesContext = triplesContext;
-        token.chainSubject = subject;
-        
-        return token;
+        return {
+          token: 'triplessamesubject',
+          chainSubject: s,
+          triplesContext: triplesContext,
+        }
       },
       peg$c175 = function(tn, pairs) {
         var triplesContext = tn.triplesContext;
@@ -1178,38 +1166,31 @@ function peg$parse(input, options) {
         
         return toReturn;
       },
-      peg$c181 = function(s, pairs) {
-        var triplesContext = pairs.triplesContext;
-        var subject = s;
-        if(pairs.pairs) {
-          for(var i=0; i< pairs.pairs.length; i++) {
-            var pair = pairs.pairs[i];
-            var triple = null;
-            if(pair[1].length != null)
-              pair[1] = pair[1][0]
-            if(subject.token && subject.token==='triplesnodecollection') {
-              triple = {subject: subject.chainSubject[0], predicate: pair[0], object: pair[1]};
-              if(triple.predicate.token === 'path' && triple.predicate.kind === 'element') {
-                triple.predicate = triple.predicate.value;
-              }
-              triplesContext.push(triple);
-              triplesContext = triplesContext.concat(subject.triplesContext);
-            } else {
-              triple = {subject: subject, predicate: pair[0], object: pair[1]}
-              if(triple.predicate.token === 'path' && triple.predicate.kind === 'element') {
-                triple.predicate = triple.predicate.value;
-              }
-              triplesContext.push(triple);
-            }
+      peg$c181 = function(s, list) {
+        let triplesContext = list.triplesContext;
+
+        list.pairs.forEach((pair) => {
+          if (pair[1].length != null) {
+            pair[1] = pair[1][0];
           }
+          const triple = { subject: s, predicate: pair[0], object: pair[1] };
+          if (triple.predicate.token === 'path' && triple.predicate.kind === 'element') {
+            triple.predicate = triple.predicate.value;
+          }
+          if (s.token && s.token === 'triplesnodecollection') {
+            triple.subject = s.chainSubject[0];
+            triplesContext.push(triple);
+            triplesContext = triplesContext.concat(s.triplesContext);
+          } else {
+            triplesContext.push(triple);
+          }
+        });
+
+        return {
+          token: 'triplessamesubject',
+          chainSubject: s,
+          triplesContext: triplesContext,
         }
-
-        var tokenParsed = {};
-        tokenParsed.token = "triplessamesubject";
-        tokenParsed.triplesContext = triplesContext;
-        tokenParsed.chainSubject = subject;
-
-        return tokenParsed;
       },
       peg$c182 = function(tn, pairs) {
         var triplesContext = tn.triplesContext;
