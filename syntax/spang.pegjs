@@ -50,14 +50,12 @@ QueryUnit = Query
 // Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
 Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
 {
-  var commentsList = Object.entries(CommentsHash).map(([loc, str]) => ({line:parseInt(loc), text:str}));
-
   return {
     token: 'query',
     headers: h,
     prologue: p,
     body: q,
-    commentsList: commentsList,
+    commentsList: Object.entries(CommentsHash).map(([loc, str]) => ({ line: parseInt(loc), text: str })),
     functions: f,
     inlineData: v
   }
@@ -91,70 +89,68 @@ Prologue = b:BaseDecl? WS* p:PrefixDecl*
 BaseDecl = WS* 'BASE'i WS* i:IRIREF
 {
   registerDefaultPrefix(i);
-  
-  var base = {};
-  base.token = 'base';
-  base.value = i;
-  
-  return base;
+
+  return {
+    token: 'base',
+    value: i,
+  }
 }
 
 // [6] PrefixDecl ::= 'PREFIX' PNAME_NS IRIREF
 PrefixDecl = WS* 'PREFIX'i  WS* p:PNAME_NS  WS* l:IRIREF
 {
-  registerPrefix(p,l);
-  
-  var prefix = {};
-  prefix.token = 'prefix';
-  prefix.prefix = p;
-  prefix.local = l;
-  
-  return prefix;
+  registerPrefix(p, l);
+
+  return {
+    token: 'prefix',
+    prefix: p,
+    local: l,
+  }
 }
 
 // [7] SelectQuery ::= SelectClause DatasetClause* WhereClause SolutionModifier
 SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier WS* BindingsClause 
 {
-  var dataset = {'named':[], 'implicit':[]};
-  for(var i=0; i<gs.length; i++) {
-    var g = gs[i];
-    if(g.kind === 'default') {
-      dataset['implicit'].push(g.graph);
+  const dataset = { named: [], implicit: [] };
+  gs.forEach((g) => {
+    if (g.kind === 'default') {
+      dataset.implicit.push(g.graph);
     } else {
-      dataset['named'].push(g.graph)
+      dataset.named.push(g.graph);
     }
+  });
+
+  if (dataset.named.length === 0 && dataset.implicit.length === 0) {
+    dataset.implicit.push({token:'uri',
+      location: null,
+      prefix:null,
+      suffix:null,
+      value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
   }
-  
-  if(dataset['named'].length === 0 && dataset['implicit'].length === 0) {
-    dataset['implicit'].push({token:'uri',
-                              location: null,     
-                              prefix:null,
-                              suffix:null,
-                              value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+
+  let query = {
+    token: 'executableunit',
+    kind: 'select',
+    dataset: dataset,
+    projection: s.vars,
+    modifier: s.modifier,
+    pattern: w,
+    location: location(),
   }
-  
-  var query = {};
-  query.kind = 'select';
-  query.token = 'executableunit';
-  query.dataset = dataset;
-  query.projection = s.vars;
-  query.modifier = s.modifier;
-  query.pattern = w;
-  query.location = location();
-  
-  if(sm!=null && sm.limit!=null) {
+
+  if (sm != null && sm.limit != null) {
     query.limit = sm.limit;
   }
-  if(sm!=null && sm.offset!=null) {
+  if (sm != null && sm.offset != null) {
     query.offset = sm.offset;
   }
-  if(sm!=null && (sm.order!=null && sm.order!="")) {
+  if (sm != null && (sm.order != null && sm.order != "")) {
     query.order = sm.order;
   }
-  if(sm!=null && sm.group!=null) {
+  if (sm != null && sm.group != null) {
     query.group = sm.group;
   }
-  
+
   return query;
 }
 
@@ -190,55 +186,53 @@ SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 SelectClause = WS* 'SELECT'i WS* mod:( 'DISTINCT'i / 'REDUCED'i )? WS*
   proj:( ( ( WS* Var WS* ) / ( WS* '(' WS* Expression WS* 'AS'i WS* Var WS* ')' WS* ) )+ / ( WS* '*' WS* )  ) 
 {
-  var vars = [];
-  if(proj.length === 3 && proj[1]==="*") {
+  let vars = [];
+  if (proj.length === 3 && proj[1] === "*") {
     return {
       vars: [{token: 'variable',
-              location: location(),
-              kind:'*'}],
-      modifier:arrayToString(mod)
+        location: location(),
+        kind: '*'}],
+      modifier: arrayToString(mod)
     };
   }
-  
-  for(var i=0; i< proj.length; i++) {
-    var aVar = proj[i];
-    
-    if(aVar.length === 3) {
+
+  proj.forEach((aVar) => {
+    if (aVar.length === 3) {
       vars.push({token: 'variable',
-                 kind:'var',
-                 value:aVar[1]});
+        kind: 'var',
+        value: aVar[1]});
     } else {
       vars.push({token: 'variable',
-                 kind:'aliased',
-                 expression: aVar[3],
-                 alias:aVar[7]})
+        kind: 'aliased',
+        expression: aVar[3],
+        location: location(),
+        alias: aVar[7]})
     }
-  }
-  
+  });
+
   return {
     vars: vars,
-    modifier:arrayToString(mod)
+    modifier: arrayToString(mod)
   };
 }
 
 // [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
 ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
-  var dataset = {'named':[], 'implicit':[]};
-  for(var i=0; i<gs.length; i++) {
-    var g = gs[i];
-    if(g.kind === 'default') {
-      dataset['implicit'].push(g.graph);
+  const dataset = { named:[], implicit:[] };
+  gs.forEach((g) => {
+    if (g.kind === 'default') {
+      dataset.implicit.push(g.graph);
     } else {
-      dataset['named'].push(g.graph)
+      dataset.named.push(g.graph);
     }
-  }
-  
-  if(dataset['named'].length === 0 && dataset['implicit'].length === 0) {
-    dataset['implicit'].push({token:'uri',
-                              prefix:null,
-                              suffix:null,
-                              value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+  });
+
+  if (dataset.named.length === 0 && dataset.implicit.length === 0) {
+    dataset.implicit.push({token:'uri',
+      prefix:null,
+      suffix:null,
+      value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
   }
   
   var query = {location: location()};

@@ -142,14 +142,12 @@ function peg$parse(input, options) {
       peg$startRuleFunction  = peg$parseDOCUMENT,
 
       peg$c0 = function(h, p, f, q, v) {
-        var commentsList = Object.entries(CommentsHash).map(([loc, str]) => ({line:parseInt(loc), text:str}));
-
         return {
           token: 'query',
           headers: h,
           prologue: p,
           body: q,
-          commentsList: commentsList,
+          commentsList: Object.entries(CommentsHash).map(([loc, str]) => ({ line: parseInt(loc), text: str })),
           functions: f,
           inlineData: v
         }
@@ -173,66 +171,64 @@ function peg$parse(input, options) {
       peg$c4 = peg$literalExpectation("BASE", true),
       peg$c5 = function(i) {
         registerDefaultPrefix(i);
-        
-        var base = {};
-        base.token = 'base';
-        base.value = i;
-        
-        return base;
+
+        return {
+          token: 'base',
+          value: i,
+        }
       },
       peg$c6 = "prefix",
       peg$c7 = peg$literalExpectation("PREFIX", true),
       peg$c8 = function(p, l) {
-        registerPrefix(p,l);
-        
-        var prefix = {};
-        prefix.token = 'prefix';
-        prefix.prefix = p;
-        prefix.local = l;
-        
-        return prefix;
+        registerPrefix(p, l);
+
+        return {
+          token: 'prefix',
+          prefix: p,
+          local: l,
+        }
       },
       peg$c9 = function(s, gs, w, sm) {
-        var dataset = {'named':[], 'implicit':[]};
-        for(var i=0; i<gs.length; i++) {
-          var g = gs[i];
-          if(g.kind === 'default') {
-            dataset['implicit'].push(g.graph);
+        const dataset = { named: [], implicit: [] };
+        gs.forEach((g) => {
+          if (g.kind === 'default') {
+            dataset.implicit.push(g.graph);
           } else {
-            dataset['named'].push(g.graph)
+            dataset.named.push(g.graph);
           }
+        });
+
+        if (dataset.named.length === 0 && dataset.implicit.length === 0) {
+          dataset.implicit.push({token:'uri',
+            location: null,
+            prefix:null,
+            suffix:null,
+            value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
         }
-        
-        if(dataset['named'].length === 0 && dataset['implicit'].length === 0) {
-          dataset['implicit'].push({token:'uri',
-                                    location: null,     
-                                    prefix:null,
-                                    suffix:null,
-                                    value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+
+        let query = {
+          token: 'executableunit',
+          kind: 'select',
+          dataset: dataset,
+          projection: s.vars,
+          modifier: s.modifier,
+          pattern: w,
+          location: location(),
         }
-        
-        var query = {};
-        query.kind = 'select';
-        query.token = 'executableunit';
-        query.dataset = dataset;
-        query.projection = s.vars;
-        query.modifier = s.modifier;
-        query.pattern = w;
-        query.location = location();
-        
-        if(sm!=null && sm.limit!=null) {
+
+        if (sm != null && sm.limit != null) {
           query.limit = sm.limit;
         }
-        if(sm!=null && sm.offset!=null) {
+        if (sm != null && sm.offset != null) {
           query.offset = sm.offset;
         }
-        if(sm!=null && (sm.order!=null && sm.order!="")) {
+        if (sm != null && (sm.order != null && sm.order != "")) {
           query.order = sm.order;
         }
-        if(sm!=null && sm.group!=null) {
+        if (sm != null && sm.group != null) {
           query.group = sm.group;
         }
-        
+
         return query;
       },
       peg$c10 = function(s, w, sm) {
@@ -274,54 +270,52 @@ function peg$parse(input, options) {
       peg$c23 = "*",
       peg$c24 = peg$literalExpectation("*", false),
       peg$c25 = function(mod, proj) {
-        var vars = [];
-        if(proj.length === 3 && proj[1]==="*") {
+        let vars = [];
+        if (proj.length === 3 && proj[1] === "*") {
           return {
             vars: [{token: 'variable',
-                    location: location(),
-                    kind:'*'}],
-            modifier:arrayToString(mod)
+              location: location(),
+              kind: '*'}],
+            modifier: arrayToString(mod)
           };
         }
-        
-        for(var i=0; i< proj.length; i++) {
-          var aVar = proj[i];
-          
-          if(aVar.length === 3) {
+
+        proj.forEach((aVar) => {
+          if (aVar.length === 3) {
             vars.push({token: 'variable',
-                       kind:'var',
-                       value:aVar[1]});
+              kind: 'var',
+              value: aVar[1]});
           } else {
             vars.push({token: 'variable',
-                       kind:'aliased',
-                       expression: aVar[3],
-                       alias:aVar[7]})
+              kind: 'aliased',
+              expression: aVar[3],
+              location: location(),
+              alias: aVar[7]})
           }
-        }
-        
+        });
+
         return {
           vars: vars,
-          modifier:arrayToString(mod)
+          modifier: arrayToString(mod)
         };
       },
       peg$c26 = "construct",
       peg$c27 = peg$literalExpectation("CONSTRUCT", true),
       peg$c28 = function(t, gs, w, sm) {
-        var dataset = {'named':[], 'implicit':[]};
-        for(var i=0; i<gs.length; i++) {
-          var g = gs[i];
-          if(g.kind === 'default') {
-            dataset['implicit'].push(g.graph);
+        const dataset = { named:[], implicit:[] };
+        gs.forEach((g) => {
+          if (g.kind === 'default') {
+            dataset.implicit.push(g.graph);
           } else {
-            dataset['named'].push(g.graph)
+            dataset.named.push(g.graph);
           }
-        }
-        
-        if(dataset['named'].length === 0 && dataset['implicit'].length === 0) {
-          dataset['implicit'].push({token:'uri',
-                                    prefix:null,
-                                    suffix:null,
-                                    value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+        });
+
+        if (dataset.named.length === 0 && dataset.implicit.length === 0) {
+          dataset.implicit.push({token:'uri',
+            prefix:null,
+            suffix:null,
+            value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
         }
         
         var query = {location: location()};
@@ -802,7 +796,7 @@ function peg$parse(input, options) {
             }
           }
         }
-        
+
         let filters = [];
         let binds = [];
         let patterns = [];
@@ -818,28 +812,20 @@ function peg$parse(input, options) {
             if (tmpPatterns.length != 0 || filters.length != 0) {
               const tmpContext = tmpPatterns.map(pattern => pattern.triplesContext).flat();
               if (tmpContext.length > 0) {
-                patterns.push({ token: 'basicgraphpattern', location: location(), triplesContext: tmpContext });
+                patterns.push({ token: 'basicgraphpattern', triplesContext: tmpContext, location: location() });
               }
               tmpPatterns = [];
             }
             patterns.push(block);
           }
         });
-        
         if (tmpPatterns.length != 0 || filters.length != 0) {
-          // let triplesContext = [];
-          // for (let j = 0; j < tmpPatterns.length; j++) {
-          //   triplesContext = triplesContext.concat(tmpPatterns[j].triplesContext);
-          // }
-          // if (triplesContext.length > 0) {
-          //   patterns.push({ token: 'basicgraphpattern', location: location(), triplesContext: triplesContext });
-          // }
           const tmpContext = tmpPatterns.map(pattern => pattern.triplesContext).flat();
           if (tmpContext.length > 0) {
-            patterns.push({ token: 'basicgraphpattern', location: location(), triplesContext: tmpContext });
+            patterns.push({ token: 'basicgraphpattern', triplesContext: tmpContext, location: location() });
           }
         }
-        
+
       //      if(patterns.length == 1) {
       //          patterns[0].filters = filters;
       //          return patterns[0];
