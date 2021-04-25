@@ -199,11 +199,12 @@ function peg$parse(input, options) {
         });
 
         if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-          dataset.implicit.push({token:'uri',
+          dataset.implicit.push({
+            token:'uri',
             location: null,
             prefix:null,
             suffix:null,
-            });
+          });
         }
 
         let query = {
@@ -216,41 +217,45 @@ function peg$parse(input, options) {
           location: location(),
         }
 
-        if (sm != null && sm.limit != null) {
-          query.limit = sm.limit;
-        }
-        if (sm != null && sm.offset != null) {
-          query.offset = sm.offset;
-        }
-        if (sm != null && (sm.order != null && sm.order != "")) {
-          query.order = sm.order;
-        }
-        if (sm != null && sm.group != null) {
-          query.group = sm.group;
+        if (sm != null) {
+          if (sm.limit != null) {
+            query.limit = sm.limit;
+          }
+          if (sm.offset != null) {
+            query.offset = sm.offset;
+          }
+          if (sm.group != null) {
+            query.group = sm.group;
+          }
+          if (sm.order != null && sm.order != "") {
+            query.order = sm.order;
+          }
         }
 
         return query;
       },
       peg$c10 = function(s, w, sm) {
-        var query = {};
+        let query = {
+          token: 'subselect',
+          kind: 'select',
+          projection: s.vars,
+          modifier: s.modifier,
+          pattern: w,
+        };
 
-        query.kind = 'select';
-        query.token = 'subselect';
-        query.projection = s.vars;
-        query.modifier = s.modifier;
-        query.pattern = w;
-        
-        if(sm!=null && sm.limit!=null) {
-          query.limit = sm.limit;
-        }
-        if(sm!=null && sm.offset!=null) {
-          query.offset = sm.offset;
-        }
-        if(sm!=null && (sm.order!=null && sm.order!="")) {
-          query.order = sm.order;
-        }
-        if(sm!=null && sm.group!=null) {
-          query.group = sm.group;
+        if (sm != null) {
+          if (sm.limit != null) {
+            query.limit = sm.limit;
+          }
+          if (sm.offset != null) {
+            query.offset = sm.offset;
+          }
+          if (sm.group != null) {
+            query.group = sm.group;
+          }
+          if (sm.order != null && sm.order != "") {
+            query.order = sm.order;
+          }
         }
         
         return query;
@@ -321,22 +326,25 @@ function peg$parse(input, options) {
             });
         }
         
-        var query = {location: location()};
-        query.kind = 'construct';
-        query.token = 'executableunit'
-        query.dataset = dataset;
-        query.template = t;
-        query.pattern = w;
-        query.location = location();
-        
-        if(sm!=null && sm.limit!=null) {
-          query.limit = sm.limit;
-        }
-        if(sm!=null && sm.offset!=null) {
-          query.offset = sm.offset;
-        }
-        if(sm!=null && (sm.order!=null && sm.order!="")) {
-          query.order = sm.order;
+        let query = {
+          kind: 'construct',
+          token: 'executableunit',
+          dataset: dataset,
+          template: t,
+          pattern: w,
+          location: location(),
+        };
+
+        if (sm != null) {
+          if (sm.limit != null) {
+            query.limit = sm.limit;
+          }
+          if (sm.offset != null) {
+            query.offset = sm.offset;
+          }
+          if (sm.order != null && sm.order != "") {
+            query.order = sm.order;
+          }
         }
 
         return query
@@ -348,44 +356,47 @@ function peg$parse(input, options) {
       peg$c33 = "}",
       peg$c34 = peg$literalExpectation("}", false),
       peg$c35 = function(gs, t, sm) {
-        var dataset = {'named':[], 'implicit':[]};
-        for(var i=0; i<gs.length; i++) {
-          var g = gs[i];
-          if(g.kind === 'default') {
-            dataset['implicit'].push(g.graph);
+        let dataset = { named: [], implicit: [] };
+        gs.forEach((g) => {
+          if (g.kind === 'default') {
+            dataset.implicit.push(g.graph);
           } else {
-            dataset['named'].push(g.graph)
+            dataset.named.push(g.graph)
+          }
+        });
+
+        if (dataset.named.length === 0 && dataset.implicit.length === 0) {
+          dataset.implicit.push({
+            token:'uri',
+            prefix:null,
+            suffix:null,
+          });
+        }
+        
+        let query = {
+          kind: 'construct',
+          token: 'executableunit',
+          dataset: dataset,
+          template: t,
+          pattern: {
+            token: "basicgraphpattern",
+            triplesContext: t.triplesContext
+          },
+          location: location()
+        };
+        
+        if (sm != null) {
+          if (sm.limit != null) {
+            query.limit = sm.limit;
+          }
+          if (sm.offset != null) {
+            query.offset = sm.offset;
+          }
+          if (sm.order != null && sm.order != "") {
+            query.order = sm.order;
           }
         }
-        
-        
-        if(dataset['named'].length === 0 && dataset['implicit'].length === 0) {
-          dataset['implicit'].push({token:'uri',
-                                    prefix:null,
-                                    suffix:null,
-                                    });
-        }
-        
-        var query = {location: location()};
-        query.kind = 'construct';
-        query.token = 'executableunit'
-        query.dataset = dataset;
-        query.template = t;
-        query.pattern = {
-          token: "basicgraphpattern",
-          triplesContext: t.triplesContext
-        };
-        query.location = location();    
-        
-        if(sm!=null && sm.limit!=null) {
-          query.limit = sm.limit;
-        }
-        if(sm!=null && sm.offset!=null) {
-          query.offset = sm.offset;
-        }
-        if(sm!=null && (sm.order!=null && sm.order!="")) {
-          query.order = sm.order;
-        }
+
         return query
       },
       peg$c36 = "describe",
@@ -393,32 +404,30 @@ function peg$parse(input, options) {
       peg$c38 = "ask",
       peg$c39 = peg$literalExpectation("ASK", true),
       peg$c40 = function(gs, w) {
-        var dataset = {'named':[], 'implicit':[]};
-        for(var i=0; i<gs.length; i++) {
-          var g = gs[i];
+        const dataset = { named: [], implicit: [] };
+        gs.forEach((g) => {
           if(g.kind === 'implicit') {
-            dataset['implicit'].push(g.graph);
+            dataset.implicit.push(g.graph);
           } else {
-            dataset['named'].push(g.graph)
+            dataset.named.push(g.graph);
           }
+        });
+
+        if (dataset.named.length === 0 && dataset.implicit.length === 0) {
+          dataset.implicit.push({
+            token:'uri',
+            prefix:null,
+            suffix:null,
+          });
         }
-        
-        if(dataset['named'].length === 0 && dataset['implicit'].length === 0) {
-          dataset['implicit'].push(
-            {token:'uri',
-             prefix:null,
-             suffix:null,
-             });
+
+        return {
+          kind: 'ask',
+          token: 'executableunit',
+          dataset: dataset,
+          pattern: w,
+          location: location(),
         }
-        
-        var query = {location: location()};
-        query.kind = 'ask';
-        query.token = 'executableunit'
-        query.dataset = dataset;
-        query.pattern = w;
-        query.location = location();
-        
-        return query
       },
       peg$c41 = "from",
       peg$c42 = peg$literalExpectation("FROM", true),
@@ -426,12 +435,22 @@ function peg$parse(input, options) {
         return gs;
       },
       peg$c44 = function(s) {
-        return {graph:s , kind:'default', token:'graphClause', location: location()}
+        return {
+          kind: 'default', 
+          token: 'graphClause', 
+          graph: s, 
+          location: location(),
+        }
       },
       peg$c45 = "named",
       peg$c46 = peg$literalExpectation("NAMED", true),
       peg$c47 = function(s) {
-        return {graph:s, kind:'named', token:'graphCluase', location: location()};
+        return {
+          token: 'graphCluase',
+          kind: 'named',
+          graph: s,
+          location: location(),
+        };
       },
       peg$c48 = function(g) {
         return g;
