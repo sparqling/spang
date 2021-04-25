@@ -203,7 +203,7 @@ function peg$parse(input, options) {
             location: null,
             prefix:null,
             suffix:null,
-            value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+            });
         }
 
         let query = {
@@ -318,7 +318,7 @@ function peg$parse(input, options) {
           dataset.implicit.push({token:'uri',
             prefix:null,
             suffix:null,
-            value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+            });
         }
         
         var query = {location: location()};
@@ -363,7 +363,7 @@ function peg$parse(input, options) {
           dataset['implicit'].push({token:'uri',
                                     prefix:null,
                                     suffix:null,
-                                    value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+                                    });
         }
         
         var query = {location: location()};
@@ -408,7 +408,7 @@ function peg$parse(input, options) {
             {token:'uri',
              prefix:null,
              suffix:null,
-             value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+             });
         }
         
         var query = {location: location()};

@@ -125,7 +125,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
       location: null,
       prefix:null,
       suffix:null,
-      value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+      });
   }
 
   let query = {
@@ -235,7 +235,7 @@ ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* 
     dataset.implicit.push({token:'uri',
       prefix:null,
       suffix:null,
-      value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+      });
   }
   
   var query = {location: location()};
@@ -275,7 +275,7 @@ ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* 
     dataset['implicit'].push({token:'uri',
                               prefix:null,
                               suffix:null,
-                              value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+                              });
   }
   
   var query = {location: location()};
@@ -323,7 +323,7 @@ AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause
       {token:'uri',
        prefix:null,
        suffix:null,
-       value:'https://github.com/antoniogarrote/rdfstore-js#default_graph'});
+       });
   }
   
   var query = {location: location()};
