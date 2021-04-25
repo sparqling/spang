@@ -186,32 +186,35 @@ SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 SelectClause = WS* 'SELECT'i WS* mod:( 'DISTINCT'i / 'REDUCED'i )? WS*
   proj:( ( ( WS* Var WS* ) / ( WS* '(' WS* Expression WS* 'AS'i WS* Var WS* ')' WS* ) )+ / ( WS* '*' WS* )  ) 
 {
-  let vars = [];
   if (proj.length === 3 && proj[1] === "*") {
     return {
-      vars: [{token: 'variable',
+      vars: [{
+        token: 'variable',
+        kind: '*',
         location: location(),
-        kind: '*'}],
+      }],
       modifier: arrayToString(mod)
     };
   }
 
-  proj.forEach((aVar) => {
-    if (aVar.length === 3) {
-      vars.push({token: 'variable',
-        kind: 'var',
-        value: aVar[1]});
-    } else {
-      vars.push({token: 'variable',
-        kind: 'aliased',
-        expression: aVar[3],
-        location: location(),
-        alias: aVar[7]})
-    }
-  });
-
   return {
-    vars: vars,
+    vars: proj.map((elem) => {
+      if (elem.length === 3) {
+        return {
+          token: 'variable',
+          kind: 'var',
+          value: elem[1],
+        };
+      } else {
+        return {
+          token: 'variable',
+          kind: 'aliased',
+          expression: elem[3],
+          alias: elem[7],
+          location: location(),
+        };
+      }
+    }),
     modifier: arrayToString(mod)
   };
 }
