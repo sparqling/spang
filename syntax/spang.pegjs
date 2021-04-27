@@ -1,5 +1,5 @@
 {
-  var flattenString = function(arrs) {
+  function flattenString(arrs) {
     var acum ="";
     for(var i=0; i< arrs.length; i++) {
       if(typeof(arrs[i])==='string') {
@@ -18,15 +18,15 @@
 
   var prefixes = {};
 
-  var registerPrefix = function(prefix, uri) {
+  function registerPrefix(prefix, uri) {
     prefixes[prefix] = uri;
   }
 
-  var registerDefaultPrefix = function(uri) {
+  function registerDefaultPrefix(uri) {
     prefixes[null] = uri;
   }
 
-  var arrayToString = function(array) {
+  function arrayToString(array) {
     var tmp = "";
     if(array == null)
       return null;
