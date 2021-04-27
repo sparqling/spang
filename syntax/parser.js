@@ -170,7 +170,7 @@ function peg$parse(input, options) {
       peg$c3 = "base",
       peg$c4 = peg$literalExpectation("BASE", true),
       peg$c5 = function(i) {
-        registerDefaultPrefix(i);
+        Prefixes[null] = i;
 
         return {
           token: 'base',
@@ -180,7 +180,7 @@ function peg$parse(input, options) {
       peg$c6 = "prefix",
       peg$c7 = peg$literalExpectation("PREFIX", true),
       peg$c8 = function(p, l) {
-        registerPrefix(p, l);
+        Prefixes[p] = l;
 
         return {
           token: 'prefix',
@@ -382,7 +382,7 @@ function peg$parse(input, options) {
             token: "basicgraphpattern",
             triplesContext: t.triplesContext
           },
-          location: location()
+          location: location(),
         };
         
         if (sm != null) {
@@ -436,9 +436,9 @@ function peg$parse(input, options) {
       },
       peg$c44 = function(s) {
         return {
-          kind: 'default', 
-          token: 'graphClause', 
-          graph: s, 
+          kind: 'default',
+          token: 'graphClause',
+          graph: s,
           location: location(),
         }
       },
@@ -18058,10 +18058,30 @@ function peg$parse(input, options) {
   }
 
 
+    let Prefixes = {};
+
+    let CommentsHash = {};  // For extracting comments
+
+    let GlobalBlankNodeCounter = 0;
+
+    function arrayToString(array) {
+      if (array == null) {
+        return null;
+      }
+
+      let tmp = "";
+      for (let i = 0; i < array.length; i++) {
+        tmp = tmp + array[i];
+      }
+
+      return tmp.toUpperCase();
+    }
+
     function flattenString(arrs) {
-      var acum ="";
-      for(var i=0; i< arrs.length; i++) {
-        if(typeof(arrs[i])==='string') {
+      let acum ="";
+
+      for (let i = 0; i < arrs.length; i++) {
+        if (typeof(arrs[i]) === 'string') {
           acum = acum + arrs[i];
         } else {
           acum = acum + arrs[i].join('');
@@ -18069,32 +18089,6 @@ function peg$parse(input, options) {
       }
 
       return acum;
-    }
-
-    var GlobalBlankNodeCounter = 0;
-
-    var CommentsHash = {};  // For extracting comments
-
-    var prefixes = {};
-
-    function registerPrefix(prefix, uri) {
-      prefixes[prefix] = uri;
-    }
-
-    function registerDefaultPrefix(uri) {
-      prefixes[null] = uri;
-    }
-
-    function arrayToString(array) {
-      var tmp = "";
-      if(array == null)
-        return null;
-
-      for(var i=0; i<array.length; i++) {
-        tmp = tmp + array[i];
-      }
-
-      return tmp.toUpperCase();
     }
 
 

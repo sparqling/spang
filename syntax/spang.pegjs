@@ -1,8 +1,28 @@
 {
+  let Prefixes = {};
+
+  let CommentsHash = {};  // For extracting comments
+
+  let GlobalBlankNodeCounter = 0;
+
+  function arrayToString(array) {
+    if (array == null) {
+      return null;
+    }
+
+    let tmp = "";
+    for (let i = 0; i < array.length; i++) {
+      tmp = tmp + array[i];
+    }
+
+    return tmp.toUpperCase();
+  }
+
   function flattenString(arrs) {
-    var acum ="";
-    for(var i=0; i< arrs.length; i++) {
-      if(typeof(arrs[i])==='string') {
+    let acum ="";
+
+    for (let i = 0; i < arrs.length; i++) {
+      if (typeof(arrs[i]) === 'string') {
         acum = acum + arrs[i];
       } else {
         acum = acum + arrs[i].join('');
@@ -10,32 +30,6 @@
     }
 
     return acum;
-  }
-
-  var GlobalBlankNodeCounter = 0;
-
-  var CommentsHash = {};  // For extracting comments
-
-  var prefixes = {};
-
-  function registerPrefix(prefix, uri) {
-    prefixes[prefix] = uri;
-  }
-
-  function registerDefaultPrefix(uri) {
-    prefixes[null] = uri;
-  }
-
-  function arrayToString(array) {
-    var tmp = "";
-    if(array == null)
-      return null;
-
-    for(var i=0; i<array.length; i++) {
-      tmp = tmp + array[i];
-    }
-
-    return tmp.toUpperCase();
   }
 }
 
@@ -88,7 +82,7 @@ Prologue = b:BaseDecl? WS* p:PrefixDecl*
 // [5] BaseDecl  ::=  'BASE' IRIREF
 BaseDecl = WS* 'BASE'i WS* i:IRIREF
 {
-  registerDefaultPrefix(i);
+  Prefixes[null] = i;
 
   return {
     token: 'base',
@@ -99,7 +93,7 @@ BaseDecl = WS* 'BASE'i WS* i:IRIREF
 // [6] PrefixDecl ::= 'PREFIX' PNAME_NS IRIREF
 PrefixDecl = WS* 'PREFIX'i  WS* p:PNAME_NS  WS* l:IRIREF
 {
-  registerPrefix(p, l);
+  Prefixes[p] = l;
 
   return {
     token: 'prefix',
