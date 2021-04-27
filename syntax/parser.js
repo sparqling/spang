@@ -170,8 +170,6 @@ function peg$parse(input, options) {
       peg$c3 = "base",
       peg$c4 = peg$literalExpectation("BASE", true),
       peg$c5 = function(i) {
-        Prefixes[null] = i;
-
         return {
           token: 'base',
           value: i,
@@ -180,8 +178,6 @@ function peg$parse(input, options) {
       peg$c6 = "prefix",
       peg$c7 = peg$literalExpectation("PREFIX", true),
       peg$c8 = function(p, l) {
-        Prefixes[p] = l;
-
         return {
           token: 'prefix',
           prefix: p,
@@ -18057,8 +18053,6 @@ function peg$parse(input, options) {
     return s0;
   }
 
-
-    let Prefixes = {};
 
     let CommentsHash = {};  // For extracting comments
 

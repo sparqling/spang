@@ -1,6 +1,4 @@
 {
-  let Prefixes = {};
-
   let CommentsHash = {};  // For extracting comments
 
   let GlobalBlankNodeCounter = 0;
@@ -82,8 +80,6 @@ Prologue = b:BaseDecl? WS* p:PrefixDecl*
 // [5] BaseDecl  ::=  'BASE' IRIREF
 BaseDecl = WS* 'BASE'i WS* i:IRIREF
 {
-  Prefixes[null] = i;
-
   return {
     token: 'base',
     value: i,
@@ -93,8 +89,6 @@ BaseDecl = WS* 'BASE'i WS* i:IRIREF
 // [6] PrefixDecl ::= 'PREFIX' PNAME_NS IRIREF
 PrefixDecl = WS* 'PREFIX'i  WS* p:PNAME_NS  WS* l:IRIREF
 {
-  Prefixes[p] = l;
-
   return {
     token: 'prefix',
     prefix: p,
