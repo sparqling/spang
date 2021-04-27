@@ -147,7 +147,7 @@ function peg$parse(input, options) {
           headers: h,
           prologue: p,
           body: q,
-          commentsList: Object.entries(CommentsHash).map(([loc, str]) => ({ line: parseInt(loc), text: str })),
+          comments: Object.entries(Comments).map(([loc, str]) => ({ line: parseInt(loc), text: str })),
           functions: f,
           inlineData: v
         }
@@ -2355,7 +2355,7 @@ function peg$parse(input, options) {
         var loc = location().start.line;
         // var str = flattenString(comment).trim()
         var str = flattenString(comment)
-        CommentsHash[loc] = str;
+        Comments[loc] = str;
 
         return '';
       },
@@ -18054,7 +18054,7 @@ function peg$parse(input, options) {
   }
 
 
-    let CommentsHash = {};  // For extracting comments
+    let Comments = {};
 
     let GlobalBlankNodeCounter = 0;
 

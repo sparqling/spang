@@ -1,5 +1,5 @@
 {
-  let CommentsHash = {};  // For extracting comments
+  let Comments = {};
 
   let GlobalBlankNodeCounter = 0;
 
@@ -47,7 +47,7 @@ Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / 
     headers: h,
     prologue: p,
     body: q,
-    commentsList: Object.entries(CommentsHash).map(([loc, str]) => ({ line: parseInt(loc), text: str })),
+    comments: Object.entries(Comments).map(([loc, str]) => ({ line: parseInt(loc), text: str })),
     functions: f,
     inlineData: v
   }
@@ -2716,7 +2716,7 @@ COMMENT = comment:(SPACE_OR_TAB* '#' NON_NEW_LINE*)
   var loc = location().start.line;
   // var str = flattenString(comment).trim()
   var str = flattenString(comment)
-  CommentsHash[loc] = str;
+  Comments[loc] = str;
 
   return '';
 }
