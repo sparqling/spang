@@ -3,19 +3,6 @@
 
   let GlobalBlankNodeCounter = 0;
 
-  function arrayToString(array) {
-    if (array == null) {
-      return null;
-    }
-
-    let tmp = "";
-    for (let i = 0; i < array.length; i++) {
-      tmp = tmp + array[i];
-    }
-
-    return tmp.toUpperCase();
-  }
-
   function flattenString(arrs) {
     let acum ="";
 
@@ -179,19 +166,32 @@ SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 SelectClause = WS* 'SELECT'i WS* mod:( 'DISTINCT'i / 'REDUCED'i )? WS*
   proj:( ( ( WS* Var WS* ) / ( WS* '(' WS* Expression WS* 'AS'i WS* Var WS* ')' WS* ) )+ / ( WS* '*' WS* )  ) 
 {
-  if (proj.length === 3 && proj[1] === "*") {
-    return {
-      vars: [{
-        token: 'variable',
-        kind: '*',
-        location: location(),
-      }],
-      modifier: arrayToString(mod)
-    };
+
+  function arrayToString(array) {
+    if (array == null) {
+      return null;
+    }
+
+    let tmp = "";
+    for (let i = 0; i < array.length; i++) {
+      tmp = tmp + array[i];
+    }
+
+    return tmp.toUpperCase();
   }
 
-  return {
-    vars: proj.map((elem) => {
+  let s = {
+    modifier: arrayToString(mod)
+  };
+
+  if (proj.length === 3 && proj[1] === "*") {
+    s.vars = [{
+      token: 'variable',
+      kind: '*',
+      location: location(),
+    }];
+  } else {
+    s.vars = proj.map((elem) => {
       if (elem.length === 3) {
         return {
           token: 'variable',
@@ -207,9 +207,10 @@ SelectClause = WS* 'SELECT'i WS* mod:( 'DISTINCT'i / 'REDUCED'i )? WS*
           location: location(),
         };
       }
-    }),
-    modifier: arrayToString(mod)
-  };
+    });
+  }
+
+  return s;
 }
 
 // [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )

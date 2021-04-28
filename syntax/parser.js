@@ -271,19 +271,31 @@ function peg$parse(input, options) {
       peg$c23 = "*",
       peg$c24 = peg$literalExpectation("*", false),
       peg$c25 = function(mod, proj) {
-        if (proj.length === 3 && proj[1] === "*") {
-          return {
-            vars: [{
-              token: 'variable',
-              kind: '*',
-              location: location(),
-            }],
-            modifier: arrayToString(mod)
-          };
+
+        function arrayToString(array) {
+          if (array == null) {
+            return null;
+          }
+
+          let tmp = "";
+          for (let i = 0; i < array.length; i++) {
+            tmp = tmp + array[i];
+          }
+
+          return tmp.toUpperCase();
         }
 
-        return {
-          vars: proj.map((elem) => {
+        let s = {
+          modifier: arrayToString(mod)
+        };
+        if (proj.length === 3 && proj[1] === "*") {
+          s.vars = [{
+            token: 'variable',
+            kind: '*',
+            location: location(),
+          }];
+        } else {
+          s.vars = proj.map((elem) => {
             if (elem.length === 3) {
               return {
                 token: 'variable',
@@ -299,9 +311,10 @@ function peg$parse(input, options) {
                 location: location(),
               };
             }
-          }),
-          modifier: arrayToString(mod)
-        };
+          });
+        }
+
+        return s;
       },
       peg$c26 = "construct",
       peg$c27 = peg$literalExpectation("CONSTRUCT", true),
@@ -18057,19 +18070,6 @@ function peg$parse(input, options) {
     let Comments = {};
 
     let GlobalBlankNodeCounter = 0;
-
-    function arrayToString(array) {
-      if (array == null) {
-        return null;
-      }
-
-      let tmp = "";
-      for (let i = 0; i < array.length; i++) {
-        tmp = tmp + array[i];
-      }
-
-      return tmp.toUpperCase();
-    }
 
     function flattenString(arrs) {
       let acum ="";
