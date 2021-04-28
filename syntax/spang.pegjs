@@ -358,23 +358,24 @@ WhereClause = ('WHERE'i)? WS* g:GroupGraphPattern WS*
 // [18] SolutionModifier ::= GroupClause? HavingClause? OrderClause? LimitOffsetClauses?
 SolutionModifier = gc:GroupClause? HavingClause? oc:OrderClause? lo:LimitOffsetClauses? 
 {
-  var acum = {};
-  if(lo != null) {
-    if(lo.limit != null) {
-      acum.limit = lo.limit;
+  let sm = {};
+
+  if (gc != null) {
+    sm.group = gc;
+  }
+
+  sm.order = oc;
+
+  if (lo != null) {
+    if (lo.limit != null) {
+      sm.limit = lo.limit;
     }
-    if(lo.offset != null) {
-      acum.offset = lo.offset;
+    if (lo.offset != null) {
+      sm.offset = lo.offset;
     }
   }
-  
-  if(gc != null) {
-    acum.group = gc;
-  }
-  
-  acum.order = oc;
-  
-  return acum
+
+  return sm
 }
                              
 // [19] GroupClause ::= 'GROUP' 'BY' GroupCondition+
