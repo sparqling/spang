@@ -18060,18 +18060,14 @@ function peg$parse(input, options) {
 
     let GlobalBlankNodeCounter = 0;
 
-    function flattenString(arrs) {
-      let acum ="";
-
-      for (let i = 0; i < arrs.length; i++) {
-        if (typeof(arrs[i]) === 'string') {
-          acum = acum + arrs[i];
+    function flattenString(arr) {
+      return arr.map((a) => {
+        if (typeof(a) === 'string') {
+          return a;
         } else {
-          acum = acum + arrs[i].join('');
+          return a.join('');
         }
-      }
-
-      return acum;
+      }).join('');
     }
 
 
