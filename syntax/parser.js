@@ -271,23 +271,12 @@ function peg$parse(input, options) {
       peg$c23 = "*",
       peg$c24 = peg$literalExpectation("*", false),
       peg$c25 = function(mod, proj) {
+        let s = {};
 
-        function arrayToString(array) {
-          if (array == null) {
-            return null;
-          }
-
-          let tmp = "";
-          for (let i = 0; i < array.length; i++) {
-            tmp = tmp + array[i];
-          }
-
-          return tmp.toUpperCase();
+        if (mod) {
+          s.modifier = mod.toUpperCase();
         }
 
-        let s = {
-          modifier: arrayToString(mod)
-        };
         if (proj.length === 3 && proj[1] === "*") {
           s.vars = [{
             token: 'variable',

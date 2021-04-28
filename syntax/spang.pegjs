@@ -166,23 +166,11 @@ SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 SelectClause = WS* 'SELECT'i WS* mod:( 'DISTINCT'i / 'REDUCED'i )? WS*
   proj:( ( ( WS* Var WS* ) / ( WS* '(' WS* Expression WS* 'AS'i WS* Var WS* ')' WS* ) )+ / ( WS* '*' WS* )  ) 
 {
+  let s = {};
 
-  function arrayToString(array) {
-    if (array == null) {
-      return null;
-    }
-
-    let tmp = "";
-    for (let i = 0; i < array.length; i++) {
-      tmp = tmp + array[i];
-    }
-
-    return tmp.toUpperCase();
+  if (mod) {
+    s.modifier = mod.toUpperCase();
   }
-
-  let s = {
-    modifier: arrayToString(mod)
-  };
 
   if (proj.length === 3 && proj[1] === "*") {
     s.vars = [{
