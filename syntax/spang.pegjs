@@ -500,9 +500,6 @@ ValuesClause = b:( 'VALUES'i DataBlock )?
 // Update ::= Prologue Update1 ( ';' Update? )?
 Update = p:Prologue WS* u:Update1 us:( WS* ';' WS* Update? )?
 {
-  // var query = {};
-  // query.token = 'update';
-  // query.prologue = p;
   let query = {
     token: 'update',
     prologue: p,
@@ -539,34 +536,31 @@ Load = 'LOAD'i WS* sg:IRIref WS* dg:( 'INTO'i WS* GraphRef)?
 // [32] Clear ::= 'CLEAR' 'SILENT'? GraphRefAll
 Clear = 'CLEAR'i WS* 'SILENT'i? WS* ref:GraphRefAll
 {
-  var query = {};
-  query.kind = 'clear';
-  query.token = 'executableunit'
-  query.destinyGraph = ref;
-  
-  return query;
+  return {
+    token: 'executableunit',
+    kind: 'clear',
+    destinyGraph: ref,
+  }
 }
 
 // [33] Drop ::= 'DROP' 'SILENT'? GraphRefAll
 Drop = 'DROP'i  WS* 'SILENT'i? WS* ref:GraphRefAll
 {
-  var query = {};
-  query.kind = 'drop';
-  query.token = 'executableunit'
-  query.destinyGraph = ref;
-  
-  return query;
+  return {
+    token: 'executableunit',
+    kind: 'drop',
+    destinyGraph: ref,
+  }
 }
 
 // [34] Create ::= 'CREATE' 'SILENT'? GraphRef
 Create = 'CREATE'i WS* 'SILENT'i? WS* ref:GraphRef
 {
-  var query = {};
-  query.kind = 'create';
-  query.token = 'executableunit'
-  query.destinyGraph = ref;
-  
-  return query;
+  return {
+    token: 'executableunit',
+    kind: 'create',
+    destinyGraph: ref,
+  }
 }
 
 // [35]  	Add	  ::=  	'ADD' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
@@ -576,24 +570,21 @@ Create = 'CREATE'i WS* 'SILENT'i? WS* ref:GraphRef
 // [38] InsertData ::= 'INSERT DATA' QuadData
 InsertData = 'INSERT'i WS* 'DATA'i WS* qs:QuadData
 {
-  var query = {};
-  query.kind = 'insertdata';
-  query.token = 'executableunit'
-  query.quads = qs;
-  
-  return query;
+  return {
+    token: 'executableunit',
+    kind: 'insertdata',
+    quads: qs,
+  }
 }
 
 // [39] DeleteData ::= 'DELETE DATA' QuadData
 DeleteData = 'DELETE'i WS* 'DATA'i qs:QuadData
 {
-  var query = {};
-
-  query.kind = 'deletedata';
-  query.token = 'executableunit'
-  query.quads = qs;
-  
-  return query;
+  return {
+    token: 'executableunit',
+    kind: 'deletedata',
+    quads: qs,
+  }
 }
 
 // [40] DeleteWhere ::= 'DELETE WHERE' QuadPattern

@@ -576,9 +576,6 @@ function peg$parse(input, options) {
       peg$c84 = ";",
       peg$c85 = peg$literalExpectation(";", false),
       peg$c86 = function(p, u, us) {
-        // var query = {};
-        // query.token = 'update';
-        // query.prologue = p;
         let query = {
           token: 'update',
           prologue: p,
@@ -612,55 +609,49 @@ function peg$parse(input, options) {
       peg$c94 = "silent",
       peg$c95 = peg$literalExpectation("SILENT", true),
       peg$c96 = function(ref) {
-        var query = {};
-        query.kind = 'clear';
-        query.token = 'executableunit'
-        query.destinyGraph = ref;
-        
-        return query;
+        return {
+          token: 'executableunit',
+          kind: 'clear',
+          destinyGraph: ref,
+        }
       },
       peg$c97 = "drop",
       peg$c98 = peg$literalExpectation("DROP", true),
       peg$c99 = function(ref) {
-        var query = {};
-        query.kind = 'drop';
-        query.token = 'executableunit'
-        query.destinyGraph = ref;
-        
-        return query;
+        return {
+          token: 'executableunit',
+          kind: 'drop',
+          destinyGraph: ref,
+        }
       },
       peg$c100 = "create",
       peg$c101 = peg$literalExpectation("CREATE", true),
       peg$c102 = function(ref) {
-        var query = {};
-        query.kind = 'create';
-        query.token = 'executableunit'
-        query.destinyGraph = ref;
-        
-        return query;
+        return {
+          token: 'executableunit',
+          kind: 'create',
+          destinyGraph: ref,
+        }
       },
       peg$c103 = "insert",
       peg$c104 = peg$literalExpectation("INSERT", true),
       peg$c105 = "data",
       peg$c106 = peg$literalExpectation("DATA", true),
       peg$c107 = function(qs) {
-        var query = {};
-        query.kind = 'insertdata';
-        query.token = 'executableunit'
-        query.quads = qs;
-        
-        return query;
+        return {
+          token: 'executableunit',
+          kind: 'insertdata',
+          quads: qs,
+        }
       },
       peg$c108 = "delete",
       peg$c109 = peg$literalExpectation("DELETE", true),
       peg$c110 = function(qs) {
-        var query = {};
-
-        query.kind = 'deletedata';
-        query.token = 'executableunit'
-        query.quads = qs;
-        
-        return query;
+        return {
+          token: 'executableunit',
+          kind: 'deletedata',
+          quads: qs,
+        }
       },
       peg$c111 = function(p) {
         var query = {};
