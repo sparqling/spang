@@ -426,32 +426,44 @@ OrderClause = 'ORDER'i WS* 'BY'i WS* os:OrderCondition+ WS*
 // [24] OrderCondition ::= ( ( 'ASC' | 'DESC' ) BrackettedExpression ) | ( Constraint | Var )
 OrderCondition = direction:( 'ASC'i / 'DESC'i ) WS* e:BrackettedExpression WS*
 {
-  return { direction: direction.toUpperCase(), expression:e };
+  return {
+    direction: direction.toUpperCase(),
+    expression: e
+  };
 }
 / e:( Constraint / Var ) WS*
 {
-  if(e.token === 'var') {
-    var e = { token:'expression',
-              location: location(),
-              expressionType:'atomic',
-              primaryexpression: 'var',
-              value: e };
+  if (e.token === 'var') {
+    return {
+      direction: 'ASC',
+      expression: {
+        value: e,
+        token:'expression',
+        expressionType:'atomic',
+        primaryexpression: 'var',
+        location: location(),
+      }
+    };
+  } else {
+    return {
+      direction: 'ASC',
+      expression: e
+    };
   }
-  return { direction: 'ASC', expression:e };
 }
 
 // [25] LimitOffsetClauses ::= LimitClause OffsetClause? | OffsetClause LimitClause?
 LimitOffsetClauses = cls:( LimitClause OffsetClause? / OffsetClause LimitClause? )
 {
-  var acum = {};
-  for(var i=0; i<cls.length; i++) {
-    var cl = cls[i];
-    if(cl != null && cl.limit != null) {
-      acum['limit'] = cl.limit;
-    } else if(cl != null && cl.offset != null){
-      acum['offset'] = cl.offset;
+  let acum = {};
+
+  cls.forEach((cl) => {
+    if (cl != null && cl.limit != null) {
+      acum.limit = cl.limit;
+    } else if (cl != null && cl.offset != null){
+      acum.offset = cl.offset;
     }
-  }
+  });
   
   return acum;
 }
@@ -459,13 +471,13 @@ LimitOffsetClauses = cls:( LimitClause OffsetClause? / OffsetClause LimitClause?
 // [26] LimitClause ::= 'LIMIT' INTEGER
 LimitClause = 'LIMIT'i WS* i:INTEGER WS*
 {
-  return { limit:parseInt(i.value) };
+  return { limit: parseInt(i.value) };
 }
 
 // [27] OffsetClause ::= 'OFFSET' INTEGER
 OffsetClause = 'OFFSET'i WS* i:INTEGER WS*
 {
-  return { offset:parseInt(i.value) };
+  return { offset: parseInt(i.value) };
 }
 
 // BindingsClause ::= ( 'BINDINGS' Var* '{' ( '(' BindingValue+ ')' | NIL )* '}' )?
@@ -475,9 +487,9 @@ BindingsClause = ( 'BINDINGS' Var* '{' ( '(' BindingValue+ ')' / NIL )* '}' )?
 BindingValue = IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 'UNDEF'
 
 // [28] ValuesClause ::= ( 'VALUES' DataBlock )?
-ValuesClause = b:('VALUES'i DataBlock)?
+ValuesClause = b:( 'VALUES'i DataBlock )?
 {
-  if(b != null) {
+  if (b != null) {
     return b[1];
   } else {
     return null;
@@ -486,19 +498,22 @@ ValuesClause = b:('VALUES'i DataBlock)?
 
 // [29] Update ::= Prologue ( Update1 ( ';' Update )? )?
 // Update ::= Prologue Update1 ( ';' Update? )?
-Update = p:Prologue WS* u:Update1 us:(WS* ';' WS* Update? )?
+Update = p:Prologue WS* u:Update1 us:( WS* ';' WS* Update? )?
 {
-  var query = {};
-  query.token = 'update';
-  query.prologue = p;
+  // var query = {};
+  // query.token = 'update';
+  // query.prologue = p;
+  let query = {
+    token: 'update',
+    prologue: p,
+  };
   
-  var units = [u];
-
-  if(us != null && us.length != null && us[3] != null && us[3].units != null) {
+  let units = [u];
+  if (us != null && us.length != null && us[3] != null && us[3].units != null) {
     units = units.concat(us[3].units);
   }
-  
   query.units = units;
+
   return query;
 }
 
@@ -514,9 +529,10 @@ Load = 'LOAD'i WS* sg:IRIref WS* dg:( 'INTO'i WS* GraphRef)?
   query.kind = 'load';
   query.token = 'executableunit';
   query.sourceGraph = sg;
-  if(dg != null) {
+  if (dg != null) {
     query.destinyGraph = dg[2];
   }
+
   return query;
 }
 
@@ -900,10 +916,12 @@ ServiceGraphPattern = 'SERVICE' v:VarOrIri ts:GroupGraphPattern
 // [60] Bind ::= 'BIND' '(' Expression 'AS' Var ')'
 Bind = WS* 'BIND'i WS* '(' WS* ex:Expression WS* 'AS'i WS* v:Var WS* ')'
 {
-  return {token: 'bind',
-          location: location(),
-          expression: ex,
-          as: v};
+  return {
+    token: 'bind',
+    expression: ex,
+    as: v,
+    location: location(),
+  };
 }
 
 // [61] InlineData ::= 'VALUES' DataBlock
@@ -918,30 +936,29 @@ DataBlock = InlineDataOneVar / InlineDataFull
 // [63] InlineDataOneVar ::= Var '{' DataBlockValue* '}'
 InlineDataOneVar = WS* v:Var WS* '{' WS* d:DataBlockValue* '}'
 {
-  var result =  {
+  return {
     token: 'inlineData',
-    location: location(),
     // values: [{
     //   'var': v,
     //   'value': d
     // }]
     var: v,
-    values: d
+    values: d,
+    location: location(),
   };
-  
-  return result;
 }
 
 // [64] InlineDataFull ::= ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
 // for simplicity, ignore NIL, and use DataBlockTuple instead of '(' DataBlockValue* ')'
 InlineDataFull = WS*  '(' WS* vars:(Var*) WS* ')' WS* '{' WS* vals:( DataBlockTuple)* WS* '}'
 {
-  var result = {token: 'inlineDataFull',
-                location: location(),
-                variables: vars,
-                // values: vars.map((v, i) => { return  { 'var': v, 'value': vals[i] }; })
-                values: vals};
-  return result;
+  return {
+    token: 'inlineDataFull',
+    variables: vars,
+    // values: vars.map((v, i) => { return  { 'var': v, 'value': vals[i] }; })
+    values: vals,
+    location: location(),
+  };
 }
 
 // for simplicity, DataBlockTuple is used
@@ -959,10 +976,12 @@ DataBlockValue = WS* v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 
 // [66] MinusGraphPattern ::= 'MINUS' GroupGraphPattern
 MinusGraphPattern = 'MINUS'i WS* ts:GroupGraphPattern
 {
-  return {token: 'minusgraphpattern',
-          location: location(),
-          status: 'todo',
-          value: ts}
+  return {
+    token: 'minusgraphpattern',
+    status: 'todo',
+    value: ts,
+    location: location(),
+  }
 }
 
 // [67] GroupOrUnionGraphPattern ::= GroupGraphPattern ( 'UNION' GroupGraphPattern )*
@@ -996,9 +1015,11 @@ GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* ('UNION'/'union') WS* Gro
 // [68] Filter ::= 'FILTER' Constraint
 Filter = WS* 'FILTER'i WS* c:Constraint
 {
-  return {token: 'filter',
-          location: location(),
-          value: c}
+  return {
+    token: 'filter',
+    value: c,
+    location: location(),
+  }
 }
 
 // [69] Constraint ::= BrackettedExpression | BuiltInCall | FunctionCall
@@ -1159,36 +1180,29 @@ PropertyList = PropertyListNotEmpty?
 // [77] PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
 PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* ObjectList )? )*
 {
-  var tokenParsed = {};
+  let tokenParsed = {};
   tokenParsed.token = 'propertylist';
   var triplesContext = [];
   var pairs = [];
-  var test = [];
-  
-  for( var i=0; i<ol.length; i++) {
-    
-    if(ol[i].triplesContext != null) {
+  for (let i = 0; i < ol.length; i++) {
+    if (ol[i].triplesContext != null) {
       triplesContext = triplesContext.concat(ol[i].triplesContext);
-      if(ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
+      if (ol[i].token === 'triplesnodecollection' && ol[i].chainSubject.length != null) {
         pairs.push([v, ol[i].chainSubject[0]]);
       } else {
         pairs.push([v, ol[i].chainSubject]);
       }
-      
     } else {
       pairs.push([v, ol[i]])
     }
-    
   }
   
-  
-  for(var i=0; i<rest.length; i++) {
+  for (let i = 0; i < rest.length; i++) {
     var tok = rest[i][3];
     var newVerb  = tok[0];
     var newObjsList = tok[2] || [];
-    
-    for(var j=0; j<newObjsList.length; j++) {
-      if(newObjsList[j].triplesContext != null) {
+    for (let j = 0; j < newObjsList.length; j++) {
+      if (newObjsList[j].triplesContext != null) {
         triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
         pairs.push([newVerb, newObjsList[j].chainSubject]);
       } else {
@@ -1313,22 +1327,19 @@ PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath res
   var pairs = [];
   var test = [];
   
-  for( var i=0; i<ol.length; i++) {
+  for (let i=0; i<ol.length; i++) {
     
-    if(ol[i].triplesContext != null) {
+    if (ol[i].triplesContext != null) {
       triplesContext = triplesContext.concat(ol[i].triplesContext);
-      if(ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
+      if (ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
         pairs.push([v, ol[i].chainSubject[0]]);
       } else {
         pairs.push([v, ol[i].chainSubject]);
       }
-      
     } else {
       pairs.push([v, ol[i]])
     }
-    
   }
-  
   
   for(var i=0; i<rest.length; i++) {
     var tok = rest[i][3];

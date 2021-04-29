@@ -513,40 +513,52 @@ function peg$parse(input, options) {
       peg$c66 = "desc",
       peg$c67 = peg$literalExpectation("DESC", true),
       peg$c68 = function(direction, e) {
-        return { direction: direction.toUpperCase(), expression:e };
+        return {
+          direction: direction.toUpperCase(),
+          expression: e
+        };
       },
       peg$c69 = function(e) {
-        if(e.token === 'var') {
-          var e = { token:'expression',
-                    location: location(),
-                    expressionType:'atomic',
-                    primaryexpression: 'var',
-                    value: e };
+        if (e.token === 'var') {
+          return {
+            direction: 'ASC',
+            expression: {
+              value: e,
+              token:'expression',
+              expressionType:'atomic',
+              primaryexpression: 'var',
+              location: location(),
+            }
+          };
+        } else {
+          return {
+            direction: 'ASC',
+            expression: e
+          };
         }
-        return { direction: 'ASC', expression:e };
       },
       peg$c70 = function(cls) {
-        var acum = {};
-        for(var i=0; i<cls.length; i++) {
-          var cl = cls[i];
-          if(cl != null && cl.limit != null) {
-            acum['limit'] = cl.limit;
-          } else if(cl != null && cl.offset != null){
-            acum['offset'] = cl.offset;
+        let acum = {};
+
+        cls.forEach((cl) => {
+          if (cl != null && cl.limit != null) {
+            acum.limit = cl.limit;
+          } else if (cl != null && cl.offset != null){
+            acum.offset = cl.offset;
           }
-        }
+        });
         
         return acum;
       },
       peg$c71 = "limit",
       peg$c72 = peg$literalExpectation("LIMIT", true),
       peg$c73 = function(i) {
-        return { limit:parseInt(i.value) };
+        return { limit: parseInt(i.value) };
       },
       peg$c74 = "offset",
       peg$c75 = peg$literalExpectation("OFFSET", true),
       peg$c76 = function(i) {
-        return { offset:parseInt(i.value) };
+        return { offset: parseInt(i.value) };
       },
       peg$c77 = "BINDINGS",
       peg$c78 = peg$literalExpectation("BINDINGS", false),
@@ -555,7 +567,7 @@ function peg$parse(input, options) {
       peg$c81 = "values",
       peg$c82 = peg$literalExpectation("VALUES", true),
       peg$c83 = function(b) {
-        if(b != null) {
+        if (b != null) {
           return b[1];
         } else {
           return null;
@@ -564,17 +576,20 @@ function peg$parse(input, options) {
       peg$c84 = ";",
       peg$c85 = peg$literalExpectation(";", false),
       peg$c86 = function(p, u, us) {
-        var query = {};
-        query.token = 'update';
-        query.prologue = p;
+        // var query = {};
+        // query.token = 'update';
+        // query.prologue = p;
+        let query = {
+          token: 'update',
+          prologue: p,
+        };
         
-        var units = [u];
-
-        if(us != null && us.length != null && us[3] != null && us[3].units != null) {
+        let units = [u];
+        if (us != null && us.length != null && us[3] != null && us[3].units != null) {
           units = units.concat(us[3].units);
         }
-        
         query.units = units;
+
         return query;
       },
       peg$c87 = "load",
@@ -586,9 +601,10 @@ function peg$parse(input, options) {
         query.kind = 'load';
         query.token = 'executableunit';
         query.sourceGraph = sg;
-        if(dg != null) {
+        if (dg != null) {
           query.destinyGraph = dg[2];
         }
+
         return query;
       },
       peg$c92 = "clear",
@@ -904,35 +920,36 @@ function peg$parse(input, options) {
       peg$c145 = "bind",
       peg$c146 = peg$literalExpectation("BIND", true),
       peg$c147 = function(ex, v) {
-        return {token: 'bind',
-                location: location(),
-                expression: ex,
-                as: v};
+        return {
+          token: 'bind',
+          expression: ex,
+          as: v,
+          location: location(),
+        };
       },
       peg$c148 = function(d) {
         return d;
       },
       peg$c149 = function(v, d) {
-        var result =  {
+        return {
           token: 'inlineData',
-          location: location(),
           // values: [{
           //   'var': v,
           //   'value': d
           // }]
           var: v,
-          values: d
+          values: d,
+          location: location(),
         };
-        
-        return result;
       },
       peg$c150 = function(vars, vals) {
-        var result = {token: 'inlineDataFull',
-                      location: location(),
-                      variables: vars,
-                      // values: vars.map((v, i) => { return  { 'var': v, 'value': vals[i] }; })
-                      values: vals};
-        return result;
+        return {
+          token: 'inlineDataFull',
+          variables: vars,
+          // values: vars.map((v, i) => { return  { 'var': v, 'value': vals[i] }; })
+          values: vals,
+          location: location(),
+        };
       },
       peg$c151 = function(val) {
         return val;
@@ -940,10 +957,12 @@ function peg$parse(input, options) {
       peg$c152 = "minus",
       peg$c153 = peg$literalExpectation("MINUS", true),
       peg$c154 = function(ts) {
-        return {token: 'minusgraphpattern',
-                location: location(),
-                status: 'todo',
-                value: ts}
+        return {
+          token: 'minusgraphpattern',
+          status: 'todo',
+          value: ts,
+          location: location(),
+        }
       },
       peg$c155 = "UNION",
       peg$c156 = peg$literalExpectation("UNION", false),
@@ -976,9 +995,11 @@ function peg$parse(input, options) {
       peg$c160 = "filter",
       peg$c161 = peg$literalExpectation("FILTER", true),
       peg$c162 = function(c) {
-        return {token: 'filter',
-                location: location(),
-                value: c}
+        return {
+          token: 'filter',
+          value: c,
+          location: location(),
+        }
       },
       peg$c163 = function(i, args) {
         var fcall = {};
@@ -1105,36 +1126,29 @@ function peg$parse(input, options) {
         return token;
       },
       peg$c173 = function(v, ol, rest) {
-        var tokenParsed = {};
+        let tokenParsed = {};
         tokenParsed.token = 'propertylist';
         var triplesContext = [];
         var pairs = [];
-        var test = [];
-        
-        for( var i=0; i<ol.length; i++) {
-          
-          if(ol[i].triplesContext != null) {
+        for (let i = 0; i < ol.length; i++) {
+          if (ol[i].triplesContext != null) {
             triplesContext = triplesContext.concat(ol[i].triplesContext);
-            if(ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
+            if (ol[i].token === 'triplesnodecollection' && ol[i].chainSubject.length != null) {
               pairs.push([v, ol[i].chainSubject[0]]);
             } else {
               pairs.push([v, ol[i].chainSubject]);
             }
-            
           } else {
             pairs.push([v, ol[i]])
           }
-          
         }
         
-        
-        for(var i=0; i<rest.length; i++) {
+        for (let i = 0; i < rest.length; i++) {
           var tok = rest[i][3];
           var newVerb  = tok[0];
           var newObjsList = tok[2] || [];
-          
-          for(var j=0; j<newObjsList.length; j++) {
-            if(newObjsList[j].triplesContext != null) {
+          for (let j = 0; j < newObjsList.length; j++) {
+            if (newObjsList[j].triplesContext != null) {
               triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
               pairs.push([newVerb, newObjsList[j].chainSubject]);
             } else {
@@ -1240,22 +1254,19 @@ function peg$parse(input, options) {
         var pairs = [];
         var test = [];
         
-        for( var i=0; i<ol.length; i++) {
+        for (let i=0; i<ol.length; i++) {
           
-          if(ol[i].triplesContext != null) {
+          if (ol[i].triplesContext != null) {
             triplesContext = triplesContext.concat(ol[i].triplesContext);
-            if(ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
+            if (ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
               pairs.push([v, ol[i].chainSubject[0]]);
             } else {
               pairs.push([v, ol[i].chainSubject]);
             }
-            
           } else {
             pairs.push([v, ol[i]])
           }
-          
         }
-        
         
         for(var i=0; i<rest.length; i++) {
           var tok = rest[i][3];
