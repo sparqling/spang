@@ -670,10 +670,10 @@ InsertClause = 'INSERT'i q:QuadPattern
 // [44] UsingClause ::= 'USING' ( IRIref | 'NAMED' IRIref )
 UsingClause = WS* 'USING'i WS* g:( IRIref / 'NAMED'i WS* IRIref )
 {
-  if(g.length!=null) {
-    return {kind: 'named', uri: g[2]};
+  if (g.length != null) {
+    return { kind: 'named', uri: g[2] };
   } else {
-    return {kind: 'default', uri: g};
+    return { kind: 'default', uri: g };
   }
 }
 
@@ -719,18 +719,18 @@ QuadData = WS* '{' WS* qs:Quads WS* '}' WS*
 Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
 {
   var quads = [];
-  if(ts != null && ts.triplesContext != null) {
-    for(var i=0; i<ts.triplesContext.length; i++) {
+  if (ts != null && ts.triplesContext != null) {
+    for (var i=0; i<ts.triplesContext.length; i++) {
       var triple = ts.triplesContext[i]
       triple.graph = null;
       quads.push(triple)
     }
   }
 
-  if(qs && qs.length>0 && qs[0].length > 0) {
+  if (qs && qs.length>0 && qs[0].length > 0) {
     quads = quads.concat(qs[0][0].quadsContext);
     
-    if( qs[0][2] != null && qs[0][2].triplesContext != null) {
+    if (qs[0][2] != null && qs[0][2].triplesContext != null) {
       for(var i=0; i<qs[0][2].triplesContext.length; i++) {
         var triple = qs[0][2].triplesContext[i]
         triple.graph = null;
@@ -739,9 +739,11 @@ Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
     }
   }
   
-  return {token:'quads',
-          location: location(),
-          quadsContext: quads}
+  return {
+    token:'quads',
+    quadsContext: quads,
+    location: location(),
+  }
 }
 
 // [51] QuadsNotTriples ::= 'GRAPH' VarOrIri '{' TriplesTemplate? '}'
@@ -898,10 +900,12 @@ GraphGraphPattern = WS* 'GRAPH'i WS* g:VarOrIri WS* gg:GroupGraphPattern
 // ServiceGraphPattern ::= 'SERVICE' VarOrIri GroupGraphPattern
 ServiceGraphPattern = 'SERVICE' v:VarOrIri ts:GroupGraphPattern
 {
-  return {token: 'servicegraphpattern',
-          location: location(),
-          status: 'todo',
-          value: [v,ts] }
+  return {
+    token: 'servicegraphpattern',
+    status: 'todo',
+    value: [v, ts],
+    location: location(),
+  }
 }
 
 // [60] Bind ::= 'BIND' '(' Expression 'AS' Var ')'
@@ -979,7 +983,7 @@ MinusGraphPattern = 'MINUS'i WS* ts:GroupGraphPattern
 // incomplete??
 GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* ('UNION'/'union') WS* GroupGraphPattern )*
 {
-  if(b.length === 0) {
+  if (b.length === 0) {
     return a;
   } else {
     var lastToken = {token: 'graphunionpattern',

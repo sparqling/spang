@@ -723,10 +723,10 @@ function peg$parse(input, options) {
       peg$c116 = "using",
       peg$c117 = peg$literalExpectation("USING", true),
       peg$c118 = function(g) {
-        if(g.length!=null) {
-          return {kind: 'named', uri: g[2]};
+        if (g.length != null) {
+          return { kind: 'named', uri: g[2] };
         } else {
-          return {kind: 'default', uri: g};
+          return { kind: 'default', uri: g };
         }
       },
       peg$c119 = "graph",
@@ -754,18 +754,18 @@ function peg$parse(input, options) {
       peg$c131 = peg$literalExpectation(".", false),
       peg$c132 = function(ts, qs) {
         var quads = [];
-        if(ts != null && ts.triplesContext != null) {
-          for(var i=0; i<ts.triplesContext.length; i++) {
+        if (ts != null && ts.triplesContext != null) {
+          for (var i=0; i<ts.triplesContext.length; i++) {
             var triple = ts.triplesContext[i]
             triple.graph = null;
             quads.push(triple)
           }
         }
 
-        if(qs && qs.length>0 && qs[0].length > 0) {
+        if (qs && qs.length>0 && qs[0].length > 0) {
           quads = quads.concat(qs[0][0].quadsContext);
           
-          if( qs[0][2] != null && qs[0][2].triplesContext != null) {
+          if (qs[0][2] != null && qs[0][2].triplesContext != null) {
             for(var i=0; i<qs[0][2].triplesContext.length; i++) {
               var triple = qs[0][2].triplesContext[i]
               triple.graph = null;
@@ -774,9 +774,11 @@ function peg$parse(input, options) {
           }
         }
         
-        return {token:'quads',
-                location: location(),
-                quadsContext: quads}
+        return {
+          token:'quads',
+          quadsContext: quads,
+          location: location(),
+        }
       },
       peg$c133 = function(g, ts) {
         var quads = [];
@@ -903,10 +905,12 @@ function peg$parse(input, options) {
       peg$c142 = "SERVICE",
       peg$c143 = peg$literalExpectation("SERVICE", false),
       peg$c144 = function(v, ts) {
-        return {token: 'servicegraphpattern',
-                location: location(),
-                status: 'todo',
-                value: [v,ts] }
+        return {
+          token: 'servicegraphpattern',
+          status: 'todo',
+          value: [v, ts],
+          location: location(),
+        }
       },
       peg$c145 = "bind",
       peg$c146 = peg$literalExpectation("BIND", true),
@@ -960,7 +964,7 @@ function peg$parse(input, options) {
       peg$c157 = "union",
       peg$c158 = peg$literalExpectation("union", false),
       peg$c159 = function(a, b) {
-        if(b.length === 0) {
+        if (b.length === 0) {
           return a;
         } else {
           var lastToken = {token: 'graphunionpattern',
