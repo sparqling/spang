@@ -1161,12 +1161,11 @@ TriplesSameSubject = WS* s:VarOrTerm WS* pairs:PropertyListNotEmpty
     }
   }
   
-  var token = {};
-  token.token = "triplessamesubject";
-  token.triplesContext = triplesContext;
-  token.chainSubject = subject;
-  
-  return token;
+  return {
+    token: "triplessamesubject",
+    triplesContext: triplesContext,
+    chainSubject: subject,
+  }
 }
 
 // [76] PropertyList ::= PropertyListNotEmpty?
@@ -1216,11 +1215,13 @@ PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* Ob
 Verb = VarOrIri
 / 'a'
 {
-  return {token: 'uri', 
-          prefix:null, 
-          suffix:null,
-          location: location(),
-          value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#type"}
+  return {
+    token: 'uri',
+    prefix: null,
+    suffix: null,
+    value: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+    location: location(),
+  }
 }
 
 // [79] ObjectList ::= Object ( ',' Object )*
@@ -1946,33 +1947,30 @@ MultiplicativeExpression = exp:UnaryExpression exps:(WS* '*' WS* UnaryExpression
 // [118] UnaryExpression ::= '!' PrimaryExpression | '+' PrimaryExpression | '-' PrimaryExpression | PrimaryExpression
 UnaryExpression = '!' WS* e:PrimaryExpression
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'unaryexpression';
-  ex.unaryexpression = "!";
-  ex.expression = e;
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'unaryexpression',
+    unaryexpression: "!",
+    expression: e,
+  }
 }
 / '+' WS* v:PrimaryExpression
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'unaryexpression';
-  ex.unaryexpression = "+";
-  ex.expression = v;
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'unaryexpression',
+    unaryexpression: "+",
+    expression: v,
+  }
 }
 / '-' WS* v:PrimaryExpression
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'unaryexpression';
-  ex.unaryexpression = "-";
-  ex.expression = v;
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'unaryexpression',
+    unaryexpression: "-",
+    expression: v,
+  }
 }
 / PrimaryExpression
 
@@ -1980,44 +1978,40 @@ UnaryExpression = '!' WS* e:PrimaryExpression
 // PrimaryExpression ::= BrackettedExpression | BuiltInCall | IRIrefOrFunction | RDFLiteral | NumericLiteral | BooleanLiteral | Var | Aggregate
 PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RDFLiteral
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'atomic';
-  ex.primaryexpression = 'rdfliteral';
-  ex.value = v;
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'atomic',
+    primaryexpression: 'rdfliteral',
+    value: v,
+  }
 }
 / v:NumericLiteral
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'atomic';
-  ex.primaryexpression = 'numericliteral';
-  ex.value = v;
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'atomic',
+    primaryexpression: 'numericliteral',
+    value: v,
+  }
 }
 / v:BooleanLiteral
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'atomic';
-  ex.primaryexpression = 'booleanliteral';
-  ex.value = v;
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'atomic',
+    primaryexpression: 'booleanliteral',
+    value: v,
+  }
 }
 / Aggregate
 / v:Var
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'atomic';
-  ex.primaryexpression = 'var';
-  ex.value = v;
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'atomic',
+    primaryexpression: 'var',
+    value: v,
+  }
 }
 
 // [120] BrackettedExpression ::= '(' Expression ')'
@@ -2084,73 +2078,66 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 // incomplete??
 BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression'
-  ex.expressionType = 'builtincall'
-  ex.builtincall = 'str'
-  ex.args = [e]
-  
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'str',
+    args: [e],
+  }
 }
 / ('LANG'/'lang') WS* '(' WS* e:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression'
-  ex.expressionType = 'builtincall'
-  ex.builtincall = 'lang'
-  ex.args = [e]
-  
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'lang',
+    args: [e],
+  }
 }
 / ('LANGMATCHES'/'langmatches') WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression'
-  ex.expressionType = 'builtincall'
-  ex.builtincall = 'langmatches'
-  ex.args = [e1,e2]
-  
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'langmatches',
+    args: [e1, e2],
+  }
 }
 / ('DATATYPE'/'datatype') WS* '(' WS* e:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression'
-  ex.expressionType = 'builtincall'
-  ex.builtincall = 'datatype'
-  ex.args = [e]
-  
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'datatype',
+    args: [e],
+  }
 }
 / ('BOUND'/'bound') WS* '(' WS* v:Var WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression'
-  ex.expressionType = 'builtincall'
-  ex.builtincall = 'bound'
-  ex.args = [v]
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'bound',
+    args: [v],
+  }
 }
 / ('IRI'/'iri') WS* '(' WS* e:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'iri'
-  ex.args = [e];
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'iri',
+    args: [e],
+  }
 }
 / ('URI'/'uri') WS* '(' WS* e:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'uri'
-  ex.args = [e];
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'uri',
+    args: [e],
+  }
 }
 / ('BNODE'/'bnode') WS* arg:('(' WS* e:Expression WS* ')' / NIL)
 {
@@ -2168,94 +2155,86 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
 }
 / 'CONCAT'i WS* args:ExpressionList
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'concat';
-  ex.args = args;
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'concat',
+    args: args,
+  }
 }
 / SubstringExpression
 / StrReplaceExpression
 / 'CONTAINS'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression'
-  ex.expressionType = 'builtincall'
-  ex.builtincall = 'contains'
-  ex.args = [e1,e2]
-  
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'contains',
+    args: [e1, e2],
+  }
 }
 / 'STRAFTER'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'strafter';
-  ex.args = [e1,e2]
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'strafter',
+    args: [e1, e2],
+  }
 }
 / ('COALESCE'/'coalesce') WS* args:ExpressionList
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'coalesce';
-  ex.args = args;
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'coalesce',
+    args: args,
+  }
 }
 / ('IF'/'if') WS* '(' WS* test:Expression WS* ',' WS* trueCond:Expression WS* ',' WS* falseCond:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'if';
-  ex.args = [test,trueCond,falseCond];
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'if',
+    args: [test, trueCond, falseCond],
+  }
 }
 / ('ISLITERAL'/'isliteral'/'isLITERAL') WS* '(' WS* arg:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'isliteral';
-  ex.args = [arg];
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'isliteral',
+    args: [arg],
+  }
 }
 / ('ISBLANK'/'isblank'/'isBLANK') WS* '(' WS* arg:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'isblank';
-  ex.args = [arg];
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'isblank',
+    args: [arg],
+  }
 }
 / ('SAMETERM'/'sameterm') WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'sameterm';
-  ex.args = [e1, e2];
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'sameterm',
+    args: [e1, e2],
+  }
 }
 / ('ISURI'/'isuri'/'isURI'/'ISIRI'/'isiri'/'isIRI') WS* '(' WS* arg:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'isuri';
-  ex.args = [arg];
-
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'isuri',
+    args: [arg],
+  }
 }
 / ('custom:'/'CUSTOM:') fnname:[a-zA-Z0-9_]+ WS* '(' alter:(WS* Expression ',')* WS* finalarg:Expression WS* ')'
 {
@@ -2315,25 +2294,23 @@ StrReplaceExpression = ('REPLACE'i) WS* '(' WS* arg:Expression WS* ',' WS* patte
 // [125] ExistsFunc ::= 'EXISTS' GroupGraphPattern
 ExistsFunc = 'EXISTS'i WS* ggp:GroupGraphPattern
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'exists';
-  ex.args = [ggp];
-  
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'exists',
+    args: [ggp],
+  }
 }
 
 // [126] NotExistsFunc ::=   'NOT' 'EXISTS' GroupGraphPattern
 NotExistsFunc = 'NOT'i WS* 'EXISTS'i WS* ggp:GroupGraphPattern
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'notexists';
-  ex.args = [ggp];
-  
-  return ex;
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'notexists',
+    args: [ggp],
+  }
 }
 
 // [127] Aggregate ::= 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
@@ -2455,45 +2432,67 @@ NumericLiteralNegative = DOUBLE_NEGATIVE / DECIMAL_NEGATIVE / INTEGER_NEGATIVE
 // [134] BooleanLiteral ::= 'true' | 'false'
 BooleanLiteral = 'TRUE'i
 {
-  var lit = {};
-  lit.token = "literal";
-  lit.lang = null;
-  lit.type = "http://www.w3.org/2001/XMLSchema#boolean";
-  lit.value = true;
-  return lit;
+  return {
+    token: "literal",
+    lang: null,
+    type: "http://www.w3.org/2001/XMLSchema#boolean",
+    value: true,
+  }
 }
 / 'FALSE'i
 {
-  var lit = {};
-  lit.token = "literal";
-  lit.lang = null;
-  lit.type = "http://www.w3.org/2001/XMLSchema#boolean";
-  lit.value = false;
-  return lit;
+  return {
+    token: "literal",
+    lang: null,
+    type: "http://www.w3.org/2001/XMLSchema#boolean",
+    value: false,
+  }
 }
 
 // [135] String ::= STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2
 String = s:STRING_LITERAL_LONG1 
 {
-  return {token:'string', value:s,  location: location()}
+  return {
+    token: 'string',
+    value: s,
+    location: location(),
+  }
 }
 / s:STRING_LITERAL_LONG2 
 {
-  return {token:'string', value:s, location: location()}
+  return {
+    token: 'string',
+    value: s,
+    location: location(),
+  }
 }
 / s:STRING_LITERAL1 
 {
-  return {token:'string', value:s, location: location()}
+  return {
+    token: 'string',
+    value: s,
+    location: location(),
+  }
 }
 / s:STRING_LITERAL2 
 {
-  return {token:'string', value:s, location: location()}
+  return {
+    token:'string',
+    value: s,
+    location: location(),
+  }
 }
 
 // [136] IRIref ::= IRIREF | PrefixedName
 IRIref = iri:IRIREF
 {
-  return {token: 'uri', prefix:null, suffix:null, value:iri, location: location()}
+  return {
+    token: 'uri',
+    prefix: null,
+    suffix: null,
+    value: iri,
+    location: location(),
+  }
 }
 / p:PrefixedName
 {
@@ -2503,27 +2502,50 @@ IRIref = iri:IRIREF
 // [137] PrefixedName ::= PNAME_LN | PNAME_NS
 PrefixedName = p:PNAME_LN 
 {
-  return {token: 'uri', prefix:p[0], suffix:p[1], value:null, location: location() }
+  return {
+    token: 'uri',
+    prefix: p[0],
+    suffix: p[1],
+    value: null,
+    location: location(),
+  }
 }
 / p:PNAME_NS 
 {
-  return {token: 'uri', prefix:p, suffix:'', value:null, location: location() }
+  return {
+    token: 'uri',
+    prefix: p,
+    suffix: '',
+    value: null,
+    location: location(),
+  }
 }
 
 // [138] BlankNode ::= BLANK_NODE_LABEL | ANON
 BlankNode = l:BLANK_NODE_LABEL
 {
-  return {token:'blank', value:l, location: location()}
+  return {
+    token: 'blank',
+    value: l,
+    location: location(),
+  }
 }
 / ANON 
 { 
   GlobalBlankNodeCounter++;
-  return {token:'blank', value:'_:'+GlobalBlankNodeCounter, location: location()}
+  return {
+    token: 'blank',
+    value: '_:' + GlobalBlankNodeCounter,
+    location: location(),
+  }
 }
 
 // [139] IRIREF ::= '<' ([^<>"{}|^`\]-[#x00-#x20])* '>'
 // incomplete??
-IRIREF = '<' iri_ref:[^<>\"\{\}|^`\\]* '>' { return iri_ref.join('') }
+IRIREF = '<' iri_ref:[^<>\"\{\}|^`\\]* '>'
+{
+  return iri_ref.join('')
+}
 
 // [140] PNAME_NS ::= PN_PREFIX? ':'
 PNAME_NS = p:PN_PREFIX? ':'
@@ -2548,21 +2570,27 @@ BLANK_NODE_LABEL = '_:' l:PN_LOCAL
 // [143] VAR1 ::= '?' VARNAME
 VAR1 = '?' v:VARNAME 
 {
-  // return v
-  return { prefix: "?",  value: v };
+  return {
+    prefix: "?",
+    value: v,
+  }
 }
 
 // [144] VAR2 ::= '$' VARNAME
 VAR2 = '$' v:VARNAME 
 {
-  // return v
-  return { prefix: "$",  value: v };
+  return {
+    prefix: "$",
+    value: v,
+  }
 }
 
-// support var in mustash
 VAR3 = '{{' v:VARNAME '}}'
 {
-  return { prefix: 'mustash',  value: v };
+  return {
+    prefix: 'mustash',
+    value: v,
+  }
 }
 
 // [145] LANGTAG ::= '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
@@ -2578,62 +2606,62 @@ LANGTAG = '@' a:[a-zA-Z]+ b:('-' [a-zA-Z0-9]+)*
 // [146] INTEGER ::= [0-9]+
 INTEGER = d:[0-9]+
 {
-  var lit = {};
-  lit.token = "literal";
-  lit.lang = null;
-  lit.type = "http://www.w3.org/2001/XMLSchema#integer";
-  lit.value = flattenString(d);
-  return lit;
+  return {
+    token: "literal",
+    lang: null,
+    type: "http://www.w3.org/2001/XMLSchema#integer",
+    value: flattenString(d),
+  }
 }
 
 // [147] DECIMAL ::= [0-9]* '.' [0-9]+
 // DECIMAL ::= [0-9]+ '.' [0-9]* | '.' [0-9]+
 DECIMAL = a:[0-9]+ b:'.' c:[0-9]*
 {
-  var lit = {};
-  lit.token = "literal";
-  lit.lang = null;
-  lit.type = "http://www.w3.org/2001/XMLSchema#decimal";
-  lit.value = flattenString([a,b,c]);
-  return lit;
+  return {
+    token: "literal",
+    lang: null,
+    type: "http://www.w3.org/2001/XMLSchema#decimal",
+    value: flattenString([a, b, c]),
+  }
 }
 / a:'.' b:[0-9]+
 {
-  var lit = {};
-  lit.token = "literal";
-  lit.lang = null;
-  lit.type = "http://www.w3.org/2001/XMLSchema#decimal";
-  lit.value = flattenString([a,b]);
-  return lit;
+  return {
+    token: "literal",
+    lang: null,
+    type: "http://www.w3.org/2001/XMLSchema#decimal",
+    value: flattenString([a, b]),
+  }
 }
 
 // [148] DOUBLE ::= [0-9]+ '.' [0-9]* EXPONENT | '.' ([0-9])+ EXPONENT | ([0-9])+ EXPONENT
 DOUBLE = a:[0-9]+ b:'.' c:[0-9]* e:EXPONENT
 {
-  var lit = {};
-  lit.token = "literal";
-  lit.lang = null;
-  lit.type = "http://www.w3.org/2001/XMLSchema#double";
-  lit.value = flattenString([a,b,c,e]);
-  return lit;
+  return {
+    token: "literal",
+    lang: null,
+    type: "http://www.w3.org/2001/XMLSchema#double",
+    value: flattenString([a, b, c, e]),
+  }
 }
 / a:'.' b:[0-9]+ c:EXPONENT
 {
-  var lit = {};
-  lit.token = "literal";
-  lit.lang = null;
-  lit.type = "http://www.w3.org/2001/XMLSchema#double";
-  lit.value = flattenString([a,b,c]);
-  return lit;
+  return {
+    token: "literal",
+    lang: null,
+    type: "http://www.w3.org/2001/XMLSchema#double",
+    value: flattenString([a, b, c]),
+  }
 }
 / a:[0-9]+ b:EXPONENT
 {
-  var lit = {};
-  lit.token = "literal";
-  lit.lang = null;
-  lit.type = "http://www.w3.org/2001/XMLSchema#double";
-  lit.value = flattenString([a,b]);
-  return lit;
+  return {
+    token: "literal",
+    lang: null,
+    type: "http://www.w3.org/2001/XMLSchema#double",
+    value: flattenString([a, b]),
+  }
 }
 
 // [149] INTEGER_POSITIVE ::= '+' INTEGER
