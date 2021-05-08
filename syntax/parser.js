@@ -1325,17 +1325,17 @@ function peg$parse(input, options) {
         }
       },
       peg$c188 = function(p, mod) {
-        if(p.token && p.token != 'path' && mod == '') { // uri without mod
+        if (p.token && p.token != 'path' && mod == '') {
           p.kind = 'primary' // for debug
           return p;
-        // } else if(p.token && p.token != path && mod != '') { // bug?
-        } else if(p.token && p.token != 'path' && mod != '') { // uri with mod
-          var path = {};
-          path.token = 'path';
-          path.kind = 'element';
-          path.value = p;
-          path.modifier = mod;
-          return path;
+        }
+        if (p.token && p.token != 'path' && mod != '') {
+          return {
+            token: 'path',
+            kind: 'element',
+            value: p,
+            modifier: mod,
+          }
         } else {
           p.modifier = mod;
           return p;

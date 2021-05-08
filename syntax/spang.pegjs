@@ -1431,17 +1431,17 @@ PathSequence = first:PathEltOrInverse rest:( '/' PathEltOrInverse)*
 // [91] PathElt ::= PathPrimary PathMod?
 PathElt = p:PathPrimary mod:PathMod?
 {
-  if(p.token && p.token != 'path' && mod == '') { // uri without mod
+  if (p.token && p.token != 'path' && mod == '') {
     p.kind = 'primary' // for debug
     return p;
-  // } else if(p.token && p.token != path && mod != '') { // bug?
-  } else if(p.token && p.token != 'path' && mod != '') { // uri with mod
-    var path = {};
-    path.token = 'path';
-    path.kind = 'element';
-    path.value = p;
-    path.modifier = mod;
-    return path;
+  }
+  if (p.token && p.token != 'path' && mod != '') {
+    return {
+      token: 'path',
+      kind: 'element',
+      value: p,
+      modifier: mod,
+    }
   } else {
     p.modifier = mod;
     return p;
@@ -1491,7 +1491,6 @@ PathOneInPropertySet = ( IRIref / 'a' / '^' (IRIref / 'a') )
 Integer = INTEGER
 
 // [98] TriplesNode ::= Collection | BlankNodePropertyList
-// todo??
 TriplesNode = c:Collection
 {
   var triplesContext = [];
