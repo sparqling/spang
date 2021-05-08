@@ -155,8 +155,8 @@ function peg$parse(input, options) {
       peg$c1 = function(h, b) {
         return {
           token: 'function',
-          header:h,
-          body:b,
+          header: h,
+          body: b,
           location: location()
         }
       },
@@ -198,8 +198,8 @@ function peg$parse(input, options) {
           dataset.implicit.push({
             token:'uri',
             location: null,
-            prefix:null,
-            suffix:null,
+            prefix: null,
+            suffix: null,
           });
         }
 
@@ -869,13 +869,10 @@ function peg$parse(input, options) {
       //      }
       },
       peg$c137 = function(b, bs) {
-        var triples = b.triplesContext;
-        if (bs != null && typeof(bs) === 'object') {
-          if (bs != null && bs.length != null) {
-            if (bs[2] != null && bs[2].triplesContext!=null) {
-              triples = triples.concat(bs[2].triplesContext);
-            }
-          }
+        let triples = b.triplesContext;
+        if (bs != null && typeof(bs) === 'object' &&
+            bs.length != null && bs[2] != null && bs[2].triplesContext != null) {
+          triples = triples.concat(bs[2].triplesContext);
         }
         
         return {
@@ -904,11 +901,10 @@ function peg$parse(input, options) {
       },
       peg$c142 = "SERVICE",
       peg$c143 = peg$literalExpectation("SERVICE", false),
-      peg$c144 = function(v, ts) {
+      peg$c144 = function(v, ggp) {
         return {
           token: 'servicegraphpattern',
-          status: 'todo',
-          value: [v, ts],
+          value: [v, ggp],
           location: location(),
         }
       },
@@ -951,11 +947,10 @@ function peg$parse(input, options) {
       },
       peg$c152 = "minus",
       peg$c153 = peg$literalExpectation("MINUS", true),
-      peg$c154 = function(ts) {
+      peg$c154 = function(ggp) {
         return {
           token: 'minusgraphpattern',
-          status: 'todo',
-          value: ts,
+          value: ggp,
           location: location(),
         }
       },
@@ -1298,40 +1293,35 @@ function peg$parse(input, options) {
       peg$c182 = "|",
       peg$c183 = peg$literalExpectation("|", false),
       peg$c184 = function(first, rest) {
-        if(rest == null || rest.length === 0) {
+        if (rest == null || rest.length === 0) {
           return first;
-        } else {
-          var acum = [];
-          for(var i=0; i<rest.length; i++)
-            acum.push(rest[1]);
-          
-          var path = {};
-          path.token = 'path';
-          path.kind = 'alternative';
-          path.value = acum;
-          path.location = location();
-          
-          return path;
+        }
+        var acum = [];
+        for (var i = 0; i < rest.length; i++) {
+          acum.push(rest[1]);
+        }
+        return {
+          token: 'path',
+          kind: 'alternative',
+          value: acum,
+          location: location(),
         }
       },
       peg$c185 = "/",
       peg$c186 = peg$literalExpectation("/", false),
       peg$c187 = function(first, rest) {
-        if(rest == null || rest.length === 0) {
+        if (rest == null || rest.length === 0) {
           return first;
-        } else {
-          var acum = [first];
-          
-          for(var i=0; i<rest.length; i++)
-            acum.push(rest[i][1]);
-          
-          var path = {};
-          path.token = 'path';
-          path.kind = 'sequence';
-          path.value = acum;
-          path.location = location();
-          
-          return path;
+        }
+        var acum = [first];
+        for (var i = 0; i < rest.length; i++) {
+          acum.push(rest[i][1]);
+        }
+        return {
+          token: 'path',
+          kind: 'sequence',
+          value: acum,
+          location: location(),
         }
       },
       peg$c188 = function(p, mod) {

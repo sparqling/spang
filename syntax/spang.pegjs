@@ -40,8 +40,8 @@ Function = h:FunctionCall WS* b:GroupGraphPattern WS*
 {
   return {
     token: 'function',
-    header:h,
-    body:b,
+    header: h,
+    body: b,
     location: location()
   }
 }
@@ -95,8 +95,8 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
     dataset.implicit.push({
       token:'uri',
       location: null,
-      prefix:null,
-      suffix:null,
+      prefix: null,
+      suffix: null,
     });
   }
 
@@ -129,7 +129,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
 }
 
 // [8] SubSelect ::= SelectClause WhereClause SolutionModifier ValuesClause
-// SubSelect ::= SelectClause WhereClause SolutionModifier
+// add ValuesClause
 SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 {
   let query = {
@@ -289,7 +289,7 @@ ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* 
 DescribeQuery = 'DESCRIBE'i ( VarOrIri+ / '*' ) DatasetClause* WhereClause? SolutionModifier
 
 // [12] AskQuery ::= 'ASK' DatasetClause* WhereClause SolutionModifier
-// AskQuery ::= 'ASK' DatasetClause* WhereClause
+// add SolutionModifier
 AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause 
 {
   const dataset = { named: [], implicit: [] };
@@ -851,17 +851,12 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
 }
 
 // [55] TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
-// warning??
-// rewritten??
 TriplesBlock = b:TriplesSameSubjectPath bs:(WS*  '.' TriplesBlock? )?
 {
-  var triples = b.triplesContext;
-  if (bs != null && typeof(bs) === 'object') {
-    if (bs != null && bs.length != null) {
-      if (bs[2] != null && bs[2].triplesContext!=null) {
-        triples = triples.concat(bs[2].triplesContext);
-      }
-    }
+  let triples = b.triplesContext;
+  if (bs != null && typeof(bs) === 'object' &&
+      bs.length != null && bs[2] != null && bs[2].triplesContext != null) {
+    triples = triples.concat(bs[2].triplesContext);
   }
   
   return {
@@ -897,13 +892,12 @@ GraphGraphPattern = WS* 'GRAPH'i WS* g:VarOrIri WS* gg:GroupGraphPattern
 }
 
 // [59] ServiceGraphPattern ::= 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern
-// ServiceGraphPattern ::= 'SERVICE' VarOrIri GroupGraphPattern
-ServiceGraphPattern = 'SERVICE' v:VarOrIri ts:GroupGraphPattern
+// add SILENT
+ServiceGraphPattern = 'SERVICE' v:VarOrIri ggp:GroupGraphPattern
 {
   return {
     token: 'servicegraphpattern',
-    status: 'todo',
-    value: [v, ts],
+    value: [v, ggp],
     location: location(),
   }
 }
@@ -969,12 +963,11 @@ DataBlockValue = WS* v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 
 }
 
 // [66] MinusGraphPattern ::= 'MINUS' GroupGraphPattern
-MinusGraphPattern = 'MINUS'i WS* ts:GroupGraphPattern
+MinusGraphPattern = 'MINUS'i WS* ggp:GroupGraphPattern
 {
   return {
     token: 'minusgraphpattern',
-    status: 'todo',
-    value: ts,
+    value: ggp,
     location: location(),
   }
 }
@@ -1397,47 +1390,41 @@ ObjectListPath = obj:ObjectPath WS* objs:(',' WS* ObjectPath)*
 ObjectPath = GraphNodePath
 
 // [88] Path ::= PathAlternative
-// to fix??
 Path = PathAlternative
 
 // [89] PathAlternative ::= PathSequence ( '|' PathSequence )*
 PathAlternative = first:PathSequence rest:( '|' PathSequence)*
 {
-  if(rest == null || rest.length === 0) {
+  if (rest == null || rest.length === 0) {
     return first;
-  } else {
-    var acum = [];
-    for(var i=0; i<rest.length; i++)
-      acum.push(rest[1]);
-    
-    var path = {};
-    path.token = 'path';
-    path.kind = 'alternative';
-    path.value = acum;
-    path.location = location();
-    
-    return path;
+  }
+  var acum = [];
+  for (var i = 0; i < rest.length; i++) {
+    acum.push(rest[1]);
+  }
+  return {
+    token: 'path',
+    kind: 'alternative',
+    value: acum,
+    location: location(),
   }
 }
 
 // [90] PathSequence ::= PathEltOrInverse ( '/' PathEltOrInverse )*
 PathSequence = first:PathEltOrInverse rest:( '/' PathEltOrInverse)*
 {
-  if(rest == null || rest.length === 0) {
+  if (rest == null || rest.length === 0) {
     return first;
-  } else {
-    var acum = [first];
-    
-    for(var i=0; i<rest.length; i++)
-      acum.push(rest[i][1]);
-    
-    var path = {};
-    path.token = 'path';
-    path.kind = 'sequence';
-    path.value = acum;
-    path.location = location();
-    
-    return path;
+  }
+  var acum = [first];
+  for (var i = 0; i < rest.length; i++) {
+    acum.push(rest[i][1]);
+  }
+  return {
+    token: 'path',
+    kind: 'sequence',
+    value: acum,
+    location: location(),
   }
 }
 
