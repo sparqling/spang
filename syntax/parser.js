@@ -1296,9 +1296,9 @@ function peg$parse(input, options) {
         if (rest == null || rest.length === 0) {
           return first;
         }
-        var acum = [];
-        for (var i = 0; i < rest.length; i++) {
-          acum.push(rest[1]);
+        let acum = [first];
+        for (let i = 0; i < rest.length; i++) {
+          acum.push(rest[i][1]);
         }
         return {
           token: 'path',
@@ -1313,8 +1313,8 @@ function peg$parse(input, options) {
         if (rest == null || rest.length === 0) {
           return first;
         }
-        var acum = [first];
-        for (var i = 0; i < rest.length; i++) {
+        let acum = [first];
+        for (let i = 0; i < rest.length; i++) {
           acum.push(rest[i][1]);
         }
         return {
