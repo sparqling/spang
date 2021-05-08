@@ -2051,7 +2051,7 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 //   | 'STRSTARTS' '(' Expression ',' Expression ')'
 //   | 'STRENDS' '(' Expression ',' Expression ')'
 //   | 'STRBEFORE' '(' Expression ',' Expression ')'
-//   | 'STRAFTER' '(' Expression ',' Expression ')'
+//                    | 'STRAFTER' '(' Expression ',' Expression ')'
 //   | 'YEAR' '(' Expression ')'
 //   | 'MONTH' '(' Expression ')'
 //   | 'DAY' '(' Expression ')'
@@ -2186,6 +2186,16 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
   ex.builtincall = 'contains'
   ex.args = [e1,e2]
   
+  return ex;
+}
+/ 'STRAFTER'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
+{
+  var ex = {};
+  ex.token = 'expression';
+  ex.expressionType = 'builtincall';
+  ex.builtincall = 'strafter';
+  ex.args = [e1,e2]
+
   return ex;
 }
 / ('COALESCE'/'coalesce') WS* args:ExpressionList
