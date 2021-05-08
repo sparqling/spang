@@ -22,7 +22,7 @@ SPARQL = QueryUnit / UpdateUnit
 QueryUnit = Query
 
 // [2] Query ::= Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause
-// Query = p:Prologue q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
+// add HEADER_LINE and Function
 Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
 {
   return {
@@ -1975,7 +1975,6 @@ UnaryExpression = '!' WS* e:PrimaryExpression
 / PrimaryExpression
 
 // [119] PrimaryExpression ::= BrackettedExpression | BuiltInCall | IRIrefOrFunction | RDFLiteral | NumericLiteral | BooleanLiteral | Var
-// PrimaryExpression ::= BrackettedExpression | BuiltInCall | IRIrefOrFunction | RDFLiteral | NumericLiteral | BooleanLiteral | Var | Aggregate
 PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RDFLiteral
 {
   return {
@@ -2003,7 +2002,6 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
     value: v,
   }
 }
-/ Aggregate
 / v:Var
 {
   return {
@@ -2064,19 +2062,20 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 //   | 'SHA512' '(' Expression ')'
 //                    |  'COALESCE' ExpressionList
 //                    |  'IF' '(' Expression ',' Expression ',' Expression ')'
-//                    |  'STRLANG' '(' Expression ',' Expression ')'
-//                    |  'STRDT' '(' Expression ',' Expression ')'
+//   |  'STRLANG' '(' Expression ',' Expression ')'
+//   |  'STRDT' '(' Expression ',' Expression ')'
 //                    |  'sameTerm' '(' Expression ',' Expression ')'
 //                    |  'isIRI' '(' Expression ')'
 //                    |  'isURI' '(' Expression ')'
 //                    |  'isBLANK' '(' Expression ')'
 //                    |  'isLITERAL' '(' Expression ')'
-//                    |  'isNUMERIC' '(' Expression ')'
+//   |  'isNUMERIC' '(' Expression ')'
 //                    |  RegexExpression
 //                    |  ExistsFunc
 //                    |  NotExistsFunc
-// incomplete??
-BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
+// add custom:
+BuiltInCall = Aggregate
+/ 'STR'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2085,7 +2084,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [e],
   }
 }
-/ ('LANG'/'lang') WS* '(' WS* e:Expression WS* ')'
+/ 'LANG'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2094,7 +2093,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [e],
   }
 }
-/ ('LANGMATCHES'/'langmatches') WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
+/ 'LANGMATCHES'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2103,7 +2102,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [e1, e2],
   }
 }
-/ ('DATATYPE'/'datatype') WS* '(' WS* e:Expression WS* ')'
+/ 'DATATYPE'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2112,7 +2111,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [e],
   }
 }
-/ ('BOUND'/'bound') WS* '(' WS* v:Var WS* ')'
+/ 'BOUND'i WS* '(' WS* v:Var WS* ')'
 {
   return {
     token: 'expression',
@@ -2121,7 +2120,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [v],
   }
 }
-/ ('IRI'/'iri') WS* '(' WS* e:Expression WS* ')'
+/ 'IRI'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2130,7 +2129,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [e],
   }
 }
-/ ('URI'/'uri') WS* '(' WS* e:Expression WS* ')'
+/ 'URI'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2139,7 +2138,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [e],
   }
 }
-/ ('BNODE'/'bnode') WS* arg:('(' WS* e:Expression WS* ')' / NIL)
+/ 'BNODE'i WS* arg:('(' WS* e:Expression WS* ')' / NIL)
 {
   var ex = {};
   ex.token = 'expression';
@@ -2182,7 +2181,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [e1, e2],
   }
 }
-/ ('COALESCE'/'coalesce') WS* args:ExpressionList
+/ 'COALESCE'i WS* args:ExpressionList
 {
   return {
     token: 'expression',
@@ -2191,7 +2190,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: args,
   }
 }
-/ ('IF'/'if') WS* '(' WS* test:Expression WS* ',' WS* trueCond:Expression WS* ',' WS* falseCond:Expression WS* ')'
+/ 'IF'i WS* '(' WS* test:Expression WS* ',' WS* trueCond:Expression WS* ',' WS* falseCond:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2200,7 +2199,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [test, trueCond, falseCond],
   }
 }
-/ ('ISLITERAL'/'isliteral'/'isLITERAL') WS* '(' WS* arg:Expression WS* ')'
+/ 'isLITERAL'i WS* '(' WS* arg:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2209,7 +2208,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [arg],
   }
 }
-/ ('ISBLANK'/'isblank'/'isBLANK') WS* '(' WS* arg:Expression WS* ')'
+/ 'isBLANK'i WS* '(' WS* arg:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2218,7 +2217,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [arg],
   }
 }
-/ ('SAMETERM'/'sameterm') WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
+/ 'sameTerm'i WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2227,7 +2226,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [e1, e2],
   }
 }
-/ ('ISURI'/'isuri'/'isURI'/'ISIRI'/'isiri'/'isIRI') WS* '(' WS* arg:Expression WS* ')'
+/ ('isURI'i/'isIRI'i) WS* '(' WS* arg:Expression WS* ')'
 {
   return {
     token: 'expression',
@@ -2236,7 +2235,7 @@ BuiltInCall = 'STR'i WS* '(' WS* e:Expression WS* ')'
     args: [arg],
   }
 }
-/ ('custom:'/'CUSTOM:') fnname:[a-zA-Z0-9_]+ WS* '(' alter:(WS* Expression ',')* WS* finalarg:Expression WS* ')'
+/ 'custom:'i fnname:[a-zA-Z0-9_]+ WS* '(' alter:(WS* Expression ',')* WS* finalarg:Expression WS* ')'
 {
   var ex = {};
   ex.token = 'expression';
