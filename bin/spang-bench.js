@@ -117,6 +117,16 @@ function measureQuery(queryPath, expected) {
       times.push('null');
       validations.push('null');
     } else {
+      if (!expected) {
+        validations.push('null');
+      } else if (expected === result.stdout.toString()) {
+        validations.push('true');
+      } else {
+        validations.push('false');
+        if (opts.output_error) {
+          console.error(result.stdout.toString());
+        }
+      }
       let matched = result.stderr.toString().match(/(\d+)ms/);
       if (matched) {
         time = matched[1];
@@ -124,19 +134,8 @@ function measureQuery(queryPath, expected) {
           time = time / 1000;
         }
         times.push(time);
-        if (!expected) {
-          validations.push('null');
-        } else if (expected === result.stdout.toString()) {
-          validations.push('true');
-        } else {
-          validations.push('false');
-          if (opts.output_error) {
-            console.error(result.stdout.toString());
-          }
-        }
       } else {
         times.push('null');
-        validations.push('null');
       }
       if (opts.verbose) {
         console.error(`time: ${times[times.length - 1]}, valid: ${validations[validations.length - 1]}`);
