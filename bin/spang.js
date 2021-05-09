@@ -72,25 +72,6 @@ let opts = program
   .parse(process.argv)
   .opts();
 
-if (opts.fmt) {
-  let sparqlQuery;
-  if (program.args[0]) {
-    sparqlQuery = fs.readFileSync(program.args[0], 'utf8').toString();
-  } else if (process.stdin.isTTY) {
-    console.error('Format SPARQL query: input is required');
-    process.exit(-1);
-  } else {
-    sparqlQuery = input;
-  }
-  const syntaxTree = parser.parse(sparqlQuery);
-  if (opts.debug) {
-    console.log(JSON.stringify(syntaxTree, undefined, 2)); // (value, replacer, space)
-  } else {
-    console.log(formatter.format(syntaxTree, opts.indent));
-  }
-  process.exit(0);
-}
-
 initializeConfig(opts);
 
 const dbMap = search_db_name.listup();
@@ -124,6 +105,25 @@ if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePat
     opts = program.opts();
   }
   templateSpecified = true;
+}
+
+if (opts.fmt) {
+  let sparqlQuery;
+  if (program.args[0]) {
+    sparqlQuery = fs.readFileSync(program.args[0], 'utf8').toString();
+  } else if (process.stdin.isTTY) {
+    console.error('Format SPARQL query: input is required');
+    process.exit(-1);
+  } else {
+    sparqlQuery = input;
+  }
+  const syntaxTree = parser.parse(sparqlQuery);
+  if (opts.debug) {
+    console.log(JSON.stringify(syntaxTree, undefined, 2)); // (value, replacer, space)
+  } else {
+    console.log(formatter.format(syntaxTree, opts.indent));
+  }
+  process.exit(0);
 }
 
 if (templateSpecified && opts.help) {
