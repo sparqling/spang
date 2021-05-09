@@ -74,23 +74,11 @@ let opts = program
 
 initializeConfig(opts);
 
-const dbMap = search_db_name.listup();
-
-if (program.args.length < 1) {
-  if (!opts.subject && !opts.predicate && !opts.object && !opts.number && !opts.from && !opts.graph && !opts.limit) {
-    console.error(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
-    program.help();
-  } else if (!opts.endpoint && !dbMap['default']) {
-    console.error(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
-    program.help();
-  }
-}
-
 if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePath) || opts.number || opts.graph || opts.from) {
   sparqlTemplate = shortcut({ S: opts.subject, P: opts.predicate, O: opts.object, L: opts.limit, N: opts.number, G: opts.graph, F: opts.from });
   templateSpecified = false;
   metadata = {};
-} else {
+} else if (templatePath != null) {
   templatePath = alias.replaceIfAny(templatePath);
   const templateURL = prefixModule.expandPrefixedUri(templatePath);
   if (templateURL) {
@@ -124,6 +112,18 @@ if (opts.fmt) {
     console.log(formatter.format(syntaxTree, opts.indent));
   }
   process.exit(0);
+}
+
+const dbMap = search_db_name.listup();
+
+if (program.args.length < 1) {
+  if (!opts.subject && !opts.predicate && !opts.object && !opts.number && !opts.from && !opts.graph && !opts.limit) {
+    console.error(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
+    program.help();
+  } else if (!opts.endpoint && !dbMap['default']) {
+    console.error(`SPANG v${version}: Specify the target SPARQL endpoint (using -e option or in <SPARQL_TEMPLATE>).\n`);
+    program.help();
+  }
 }
 
 if (templateSpecified && opts.help) {
