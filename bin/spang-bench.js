@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
-const program = require('commander')
+const program = require('commander');
 const { spawnSync } = require('child_process');
 const csvWriter = require('csv-write-stream');
 const ls = require('ls');
@@ -51,7 +51,12 @@ if (!opts.skip_comparison) {
   header.push('valid');
 }
 
-let writer = csvWriter({ separator: opts.delimiter, newline: '\n', headers: header, sendHeaders: true });
+let writer = csvWriter({
+  separator: opts.delimiter,
+  newline: '\n',
+  headers: header,
+  sendHeaders: true
+});
 writer.pipe(process.stdout);
 
 for (let benchmark of benchmarks) {
@@ -60,8 +65,12 @@ for (let benchmark of benchmarks) {
     console.error(`Warning: Query "${benchmark.query}" is specified but no matched files are found.`);
   }
   for (let file of queries) {
-    if (pattern && !file.full.match(pattern)) continue;
-    if (exclude && file.full.match(exclude)) continue;
+    if (pattern && !file.full.match(pattern)) {
+      continue;
+    }
+    if (exclude && file.full.match(exclude)) {
+      continue;
+    }
     let expected = null;
     const defaultExpectedName = file.full.replace(/\.[^/.]+$/, '') + '.txt';
     if (!opts.skip_comparison) {
@@ -89,12 +98,18 @@ function measureQuery(queryPath, expected) {
   let row = { name: queryPath };
   let times = [];
   let validations = [];
-  if (opts.verbose) console.error(queryPath);
+  if (opts.verbose) {
+    console.error(queryPath);
+  }
   for (let i = 0; i < opts.iteration; i++) {
     let column = (i + 1).toString();
-    if (opts.verbose) console.error(`query: ${column}`);
+    if (opts.verbose) {
+      console.error(`query: ${column}`);
+    }
     let arguments = ['--time', queryPath, '--method', opts.method];
-    if (opts.endpoint) arguments = arguments.concat(['--endpoint', opts.endpoint]);
+    if (opts.endpoint) {
+      arguments = arguments.concat(['--endpoint', opts.endpoint]);
+    }
     let result = spawnSync(opts.command, arguments, { maxBuffer: Infinity });
     if (result.status) {
       // error
@@ -123,7 +138,9 @@ function measureQuery(queryPath, expected) {
         times.push('null');
         validations.push('null');
       }
-      if (opts.verbose) console.error(`time: ${times[times.length - 1]}, valid: ${validations[validations.length - 1]}`);
+      if (opts.verbose) {
+        console.error(`time: ${times[times.length - 1]}, valid: ${validations[validations.length - 1]}`);
+      }
     }
   }
   row['time'] = times.join(',');
