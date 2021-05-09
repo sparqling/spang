@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('fs');
+const program = require('commander')
 const { spawnSync } = require('child_process');
 const csvWriter = require('csv-write-stream');
 const ls = require('ls');
@@ -8,7 +9,7 @@ const path = require('path');
 
 const readFile = (path) => fs.readFileSync(path, 'utf8').toString();
 
-const commander = require('commander')
+const opts = program
   .option('-c, --command <COMMAND>', 'command', 'spang2')
   .option('-n, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
   .option('-d, --delimiter <DELIMITER>', 'delimiter of output', '\t')
@@ -21,17 +22,16 @@ const commander = require('commander')
   .option('--output_error', 'output to stderr')
   .option('-a, --average', 'calculate average')
   .option('-v, --verbose', 'output progress to stderr')
-  .arguments('[json_or_queries...]');
+  .arguments('[json_or_queries...]')
+  .parse(process.argv)
+  .opts();
 
-commander.parse(process.argv);
-if (commander.args.length < 1) {
-  commander.help();
+if (program.args.length < 1) {
+  program.help();
 }
 
-const opts = commander.opts();
-
 let benchmarks = [];
-for (let arg of commander.args) {
+for (let arg of program.args) {
   if (arg.endsWith('.json')) {
     benchmarks = benchmarks.concat(JSON.parse(readFile(arg)));
     process.chdir(path.dirname(arg));
