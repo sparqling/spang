@@ -1013,63 +1013,61 @@ Constraint = BrackettedExpression / BuiltInCall / FunctionCall
 // [70] FunctionCall ::= IRIref ArgList
 FunctionCall = i:IRIref WS* args:ArgList
 {
-  var fcall = {};
-  fcall.token = "expression";
-  fcall.expressionType = 'functioncall'
-  fcall.iriref = i;
-  fcall.args = args.value;
-  fcall.location = location();
-  return fcall;
+  return {
+    token: "expression",
+    expressionType: 'functioncall',
+    iriref: i,
+    args: args.value,
+    location: location(),
+  }
 }
 
 // [71] ArgList ::= NIL | '(' 'DISTINCT'? Expression ( ',' Expression )* ')'
 ArgList = NIL
 {
-  var args = {};
-  args.token = 'args';
-  args.value = [];
-  return args;
+  return {
+    token: 'args',
+    value: [],
+  }
 }
 / '(' WS* d:'DISTINCT'i? WS* e:Expression WS* es:( ',' WS* Expression)* ')'
 {
-  var cleanEx = [];
-  
-  for(var i=0; i<es.length; i++) {
+  let cleanEx = [];
+  for (let i = 0; i < es.length; i++) {
     cleanEx.push(es[i][2]);
   }
-  var args = {};
-  args.token = 'args';
-  args.value = [e].concat(cleanEx);
-  
-  if(d!=null && d.toUpperCase()==="DISTINCT") {
+
+  let args = {
+    token: 'args',
+    value: [e].concat(cleanEx),
+  };
+  if (d != null && d.toUpperCase() === "DISTINCT") {
     args.distinct = true;
   } else {
     args.distinct = false;
   }
-  
   return args;
 }
 
 // [72] ExpressionList ::= NIL | '(' Expression ( ',' Expression )* ')'
 ExpressionList = NIL
 {
-  var args = {};
-  args.token = 'args';
-  args.value = [];
-  return args;
+  return {
+    token: 'args',
+    value: [],
+  }
 }
 / '(' WS* e:(IRIref / Expression) WS* es:( ',' WS* (IRIref / Expression))* ')'
 {
-  var cleanEx = [];
-  
-  for(var i=0; i<es.length; i++) {
+  let cleanEx = [];
+  for (let i = 0; i < es.length; i++) {
     cleanEx.push(es[i][2]);
   }
-  var args = {};
-  args.token = 'args';
-  args.value = [e].concat(cleanEx);
-  
-  return args;
+
+  return {
+    token: 'args',
+    value: [e].concat(cleanEx),
+  }
 }
 
 // [73] ConstructTemplate ::= '{' ConstructTriples? '}'

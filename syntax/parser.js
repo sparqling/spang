@@ -988,51 +988,49 @@ function peg$parse(input, options) {
         }
       },
       peg$c161 = function(i, args) {
-        var fcall = {};
-        fcall.token = "expression";
-        fcall.expressionType = 'functioncall'
-        fcall.iriref = i;
-        fcall.args = args.value;
-        fcall.location = location();
-        return fcall;
+        return {
+          token: "expression",
+          expressionType: 'functioncall',
+          iriref: i,
+          args: args.value,
+          location: location(),
+        }
       },
       peg$c162 = function() {
-        var args = {};
-        args.token = 'args';
-        args.value = [];
-        return args;
+        return {
+          token: 'args',
+          value: [],
+        }
       },
       peg$c163 = ",",
       peg$c164 = peg$literalExpectation(",", false),
       peg$c165 = function(d, e, es) {
-        var cleanEx = [];
-        
-        for(var i=0; i<es.length; i++) {
+        let cleanEx = [];
+        for (let i = 0; i < es.length; i++) {
           cleanEx.push(es[i][2]);
         }
-        var args = {};
-        args.token = 'args';
-        args.value = [e].concat(cleanEx);
-        
-        if(d!=null && d.toUpperCase()==="DISTINCT") {
+
+        let args = {
+          token: 'args',
+          value: [e].concat(cleanEx),
+        };
+        if (d != null && d.toUpperCase() === "DISTINCT") {
           args.distinct = true;
         } else {
           args.distinct = false;
         }
-        
         return args;
       },
       peg$c166 = function(e, es) {
-        var cleanEx = [];
-        
-        for(var i=0; i<es.length; i++) {
+        let cleanEx = [];
+        for (let i = 0; i < es.length; i++) {
           cleanEx.push(es[i][2]);
         }
-        var args = {};
-        args.token = 'args';
-        args.value = [e].concat(cleanEx);
-        
-        return args;
+
+        return {
+          token: 'args',
+          value: [e].concat(cleanEx),
+        }
       },
       peg$c167 = function(ts) {
         return ts;
