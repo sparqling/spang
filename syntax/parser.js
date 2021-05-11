@@ -659,36 +659,30 @@ function peg$parse(input, options) {
         }
       },
       peg$c111 = function(p) {
-        var query = {};
-        query.kind = 'modify';
-        query.pattern = p;
-        query.with = null;
-        query.using = null;
-        
-        var quads = [];
-        
-        var patternsCollection = p.patterns[0];
-        if(patternsCollection.triplesContext == null && patternsCollection.patterns!=null) {
+        let patternsCollection = p.patterns[0];
+        if (patternsCollection.triplesContext == null && patternsCollection.patterns != null) {
           patternsCollection = patternsCollection.patterns[0].triplesContext;
         } else {
           patternsCollection = patternsCollection.triplesContext;
         }
-        
-        for(var i=0; i<patternsCollection.length; i++) {
-          var quad = {};
-          var contextQuad = patternsCollection[i];
-          
-          quad['subject'] = contextQuad['subject'];
-          quad['predicate'] = contextQuad['predicate'];
-          quad['object'] = contextQuad['object'];
-          quad['graph'] = contextQuad['graph'];
-          
-          quads.push(quad);
+
+        let quads = [];
+        for (let i = 0; i < patternsCollection.length; i++) {
+          quads.push({
+            subject: patternsCollection[i].subject,
+            predicate: patternsCollection[i].predicate,
+            object: patternsCollection[i].object,
+            graph: patternsCollection[i].graph,
+          });
         }
-        
-        query.delete = quads;
-        
-        return query;
+
+        return {
+          kind: 'modify',
+          pattern: p,
+          delete: quads,
+          with: null,
+          using: null,
+        };
       },
       peg$c112 = "with",
       peg$c113 = peg$literalExpectation("WITH", true),
