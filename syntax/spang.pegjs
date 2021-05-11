@@ -42,7 +42,7 @@ Function = h:FunctionCall WS* b:GroupGraphPattern WS*
     token: 'function',
     header: h,
     body: b,
-    location: location()
+    location: location(),
   }
 }
 
@@ -56,7 +56,7 @@ Prologue = b:BaseDecl? WS* p:PrefixDecl*
   return {
     token: 'prologue',
     base: b,
-    prefixes: p
+    prefixes: p,
   }
 }
 
@@ -447,7 +447,7 @@ OrderCondition = direction:( 'ASC'i / 'DESC'i ) WS* e:BrackettedExpression WS*
   } else {
     return {
       direction: 'ASC',
-      expression: e
+      expression: e,
     };
   }
 }
@@ -471,13 +471,17 @@ LimitOffsetClauses = cls:( LimitClause OffsetClause? / OffsetClause LimitClause?
 // [26] LimitClause ::= 'LIMIT' INTEGER
 LimitClause = 'LIMIT'i WS* i:INTEGER WS*
 {
-  return { limit: parseInt(i.value) };
+  return {
+    limit: parseInt(i.value)
+  };
 }
 
 // [27] OffsetClause ::= 'OFFSET' INTEGER
 OffsetClause = 'OFFSET'i WS* i:INTEGER WS*
 {
-  return { offset: parseInt(i.value) };
+  return {
+    offset: parseInt(i.value)
+  };
 }
 
 // BindingsClause ::= ( 'BINDINGS' Var* '{' ( '(' BindingValue+ ')' | NIL )* '}' )?
@@ -522,10 +526,11 @@ Update1 = Load / Clear / Drop / Create / InsertData / DeleteData / DeleteWhere /
 // Load ::= 'LOAD' IRIref ( 'INTO' GraphRef )?
 Load = 'LOAD'i WS* sg:IRIref WS* dg:( 'INTO'i WS* GraphRef)?
 {
-  var query = {};
-  query.kind = 'load';
-  query.token = 'executableunit';
-  query.sourceGraph = sg;
+  let query = {
+    kind: 'load',
+    token: 'executableunit',
+    sourceGraph: sg,
+  };
   if (dg != null) {
     query.destinyGraph = dg[2];
   }
@@ -974,30 +979,30 @@ MinusGraphPattern = 'MINUS'i WS* ggp:GroupGraphPattern
 
 // [67] GroupOrUnionGraphPattern ::= GroupGraphPattern ( 'UNION' GroupGraphPattern )*
 // incomplete??
-GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* ('UNION'/'union') WS* GroupGraphPattern )*
+GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* 'UNION'i WS* GroupGraphPattern )*
 {
   if (b.length === 0) {
     return a;
-  } else {
-    var lastToken = {token: 'graphunionpattern',
-                     location: location(),
-                     value: [a]};
-    
-    for(var i=0; i<b.length; i++) {
-      if(i==b.length-1) {
-        lastToken.value.push(b[i][3]);
-      } else {
-        lastToken.value.push(b[i][3]);
-        var newToken = {token: 'graphunionpattern',
-                        location: location(),
-                        value: [lastToken]}
-        
-        lastToken = newToken;
+  }
+
+  let lastToken = {
+    token: 'graphunionpattern',
+    location: location(),
+    value: [a],
+  };
+
+  for (let i = 0; i < b.length; i++) {
+    lastToken.value.push(b[i][3]);
+    if (i != b.length - 1) {
+      lastToken = {
+        token: 'graphunionpattern',
+        location: location(),
+        value: [lastToken],
       }
     }
-    
-    return lastToken;
   }
+
+  return lastToken;
 }
 
 // [68] Filter ::= 'FILTER' Constraint
