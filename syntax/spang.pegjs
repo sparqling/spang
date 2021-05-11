@@ -978,7 +978,6 @@ MinusGraphPattern = 'MINUS'i WS* ggp:GroupGraphPattern
 }
 
 // [67] GroupOrUnionGraphPattern ::= GroupGraphPattern ( 'UNION' GroupGraphPattern )*
-// incomplete??
 GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* 'UNION'i WS* GroupGraphPattern )*
 {
   if (b.length === 0) {
@@ -993,13 +992,6 @@ GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* 'UNION'i WS* GroupGraphPa
 
   for (let i = 0; i < b.length; i++) {
     lastToken.value.push(b[i][3]);
-    if (i != b.length - 1) {
-      lastToken = {
-        token: 'graphunionpattern',
-        location: location(),
-        value: [lastToken],
-      }
-    }
   }
 
   return lastToken;

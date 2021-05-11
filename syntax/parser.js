@@ -974,13 +974,6 @@ function peg$parse(input, options) {
 
         for (let i = 0; i < b.length; i++) {
           lastToken.value.push(b[i][3]);
-          if (i != b.length - 1) {
-            lastToken = {
-              token: 'graphunionpattern',
-              location: location(),
-              value: [lastToken],
-            }
-          }
         }
 
         return lastToken;
