@@ -14,7 +14,22 @@
   }
 }
 
-DOCUMENT = SPARQL
+DOCUMENT = h:(HEADER_LINE*) WS* s:SPARQL WS* f:(Function*) WS*
+{
+  s.headers = h;
+  s.comments = Object.entries(Comments).map(([loc, str]) => ({
+    text: str,
+    line: parseInt(loc),
+  }));
+
+  if (s.functions) {
+    s.functions.concat(f);
+  } else {
+    s.functions = f;
+  }
+
+  return s;
+}
 
 SPARQL = QueryUnit / UpdateUnit
 
@@ -22,15 +37,13 @@ SPARQL = QueryUnit / UpdateUnit
 QueryUnit = Query
 
 // [2] Query ::= Prologue ( SelectQuery | ConstructQuery | DescribeQuery | AskQuery ) ValuesClause
-// add HEADER_LINE and Function
-Query = h:(HEADER_LINE*) WS* p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause WS*
+// Function is added after Prologue
+Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
 {
   return {
     token: 'query',
-    headers: h,
     prologue: p,
     body: q,
-    comments: Object.entries(Comments).map(([loc, str]) => ({ line: parseInt(loc), text: str })),
     functions: f,
     inlineData: v
   }
