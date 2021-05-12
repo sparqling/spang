@@ -23,7 +23,7 @@ DOCUMENT = h:(HEADER_LINE*) WS* s:SPARQL WS* f:(Function*) WS*
   }));
 
   if (s.functions) {
-    s.functions.concat(f);
+    s.functions = s.functions.concat(f);
   } else {
     s.functions = f;
   }

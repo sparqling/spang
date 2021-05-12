@@ -149,7 +149,7 @@ function peg$parse(input, options) {
         }));
 
         if (s.functions) {
-          s.functions.concat(f);
+          s.functions = s.functions.concat(f);
         } else {
           s.functions = f;
         }
