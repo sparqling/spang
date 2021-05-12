@@ -331,10 +331,11 @@ function peg$parse(input, options) {
         });
 
         if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-          dataset.implicit.push({token:'uri',
+          dataset.implicit.push({
+            token:'uri',
             prefix:null,
             suffix:null,
-            });
+          });
         }
         
         let query = {
@@ -765,10 +766,10 @@ function peg$parse(input, options) {
       peg$c131 = ".",
       peg$c132 = peg$literalExpectation(".", false),
       peg$c133 = function(ts, qs) {
-        var quads = [];
+        let quads = [];
         if (ts != null && ts.triplesContext != null) {
           for (var i=0; i<ts.triplesContext.length; i++) {
-            var triple = ts.triplesContext[i]
+            let triple = ts.triplesContext[i]
             triple.graph = null;
             quads.push(triple)
           }
@@ -778,8 +779,8 @@ function peg$parse(input, options) {
           quads = quads.concat(qs[0][0].quadsContext);
           
           if (qs[0][2] != null && qs[0][2].triplesContext != null) {
-            for(var i=0; i<qs[0][2].triplesContext.length; i++) {
-              var triple = qs[0][2].triplesContext[i]
+            for (let i = 0; i < qs[0][2].triplesContext.length; i++) {
+              let triple = qs[0][2].triplesContext[i]
               triple.graph = null;
               quads.push(triple)
             }
@@ -793,18 +794,20 @@ function peg$parse(input, options) {
         }
       },
       peg$c134 = function(g, ts) {
-        var quads = [];
-        if(ts!=null) {
-          for (var i = 0; i < ts.triplesContext.length; i++) {
-            var triple = ts.triplesContext[i];
+        let quads = [];
+        if (ts!=null) {
+          for (let i = 0; i < ts.triplesContext.length; i++) {
+            let triple = ts.triplesContext[i];
             triple.graph = g;
             quads.push(triple)
           }
         }
         
-        return {token:'quadsnottriples',
-                location: location(),
-                quadsContext: quads}
+        return {
+          token:'quadsnottriples',
+          quadsContext: quads,
+          location: location(),
+        }
       },
       peg$c135 = function(b, bs) {
         let triples = b.triplesContext;

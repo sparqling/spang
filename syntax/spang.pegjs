@@ -223,10 +223,11 @@ ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* 
   });
 
   if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-    dataset.implicit.push({token:'uri',
+    dataset.implicit.push({
+      token:'uri',
       prefix:null,
       suffix:null,
-      });
+    });
   }
   
   let query = {
@@ -730,10 +731,10 @@ QuadData = WS* '{' WS* qs:Quads WS* '}' WS*
 // [50] Quads ::= TriplesTemplate? ( QuadsNotTriples '.'? TriplesTemplate? )*
 Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
 {
-  var quads = [];
+  let quads = [];
   if (ts != null && ts.triplesContext != null) {
     for (var i=0; i<ts.triplesContext.length; i++) {
-      var triple = ts.triplesContext[i]
+      let triple = ts.triplesContext[i]
       triple.graph = null;
       quads.push(triple)
     }
@@ -743,8 +744,8 @@ Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
     quads = quads.concat(qs[0][0].quadsContext);
     
     if (qs[0][2] != null && qs[0][2].triplesContext != null) {
-      for(var i=0; i<qs[0][2].triplesContext.length; i++) {
-        var triple = qs[0][2].triplesContext[i]
+      for (let i = 0; i < qs[0][2].triplesContext.length; i++) {
+        let triple = qs[0][2].triplesContext[i]
         triple.graph = null;
         quads.push(triple)
       }
@@ -761,18 +762,20 @@ Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
 // [51] QuadsNotTriples ::= 'GRAPH' VarOrIri '{' TriplesTemplate? '}'
 QuadsNotTriples = WS* 'GRAPH'i WS* g:VarOrIri WS* '{' WS* ts:TriplesTemplate? WS* '}' WS*
 {
-  var quads = [];
-  if(ts!=null) {
-    for (var i = 0; i < ts.triplesContext.length; i++) {
-      var triple = ts.triplesContext[i];
+  let quads = [];
+  if (ts!=null) {
+    for (let i = 0; i < ts.triplesContext.length; i++) {
+      let triple = ts.triplesContext[i];
       triple.graph = g;
       quads.push(triple)
     }
   }
   
-  return {token:'quadsnottriples',
-          location: location(),
-          quadsContext: quads}
+  return {
+    token:'quadsnottriples',
+    quadsContext: quads,
+    location: location(),
+  }
 }
 
 // [52] TriplesTemplate ::= TriplesSameSubject ( '.' TriplesTemplate? )?
