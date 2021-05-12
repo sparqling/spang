@@ -2375,6 +2375,16 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
   
   return exp
 }
+/ 'SAMPLE'i WS* '(' WS* d:('DISTINCT'i)? WS*  e:Expression WS* ')' WS*
+{
+  return {
+    token: 'expression',
+    expressionType: 'aggregate',
+    aggregateType: 'sample',
+    distinct: ((d != "" && d != null) ? 'DISTINCT' : d),
+    expression: e,
+  }
+}
 
 // [128] IRIrefOrFunction ::= IRIref ArgList?
 // error?? Something has gone wrong with numeration in the rules!!
