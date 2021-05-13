@@ -533,7 +533,6 @@ Update = p:Prologue WS* u:Update1 us:( WS* ';' WS* Update? )?
 }
 
 // [30] Update1 ::= Load | Clear | Drop | Add | Move | Copy | Create | InsertData | DeleteData | DeleteWhere | Modify
-// Update1 = Load / Clear / Drop / Add / Move / Copy / Create / InsertData / DeleteData / DeleteWhere / Modify
 Update1 = Load / Clear / Drop / Create / InsertData / DeleteData / DeleteWhere / Modify
 
 // [31] Load ::= 'LOAD' 'SILENT'? IRIref ( 'INTO' GraphRef )?
@@ -583,8 +582,37 @@ Create = 'CREATE'i WS* 'SILENT'i? WS* ref:GraphRef
 }
 
 // [35] Add ::= 'ADD' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+// check
+Add = 'ADD'i WS* 'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
+{
+  return {
+    token: 'executableunit',
+    kind: 'add',
+    graphs: [g1, g2],
+  }
+}
+
 // [36] Move ::= 'MOVE' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+// check
+Move = 'MOVE'i WS* 'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
+{
+  return {
+    token: 'executableunit',
+    kind: 'move',
+    graphs: [g1, g2],
+  }
+}
+
 // [37] Copy ::= 'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+// check
+Copy = 'COPY'i WS* 'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
+{
+  return {
+    token: 'executableunit',
+    kind: 'copy',
+    graphs: [g1, g2],
+  }
+}
 
 // [38] InsertData ::= 'INSERT DATA' QuadData
 InsertData = 'INSERT'i WS* 'DATA'i WS* qs:QuadData
@@ -690,7 +718,12 @@ UsingClause = WS* 'USING'i WS* g:( IRIref / 'NAMED'i WS* IRIref )
   }
 }
 
-// [45] GraphOrDefault ::= 'DEFAULT' | 'GRAPH'? iri
+// [45] GraphOrDefault ::= 'DEFAULT' | 'GRAPH'? IRIref
+// check
+GraphOrDefault = 'DEFAULT' / 'GRAPH'i? WS* i:IRIref
+{
+  return i;
+}
 
 // [46] GraphRef ::= 'GRAPH' IRIref
 GraphRef = 'GRAPH'i WS* i:IRIref
