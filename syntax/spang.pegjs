@@ -62,7 +62,7 @@ Function = h:FunctionCall WS* b:GroupGraphPattern WS*
 // [3] UpdateUnit ::= Update
 UpdateUnit = Update
 
-// [4] Prologue  ::= ( BaseDecl | PrefixDecl )*
+// [4] Prologue ::= ( BaseDecl | PrefixDecl )*
 // Prologue  ::=  BaseDecl? PrefixDecl*
 Prologue = b:BaseDecl? WS* p:PrefixDecl*
 {
@@ -73,7 +73,7 @@ Prologue = b:BaseDecl? WS* p:PrefixDecl*
   }
 }
 
-// [5] BaseDecl  ::=  'BASE' IRIREF
+// [5] BaseDecl ::= 'BASE' IRIREF
 BaseDecl = WS* 'BASE'i WS* i:IRIREF
 {
   return {
@@ -533,7 +533,7 @@ Update = p:Prologue WS* u:Update1 us:( WS* ';' WS* Update? )?
 }
 
 // [30] Update1 ::= Load | Clear | Drop | Add | Move | Copy | Create | InsertData | DeleteData | DeleteWhere | Modify
-// Update1 ::= Load | Clear | Drop | Create | InsertData | DeleteData | DeleteWhere | Modify
+// Update1 = Load / Clear / Drop / Add / Move / Copy / Create / InsertData / DeleteData / DeleteWhere / Modify
 Update1 = Load / Clear / Drop / Create / InsertData / DeleteData / DeleteWhere / Modify
 
 // [31] Load ::= 'LOAD' 'SILENT'? IRIref ( 'INTO' GraphRef )?
@@ -582,9 +582,9 @@ Create = 'CREATE'i WS* 'SILENT'i? WS* ref:GraphRef
   }
 }
 
-// [35]  	Add	  ::=  	'ADD' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-// [36]  	Move	  ::=  	'MOVE' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-// [37]  	Copy	  ::=  	'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+// [35] Add ::= 'ADD' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+// [36] Move ::= 'MOVE' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
+// [37] Copy ::= 'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
 
 // [38] InsertData ::= 'INSERT DATA' QuadData
 InsertData = 'INSERT'i WS* 'DATA'i WS* qs:QuadData
@@ -690,7 +690,7 @@ UsingClause = WS* 'USING'i WS* g:( IRIref / 'NAMED'i WS* IRIref )
   }
 }
 
-// [45] GraphOrDefault	  ::=  	'DEFAULT' | 'GRAPH'? iri
+// [45] GraphOrDefault ::= 'DEFAULT' | 'GRAPH'? iri
 
 // [46] GraphRef ::= 'GRAPH' IRIref
 GraphRef = 'GRAPH'i WS* i:IRIref
@@ -1486,13 +1486,13 @@ PathPrimary = IRIref
   return p;
 }
 
-// [95]   PathNegatedPropertySet    ::=   PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
+// [95] PathNegatedPropertySet ::= PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
 PathNegatedPropertySet    = ( PathOneInPropertySet / '(' ( PathOneInPropertySet        ('|' PathOneInPropertySet)* )? ')' )
 
-// [96]   PathOneInPropertySet      ::=   IRIref | 'a' | '^' ( IRIref | 'a' )
+// [96] PathOneInPropertySet ::= IRIref | 'a' | '^' ( IRIref | 'a' )
 PathOneInPropertySet = ( IRIref / 'a' / '^' (IRIref / 'a') )
 
-// [97]   Integer   ::=   INTEGER
+// [97] Integer ::= INTEGER
 Integer = INTEGER
 
 // [98] TriplesNode ::= Collection | BlankNodePropertyList
@@ -1582,7 +1582,7 @@ BlankNodePropertyList = WS* '[' WS* pl:PropertyListNotEmpty WS* ']' WS*
   };
 }
 
-// [100]          TriplesNodePath   ::=   CollectionPath | BlankNodePropertyListPath
+// [100] TriplesNodePath ::= CollectionPath | BlankNodePropertyListPath
 TriplesNodePath
     = c:CollectionPath {
     var triplesContext = [];
@@ -2258,7 +2258,7 @@ RegexExpression = 'REGEX'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression W
   
   return regex;
 }
-// [123]  	SubstringExpression	  ::=  	'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
+// [123] SubstringExpression ::= 'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
 SubstringExpression = 'SUBSTR'i WS* '(' WS* source:Expression WS* ',' WS* startingLoc:Expression WS* lenPart:(',' WS* len:Expression)? WS* ')'
 {
   return {
@@ -2270,7 +2270,7 @@ SubstringExpression = 'SUBSTR'i WS* '(' WS* source:Expression WS* ',' WS* starti
 }
   
 
-// [124]  	StrReplaceExpression	  ::=  	'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
+// [124] StrReplaceExpression ::= 'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
 StrReplaceExpression = ('REPLACE'i) WS* '(' WS* arg:Expression WS* ',' WS* pattern:Expression WS* ',' WS* replacement:Expression WS* flagsPart:(',' WS* Expression)? ')'
 {
   return {
@@ -2292,7 +2292,7 @@ ExistsFunc = 'EXISTS'i WS* ggp:GroupGraphPattern
   }
 }
 
-// [126] NotExistsFunc ::=   'NOT' 'EXISTS' GroupGraphPattern
+// [126] NotExistsFunc ::= 'NOT' 'EXISTS' GroupGraphPattern
 NotExistsFunc = 'NOT'i WS* 'EXISTS'i WS* ggp:GroupGraphPattern
 {
   return {
@@ -2687,7 +2687,7 @@ INTEGER_NEGATIVE = '-' d:INTEGER
 DECIMAL_NEGATIVE = '-' d:DECIMAL
 { d.value = "-"+d.value; return d; }
 
-// [154] DOUBLE_NEGATIVE   ::=   '-' DOUBLE
+// [154] DOUBLE_NEGATIVE ::= '-' DOUBLE
 DOUBLE_NEGATIVE = '-' d:DOUBLE
 { d.value = "-"+d.value; return d; }
 
@@ -2695,11 +2695,11 @@ DOUBLE_NEGATIVE = '-' d:DOUBLE
 EXPONENT = a:[eE] b:[+-]? c:[0-9]+
 { return flattenString([a,b,c]) }
 
-// [156] STRING_LITERAL1   ::=   "'" ( ([^#x27#x5C#xA#xD]) | ECHAR )* "'"
+// [156] STRING_LITERAL1 ::= "'" ( ([^#x27#x5C#xA#xD]) | ECHAR )* "'"
 STRING_LITERAL1 = "'" content:([^\u0027\u005C\u000A\u000D] / ECHAR)* "'"
 { return flattenString(content) }
 
-// [157] STRING_LITERAL2   ::=   '"' ( ([^#x22#x5C#xA#xD]) | ECHAR )* '"'
+// [157] STRING_LITERAL2 ::= '"' ( ([^#x22#x5C#xA#xD]) | ECHAR )* '"'
 STRING_LITERAL2 = '"' content:([^\u0022\u005C\u000A\u000D] / ECHAR)* '"'
 { return flattenString(content) }
 
