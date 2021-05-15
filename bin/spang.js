@@ -24,9 +24,9 @@ const initializeConfig = require('../lib/config.js').initialize;
 const { getReasonPhrase } = require('http-status-codes');
 
 let templatePath;
-let templateSpecified;
+let templateSpecified = false;
 let sparqlTemplate;
-let metadata;
+let metadata = {};
 let db;
 let retrieveByGet = false;
 
@@ -74,10 +74,8 @@ let opts = program
 
 initializeConfig(opts);
 
-if (opts.subject || opts.predicate || opts.object || (opts.limit && !templatePath) || opts.number || opts.graph || opts.from) {
-  sparqlTemplate = shortcut({ S: opts.subject, P: opts.predicate, O: opts.object, L: opts.limit, N: opts.number, G: opts.graph, F: opts.from });
-  templateSpecified = false;
-  metadata = {};
+if (shortcutMode(opts)) {
+  sparqlTemplate = shortcut(opts);
 } else if (templatePath != null) {
   templatePath = alias.replaceIfAny(templatePath);
   const templateURL = prefixModule.expandPrefixedUri(templatePath);
@@ -389,4 +387,10 @@ function getDB() {
     console.error('Endpoint is required');
     process.exit(-1);
   }
+}
+
+function shortcutMode(opts) {
+  return opts.subject || opts.predicate || opts.object ||
+    (opts.limit && !templatePath) ||
+    opts.number || opts.graph || opts.from;
 }
