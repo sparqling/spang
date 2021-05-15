@@ -206,39 +206,22 @@ if (opts.showMetadata) {
   process.exit(0);
 }
 
-let queryToRemote = true;
-let retrieveByGet = false;
-if (/^\w/.test(db)) {
-  if (!/^(http|https):\/\//.test(db)) {
-    if (!dbMap[db]) {
-      queryToRemote = false;
-    } else {
-      [db, retrieveByGet] = search_db_name.searchDBName(db);
-      if (opts.method && /^get$/i.test(opts.method)) {
-        retrieveByGet = true;
-      }
-    }
-  }
-} else {
-  queryToRemote = false;
+if (!/^\w/.test(db)) {
+  queryLocalFile();
+  process.exit(0);
 }
 
-if (!queryToRemote) {
-  let tmpFile = null;
-  if (opts.stdin) {
-    // Save input as a temporary file assuming the format is turtle
-    tmpFile = temp.path({ suffix: '.ttl' });
-    fs.writeFileSync(tmpFile, input);
-    db = tmpFile;
-  } else if (!fs.existsSync(db)) {
-    console.error(`${db}: no such file or endpoint`);
-    process.exit(-1);
+let retrieveByGet = false;
+if (!/^(http|https):\/\//.test(db)) {
+  if (!dbMap[db]) {
+    queryLocalFile();
+    process.exit(0);
+  } else {
+    [db, retrieveByGet] = search_db_name.searchDBName(db);
+    if (opts.method && /^get$/i.test(opts.method)) {
+      retrieveByGet = true;
+    }
   }
-  console.log(child_process.execSync(`sparql --data ${db} --results ${opts.outfmt} '${sparqlTemplate}'`).toString());
-  if (tmpFile) {
-    fs.unlinkSync(tmpFile);
-  }
-  process.exit(0);
 }
 
 let start = new Date();
@@ -307,6 +290,26 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     }
   }
 });
+
+function queryLocalFile() {
+  // Save input as a temporary file assuming the format is turtle
+  let tmpFile = null;
+
+  if (opts.stdin) {
+    tmpFile = temp.path({ suffix: '.ttl' });
+    fs.writeFileSync(tmpFile, input);
+    db = tmpFile;
+  } else if (!fs.existsSync(db)) {
+    console.error(`${db}: no such file or endpoint`);
+    process.exit(-1);
+  }
+
+  console.log(child_process.execSync(`sparql --data ${db} --results ${opts.outfmt} '${sparqlTemplate}'`).toString());
+
+  if (tmpFile) {
+    fs.unlinkSync(tmpFile);
+  }
+}
 
 function toString(resource) {
   if (!resource) {
