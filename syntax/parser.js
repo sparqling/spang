@@ -1119,26 +1119,22 @@ function peg$parse(input, options) {
         var triplesContext = tn.triplesContext;
         var subject = tn.chainSubject;
         
-        if(pairs.pairs) {
-          for(var i=0; i< pairs.pairs.length; i++) {
+        if (pairs.pairs) {
+          for (let i=0; i < pairs.pairs.length; i++) {
             var pair = pairs.pairs[i];
-            if(pair[1].length != null)
+            if (pair[1].length != null) {
               pair[1] = pair[1][0]
-            
-            if(tn.token === "triplesnodecollection") {
-              for(var j=0; j<subject.length; j++) {
-                var subj = subject[j];
-                if(subj.triplesContext != null) {
-                  var triple = {subject: subj.chainSubject, predicate: pair[0], object: pair[1]}
-                  triplesContext.concat(subj.triplesContext);
+            }
+            if (tn.token === "triplesnodecollection") {
+              for (let j = 0; j < subject.length; j++) {
+                if (subject[j].triplesContext != null) {
+                  triplesContext.concat(subject[j].triplesContext);
                 } else {
-                  var triple = {subject: subject[j], predicate: pair[0], object: pair[1]}
-                  triplesContext.push(triple);
+                  triplesContext.push({subject: subject[j], predicate: pair[0], object: pair[1]});
                 }
               }
             } else {
-              var triple = {subject: subject, predicate: pair[0], object: pair[1]}
-              triplesContext.push(triple);
+              triplesContext.push({subject: subject, predicate: pair[0], object: pair[1]});
             }
           }
         }
