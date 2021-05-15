@@ -24,13 +24,6 @@ const initializeConfig = require('../lib/config.js').initialize;
 const { getReasonPhrase } = require('http-status-codes');
 
 let templatePath;
-let templateSpecified = false;
-let sparqlTemplate;
-let metadata = {};
-let db;
-let retrieveByGet = false;
-
-const input = process.stdin.isTTY ? '' : util.stdinReadSync();
 
 let opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
@@ -74,7 +67,12 @@ let opts = program
 
 initializeConfig(opts);
 
-if (shortcutMode(opts)) {
+let templateFileSpecified = false;
+let sparqlTemplate;
+let metadata = {};
+if (opts.subject || opts.predicate || opts.object ||
+    (opts.limit && !templatePath) ||
+    opts.number || opts.graph || opts.from) {
   sparqlTemplate = shortcut(opts);
 } else if (templatePath != null) {
   templatePath = alias.replaceIfAny(templatePath);
@@ -90,9 +88,10 @@ if (shortcutMode(opts)) {
     program.parse(process.argv.concat(metadata.option.split(/\s+/)));
     opts = program.opts();
   }
-  templateSpecified = true;
+  templateFileSpecified = true;
 }
 
+const input = process.stdin.isTTY ? '' : util.stdinReadSync();
 if (opts.fmt) {
   let sparqlQuery;
   if (program.args[0]) {
@@ -124,7 +123,7 @@ if (program.args.length < 1) {
   }
 }
 
-if (templateSpecified && opts.help) {
+if (templateFileSpecified && opts.help) {
   if (metadata.title) {
     console.log(`${metadata.title}`);
   }
@@ -178,7 +177,7 @@ program.args.slice(1).forEach((arg) => {
   }
 });
 
-db = getDB();
+let db = getDB();
 
 if (opts.debug) {
   console.error(db);
@@ -187,7 +186,7 @@ if (opts.debug) {
   process.exit(0);
 }
 
-if (templateSpecified) {
+if (templateFileSpecified) {
   sparqlTemplate = constructSparql(sparqlTemplate, metadata, paramsMap, paramsArr, input);
   if (opts.limit) {
     if (!sparqlTemplate.endsWith('\n')) {
@@ -208,6 +207,7 @@ if (opts.showMetadata) {
 }
 
 let queryToRemote = true;
+let retrieveByGet = false;
 if (/^\w/.test(db)) {
   if (!/^(http|https):\/\//.test(db)) {
     if (!dbMap[db]) {
@@ -387,10 +387,4 @@ function getDB() {
     console.error('Endpoint is required');
     process.exit(-1);
   }
-}
-
-function shortcutMode(opts) {
-  return opts.subject || opts.predicate || opts.object ||
-    (opts.limit && !templatePath) ||
-    opts.number || opts.graph || opts.from;
 }
