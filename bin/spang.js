@@ -304,7 +304,7 @@ function queryLocalFile() {
     process.exit(-1);
   }
 
-  console.log(child_process.execSync(`sparql --data ${db} --results ${opts.outfmt} '${sparqlTemplate}'`).toString());
+  process.stdout.write(child_process.execSync(`sparql --data ${db} --results ${opts.outfmt} '${sparqlTemplate}'`).toString());
 
   if (tmpFile) {
     fs.unlinkSync(tmpFile);
