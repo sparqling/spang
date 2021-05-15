@@ -207,14 +207,14 @@ if (opts.showMetadata) {
 }
 
 if (!/^\w/.test(db)) {
-  queryLocalFile();
+  queryLocalFile(db);
   process.exit(0);
 }
 
 let retrieveByGet = false;
 if (!/^(http|https):\/\//.test(db)) {
   if (!dbMap[db]) {
-    queryLocalFile();
+    queryLocalFile(db);
     process.exit(0);
   } else {
     [db, retrieveByGet] = search_db_name.searchDBName(db);
@@ -291,7 +291,7 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
   }
 });
 
-function queryLocalFile() {
+function queryLocalFile(db) {
   // Save input as a temporary file assuming the format is turtle
   let tmpFile = null;
 
@@ -304,7 +304,17 @@ function queryLocalFile() {
     process.exit(-1);
   }
 
-  process.stdout.write(child_process.execSync(`sparql --data ${db} --results ${opts.outfmt} '${sparqlTemplate}'`).toString());
+  let format = opts.outfmt;
+  if (opts.outfmt === 'tsv') {
+    format = 'json';
+  }
+  const ret = child_process.execSync(`sparql --data ${db} --results ${format} '${sparqlTemplate}'`);
+  const result = ret.toString();
+  if (opts.outfmt === 'tsv') {
+    printTsv(jsonToTsv(result, Boolean(opts.vars)));
+  } else {
+    process.stdout.write(result);
+  }
 
   if (tmpFile) {
     fs.unlinkSync(tmpFile);
