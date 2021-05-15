@@ -308,12 +308,17 @@ function queryLocalFile(db) {
   if (opts.outfmt === 'tsv') {
     format = 'json';
   }
+  let start = new Date();
   const ret = child_process.execSync(`sparql --data ${db} --results ${format} '${sparqlTemplate}'`);
+  let end = new Date() - start;
   const result = ret.toString();
   if (opts.outfmt === 'tsv') {
     printTsv(jsonToTsv(result, Boolean(opts.vars)));
   } else {
     process.stdout.write(result);
+  }
+  if (opts.time) {
+    console.error('Time of query: %dms', end);
   }
 
   if (tmpFile) {
