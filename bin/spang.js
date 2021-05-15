@@ -214,83 +214,16 @@ if (/^\w/.test(db)) {
       queryToRemote = false;
     } else {
       [db, retrieveByGet] = search_db_name.searchDBName(db);
+      if (opts.method && /^get$/i.test(opts.method)) {
+        retrieveByGet = true;
+      }
     }
   }
 } else {
   queryToRemote = false;
 }
 
-if (queryToRemote) {
-  if (opts.method && /^get$/i.test(opts.method)) {
-    retrieveByGet = true;
-  }
-  let start = new Date();
-  querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
-    if (error) {
-      if (error.code === 'ENOTFOUND') {
-        console.error(`${error.code} ${error.syscall} ${error.hostname}`);
-      } else if (error.code === 'ECONNREFUSED') {
-        console.error(`${error.code} ${error.syscall} ${error.address}:${error.port}`);
-      } else {
-        console.error(error);
-      }
-      return;
-    }
-    if (statusCode != 200) {
-      console.error(`${statusCode} ${getReasonPhrase(statusCode)}`);
-      if (statusCode != 404 && statusCode != 414 && statusCode != 503) {
-        for (let body of bodies) {
-          console.error(body);
-        }
-      }
-      return;
-    }
-    let end = new Date() - start;
-    if (bodies.length == 1) {
-      if (opts.outfmt == 'tsv') {
-        printTsv(jsonToTsv(bodies[0], Boolean(opts.vars)));
-      } else {
-        console.log(bodies[0]);
-      }
-      if (opts.time) {
-        console.error('Time of query: %dms', end);
-      }
-      return;
-    }
-    if (['tsv', 'text/tsv', 'n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
-      let outputStr = '';
-      switch (opts.outfmt) {
-        case 'tsv':
-          outputStr += jsonToTsv(bodies[0], Boolean(opts.vars));
-          for (let i = 1; i < bodies.length; i++) {
-            outputStr += '\n' + jsonToTsv(bodies[i]);
-          }
-          printTsv(outputStr);
-          break;
-        case 'text/tsv':
-          outputStr += bodies[0];
-          // remove header line for i > 0
-          for (let i = 1; i < bodies.length; i++) {
-            if (!bodies[i - 1].endsWith('\n')) {
-              outputStr += '\n';
-            }
-            outputStr += bodies[i].substring(bodies[i].indexOf('\n') + 1);
-          }
-          printTsv(outputStr);
-          break;
-        default:
-          for (let i = 0; i < bodies.length; i++) {
-            console.log(bodies[i]);
-          }
-      }
-    } else {
-      console.error('The results are paginated. Those pages are saved as result1.out, result2.out,....');
-      for (let i = 0; i < bodies.length; i++) {
-        fs.writeFileSync(`result${i + 1}.out`, bodies[i]);
-      }
-    }
-  });
-} else {
+if (!queryToRemote) {
   let tmpFile = null;
   if (opts.stdin) {
     // Save input as a temporary file assuming the format is turtle
@@ -301,12 +234,79 @@ if (queryToRemote) {
     console.error(`${db}: no such file or endpoint`);
     process.exit(-1);
   }
-  // TODO: use Jena or other JS implementation
   console.log(child_process.execSync(`sparql --data ${db} --results ${opts.outfmt} '${sparqlTemplate}'`).toString());
   if (tmpFile) {
     fs.unlinkSync(tmpFile);
   }
+  process.exit(0);
 }
+
+let start = new Date();
+querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
+  if (error) {
+    if (error.code === 'ENOTFOUND') {
+      console.error(`${error.code} ${error.syscall} ${error.hostname}`);
+    } else if (error.code === 'ECONNREFUSED') {
+      console.error(`${error.code} ${error.syscall} ${error.address}:${error.port}`);
+    } else {
+      console.error(error);
+    }
+    return;
+  }
+  if (statusCode != 200) {
+    console.error(`${statusCode} ${getReasonPhrase(statusCode)}`);
+    if (statusCode != 404 && statusCode != 414 && statusCode != 503) {
+      for (let body of bodies) {
+        console.error(body);
+      }
+    }
+    return;
+  }
+  let end = new Date() - start;
+  if (bodies.length == 1) {
+    if (opts.outfmt == 'tsv') {
+      printTsv(jsonToTsv(bodies[0], Boolean(opts.vars)));
+    } else {
+      console.log(bodies[0]);
+    }
+    if (opts.time) {
+      console.error('Time of query: %dms', end);
+    }
+    return;
+  }
+  if (['tsv', 'text/tsv', 'n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
+    let outputStr = '';
+    switch (opts.outfmt) {
+      case 'tsv':
+        outputStr += jsonToTsv(bodies[0], Boolean(opts.vars));
+        for (let i = 1; i < bodies.length; i++) {
+          outputStr += '\n' + jsonToTsv(bodies[i]);
+        }
+        printTsv(outputStr);
+        break;
+      case 'text/tsv':
+        outputStr += bodies[0];
+        // remove header line for i > 0
+        for (let i = 1; i < bodies.length; i++) {
+          if (!bodies[i - 1].endsWith('\n')) {
+            outputStr += '\n';
+          }
+          outputStr += bodies[i].substring(bodies[i].indexOf('\n') + 1);
+        }
+        printTsv(outputStr);
+        break;
+      default:
+        for (let i = 0; i < bodies.length; i++) {
+          console.log(bodies[i]);
+        }
+    }
+  } else {
+    console.error('The results are paginated. Those pages are saved as result1.out, result2.out,....');
+    for (let i = 0; i < bodies.length; i++) {
+      fs.writeFileSync(`result${i + 1}.out`, bodies[i]);
+    }
+  }
+});
 
 function toString(resource) {
   if (!resource) {
