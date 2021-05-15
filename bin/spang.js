@@ -304,13 +304,15 @@ function queryLocalFile(db) {
     process.exit(-1);
   }
 
-  let format = opts.outfmt;
+  let outfmt = opts.outfmt;
   if (opts.outfmt === 'tsv') {
-    format = 'json';
+    outfmt = 'json';
   }
+
   let start = new Date();
-  const ret = child_process.execSync(`sparql --data ${db} --results ${format} '${sparqlTemplate}'`);
+  const ret = child_process.execSync(`sparql --data ${db} --results ${outfmt} '${sparqlTemplate}'`);
   let end = new Date() - start;
+
   const result = ret.toString();
   if (opts.outfmt === 'tsv') {
     printTsv(jsonToTsv(result, Boolean(opts.vars)));
