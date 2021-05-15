@@ -327,7 +327,7 @@ function toString(resource) {
   } else {
     return `"${resource.value}"`;
   }
-};
+}
 
 function jsonToTsv(body, withHeader = false) {
   const obj = JSON.parse(body);
@@ -342,7 +342,7 @@ function jsonToTsv(body, withHeader = false) {
     })
     .join('\n');
   return tsv;
-};
+}
 
 function printTsv(tsv) {
   if (opts.alignColumn) {
@@ -356,7 +356,7 @@ function printTsv(tsv) {
   } else {
     console.log(tsv);
   }
-};
+}
 
 function getTemplateURL(templatePath) {
   let match = /^github:\/\/([^\/]+)\/([^\/]+)\/(.+)/.exec(templatePath);
