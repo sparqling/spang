@@ -29,6 +29,7 @@ let opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
   .option('-f, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
   .option('-c, --align-column', 'align output columns (only valid for tsv)')
+  .option('-j, --json', 'same as -f json')
   .option('-a, --abbr', 'abbreviate results using predefined prefixes')
   .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
   .option('-S, --subject <SUBJECT>', 'shortcut to specify subject')
@@ -64,6 +65,10 @@ let opts = program
   })
   .parse(process.argv)
   .opts();
+
+if (opts.json) {
+  opts.outfmt = 'json'
+}
 
 initializeConfig(opts);
 
