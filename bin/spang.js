@@ -358,10 +358,14 @@ function jsonToTsv(body, withHeader = false) {
   }
   tsv += obj.results.bindings
     .map((b) => {
-      return vars.map((v) => toString(b[v])).join('\t');
+      return getBindings(vars, b);
     })
     .join('\n');
   return tsv;
+}
+
+function getBindings(vars, b) {
+  return vars.map((v) => toString(b[v])).join('\t');
 }
 
 function printTsv(tsv) {
