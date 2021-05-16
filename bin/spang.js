@@ -314,8 +314,6 @@ function queryLocalFile(db) {
   try {
     ret = child_process.execSync(`sparql --data ${db} --results ${outfmt} '${sparqlTemplate}'`);
   } catch (e) {
-    console.log(e.stdout.toString());
-    console.error(e.stderr.toString());
     process.exit(1);
   }
   let end = new Date() - start;
