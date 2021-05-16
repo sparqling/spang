@@ -310,7 +310,14 @@ function queryLocalFile(db) {
   }
 
   let start = new Date();
-  const ret = child_process.execSync(`sparql --data ${db} --results ${outfmt} '${sparqlTemplate}'`);
+  let ret;
+  try {
+    ret = child_process.execSync(`sparql --data ${db} --results ${outfmt} '${sparqlTemplate}'`);
+  } catch (e) {
+    console.log(e.stdout.toString());
+    console.error(e.stderr.toString());
+    process.exit(1);
+  }
   let end = new Date() - start;
 
   const result = ret.toString();
