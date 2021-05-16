@@ -1,2 +1,2 @@
 #!/bin/sh
-spang2 -e test -S http://identifiers.org/taxonomy/2 -o json
+spang2 -e test -S http://identifiers.org/taxonomy/2 -f json

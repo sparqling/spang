@@ -27,7 +27,7 @@ let templatePath;
 
 let opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
-  .option('-o, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
+  .option('-f, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
   .option('-c, --align-column', 'align output columns (only valid for tsv)')
   .option('-a, --abbr', 'abbreviate results using predefined prefixes')
   .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
@@ -45,7 +45,7 @@ let opts = program
   .option('-q, --show-query', 'show query and quit')
   .option('--show-metadata', 'show metadata and quit')
   .option('-d, --debug', 'debug (output expanded template, or output AST with --fmt)')
-  .option('-f, --fmt', 'format the query')
+  .option('--fmt', 'format the query')
   .option('-i, --indent <DEPTH>', 'indent depth; use with --fmt', 2)
   .option('-l, --list-nick-name', 'list up available nicknames of endpoints and quit')
   .option('--stdin', 'read rdf data source from stdin. The format must be Turtle.')
