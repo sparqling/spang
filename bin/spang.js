@@ -104,7 +104,9 @@ if (opts.fmt) {
   }
   const syntaxTree = parser.parse(sparqlQuery);
   if (opts.debug) {
-    console.log(JSON.stringify(syntaxTree, undefined, 2)); // (value, replacer, space)
+    console.log(JSON.stringify(syntaxTree, undefined, 2));
+  } else if (opts.outfmt === 'json') {
+    console.log(JSON.stringify(syntaxTree, selector, 2));
   } else {
     console.log(formatter.format(syntaxTree, opts.indent));
   }
@@ -412,5 +414,11 @@ function getDB() {
   } else {
     console.error('Endpoint is required');
     process.exit(-1);
+  }
+}
+
+function selector(key, value) {
+  if (key !== 'location') {
+    return value;
   }
 }
