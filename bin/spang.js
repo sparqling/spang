@@ -344,6 +344,8 @@ function toString(resource) {
     } else {
       return `"${resource.value}"^^<${resource.datatype}>`;
     }
+  } else if (resource.type == 'bnode') {
+    return `_:${resource.value}`;
   } else {
     return `"${resource.value}"`;
   }
@@ -352,15 +354,12 @@ function toString(resource) {
 function jsonToTsv(body, withHeader = false) {
   const obj = JSON.parse(body);
   const vars = obj.head.vars;
+  const bindings = obj.results.bindings;
   let tsv = '';
   if (withHeader) {
     tsv += vars.join('\t') + '\n';
   }
-  tsv += obj.results.bindings
-    .map((b) => {
-      return getBindings(vars, b);
-    })
-    .join('\n');
+  tsv += bindings.map((b) => getBindings(vars, b)).join('\n');
   return tsv;
 }
 
