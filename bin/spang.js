@@ -328,29 +328,6 @@ function queryLocalFile(db) {
   }
 }
 
-function toString(resource) {
-  if (!resource) {
-    return '';
-  }
-  if (resource.type == 'uri') {
-    if (opts.abbr) {
-      return prefixModule.abbreviateURL(resource.value);
-    } else {
-      return `<${resource.value}>`;
-    }
-  } else if (resource.type == 'typed-literal') {
-    if (opts.abbr) {
-      return `"${resource.value}"^^${prefixModule.abbreviateURL(resource.datatype)}`;
-    } else {
-      return `"${resource.value}"^^<${resource.datatype}>`;
-    }
-  } else if (resource.type == 'bnode') {
-    return `_:${resource.value}`;
-  } else {
-    return `"${resource.value}"`;
-  }
-}
-
 function jsonToTsv(body, withHeader = false) {
   const obj = JSON.parse(body);
   const vars = obj.head.vars;
@@ -359,12 +336,33 @@ function jsonToTsv(body, withHeader = false) {
   if (withHeader) {
     tsv += vars.join('\t') + '\n';
   }
-  tsv += bindings.map((b) => getBindings(vars, b)).join('\n');
+  tsv += bindings.map((b) => getBindings(vars, b).join('\t')).join('\n');
   return tsv;
 }
 
 function getBindings(vars, b) {
-  return vars.map((v) => toString(b[v])).join('\t');
+  return vars.map((v) => {
+    if (!b[v]) {
+      return '';
+    }
+    if (b[v].type == 'uri') {
+      if (opts.abbr) {
+        return prefixModule.abbreviateURL(b[v].value);
+      } else {
+        return `<${b[v].value}>`;
+      }
+    } else if (b[v].type == 'typed-literal') {
+      if (opts.abbr) {
+        return `"${b[v].value}"^^${prefixModule.abbreviateURL(b[v].datatype)}`;
+      } else {
+        return `"${b[v].value}"^^<${b[v].datatype}>`;
+      }
+    } else if (b[v].type == 'bnode') {
+      return `_:${b[v].value}`;
+    } else {
+      return `"${b[v].value}"`;
+    }
+  });
 }
 
 function printTsv(tsv) {
