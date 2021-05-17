@@ -386,7 +386,7 @@ function printTsv(tsv) {
         headingTransform: (x) => x
       }).replace(/\s+$/gm, '')
     );
-  } else {
+  } else if (tsv !== '') {
     console.log(tsv);
   }
 }
