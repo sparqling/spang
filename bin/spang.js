@@ -363,7 +363,7 @@ function getBindings(vars, b) {
       } else {
         return `<${b[v].value}>`;
       }
-    } else if (b[v].type == 'typed-literal') {
+    } else if (b[v].type == 'typed-literal' || b[v].type === 'literal' && b[v].datatype) {
       if (opts.abbr) {
         return `"${b[v].value}"^^${prefixModule.abbreviateURL(b[v].datatype)}`;
       } else {
