@@ -426,7 +426,7 @@ GroupCondition = WS* b:BuiltInCall WS*
 }
 
 // [21] HavingClause ::= 'HAVING' HavingCondition+
-HavingClause = 'HAVING' HavingCondition+
+HavingClause = 'HAVING' WS* HavingCondition+
 
 // [22] HavingCondition ::= Constraint
 HavingCondition = Constraint
