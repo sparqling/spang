@@ -7,7 +7,7 @@ owl:sameAs	<http://www.berkeleybop.org/ontologies/owl/NCBITaxon#2>
 owl:sameAs	taxonomy:2
 owl:sameAs	taxon:2
 rdfs:subClassOf	taxid:131567
-dcterms:identifier	"2"^^xsd:integer
+dcterms:identifier	2
 taxon:blastName	"bacteria"
 taxon:genbankCommonName	"eubacteria"
 taxon:geneticCode	taxon:GeneticCode11
