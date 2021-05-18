@@ -256,6 +256,8 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
   if (bodies.length == 1) {
     if (opts.outfmt == 'tsv') {
       printTsv(jsonToTsv(bodies[0], Boolean(opts.vars)));
+    } else if (bodies[0].slice(-1) === '\n' ) {
+      process.stdout.write(bodies[0]);
     } else {
       console.log(bodies[0]);
     }
