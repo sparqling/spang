@@ -364,7 +364,11 @@ function getBindings(vars, b) {
         return `<${b[v].value}>`;
       }
     } else if (b[v].type == 'typed-literal' || b[v].type === 'literal' && b[v].datatype) {
-      if (opts.abbr) {
+      if (b[v].datatype === 'http://www.w3.org/2001/XMLSchema#integer' ||
+          b[v].datatype === 'http://www.w3.org/2001/XMLSchema#decimal' ||
+          b[v].datatype === 'http://www.w3.org/2001/XMLSchema#double') {
+        return b[v].value;
+      } else if (opts.abbr) {
         return `"${b[v].value}"^^${prefixModule.abbreviateURL(b[v].datatype)}`;
       } else {
         return `"${b[v].value}"^^<${b[v].datatype}>`;
