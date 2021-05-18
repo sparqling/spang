@@ -253,8 +253,8 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     return;
   }
   let end = new Date() - start;
-  if (bodies.length == 1) {
-    if (opts.outfmt == 'tsv') {
+  if (bodies.length === 1) {
+    if (opts.outfmt === 'tsv') {
       printTsv(jsonToTsv(bodies[0], Boolean(opts.vars)));
     } else if (bodies[0].slice(-1) === '\n' ) {
       process.stdout.write(bodies[0]);
@@ -359,13 +359,13 @@ function getBindings(vars, b) {
     if (!b[v]) {
       return '';
     }
-    if (b[v].type == 'uri') {
+    if (b[v].type === 'uri') {
       if (opts.abbr) {
         return prefixModule.abbreviateURL(b[v].value);
       } else {
         return `<${b[v].value}>`;
       }
-    } else if (b[v].type == 'typed-literal' || b[v].type === 'literal' && b[v].datatype) {
+    } else if (b[v].type === 'typed-literal' || b[v].type === 'literal' && b[v].datatype) {
       if (b[v].datatype === 'http://www.w3.org/2001/XMLSchema#integer' ||
           b[v].datatype === 'http://www.w3.org/2001/XMLSchema#decimal' ||
           b[v].datatype === 'http://www.w3.org/2001/XMLSchema#double') {
@@ -375,7 +375,7 @@ function getBindings(vars, b) {
       } else {
         return `"${b[v].value}"^^<${b[v].datatype}>`;
       }
-    } else if (b[v].type == 'bnode') {
+    } else if (b[v].type === 'bnode') {
       return `_:${b[v].value}`;
     } else {
       return `"${b[v].value}"`;
