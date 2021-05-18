@@ -27,7 +27,7 @@ let templatePath;
 
 let opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
-  .option('-f, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html', 'tsv')
+  .option('-f, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html, text', 'tsv')
   .option('-c, --align-column', 'align output columns (only valid for tsv)')
   .option('-j, --json', 'same as -f json')
   .option('-a, --abbr', 'abbreviate results using predefined prefixes')
@@ -264,7 +264,7 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     }
     return;
   }
-  if (['tsv', 'text/tsv', 'n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
+  if (['tsv', 'text', 'n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
     let outputStr = '';
     switch (opts.outfmt) {
       case 'tsv':
@@ -274,7 +274,7 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
         }
         printTsv(outputStr);
         break;
-      case 'text/tsv':
+      case 'text':
         outputStr += bodies[0];
         // remove header line for i > 0
         for (let i = 1; i < bodies.length; i++) {
