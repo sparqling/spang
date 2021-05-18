@@ -2060,9 +2060,9 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 //   | 'LCASE' '(' Expression ')'
 //   | 'ENCODE_FOR_URI' '(' Expression ')'
 //                    | 'CONTAINS' '(' Expression ',' Expression ')'
-//   | 'STRSTARTS' '(' Expression ',' Expression ')'
-//   | 'STRENDS' '(' Expression ',' Expression ')'
-//   | 'STRBEFORE' '(' Expression ',' Expression ')'
+//                    | 'STRSTARTS' '(' Expression ',' Expression ')'
+//                    | 'STRENDS' '(' Expression ',' Expression ')'
+//                    | 'STRBEFORE' '(' Expression ',' Expression ')'
 //                    | 'STRAFTER' '(' Expression ',' Expression ')'
 //   | 'YEAR' '(' Expression ')'
 //   | 'MONTH' '(' Expression ')'
@@ -2189,6 +2189,33 @@ BuiltInCall = Aggregate
     token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'contains',
+    args: [e1, e2],
+  }
+}
+/ 'STRBEFORE'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
+{
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'strbefore',
+    args: [e1, e2],
+  }
+}
+/ 'STRSTARTS'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
+{
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'strstarts',
+    args: [e1, e2],
+  }
+}
+/ 'STRENDS'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
+{
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'strends',
     args: [e1, e2],
   }
 }
