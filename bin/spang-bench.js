@@ -117,7 +117,7 @@ function measureQuery(queryPath, expected) {
       times.push('null');
       validations.push('null');
     } else {
-      if (!expected) {
+      if (expected == null) {
         validations.push('null');
       } else if (expected === result.stdout.toString()) {
         validations.push('true');
