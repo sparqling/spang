@@ -2369,48 +2369,44 @@ NotExistsFunc = 'NOT'i WS* 'EXISTS'i WS* ggp:GroupGraphPattern
 // incomplete??
 Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')' WS*
 {
-  var exp = {};
-  exp.token = 'expression';
-  exp.expressionType = 'aggregate';
-  exp.aggregateType = 'count';
-  exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-  exp.expression = e;
-  
-  return exp;
+  return {
+    token: 'expression',
+    expressionType: 'aggregate',
+    aggregateType: 'count',
+    distinct: Boolean(d),
+    expression: e,
+  }
 }
 / 'GROUP_CONCAT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression s:(';' WS* 'SEPARATOR'i WS* '=' WS* String WS*)? ')' WS*
 {
-  var exp = {};
-  exp.token = 'expression';
-  exp.expressionType = 'aggregate';
-  exp.aggregateType = 'group_concat';
-  exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-  exp.expression = e;
-  exp.separator = s;
-  
-  return exp;
+  return {
+    token: 'expression',
+    expressionType: 'aggregate',
+    aggregateType: 'group_concat',
+    distinct: Boolean(d),
+    expression: e,
+    separator: s,
+  }
 }
 / 'SUM'i WS* '(' WS* d:('DISTINCT'i)? WS*  e:Expression WS* ')' WS*
 {
-  var exp = {};
-  exp.token = 'expression';
-  exp.expressionType = 'aggregate';
-  exp.aggregateType = 'sum';
-  exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-  exp.expression = e;
-  
-  return exp;
+  return {
+    token: 'expression',
+    expressionType: 'aggregate',
+    aggregateType: 'sum',
+    distinct: Boolean(d),
+    expression: e,
+  }
 }
 / 'MIN'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {
-  var exp = {};
-  exp.token = 'expression';
-  exp.expressionType = 'aggregate';
-  exp.aggregateType = 'min';
-  exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-  exp.expression = e;
-  
-  return exp;
+  return {
+    token: 'expression',
+    expressionType: 'aggregate',
+    aggregateType: 'min',
+    distinct: Boolean(d),
+    expression: e,
+  }
 }
 / 'MAX'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {

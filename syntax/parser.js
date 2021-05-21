@@ -2069,53 +2069,49 @@ function peg$parse(input, options) {
       peg$c351 = "count",
       peg$c352 = peg$literalExpectation("COUNT", true),
       peg$c353 = function(d, e) {
-        var exp = {};
-        exp.token = 'expression';
-        exp.expressionType = 'aggregate';
-        exp.aggregateType = 'count';
-        exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-        exp.expression = e;
-        
-        return exp;
+        return {
+          token: 'expression',
+          expressionType: 'aggregate',
+          aggregateType: 'count',
+          distinct: Boolean(d),
+          expression: e,
+        }
       },
       peg$c354 = "group_concat",
       peg$c355 = peg$literalExpectation("GROUP_CONCAT", true),
       peg$c356 = "separator",
       peg$c357 = peg$literalExpectation("SEPARATOR", true),
       peg$c358 = function(d, e, s) {
-        var exp = {};
-        exp.token = 'expression';
-        exp.expressionType = 'aggregate';
-        exp.aggregateType = 'group_concat';
-        exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-        exp.expression = e;
-        exp.separator = s;
-        
-        return exp;
+        return {
+          token: 'expression',
+          expressionType: 'aggregate',
+          aggregateType: 'group_concat',
+          distinct: Boolean(d),
+          expression: e,
+          separator: s,
+        }
       },
       peg$c359 = "sum",
       peg$c360 = peg$literalExpectation("SUM", true),
       peg$c361 = function(d, e) {
-        var exp = {};
-        exp.token = 'expression';
-        exp.expressionType = 'aggregate';
-        exp.aggregateType = 'sum';
-        exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-        exp.expression = e;
-        
-        return exp;
+        return {
+          token: 'expression',
+          expressionType: 'aggregate',
+          aggregateType: 'sum',
+          distinct: Boolean(d),
+          expression: e,
+        }
       },
       peg$c362 = "min",
       peg$c363 = peg$literalExpectation("MIN", true),
       peg$c364 = function(d, e) {
-        var exp = {};
-        exp.token = 'expression';
-        exp.expressionType = 'aggregate';
-        exp.aggregateType = 'min';
-        exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-        exp.expression = e;
-        
-        return exp;
+        return {
+          token: 'expression',
+          expressionType: 'aggregate',
+          aggregateType: 'min',
+          distinct: Boolean(d),
+          expression: e,
+        }
       },
       peg$c365 = "max",
       peg$c366 = peg$literalExpectation("MAX", true),
