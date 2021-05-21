@@ -2366,7 +2366,6 @@ NotExistsFunc = 'NOT'i WS* 'EXISTS'i WS* ggp:GroupGraphPattern
 //       | 'AVG' '(' 'DISTINCT'? Expression ')'
 //       | 'SAMPLE' '(' 'DISTINCT'? Expression ')'
 //       | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
-// incomplete??
 Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')' WS*
 {
   return {
@@ -2375,17 +2374,6 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
     aggregateType: 'count',
     distinct: Boolean(d),
     expression: e,
-  }
-}
-/ 'GROUP_CONCAT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression s:(';' WS* 'SEPARATOR'i WS* '=' WS* String WS*)? ')' WS*
-{
-  return {
-    token: 'expression',
-    expressionType: 'aggregate',
-    aggregateType: 'group_concat',
-    distinct: Boolean(d),
-    expression: e,
-    separator: s,
   }
 }
 / 'SUM'i WS* '(' WS* d:('DISTINCT'i)? WS*  e:Expression WS* ')' WS*
@@ -2410,25 +2398,23 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 }
 / 'MAX'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {
-  var exp = {};
-  exp.token = 'expression'
-  exp.expressionType = 'aggregate'
-  exp.aggregateType = 'max'
-  exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-  exp.expression = e
-  
-  return exp
+  return {
+    token: 'expression',
+    expressionType: 'aggregate',
+    aggregateType: 'max',
+    distinct: Boolean(d),
+    expression: e,
+  }
 }
 / 'AVG'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {
-  var exp = {};
-  exp.token = 'expression'
-  exp.expressionType = 'aggregate'
-  exp.aggregateType = 'avg'
-  exp.distinct = ((d != "" && d != null) ? 'DISTINCT' : d);
-  exp.expression = e
-  
-  return exp
+  return {
+    token: 'expression',
+    expressionType: 'aggregate',
+    aggregateType: 'avg',
+    distinct: Boolean(d),
+    expression: e,
+  }
 }
 / 'SAMPLE'i WS* '(' WS* d:('DISTINCT'i)? WS*  e:Expression WS* ')' WS*
 {
@@ -2436,8 +2422,19 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
     token: 'expression',
     expressionType: 'aggregate',
     aggregateType: 'sample',
-    distinct: ((d != "" && d != null) ? 'DISTINCT' : d),
+    distinct: Boolean(d),
     expression: e,
+  }
+}
+/ 'GROUP_CONCAT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression s:(';' WS* 'SEPARATOR'i WS* '=' WS* String WS*)? ')' WS*
+{
+  return {
+    token: 'expression',
+    expressionType: 'aggregate',
+    aggregateType: 'group_concat',
+    distinct: Boolean(d),
+    expression: e,
+    separator: s,
   }
 }
 
