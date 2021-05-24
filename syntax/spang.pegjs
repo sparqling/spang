@@ -1885,46 +1885,43 @@ RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression 
 NumericExpression = AdditiveExpression
 
 // [116] AdditiveExpression ::= MultiplicativeExpression ( '+' MultiplicativeExpression | '-' MultiplicativeExpression | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )* )*
-// AdditiveExpression ::= MultiplicativeExpression ( '+' MultiplicativeExpression | '-' MultiplicativeExpression | ( NumericLiteralPositive | NumericLiteralNegative ) ( ( '*' UnaryExpression ) | ( '/' UnaryExpression ) )? )*
-AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* MultiplicativeExpression / WS* '-' WS* MultiplicativeExpression / ( NumericLiteralNegative / NumericLiteralNegative ) ( (WS* '*' WS* UnaryExpression) / (WS* '/' WS* UnaryExpression))? )*
+AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* MultiplicativeExpression / WS* '-' WS* MultiplicativeExpression / ( NumericLiteralPositive / NumericLiteralNegative ) ( (WS* '*' WS* UnaryExpression) / (WS* '/' WS* UnaryExpression))* )*
 {
-  if(ops.length === 0) {
+  if (ops.length === 0) {
     return op1;
   }
 
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'additiveexpression';
-  ex.summand = op1;
-  ex.summands = [];
-  
-  for(var i=0; i<ops.length; i++) {
-    var summand = ops[i];
-    var sum = {};
-    if(summand.length == 4 && typeof(summand[1]) === "string") {
-      sum.operator = summand[1];
-      sum.expression = summand[3];
+  let ex = {
+    token: 'expression',
+    expressionType: 'additiveexpression',
+    summand: op1,
+    summands: [],
+  }
+
+  ops.forEach((op) => {
+    if (op.length == 4 && typeof(op[1]) === "string") {
+      ex.summands.push({ operator: op[1], expression: op[3] });
     } else {
-      var subexp = {}
+      let sum = {};
       var firstFactor = sum[0];
       var operator = sum[1][1];
       var secondFactor = sum[1][3];
       var operator = null;
-      if(firstFactor.value < 0) {
+      if (firstFactor.value < 0) {
         sum.operator = '-';
         firstFactor.value = - firstFactor.value;
       } else {
         sum.operator = '+';
       }
-      subexp.token = 'expression';
-      subexp.expressionType = 'multiplicativeexpression';
-      subexp.operator = firstFactor;
-      subexp.factors = [{operator: operator, expression: secondFactor}];
-      
-      sum.expression = subexp;
+      sum.expression = {
+        token: 'expression',
+        expressionType: 'multiplicativeexpression',
+        operator: firstFactor,
+        factors: [ { operator: operator, expression: secondFactor } ],
+      };
+      ex.summands.push(sum);
     }
-    ex.summands.push(sum);
-  }
+  });
   
   return ex;
 }
@@ -2023,6 +2020,7 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
 // [120] BrackettedExpression ::= '(' Expression ')'
 BrackettedExpression = '(' WS* e:Expression WS* ')'
 {
+  e.bracketted = 'true';
   return e;
 }
 
