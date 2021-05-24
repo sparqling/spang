@@ -1695,26 +1695,22 @@ function peg$parse(input, options) {
         
         return ex;
       },
-      peg$c260 = function(exp, exps) {
-        if (exps.length === 0) {
-          return exp;
+      peg$c260 = function(e1, es) {
+        if (es.length === 0) {
+          return e1;
         }
         
-        let ex = {
+        let ret = {
           token: 'expression',
           expressionType: 'multiplicativeexpression',
-          factor: exp,
+          factor: e1,
           factors: [],
         };
-        for (let i = 0; i < exps.length; i++) {
-          let factor = exps[i];
-          ex.factors.push({
-            operator: factor[1],
-            expression: factor[3],
-          });
-        }
+        es.forEach((e) => {
+          ret.factors.push({ operator: e[1], expression: e[3] });
+        });
         
-        return ex;
+        return ret;
       },
       peg$c261 = function(e) {
         return {

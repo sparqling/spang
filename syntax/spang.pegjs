@@ -1927,27 +1927,23 @@ AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* Multiplicati
 }
 
 // [117] MultiplicativeExpression ::= UnaryExpression ( '*' UnaryExpression | '/' UnaryExpression )*
-MultiplicativeExpression = exp:UnaryExpression exps:(WS* '*' WS* UnaryExpression / WS* '/' WS* UnaryExpression)*
+MultiplicativeExpression = e1:UnaryExpression es:(WS* '*' WS* UnaryExpression / WS* '/' WS* UnaryExpression)*
 {
-  if (exps.length === 0) {
-    return exp;
+  if (es.length === 0) {
+    return e1;
   }
   
-  let ex = {
+  let ret = {
     token: 'expression',
     expressionType: 'multiplicativeexpression',
-    factor: exp,
+    factor: e1,
     factors: [],
   };
-  for (let i = 0; i < exps.length; i++) {
-    let factor = exps[i];
-    ex.factors.push({
-      operator: factor[1],
-      expression: factor[3],
-    });
-  }
+  es.forEach((e) => {
+    ret.factors.push({ operator: e[1], expression: e[3] });
+  });
   
-  return ex;
+  return ret;
 }
 
 // [118] UnaryExpression ::= '!' PrimaryExpression | '+' PrimaryExpression | '-' PrimaryExpression | PrimaryExpression
