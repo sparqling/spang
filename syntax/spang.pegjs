@@ -1929,21 +1929,22 @@ AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* Multiplicati
 // [117] MultiplicativeExpression ::= UnaryExpression ( '*' UnaryExpression | '/' UnaryExpression )*
 MultiplicativeExpression = exp:UnaryExpression exps:(WS* '*' WS* UnaryExpression / WS* '/' WS* UnaryExpression)*
 {
-  if(exps.length === 0) {
+  if (exps.length === 0) {
     return exp;
   }
   
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'multiplicativeexpression';
-  ex.factor = exp;
-  ex.factors = [];
-  for(var i=0; i<exps.length; i++) {
-    var factor = exps[i];
-    var fact = {};
-    fact.operator = factor[1];
-    fact.expression = factor[3];
-    ex.factors.push(fact);
+  let ex = {
+    token: 'expression',
+    expressionType: 'multiplicativeexpression',
+    factor: exp,
+    factors: [],
+  };
+  for (let i = 0; i < exps.length; i++) {
+    let factor = exps[i];
+    ex.factors.push({
+      operator: factor[1],
+      expression: factor[3],
+    });
   }
   
   return ex;
