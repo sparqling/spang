@@ -1826,21 +1826,17 @@ ConditionalAndExpression = v:ValueLogical vs:(WS* '&&' WS* ValueLogical)*
 ValueLogical = RelationalExpression
 
 // [114] RelationalExpression ::= NumericExpression ( '=' NumericExpression | '!=' NumericExpression | '<' NumericExpression | '>' NumericExpression | '<=' NumericExpression | '>=' NumericExpression | 'IN' ExpressionList | 'NOT' 'IN' ExpressionList )?
-RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression /
-                                                  WS* '!=' WS* NumericExpression /
-                                                  WS* '<' WS* NumericExpression /
-                                                  WS* '>' WS* NumericExpression /
-                                                  WS* '<=' WS* NumericExpression /
-                                                  WS* '>=' WS* NumericExpression /
-                                                  WS* ('I'/'i')('N'/'n') WS* ExpressionList /
-                                                  WS* ('N'/'n')('O'/'o')('T'/'t') WS* ('I'/'i')('N'/'n') WS* ExpressionList)*
+RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression / WS* '!=' WS* NumericExpression / WS* '<' WS* NumericExpression / WS* '>' WS* NumericExpression / WS* '<=' WS* NumericExpression / WS* '>=' WS* NumericExpression /
+                                                  WS* 'IN'i WS* ExpressionList / WS* 'NOT'i WS* 'IN'i WS* ExpressionList)*
 {
-  if(op2.length === 0) {
+  if (op2.length === 0) {
     return op1;
-  } else if(op2[0][1] === 'i' || op2[0][1] === 'I' || op2[0][1] === 'n' || op2[0][1] === 'N'){
+  }
+
+  if (op2[0][1] === 'i' || op2[0][1] === 'I' || op2[0][1] === 'n' || op2[0][1] === 'N') {
     var exp = {};
     
-    if(op2[0][1] === 'i' || op2[0][1] === 'I') {
+    if (op2[0][1] === 'i' || op2[0][1] === 'I') {
       var operator = "=";
       exp.expressionType = "conditionalor"
     } else {
@@ -1849,8 +1845,8 @@ RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression 
     }
     var lop = op1;
     var rops = []
-    for(var opi=0; opi<op2[0].length; opi++) {
-      if(op2[0][opi].token ==="args") {
+    for (let opi = 0; opi < op2[0].length; opi++) {
+      if (op2[0][opi].token === "args") {
         rops = op2[0][opi].value;
         break;
       }
@@ -1858,26 +1854,24 @@ RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression 
     
     exp.token = "expression";
     exp.operands = [];
-    for(var i=0; i<rops.length; i++) {
-      var nextOperand = {};
-      nextOperand.token = "expression";
-      nextOperand.expressionType = "relationalexpression";
-      nextOperand.operator = operator;
-      nextOperand.op1 = lop;
-      nextOperand.op2 = rops[i];
-      
-      exp.operands.push(nextOperand);
+    for (let i = 0; i < rops.length; i++) {
+      exp.operands.push({
+        token: "expression",
+        expressionType: "relationalexpression",
+        operator: operator,
+        op1: lop,
+        op2: rops[i],
+      });
     }
     return exp;
-  } else {
-    var exp = {};
-    exp.expressionType = "relationalexpression"
-    exp.operator = op2[0][1];
-    exp.op1 = op1;
-    exp.op2 = op2[0][3];
-    exp.token = "expression";
-    
-    return exp;
+  }
+
+  return {
+    expressionType: "relationalexpression",
+    op1: op1,
+    operator: op2[0][1],
+    op2: op2[0][3],
+    token: "expression",
   }
 }
 
