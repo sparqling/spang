@@ -17,6 +17,7 @@ const opts = program
   .option('-m, --method <METHOD>', 'method of HTTP requers (GET or POST)', 'GET')
   .option('-s, --skip_comparison', 'skip comparison with expected result')
   .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
+  .option('--sort', 'sort order of query result before validating')
   .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
   .option('--sec', 'output in "sec" (default: in "ms")')
   .option('--output_error', 'output to stderr')
@@ -89,12 +90,16 @@ for (let benchmark of benchmarks) {
         }
       }
     }
-    measureQuery(file.full, expected);
+    measureQuery(file.full, expected, opts.sort || benchmark.sort);
   }
 }
 writer.end();
 
-function measureQuery(queryPath, expected) {
+function normalize(result) {
+  return result.split(/\r\n|\r|\n/).sort().join("\n");
+}
+
+function measureQuery(queryPath, expected, sort) {
   let row = { name: queryPath };
   let times = [];
   let validations = [];
@@ -119,12 +124,19 @@ function measureQuery(queryPath, expected) {
     } else {
       if (expected == null) {
         validations.push('null');
-      } else if (expected === result.stdout.toString()) {
-        validations.push('true');
       } else {
-        validations.push('false');
-        if (opts.output_error) {
-          console.error(result.stdout.toString());
+        let actual = result.stdout.toString();
+        if(sort) {
+          actual = normalize(actual);
+          expected = normalize(expected);
+        }
+        if (actual === expected) {
+          validations.push('true');
+        } else {
+          validations.push('false');
+          if (opts.output_error) {
+            console.error(result.stdout.toString());
+          }
         }
       }
       let matched = result.stderr.toString().match(/(\d+)ms/);
