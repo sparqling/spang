@@ -1261,26 +1261,12 @@ ObjectList = obj:Object WS* objs:( ',' WS* Object )*
 Object = GraphNode
 
 // [81] TriplesSameSubjectPath ::= VarOrTerm PropertyListPathNotEmpty | TriplesNodePath PropertyListPath
-// support for property paths must be added
 TriplesSameSubjectPath = WS* s:VarOrTerm WS* list:PropertyListPathNotEmpty
 {
   let triplesContext = list.triplesContext;
 
   list.pairs.forEach((pair) => {
-    if (pair[1].length != null) {
-      pair[1] = pair[1][0];
-    }
-    const triple = { subject: s, predicate: pair[0], object: pair[1] };
-    if (triple.predicate.token === 'path' && triple.predicate.kind === 'element') {
-      triple.predicate = triple.predicate.value;
-    }
-    if (s.token && s.token === 'triplesnodecollection') {
-      triple.subject = s.chainSubject[0];
-      triplesContext.push(triple);
-      triplesContext = triplesContext.concat(s.triplesContext);
-    } else {
-      triplesContext.push(triple);
-    }
+    triplesContext.push({ subject: s, predicate: pair[0], object: pair[1] });
   });
 
   return {
@@ -1332,14 +1318,9 @@ PropertyListPath = PropertyListPathNotEmpty?
 // [83] PropertyListPathNotEmpty ::= ( VerbPath | VerbSimple ) ObjectListPath ( ';' ( ( VerbPath | VerbSimple ) ObjectList )? )*
 PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath rest:( WS* ';' WS* ( ( VerbPath / VerbSimple ) WS* ObjectList )? )*
 {
-  var tokenParsed = {};
-  tokenParsed.token = 'propertylist';
-  var triplesContext = [];
-  var pairs = [];
-  var test = [];
-  
-  for (let i=0; i<ol.length; i++) {
-    
+  let pairs = [];
+  let triplesContext = [];
+  for (let i = 0; i < ol.length; i++) {
     if (ol[i].triplesContext != null) {
       triplesContext = triplesContext.concat(ol[i].triplesContext);
       if (ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
@@ -1358,7 +1339,6 @@ PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath res
       continue;
     var newVerb  = tok[0];
     var newObjsList = tok[2] || []; // not 1 but 2 (?)
-    
     for(var j=0; j<newObjsList.length; j++) {
       if(newObjsList[j].triplesContext != null) {
         triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
@@ -1369,23 +1349,15 @@ PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath res
     }
   }
   
-  tokenParsed.pairs = pairs;
-  tokenParsed.triplesContext = triplesContext;
-  
-  return tokenParsed;
+  return {
+    token: 'propertylist',
+    pairs: pairs,
+    triplesContext: triplesContext,
+  };
 }
 
 // [84] VerbPath ::= Path
-VerbPath = p:Path
-{
-  var path = {};
-  path.token = 'path';
-  path.kind = 'element';
-  path.value = p;
-  path.location = location();
-  
-  return p; // return path?
-}
+VerbPath = Path
 
 // [85] VerbSimple ::= Var
 VerbSimple = Var
@@ -1483,8 +1455,6 @@ PathEltOrInverse = PathElt
 }
 
 // [93] PathMod ::= '?' | '*' | '+'
-// PathMod ::= ( '*' | '?' | '+' | '{' ( Integer ( ',' ( '}' | Integer '}' ) | '}' ) | ',' Integer '}' ) )
-// an extension??
 // PathMod = ( '*' / '?' / '+' / '{' ( Integer ( ',' ( '}' / Integer '}' ) / '}' ) / ',' Integer '}' ) )
 PathMod = m:('?' / '*' / '+')
 {
