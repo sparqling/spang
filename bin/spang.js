@@ -365,6 +365,9 @@ function getBindings(vars, b) {
       } else {
         return `<${b[v].value}>`;
       }
+    } else if (b[v]['xml:lang']) {
+      const lang = b[v]['xml:lang'];
+      return `"${b[v].value}"@${lang}`;
     } else if (b[v].type === 'typed-literal' || b[v].type === 'literal' && b[v].datatype) {
       if (b[v].datatype === 'http://www.w3.org/2001/XMLSchema#integer' ||
           b[v].datatype === 'http://www.w3.org/2001/XMLSchema#decimal' ||
