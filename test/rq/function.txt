@@ -1,0 +1,12 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @option --fmt
+
+_:hasName(?taxid, ?name) {
+  ?taxid rdfs:label ?name .
+}
+
+SELECT *
+WHERE {
+  _:hasName(taxid:9606, ?name)
+}

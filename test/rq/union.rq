@@ -1,0 +1,12 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @option --fmt
+
+SELECT *
+WHERE {
+  {taxid:9606 rdfs:label ?label}
+  UNION
+  {taxid:10090 rdfs:label ?label}
+  UNION
+  {taxid:10116 rdfs:label ?label}
+}

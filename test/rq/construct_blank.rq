@@ -1,0 +1,11 @@
+#!/usr/bin/env spang2
+# @option --fmt
+
+CONSTRUCT {
+  taxid:2 rdfs:label ?o .
+}
+FROM <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
+WHERE {
+  [ ?p ?o ] ?p1 ?o1 ;
+     ?p2 ?o2 .
+}

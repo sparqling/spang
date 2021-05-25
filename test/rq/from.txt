@@ -1,0 +1,8 @@
+#!/usr/bin/env spang2
+# @option --fmt
+
+SELECT ?o
+FROM <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
+WHERE {
+  taxid:2 rdfs:label ?o .
+}

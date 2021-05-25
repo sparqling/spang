@@ -1,0 +1,10 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @option --fmt
+
+SELECT ?label
+WHERE {
+?taxid rdfs:label ?label .
+?taxid dct:identifier ?id .
+FILTER(?id = 2)
+}

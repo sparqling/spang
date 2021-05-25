@@ -1,0 +1,8 @@
+#!/usr/bin/env spang2
+# @option --fmt
+
+SELECT *
+FROM taxon:
+WHERE {# FROM <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
+  taxid:2 rdfs:label ?o .
+}

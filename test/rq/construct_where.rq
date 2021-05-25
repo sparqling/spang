@@ -1,0 +1,6 @@
+#!/usr/bin/env spang2
+# @option --fmt
+
+CONSTRUCT WHERE {
+  taxid:2 rdfs:label ?o .
+}

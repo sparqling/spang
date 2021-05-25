@@ -1,0 +1,7 @@
+#!/usr/bin/env spang2
+# @option --fmt
+
+SELECT (?o AS ?label)
+WHERE {
+  taxid:2 rdfs:label ?o .
+}

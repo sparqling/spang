@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @option --fmt
+
+SELECT *
+WHERE {
+  [ ?p ?o ] ?p1 ?o2 ;
+     ?p2 ?o2 .
+}

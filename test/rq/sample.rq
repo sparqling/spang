@@ -1,0 +1,8 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @option --fmt
+
+SELECT (SAMPLE(?s) AS ?sample) ?label
+WHERE {
+  ?s rdfs:subClassOf taxid:2 .
+}
