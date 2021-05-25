@@ -133,6 +133,9 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
     if (sm.group != null) {
       query.group = sm.group;
     }
+    if (sm.having != null) {
+      query.having = sm.having;
+    }
     if (sm.order != null && sm.order != "") {
       query.order = sm.order;
     }
@@ -370,13 +373,14 @@ WhereClause = ('WHERE'i)? WS* g:GroupGraphPattern WS*
 }
 
 // [18] SolutionModifier ::= GroupClause? HavingClause? OrderClause? LimitOffsetClauses?
-SolutionModifier = gc:GroupClause? HavingClause? oc:OrderClause? lo:LimitOffsetClauses? 
+SolutionModifier = gc:GroupClause? h:HavingClause? oc:OrderClause? lo:LimitOffsetClauses?
 {
   return {
     group: gc,
     order: oc,
     limit: lo?.limit,
     offset: lo?.offset,
+    having: h,
   }
 }
                              
@@ -414,7 +418,10 @@ GroupCondition = WS* b:BuiltInCall WS*
 }
 
 // [21] HavingClause ::= 'HAVING' HavingCondition+
-HavingClause = 'HAVING' WS* HavingCondition+
+HavingClause = 'HAVING' WS* h:HavingCondition+
+{
+  return h;
+}
 
 // [22] HavingCondition ::= Constraint
 HavingCondition = Constraint
