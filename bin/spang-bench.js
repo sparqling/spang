@@ -11,17 +11,17 @@ const readFile = (path) => fs.readFileSync(path, 'utf8').toString();
 
 const opts = program
   .option('-c, --command <COMMAND>', 'command', 'spang2')
+  .option('-e, --endpoint <ENDPOINT>', 'target endpoint')
   .option('-n, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
+  .option('-a, --average', 'calculate average time')
+  .option('-s, --sort', 'sort resulting lines before validation')
   .option('-d, --delimiter <DELIMITER>', 'delimiter of output', '\t')
-  .option('-e, --endpoint <ENDPOINT>', 'url of target endpoint')
   .option('-m, --method <METHOD>', 'method of HTTP requers (GET or POST)', 'GET')
-  .option('-s, --skip_comparison', 'skip comparison with expected result')
   .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
-  .option('--sort', 'sort order of query result before validating')
   .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
+  .option('--output-error', 'output to stderr')
+  .option('--skip-validation', 'skip comparison with expected result')
   .option('--sec', 'output in "sec" (default: in "ms")')
-  .option('--output_error', 'output to stderr')
-  .option('-a, --average', 'calculate average')
   .option('-v, --verbose', 'output progress to stderr')
   .arguments('[json_or_queries...]')
   .parse(process.argv)
@@ -48,7 +48,7 @@ let header = ['name', 'time'];
 if (opts.average) {
   header.push('average');
 }
-if (!opts.skip_comparison) {
+if (!opts.skipValidation) {
   header.push('valid');
 }
 
@@ -74,7 +74,7 @@ for (let benchmark of benchmarks) {
     }
     let expected = null;
     const defaultExpectedName = file.full.replace(/\.[^/.]+$/, '') + '.txt';
-    if (!opts.skip_comparison) {
+    if (!opts.skipValidation) {
       if (!benchmark.expected && fs.existsSync(defaultExpectedName)) {
         expected = readFile(defaultExpectedName);
       } else if (benchmark.expected) {
@@ -134,7 +134,7 @@ function measureQuery(queryPath, expected, sort) {
           validations.push('true');
         } else {
           validations.push('false');
-          if (opts.output_error) {
+          if (opts.outputError) {
             console.error(result.stdout.toString());
           }
         }
@@ -155,7 +155,7 @@ function measureQuery(queryPath, expected, sort) {
     }
   }
   row['time'] = times.join(',');
-  if (!opts.skip_comparison) {
+  if (!opts.skipValidation) {
     row['valid'] = validations.join(',');
   }
   if (opts.average) {
