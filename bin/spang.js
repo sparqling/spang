@@ -14,9 +14,7 @@ const metadataModule = require('../lib/metadata.js');
 const prefixModule = require('../lib/prefix.js');
 const search_db_name = require('../lib/search_db_name');
 const shortcut = require('../lib/shortcut.js').shortcut;
-const constructSparql = require('../lib/construct_sparql.js').constructSparql;
-const expandTemplate = require('../lib/construct_sparql.js').expandTemplate;
-const makePortable = require('../lib/construct_sparql.js').makePortable;
+const sparql = require('../lib/construct_sparql.js');
 const querySparql = require('../lib/query_sparql.js');
 const alias = require('../lib/alias.js');
 const util = require('../lib/util.js');
@@ -188,13 +186,13 @@ let db = getDB();
 
 if (opts.debug) {
   console.error(db);
-  sparqlTemplate = expandTemplate(sparqlTemplate, metadata, paramsMap, paramsArr, input);
-  process.stdout.write(makePortable(sparqlTemplate, dbMap));
+  sparqlTemplate = sparql.expandTemplate(sparqlTemplate, metadata, paramsMap, paramsArr, input);
+  process.stdout.write(sparql.makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
 if (templateFileSpecified) {
-  sparqlTemplate = constructSparql(sparqlTemplate, metadata, paramsMap, paramsArr, input);
+  sparqlTemplate = sparql.constructSparql(sparqlTemplate, metadata, paramsMap, paramsArr, input);
   if (opts.limit) {
     if (!sparqlTemplate.endsWith('\n')) {
       sparqlTemplate += '\n';
@@ -204,7 +202,7 @@ if (templateFileSpecified) {
 }
 
 if (opts.showQuery) {
-  process.stdout.write(makePortable(sparqlTemplate, dbMap));
+  process.stdout.write(sparql.makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
