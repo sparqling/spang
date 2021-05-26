@@ -5,19 +5,20 @@ const prefixModule = require('../lib/prefix.js');
 const initializeConfig = require('../lib/config.js').initialize;
 const alias = require('../lib/alias.js');
 
-program
+let opts = program
   .option('-r, --prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
-  .option('-n, --ignore', 'ignore user-specific file (~/.spang/prefix) for test purpose')
+  .option('-n, --ignore-user-prefix', 'ignore user-specific file (~/.spang/prefix) for test purpose')
   .option('-q, --quit', 'show expanded URI and quit')
   .version(require("../package.json").version)
   .arguments('<URI>')
-  .parse(process.argv);
+  .parse(process.argv)
+  .opts();
 
 if (program.args.length == 0) {
   program.help();
 }
 
-initializeConfig(program);
+initializeConfig(opts);
 
 const uri = prefixModule.expandPrefixedUri(alias.replaceIfAny(program.args[0]));
 
