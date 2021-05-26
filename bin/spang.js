@@ -192,7 +192,7 @@ if (opts.debug) {
 }
 
 if (templateFileSpecified) {
-  sparqlTemplate = sparql.constructSparql(sparqlTemplate, metadata, paramsMap, paramsArr, input);
+  sparqlTemplate = sparql.makeSparql(sparqlTemplate, metadata, paramsMap, paramsArr, input);
   if (opts.limit) {
     if (!sparqlTemplate.endsWith('\n')) {
       sparqlTemplate += '\n';
