@@ -187,7 +187,7 @@ let db = getDB();
 if (opts.debug) {
   console.error(db);
   sparqlTemplate = sparql.expandTemplate(sparqlTemplate, metadata, paramsMap, paramsArr, input);
-  process.stdout.write(sparql.makePortable(sparqlTemplate, dbMap));
+  console.log(sparql.makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
@@ -202,7 +202,7 @@ if (templateFileSpecified) {
 }
 
 if (opts.showQuery) {
-  process.stdout.write(sparql.makePortable(sparqlTemplate, dbMap));
+  console.log(sparql.makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
