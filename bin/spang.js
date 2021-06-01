@@ -47,6 +47,7 @@ let opts = program
   .option('--fmt', 'format the query')
   .option('-i, --indent <DEPTH>', 'indent depth; use with --fmt', 2)
   .option('-l, --list-nick-name', 'list up available nicknames of endpoints and quit')
+  .option('-s, --sort', 'sort result rows (valid only if FORMAT=tsv)')
   .option('--stdin', 'read rdf data source from stdin. The format must be Turtle.')
   .option('--time', 'measure time of query execution (exluding construction of query)')
   .option('-r, --reset-option', 'ignore options specified in query file metadata')
@@ -253,7 +254,7 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
   let end = new Date() - start;
   if (bodies.length === 1) {
     if (opts.outfmt === 'tsv') {
-      printTsv(jsonToTsv(bodies[0], Boolean(opts.vars)));
+      printTsv(jsonToTsv(bodies[0], Boolean(opts.vars), opts.sort));
     } else if (bodies[0].slice(-1) === '\n' ) {
       process.stdout.write(bodies[0]);
     } else {
@@ -268,11 +269,14 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     let outputStr = '';
     switch (opts.outfmt) {
       case 'tsv':
-        outputStr += jsonToTsv(bodies[0], Boolean(opts.vars));
-        for (let i = 1; i < bodies.length; i++) {
-          outputStr += '\n' + jsonToTsv(bodies[i]);
+        {
+          let lines = jsontotsv(bodies[0], Boolean(opts.vars));
+          for (let i = 1; i < bodies.length; i++) {
+            lines = lines.concat('\n' + jsonToTsv(bodies[i]));
+          }
+          lines = [lines[0]].concat(lines.slice(1).sort());
+          printTsv(lines);
         }
-        printTsv(outputStr);
         break;
       case 'text':
         outputStr += bodies[0];
@@ -327,7 +331,7 @@ function queryLocalFile(db) {
 
   const result = ret.toString();
   if (opts.outfmt === 'tsv') {
-    printTsv(jsonToTsv(result, Boolean(opts.vars)));
+    printTsv(jsonToTsv(result, Boolean(opts.vars), opts.sort));
   } else {
     process.stdout.write(result);
   }
@@ -340,15 +344,18 @@ function queryLocalFile(db) {
   }
 }
 
-function jsonToTsv(body, withHeader = false) {
+function jsonToTsv(body, withHeader = false, sort = false) {
   const obj = JSON.parse(body);
   const vars = obj.head.vars;
   const bindings = obj.results.bindings;
-  let tsv = '';
+  let tsv = [];
   if (withHeader) {
-    tsv += vars.join('\t') + '\n';
+    tsv.push(vars.join('\t'));
   }
-  tsv += bindings.map((b) => getBindings(vars, b).join('\t')).join('\n');
+  let contents = bindings.map((b) => getBindings(vars, b).join('\t'));
+  if(sort)
+    contents.sort();
+  tsv = tsv.concat(contents);
   return tsv;
 }
 
@@ -385,6 +392,8 @@ function getBindings(vars, b) {
 }
 
 function printTsv(tsv) {
+  if(Array.isArray(tsv))
+    tsv = tsv.join("\n");
   if (opts.alignColumn) {
     console.log(
       columnify(csvParse(tsv, { columns: Boolean(opts.vars), delimiter: '\t', relax: true }), {
@@ -393,7 +402,7 @@ function printTsv(tsv) {
         headingTransform: (x) => x
       }).replace(/\s+$/gm, '')
     );
-  } else if (tsv !== '') {
+  } else if (tsv.length > 0) {
     console.log(tsv);
   }
 }
