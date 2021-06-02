@@ -26,7 +26,8 @@ let templatePath;
 let opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target SPARQL endpoint (URL or its predifined name in SPANG_DIR/etc/endpoints,~/.spang/endpoints)')
   .option('-f, --outfmt <FORMAT>', 'tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html, text', 'tsv')
-  .option('-c, --align-column', 'align output columns (only valid for tsv)')
+  .option('-c, --align-column', 'align output columns (valid for tsv and text)')
+  .option('-s, --sort', 'sort result lines (valid for tsv and text)')
   .option('-j, --json', 'same as -f json')
   .option('-a, --abbr', 'abbreviate results using predefined prefixes')
   .option('-v, --vars', 'variable names are included in output (in the case of tsv format)')
@@ -47,7 +48,6 @@ let opts = program
   .option('--fmt', 'format the query')
   .option('-i, --indent <DEPTH>', 'indent depth; use with --fmt', 2)
   .option('-l, --list-nick-name', 'list up available nicknames of endpoints and quit')
-  .option('-s, --sort', 'sort result rows (valid only if FORMAT=tsv)')
   .option('--stdin', 'read rdf data source from stdin. The format must be Turtle.')
   .option('--time', 'measure time of query execution (exluding construction of query)')
   .option('-r, --reset-option', 'ignore options specified in query file metadata')
@@ -66,7 +66,7 @@ let opts = program
   .opts();
 
 if (opts.json) {
-  opts.outfmt = 'json'
+  opts.outfmt = 'json';
 }
 
 initializeConfig(opts);
@@ -254,8 +254,8 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
   let end = new Date() - start;
   if (bodies.length === 1) {
     if (opts.outfmt === 'tsv') {
-      printTsv(jsonToTsv(bodies[0], Boolean(opts.vars), opts.sort));
-    } else if (bodies[0].slice(-1) === '\n' ) {
+      printTsv(jsonToTsv(bodies[0], Boolean(opts.vars)));
+    } else if (bodies[0].slice(-1) === '\n') {
       process.stdout.write(bodies[0]);
     } else {
       console.log(bodies[0]);
@@ -269,14 +269,11 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     let outputStr = '';
     switch (opts.outfmt) {
       case 'tsv':
-        {
-          let lines = jsontotsv(bodies[0], Boolean(opts.vars));
-          for (let i = 1; i < bodies.length; i++) {
-            lines = lines.concat('\n' + jsonToTsv(bodies[i]));
-          }
-          lines = [lines[0]].concat(lines.slice(1).sort());
-          printTsv(lines);
+        outputStr += jsonToTsv(bodies[0], Boolean(opts.vars));
+        for (let i = 1; i < bodies.length; i++) {
+          outputStr += '\n' + jsonToTsv(bodies[i]);
         }
+        printTsv(outputStr);
         break;
       case 'text':
         outputStr += bodies[0];
@@ -331,7 +328,7 @@ function queryLocalFile(db) {
 
   const result = ret.toString();
   if (opts.outfmt === 'tsv') {
-    printTsv(jsonToTsv(result, Boolean(opts.vars), opts.sort));
+    printTsv(jsonToTsv(result, Boolean(opts.vars)));
   } else {
     process.stdout.write(result);
   }
@@ -344,18 +341,15 @@ function queryLocalFile(db) {
   }
 }
 
-function jsonToTsv(body, withHeader = false, sort = false) {
+function jsonToTsv(body, withHeader = false) {
   const obj = JSON.parse(body);
   const vars = obj.head.vars;
   const bindings = obj.results.bindings;
-  let tsv = [];
+  let tsv = '';
   if (withHeader) {
-    tsv.push(vars.join('\t'));
+    tsv += vars.join('\t') + '\n';
   }
-  let contents = bindings.map((b) => getBindings(vars, b).join('\t'));
-  if(sort)
-    contents.sort();
-  tsv = tsv.concat(contents);
+  tsv += bindings.map((b) => getBindings(vars, b).join('\t')).join('\n');
   return tsv;
 }
 
@@ -392,8 +386,14 @@ function getBindings(vars, b) {
 }
 
 function printTsv(tsv) {
-  if(Array.isArray(tsv))
-    tsv = tsv.join("\n");
+  if (opts.sort) {
+    let lines = tsv.split('\n');
+    if (opts.vars) {
+      tsv = [lines[0]].concat(lines.slice(1).sort()).join('\n');
+    } else {
+      tsv = lines.slice().sort().join('\n');
+    }
+  }
   if (opts.alignColumn) {
     console.log(
       columnify(csvParse(tsv, { columns: Boolean(opts.vars), delimiter: '\t', relax: true }), {
@@ -402,7 +402,7 @@ function printTsv(tsv) {
         headingTransform: (x) => x
       }).replace(/\s+$/gm, '')
     );
-  } else if (tsv.length > 0) {
+  } else if (tsv !== '') {
     console.log(tsv);
   }
 }
