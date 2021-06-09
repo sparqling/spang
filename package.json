@@ -1,5 +1,7 @@
 {
   "name": "spang",
+  "version": "2.1.0",
+  "description": "JavaScript implementation of SPANG",
   "repository": {
     "type": "git",
     "url": "https://github.com/hchiba1/spang"
@@ -9,8 +11,6 @@
     "node": ">=12.0.0",
     "npm": ">=6.0.0"
   },
-  "version": "2.1.0",
-  "description": "JavaScript implementation of SPANG",
   "dependencies": {
     "columnify": "^1.5.4",
     "commander": "^7.1.0",
