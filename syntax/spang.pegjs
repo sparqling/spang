@@ -2036,14 +2036,14 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 //   | 'SHA512' '(' Expression ')'
 //                    |  'COALESCE' ExpressionList
 //                    |  'IF' '(' Expression ',' Expression ',' Expression ')'
-//   |  'STRLANG' '(' Expression ',' Expression ')'
-//   |  'STRDT' '(' Expression ',' Expression ')'
+//                    |  'STRLANG' '(' Expression ',' Expression ')'
+//                    |  'STRDT' '(' Expression ',' Expression ')'
 //                    |  'sameTerm' '(' Expression ',' Expression ')'
 //                    |  'isIRI' '(' Expression ')'
 //                    |  'isURI' '(' Expression ')'
 //                    |  'isBLANK' '(' Expression ')'
 //                    |  'isLITERAL' '(' Expression ')'
-//   |  'isNUMERIC' '(' Expression ')'
+//                    |  'isNUMERIC' '(' Expression ')'
 //                    |  RegexExpression
 //                    |  ExistsFunc
 //                    |  NotExistsFunc
@@ -2200,22 +2200,22 @@ BuiltInCall = Aggregate
     args: [test, trueCond, falseCond],
   }
 }
-/ 'isLITERAL'i WS* '(' WS* arg:Expression WS* ')'
+/ 'STRLANG'i WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'isliteral',
-    args: [arg],
+    builtincall: 'strlang',
+    args: [e1, e2],
   }
 }
-/ 'isBLANK'i WS* '(' WS* arg:Expression WS* ')'
+/ 'STRDT'i WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'isblank',
-    args: [arg],
+    builtincall: 'strdt',
+    args: [e1, e2],
   }
 }
 / 'sameTerm'i WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
@@ -2233,6 +2233,33 @@ BuiltInCall = Aggregate
     token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'isuri',
+    args: [arg],
+  }
+}
+/ 'isBLANK'i WS* '(' WS* arg:Expression WS* ')'
+{
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'isblank',
+    args: [arg],
+  }
+}
+/ 'isLITERAL'i WS* '(' WS* arg:Expression WS* ')'
+{
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'isliteral',
+    args: [arg],
+  }
+}
+/ 'isNUMERIC'i WS* '(' WS* arg:Expression WS* ')'
+{
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'isnumeric',
     args: [arg],
   }
 }
