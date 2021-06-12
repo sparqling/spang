@@ -1041,21 +1041,11 @@ function peg$parse(input, options) {
       peg$c178 = ",",
       peg$c179 = peg$literalExpectation(",", false),
       peg$c180 = function(d, e, es) {
-        let cleanEx = [];
-        for (let i = 0; i < es.length; i++) {
-          cleanEx.push(es[i][2]);
-        }
-
-        let args = {
+        return {
           token: 'args',
-          value: [e].concat(cleanEx),
-        };
-        if (d != null && d.toUpperCase() === "DISTINCT") {
-          args.distinct = true;
-        } else {
-          args.distinct = false;
+          distinct: Boolean(d),
+          value: [e].concat(es.map((e) => e[2])),
         }
-        return args;
       },
       peg$c181 = function() {
         return [];

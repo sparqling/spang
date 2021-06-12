@@ -1070,21 +1070,11 @@ ArgList = NIL
 }
 / '(' WS* d:'DISTINCT'i? WS* e:Expression WS* es:( ',' WS* Expression)* ')'
 {
-  let cleanEx = [];
-  for (let i = 0; i < es.length; i++) {
-    cleanEx.push(es[i][2]);
-  }
-
-  let args = {
+  return {
     token: 'args',
-    value: [e].concat(cleanEx),
-  };
-  if (d != null && d.toUpperCase() === "DISTINCT") {
-    args.distinct = true;
-  } else {
-    args.distinct = false;
+    distinct: Boolean(d),
+    value: [e].concat(es.map((e) => e[2])),
   }
-  return args;
 }
 
 // [72] ExpressionList ::= NIL | '(' Expression ( ',' Expression )* ')'
