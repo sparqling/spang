@@ -1982,60 +1982,60 @@ BrackettedExpression = '(' WS* e:Expression WS* ')'
 }
 
 // [121] BuiltInCall ::= Aggregate
-//                    | 'STR' '(' Expression ')'
-//                    | 'LANG' '(' Expression ')'
-//                    | 'LANGMATCHES' '(' Expression ',' Expression ')'
-//                    | 'DATATYPE' '(' Expression ')'
-//                    | 'BOUND' '(' Var ')'
-//                    | 'IRI' '(' Expression ')'
-//                    | 'URI' '(' Expression ')'
-//                    | 'BNODE' ( '(' Expression ')' | NIL )
-//                    | 'RAND' NIL
-//                    | 'ABS' '(' Expression ')'
-//                    | 'CEIL' '(' Expression ')'
-//                    | 'FLOOR' '(' Expression ')'
-//                    | 'ROUND' '(' Expression ')'
-//                    | 'CONCAT' ExpressionList
-//                    |  SubstringExpression
-//                    | 'STRLEN' '(' Expression ')'
-//                    |  StrReplaceExpression
-//                    | 'UCASE' '(' Expression ')'
-//                    | 'LCASE' '(' Expression ')'
-//                    | 'ENCODE_FOR_URI' '(' Expression ')'
-//                    | 'CONTAINS' '(' Expression ',' Expression ')'
-//                    | 'STRSTARTS' '(' Expression ',' Expression ')'
-//                    | 'STRENDS' '(' Expression ',' Expression ')'
-//                    | 'STRBEFORE' '(' Expression ',' Expression ')'
-//                    | 'STRAFTER' '(' Expression ',' Expression ')'
-//                    | 'YEAR' '(' Expression ')'
-//                    | 'MONTH' '(' Expression ')'
-//                    | 'DAY' '(' Expression ')'
-//                    | 'HOURS' '(' Expression ')'
-//                    | 'MINUTES' '(' Expression ')'
-//                    | 'SECONDS' '(' Expression ')'
-//                    | 'TIMEZONE' '(' Expression ')'
-//                    | 'TZ' '(' Expression ')'
-//                    | 'NOW' NIL
-//                    | 'UUID' NIL
-//                    | 'STRUUID' NIL
-//                    | 'MD5' '(' Expression ')'
-//                    | 'SHA1' '(' Expression ')'
-//                    | 'SHA256' '(' Expression ')'
-//                    | 'SHA384' '(' Expression ')'
-//                    | 'SHA512' '(' Expression ')'
-//                    | 'COALESCE' ExpressionList
-//                    | 'IF' '(' Expression ',' Expression ',' Expression ')'
-//                    | 'STRLANG' '(' Expression ',' Expression ')'
-//                    | 'STRDT' '(' Expression ',' Expression ')'
-//                    | 'sameTerm' '(' Expression ',' Expression ')'
-//                    | 'isIRI' '(' Expression ')'
-//                    | 'isURI' '(' Expression ')'
-//                    | 'isBLANK' '(' Expression ')'
-//                    | 'isLITERAL' '(' Expression ')'
-//                    | 'isNUMERIC' '(' Expression ')'
-//                    |  RegexExpression
-//                    |  ExistsFunc
-//                    |  NotExistsFunc
+//       | 'STR' '(' Expression ')'
+//       | 'LANG' '(' Expression ')'
+//       | 'LANGMATCHES' '(' Expression ',' Expression ')'
+//       | 'DATATYPE' '(' Expression ')'
+//       | 'BOUND' '(' Var ')'
+//       | 'IRI' '(' Expression ')'
+//       | 'URI' '(' Expression ')'
+//       | 'BNODE' ( '(' Expression ')' | NIL )
+//       | 'RAND' NIL
+//       | 'ABS' '(' Expression ')'
+//       | 'CEIL' '(' Expression ')'
+//       | 'FLOOR' '(' Expression ')'
+//       | 'ROUND' '(' Expression ')'
+//       | 'CONCAT' ExpressionList
+//       |  SubstringExpression
+//       | 'STRLEN' '(' Expression ')'
+//       |  StrReplaceExpression
+//       | 'UCASE' '(' Expression ')'
+//       | 'LCASE' '(' Expression ')'
+//       | 'ENCODE_FOR_URI' '(' Expression ')'
+//       | 'CONTAINS' '(' Expression ',' Expression ')'
+//       | 'STRSTARTS' '(' Expression ',' Expression ')'
+//       | 'STRENDS' '(' Expression ',' Expression ')'
+//       | 'STRBEFORE' '(' Expression ',' Expression ')'
+//       | 'STRAFTER' '(' Expression ',' Expression ')'
+//       | 'YEAR' '(' Expression ')'
+//       | 'MONTH' '(' Expression ')'
+//       | 'DAY' '(' Expression ')'
+//       | 'HOURS' '(' Expression ')'
+//       | 'MINUTES' '(' Expression ')'
+//       | 'SECONDS' '(' Expression ')'
+//       | 'TIMEZONE' '(' Expression ')'
+//       | 'TZ' '(' Expression ')'
+//       | 'NOW' NIL
+//       | 'UUID' NIL
+//       | 'STRUUID' NIL
+//       | 'MD5' '(' Expression ')'
+//       | 'SHA1' '(' Expression ')'
+//       | 'SHA256' '(' Expression ')'
+//       | 'SHA384' '(' Expression ')'
+//       | 'SHA512' '(' Expression ')'
+//       | 'COALESCE' ExpressionList
+//       | 'IF' '(' Expression ',' Expression ',' Expression ')'
+//       | 'STRLANG' '(' Expression ',' Expression ')'
+//       | 'STRDT' '(' Expression ',' Expression ')'
+//       | 'sameTerm' '(' Expression ',' Expression ')'
+//       | 'isIRI' '(' Expression ')'
+//       | 'isURI' '(' Expression ')'
+//       | 'isBLANK' '(' Expression ')'
+//       | 'isLITERAL' '(' Expression ')'
+//       | 'isNUMERIC' '(' Expression ')'
+//       |  RegexExpression
+//       |  ExistsFunc
+//       |  NotExistsFunc
 // add custom:
 BuiltInCall = Aggregate
 / 'STR'i WS* '(' WS* e:Expression WS* ')'
@@ -2103,17 +2103,17 @@ BuiltInCall = Aggregate
 }
 / 'BNODE'i WS* arg:('(' WS* e:Expression WS* ')' / NIL)
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'builtincall';
-  ex.builtincall = 'BNODE';
-  if(arg.length === 5) {
-    ex.args = [arg[2]];
-  } else {
-    ex.args = null;
+  const ret = {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'BNODE',
+    args: null,
+  };
+  if (arg.length === 5) {
+    ret.args = [arg[2]];
   }
 
-  return ex;
+  return ret;
 }
 / 'RAND'i WS* NIL
 {

@@ -1808,17 +1808,17 @@ function peg$parse(input, options) {
       peg$c279 = "bnode",
       peg$c280 = peg$literalExpectation("BNODE", true),
       peg$c281 = function(arg) {
-        var ex = {};
-        ex.token = 'expression';
-        ex.expressionType = 'builtincall';
-        ex.builtincall = 'BNODE';
-        if(arg.length === 5) {
-          ex.args = [arg[2]];
-        } else {
-          ex.args = null;
+        const ret = {
+          token: 'expression',
+          expressionType: 'builtincall',
+          builtincall: 'BNODE',
+          args: null,
+        };
+        if (arg.length === 5) {
+          ret.args = [arg[2]];
         }
 
-        return ex;
+        return ret;
       },
       peg$c282 = "rand",
       peg$c283 = peg$literalExpectation("RAND", true),
