@@ -1761,7 +1761,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'langmatches',
+          builtincall: 'langMatches',
           args: [e1, e2],
         }
       },
@@ -1791,7 +1791,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'iri',
+          builtincall: 'IRI',
           args: [e],
         }
       },
@@ -1801,7 +1801,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'uri',
+          builtincall: 'URI',
           args: [e],
         }
       },
@@ -1811,7 +1811,7 @@ function peg$parse(input, options) {
         var ex = {};
         ex.token = 'expression';
         ex.expressionType = 'builtincall';
-        ex.builtincall = 'bnode';
+        ex.builtincall = 'BNODE';
         if(arg.length === 5) {
           ex.args = [arg[2]];
         } else {
@@ -1826,7 +1826,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'rand',
+          builtincall: 'RAND',
         }
       },
       peg$c285 = "abs",
@@ -1865,7 +1865,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'round',
+          builtincall: 'ROUND',
           args: [e],
         }
       },
@@ -1875,7 +1875,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'concat',
+          builtincall: 'CONCAT',
           args: args,
         }
       },
@@ -1885,7 +1885,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'strlen',
+          builtincall: 'STRLEN',
           args: [e],
         }
       },
@@ -1895,7 +1895,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'ucase',
+          builtincall: 'UCASE',
           args: [e],
         }
       },
@@ -1905,7 +1905,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'lcase',
+          builtincall: 'LCASE',
           args: [e],
         }
       },
@@ -1915,7 +1915,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'encode_for_uri',
+          builtincall: 'ENCODE_FOR_URI',
           args: [e],
         }
       },
@@ -1925,7 +1925,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'contains',
+          builtincall: 'CONTAINS',
           args: [e1, e2],
         }
       },
@@ -1935,7 +1935,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'strbefore',
+          builtincall: 'STRBEFORE',
           args: [e1, e2],
         }
       },
@@ -1945,7 +1945,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'strstarts',
+          builtincall: 'STRSTARTS',
           args: [e1, e2],
         }
       },
@@ -1955,7 +1955,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'strends',
+          builtincall: 'STRENDS',
           args: [e1, e2],
         }
       },
@@ -1965,7 +1965,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'strafter',
+          builtincall: 'STRAFTER',
           args: [e1, e2],
         }
       },
@@ -2064,7 +2064,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'uuid',
+          builtincall: 'UUID',
         }
       },
       peg$c357 = "struuid",
@@ -2073,7 +2073,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'struuid',
+          builtincall: 'STRUUID',
         }
       },
       peg$c360 = "md5",
@@ -2082,7 +2082,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'md5',
+          builtincall: 'MD5',
           args: [e],
         }
       },
@@ -2092,7 +2092,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'sha1',
+          builtincall: 'SHA1',
           args: [e],
         }
       },
@@ -2102,7 +2102,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'sha256',
+          builtincall: 'SHA256',
           args: [e],
         }
       },
@@ -2112,7 +2112,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'sha384',
+          builtincall: 'SHA384',
           args: [e],
         }
       },
@@ -2122,7 +2122,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'sha512',
+          builtincall: 'SHA512',
           args: [e],
         }
       },
@@ -2132,7 +2132,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'coalesce',
+          builtincall: 'COALESCE',
           args: args,
         }
       },
@@ -2142,7 +2142,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'if',
+          builtincall: 'IF',
           args: [test, trueCond, falseCond],
         }
       },
@@ -2152,7 +2152,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'strlang',
+          builtincall: 'STRLANG',
           args: [e1, e2],
         }
       },
@@ -2162,7 +2162,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'strdt',
+          builtincall: 'STRDT',
           args: [e1, e2],
         }
       },
@@ -2172,7 +2172,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'sameterm',
+          builtincall: 'sameTerm',
           args: [e1, e2],
         }
       },
@@ -2184,7 +2184,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'isuri',
+          builtincall: 'isURI',
           args: [arg],
         }
       },
@@ -2194,7 +2194,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'isblank',
+          builtincall: 'isBlank',
           args: [arg],
         }
       },
@@ -2204,7 +2204,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'isliteral',
+          builtincall: 'isLiteral',
           args: [arg],
         }
       },
@@ -2214,7 +2214,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'isnumeric',
+          builtincall: 'isNumeric',
           args: [arg],
         }
       },
@@ -2240,7 +2240,7 @@ function peg$parse(input, options) {
       peg$c411 = function(e1, e2, eo) {
         var regex = {};
         regex.token = 'expression';
-        regex.expressionType = 'regex';
+        regex.expressionType = 'REGEX';
         regex.text = e1;
         regex.pattern = e2;
         if(eo != null) {

@@ -2061,7 +2061,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'langmatches',
+    builtincall: 'langMatches',
     args: [e1, e2],
   }
 }
@@ -2088,7 +2088,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'iri',
+    builtincall: 'IRI',
     args: [e],
   }
 }
@@ -2097,7 +2097,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'uri',
+    builtincall: 'URI',
     args: [e],
   }
 }
@@ -2106,7 +2106,7 @@ BuiltInCall = Aggregate
   var ex = {};
   ex.token = 'expression';
   ex.expressionType = 'builtincall';
-  ex.builtincall = 'bnode';
+  ex.builtincall = 'BNODE';
   if(arg.length === 5) {
     ex.args = [arg[2]];
   } else {
@@ -2120,7 +2120,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'rand',
+    builtincall: 'RAND',
   }
 }
 / 'ABS'i WS* '(' WS* e:Expression WS* ')'
@@ -2155,7 +2155,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'round',
+    builtincall: 'ROUND',
     args: [e],
   }
 }
@@ -2164,7 +2164,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'concat',
+    builtincall: 'CONCAT',
     args: args,
   }
 }
@@ -2174,7 +2174,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'strlen',
+    builtincall: 'STRLEN',
     args: [e],
   }
 }
@@ -2184,7 +2184,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'ucase',
+    builtincall: 'UCASE',
     args: [e],
   }
 }
@@ -2193,7 +2193,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'lcase',
+    builtincall: 'LCASE',
     args: [e],
   }
 }
@@ -2202,7 +2202,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'encode_for_uri',
+    builtincall: 'ENCODE_FOR_URI',
     args: [e],
   }
 }
@@ -2211,7 +2211,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'contains',
+    builtincall: 'CONTAINS',
     args: [e1, e2],
   }
 }
@@ -2220,7 +2220,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'strbefore',
+    builtincall: 'STRBEFORE',
     args: [e1, e2],
   }
 }
@@ -2229,7 +2229,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'strstarts',
+    builtincall: 'STRSTARTS',
     args: [e1, e2],
   }
 }
@@ -2238,7 +2238,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'strends',
+    builtincall: 'STRENDS',
     args: [e1, e2],
   }
 }
@@ -2247,7 +2247,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'strafter',
+    builtincall: 'STRAFTER',
     args: [e1, e2],
   }
 }
@@ -2336,7 +2336,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'uuid',
+    builtincall: 'UUID',
   }
 }
 / 'STRUUID'i WS* NIL
@@ -2344,7 +2344,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'struuid',
+    builtincall: 'STRUUID',
   }
 }
 / 'MD5'i WS* '(' WS* e:Expression WS* ')'
@@ -2352,7 +2352,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'md5',
+    builtincall: 'MD5',
     args: [e],
   }
 }
@@ -2361,7 +2361,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'sha1',
+    builtincall: 'SHA1',
     args: [e],
   }
 }
@@ -2370,7 +2370,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'sha256',
+    builtincall: 'SHA256',
     args: [e],
   }
 }
@@ -2379,7 +2379,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'sha384',
+    builtincall: 'SHA384',
     args: [e],
   }
 }
@@ -2388,7 +2388,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'sha512',
+    builtincall: 'SHA512',
     args: [e],
   }
 }
@@ -2397,7 +2397,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'coalesce',
+    builtincall: 'COALESCE',
     args: args,
   }
 }
@@ -2406,7 +2406,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'if',
+    builtincall: 'IF',
     args: [test, trueCond, falseCond],
   }
 }
@@ -2415,7 +2415,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'strlang',
+    builtincall: 'STRLANG',
     args: [e1, e2],
   }
 }
@@ -2424,7 +2424,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'strdt',
+    builtincall: 'STRDT',
     args: [e1, e2],
   }
 }
@@ -2433,7 +2433,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'sameterm',
+    builtincall: 'sameTerm',
     args: [e1, e2],
   }
 }
@@ -2442,7 +2442,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'isuri',
+    builtincall: 'isURI',
     args: [arg],
   }
 }
@@ -2451,7 +2451,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'isblank',
+    builtincall: 'isBlank',
     args: [arg],
   }
 }
@@ -2460,7 +2460,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'isliteral',
+    builtincall: 'isLiteral',
     args: [arg],
   }
 }
@@ -2469,7 +2469,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'isnumeric',
+    builtincall: 'isNumeric',
     args: [arg],
   }
 }
@@ -2496,7 +2496,7 @@ RegexExpression = 'REGEX'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression W
 {
   var regex = {};
   regex.token = 'expression';
-  regex.expressionType = 'regex';
+  regex.expressionType = 'REGEX';
   regex.text = e1;
   regex.pattern = e2;
   if(eo != null) {
