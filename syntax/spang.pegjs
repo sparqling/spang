@@ -1090,22 +1090,11 @@ ArgList = NIL
 // [72] ExpressionList ::= NIL | '(' Expression ( ',' Expression )* ')'
 ExpressionList = NIL
 {
-  return {
-    token: 'args',
-    value: [],
-  }
+  return [];
 }
 / '(' WS* e:(IRIref / Expression) WS* es:( ',' WS* (IRIref / Expression))* ')'
 {
-  let cleanEx = [];
-  for (let i = 0; i < es.length; i++) {
-    cleanEx.push(es[i][2]);
-  }
-
-  return {
-    token: 'args',
-    value: [e].concat(cleanEx),
-  }
+  return [e].concat(es.map((e) => e[2]));
 }
 
 // [73] ConstructTemplate ::= '{' ConstructTriples? '}'
