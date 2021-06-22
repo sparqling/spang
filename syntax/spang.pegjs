@@ -2465,57 +2465,66 @@ BuiltInCall = Aggregate
 }
 / 'custom:'i fnname:[a-zA-Z0-9_]+ WS* '(' alter:(WS* Expression ',')* WS* finalarg:Expression WS* ')'
 {
-  var ex = {};
-  ex.token = 'expression';
-  ex.expressionType = 'custom';
-  ex.name = fnname.join('');
-  var acum = [];
-  for(var i=0; i<alter.length; i++)
-    acum.push(alter[i][1]);
-  acum.push(finalarg);
-  ex.args = acum;
+  let ret = {
+    token: 'expression',
+    expressionType: 'custom',
+    name: fnname.join(''),
+  };
 
-  return ex;
+  let acum = [];
+  for (let i = 0; i < alter.length; i++) {
+    acum.push(alter[i][1]);
+  }
+  acum.push(finalarg);
+  ret.args = acum;
+
+  return ret;
 }
 / RegexExpression
 / ExistsFunc
 / NotExistsFunc
 
 // [122] RegexExpression ::= 'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'
-RegexExpression = 'REGEX'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* eo:( ',' WS* Expression)?  WS* ')'
-{
-  var regex = {};
-  regex.token = 'expression';
-  regex.expressionType = 'REGEX';
-  regex.text = e1;
-  regex.pattern = e2;
-  if(eo != null) {
-    regex.flags = eo[2];
-  }
-  
-  return regex;
-}
-// [123] SubstringExpression ::= 'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
-SubstringExpression = 'SUBSTR'i WS* '(' WS* source:Expression WS* ',' WS* startingLoc:Expression WS* lenPart:(',' WS* len:Expression)? WS* ')'
+RegexExpression = 'REGEX'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* e3:(',' WS* Expression)?  WS* ')'
 {
   return {
-      token: 'expression',
-      expressionType: 'builtincall',
-      builtincall: 'substr',
-      args: [source, startingLoc, lenPart ? lenPart[2] : null]
-  };
+    token: 'expression',
+    expressionType: 'regex',
+    text: e1,
+    pattern: e2,
+    flags: e3 ? e3[2] : null,
+  }
 }
-  
+
+// [123] SubstringExpression ::= 'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
+SubstringExpression = 'SUBSTR'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* e3:(',' WS* Expression)? WS* ')'
+{
+  return {
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'substr',
+    args: [
+      e1,
+      e2,
+      e3 ? e3[2] : null
+    ]
+  }
+}
 
 // [124] StrReplaceExpression ::= 'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
-StrReplaceExpression = ('REPLACE'i) WS* '(' WS* arg:Expression WS* ',' WS* pattern:Expression WS* ',' WS* replacement:Expression WS* flagsPart:(',' WS* Expression)? ')'
+StrReplaceExpression = 'REPLACE'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ',' WS* e3:Expression WS* e4:(',' WS* Expression)? WS* ')'
 {
   return {
-      token: 'expression',
-      expressionType: 'builtincall',
-      builtincall: 'replace',
-      args: [arg, pattern, replacement, flagsPart ? flagsPart[2] : null]
-  };
+    token: 'expression',
+    expressionType: 'builtincall',
+    builtincall: 'replace',
+    args: [
+      e1,
+      e2,
+      e3,
+      e4 ? e4[2] : null
+    ]
+  }
 }
 
 // [125] ExistsFunc ::= 'EXISTS' GroupGraphPattern

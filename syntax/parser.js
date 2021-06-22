@@ -2213,51 +2213,60 @@ function peg$parse(input, options) {
       peg$c406 = /^[a-zA-Z0-9_]/,
       peg$c407 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"], "_"], false, false),
       peg$c408 = function(fnname, alter, finalarg) {
-        var ex = {};
-        ex.token = 'expression';
-        ex.expressionType = 'custom';
-        ex.name = fnname.join('');
-        var acum = [];
-        for(var i=0; i<alter.length; i++)
-          acum.push(alter[i][1]);
-        acum.push(finalarg);
-        ex.args = acum;
+        let ret = {
+          token: 'expression',
+          expressionType: 'custom',
+          name: fnname.join(''),
+        };
 
-        return ex;
+        let acum = [];
+        for (let i = 0; i < alter.length; i++) {
+          acum.push(alter[i][1]);
+        }
+        acum.push(finalarg);
+        ret.args = acum;
+
+        return ret;
       },
       peg$c409 = "regex",
       peg$c410 = peg$literalExpectation("REGEX", true),
-      peg$c411 = function(e1, e2, eo) {
-        var regex = {};
-        regex.token = 'expression';
-        regex.expressionType = 'REGEX';
-        regex.text = e1;
-        regex.pattern = e2;
-        if(eo != null) {
-          regex.flags = eo[2];
+      peg$c411 = function(e1, e2, e3) {
+        return {
+          token: 'expression',
+          expressionType: 'regex',
+          text: e1,
+          pattern: e2,
+          flags: e3 ? e3[2] : null,
         }
-        
-        return regex;
       },
       peg$c412 = "substr",
       peg$c413 = peg$literalExpectation("SUBSTR", true),
-      peg$c414 = function(source, startingLoc, lenPart) {
+      peg$c414 = function(e1, e2, e3) {
         return {
-            token: 'expression',
-            expressionType: 'builtincall',
-            builtincall: 'substr',
-            args: [source, startingLoc, lenPart ? lenPart[2] : null]
-        };
+          token: 'expression',
+          expressionType: 'builtincall',
+          builtincall: 'substr',
+          args: [
+            e1,
+            e2,
+            e3 ? e3[2] : null
+          ]
+        }
       },
       peg$c415 = "replace",
       peg$c416 = peg$literalExpectation("REPLACE", true),
-      peg$c417 = function(arg, pattern, replacement, flagsPart) {
+      peg$c417 = function(e1, e2, e3, e4) {
         return {
-            token: 'expression',
-            expressionType: 'builtincall',
-            builtincall: 'replace',
-            args: [arg, pattern, replacement, flagsPart ? flagsPart[2] : null]
-        };
+          token: 'expression',
+          expressionType: 'builtincall',
+          builtincall: 'replace',
+          args: [
+            e1,
+            e2,
+            e3,
+            e4 ? e4[2] : null
+          ]
+        }
       },
       peg$c418 = "exists",
       peg$c419 = peg$literalExpectation("EXISTS", true),
@@ -17588,17 +17597,28 @@ function peg$parse(input, options) {
                                   s15 = null;
                                 }
                                 if (s15 !== peg$FAILED) {
-                                  if (input.charCodeAt(peg$currPos) === 41) {
-                                    s16 = peg$c22;
-                                    peg$currPos++;
-                                  } else {
-                                    s16 = peg$FAILED;
-                                    if (peg$silentFails === 0) { peg$fail(peg$c23); }
+                                  s16 = [];
+                                  s17 = peg$parseWS();
+                                  while (s17 !== peg$FAILED) {
+                                    s16.push(s17);
+                                    s17 = peg$parseWS();
                                   }
                                   if (s16 !== peg$FAILED) {
-                                    peg$savedPos = s0;
-                                    s1 = peg$c417(s5, s9, s13, s15);
-                                    s0 = s1;
+                                    if (input.charCodeAt(peg$currPos) === 41) {
+                                      s17 = peg$c22;
+                                      peg$currPos++;
+                                    } else {
+                                      s17 = peg$FAILED;
+                                      if (peg$silentFails === 0) { peg$fail(peg$c23); }
+                                    }
+                                    if (s17 !== peg$FAILED) {
+                                      peg$savedPos = s0;
+                                      s1 = peg$c417(s5, s9, s13, s15);
+                                      s0 = s1;
+                                    } else {
+                                      peg$currPos = s0;
+                                      s0 = peg$FAILED;
+                                    }
                                   } else {
                                     peg$currPos = s0;
                                     s0 = peg$FAILED;
