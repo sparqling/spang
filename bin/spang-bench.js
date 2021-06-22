@@ -100,10 +100,6 @@ for (let benchmark of benchmarks) {
 }
 writer.end();
 
-function normalize(result) {
-  return result.split(/\r\n|\r|\n/).sort().join("\n");
-}
-
 function measureQuery(queryPath, expected, sort) {
   let row = { name: queryPath };
   let times = [];
@@ -133,9 +129,9 @@ function measureQuery(queryPath, expected, sort) {
         validations.push('null');
       } else {
         let actual = result.stdout.toString();
-        if(sort) {
-          actual = normalize(actual);
-          expected = normalize(expected);
+        if (sort) {
+          actual = sort_result_lines(actual);
+          expected = sort_result_lines(expected);
         }
         if (actual === expected) {
           validations.push('true');
@@ -173,4 +169,8 @@ function measureQuery(queryPath, expected, sort) {
     row['valid'] = validations.join(',');
   }
   writer.write(row);
+}
+
+function sort_result_lines(result) {
+  return result.split(/\r\n|\r|\n/).sort().join("\n");
 }
