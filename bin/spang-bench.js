@@ -22,6 +22,8 @@ const opts = program
   .option('--output-error', 'output to stderr')
   .option('--skip-validation', 'skip comparison with expected result')
   .option('--sec', 'output in "sec" (default: in "ms")')
+  .option('-H, --no-header', 'output with header')
+  .option('-N, --no-time', 'output without time')
   .option('-v, --verbose', 'output progress to stderr')
   .arguments('[json_or_queries...]')
   .parse(process.argv)
@@ -48,6 +50,9 @@ let header = ['name', 'time'];
 if (opts.average) {
   header.push('average');
 }
+if (!opts.time) {
+  header = ['name'];
+}
 if (!opts.skipValidation) {
   header.push('valid');
 }
@@ -56,7 +61,7 @@ let writer = csvWriter({
   separator: opts.delimiter,
   newline: '\n',
   headers: header,
-  sendHeaders: true
+  sendHeaders: Boolean(opts.header)
 });
 writer.pipe(process.stdout);
 
@@ -119,7 +124,9 @@ function measureQuery(queryPath, expected, sort) {
     if (result.status) {
       // error
       console.error(result.stderr.toString());
-      times.push('null');
+      if (opts.time) {
+        times.push('null');
+      }
       validations.push('null');
     } else {
       if (expected == null) {
@@ -154,11 +161,13 @@ function measureQuery(queryPath, expected, sort) {
       }
     }
   }
-  row['time'] = times.join(',');
+  if (opts.time) {
+    row['time'] = times.join(',');
+  }
   if (!opts.skipValidation) {
     row['valid'] = validations.join(',');
   }
-  if (opts.average) {
+  if (opts.average && opts.time) {
     let validTimes = times.filter((time) => time !== 'null');
     const average = validTimes.map((t) => parseInt(t)).reduce((a, b) => a + b, 0) / validTimes.length;
     row['average'] = average.toString();
