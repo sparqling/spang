@@ -22,7 +22,7 @@ const opts = program
   .option('--output-error', 'output to stderr')
   .option('--sec', 'output in "sec" (default: in "ms")')
   .option('-H, --no-header', 'output without header')
-  .option('-N, --no-time', 'output without time')
+  .option('-T, --no-time', 'output without time')
   .option('-V, --no-validation', 'without validation of the result')
   .option('-v, --verbose', 'output progress to stderr')
   .arguments('[json_or_queries...]')
