@@ -20,7 +20,7 @@ const opts = program
   .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
   .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
   .option('--output-error', 'output to stderr')
-  .option('--skip-validation', 'skip comparison with expected result')
+  .option('--no-validation', 'skip comparison with expected result')
   .option('--sec', 'output in "sec" (default: in "ms")')
   .option('-H, --no-header', 'output with header')
   .option('-N, --no-time', 'output without time')
@@ -46,14 +46,14 @@ for (let arg of program.args) {
 const pattern = opts.pattern ? new RegExp(opts.pattern) : null;
 const exclude = opts.exclude ? new RegExp(opts.exclude) : null;
 
-let header = ['name', 'time'];
-if (opts.average) {
-  header.push('average');
+let header = ['name'];
+if (opts.time) {
+  header.push('time');
+  if (opts.average) {
+    header.push('average');
+  }
 }
-if (!opts.time) {
-  header = ['name'];
-}
-if (!opts.skipValidation) {
+if (opts.validation) {
   header.push('valid');
 }
 
@@ -79,7 +79,7 @@ for (let benchmark of benchmarks) {
     }
     let expected = null;
     const defaultExpectedName = file.full.replace(/\.[^/.]+$/, '') + '.txt';
-    if (!opts.skipValidation) {
+    if (opts.validation) {
       if (!benchmark.expected && fs.existsSync(defaultExpectedName)) {
         expected = readFile(defaultExpectedName);
       } else if (benchmark.expected) {
@@ -163,14 +163,14 @@ function measureQuery(queryPath, expected, sort) {
   }
   if (opts.time) {
     row['time'] = times.join(',');
+    if (opts.average) {
+      let validTimes = times.filter((time) => time !== 'null');
+      const average = validTimes.map((t) => parseInt(t)).reduce((a, b) => a + b, 0) / validTimes.length;
+      row['average'] = average.toString();
+    }
   }
-  if (!opts.skipValidation) {
+  if (opts.validation) {
     row['valid'] = validations.join(',');
-  }
-  if (opts.average && opts.time) {
-    let validTimes = times.filter((time) => time !== 'null');
-    const average = validTimes.map((t) => parseInt(t)).reduce((a, b) => a + b, 0) / validTimes.length;
-    row['average'] = average.toString();
   }
   writer.write(row);
 }
