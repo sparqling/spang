@@ -46,7 +46,7 @@ for (let arg of program.args) {
 const pattern = opts.pattern ? new RegExp(opts.pattern) : null;
 const exclude = opts.exclude ? new RegExp(opts.exclude) : null;
 
-let header = ['name'];
+let header = [];
 if (opts.time) {
   header.push('time');
   if (opts.average) {
@@ -56,6 +56,7 @@ if (opts.time) {
 if (opts.validation) {
   header.push('valid');
 }
+header.push('name');
 
 let writer = csvWriter({
   separator: opts.delimiter,
