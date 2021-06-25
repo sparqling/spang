@@ -2597,8 +2597,8 @@ function peg$parse(input, options) {
       peg$c520 = peg$classExpectation(["\"", "\\"], true, false),
       peg$c521 = "\\",
       peg$c522 = peg$literalExpectation("\\", false),
-      peg$c523 = /^[tbnrf"']/,
-      peg$c524 = peg$classExpectation(["t", "b", "n", "r", "f", "\"", "'"], false, false),
+      peg$c523 = /^[tbnrf\\"']/,
+      peg$c524 = peg$classExpectation(["t", "b", "n", "r", "f", "\\", "\"", "'"], false, false),
       peg$c525 = function() {
         return {
           token: "triplesnodecollection",

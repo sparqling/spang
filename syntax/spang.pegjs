@@ -2952,7 +2952,7 @@ STRING_LITERAL_LONG2 = '"""' content:([^\"\\] / ECHAR)* '"""'
 { return flattenString(content) }
 
 // [160] ECHAR ::= '\' [tbnrf\"']
-ECHAR = '\\' [tbnrf\"\']
+ECHAR = '\\' [tbnrf\\\"\']
 
 // [161] NIL ::= '(' WS* ')'
 NIL = '(' WS* ')'
