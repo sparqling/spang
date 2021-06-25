@@ -1779,7 +1779,9 @@ ConditionalAndExpression = v:ValueLogical vs:(WS* '&&' WS* ValueLogical)*
 ValueLogical = RelationalExpression
 
 // [114] RelationalExpression ::= NumericExpression ( '=' NumericExpression | '!=' NumericExpression | '<' NumericExpression | '>' NumericExpression | '<=' NumericExpression | '>=' NumericExpression | 'IN' ExpressionList | 'NOT' 'IN' ExpressionList )?
-RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression / WS* '!=' WS* NumericExpression / WS* '<' WS* NumericExpression / WS* '>' WS* NumericExpression / WS* '<=' WS* NumericExpression / WS* '>=' WS* NumericExpression /
+RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression / WS* '!=' WS* NumericExpression /
+                                                  WS* '<' WS* NumericExpression / WS* '>' WS* NumericExpression /
+                                                  WS* '<=' WS* NumericExpression / WS* '>=' WS* NumericExpression /
                                                   WS* 'IN'i WS* ExpressionList / WS* 'NOT'i WS* 'IN'i WS* ExpressionList)*
 {
   if (op2.length === 0) {
