@@ -1740,42 +1740,39 @@ Expression = ConditionalOrExpression
 // [111] ConditionalOrExpression ::= ConditionalAndExpression ( '||' ConditionalAndExpression )*
 ConditionalOrExpression = v:ConditionalAndExpression vs:(WS* '||' WS* ConditionalAndExpression)*
 {
-  if(vs.length === 0) {
+  if (vs.length === 0) {
     return v;
   }
-  
-  var exp = {};
-  exp.token = "expression";
-  exp.expressionType = "conditionalor";
-  var ops = [v];
-  
-  for(var i=0; i<vs.length; i++) {
-    ops.push(vs[i][3]);
+
+  let operands = [v];
+  for (let i = 0; i < vs.length; i++) {
+    operands.push(vs[i][3]);
   }
-  
-  exp.operands = ops;
-  
-  return exp;
+
+  return {
+    token: "expression",
+    expressionType: "conditionalor",
+    operands: operands,
+  };
 }
 
 // [112] ConditionalAndExpression ::= ValueLogical ( '&&' ValueLogical )*
 ConditionalAndExpression = v:ValueLogical vs:(WS* '&&' WS* ValueLogical)*
 {
-  if(vs.length === 0) {
+  if (vs.length === 0) {
     return v;
   }
-  var exp = {};
-  exp.token = "expression";
-  exp.expressionType = "conditionaland";
-  var ops = [v];
-  
-  for(var i=0; i<vs.length; i++) {
-    ops.push(vs[i][3]);
-  }
-  
-  exp.operands = ops;
-  
-  return exp;
+
+  let operands = [v];
+  for (let i = 0; i < vs.length; i++) {
+    operands.push(vs[i][3]);
+  }  
+
+  return {
+    token: "expression",
+    expressionType: "conditionaland",
+    operands: operands,
+  };
 }
 
 // [113] ValueLogical ::= RelationalExpression
