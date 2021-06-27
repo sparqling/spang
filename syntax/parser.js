@@ -492,12 +492,12 @@ function peg$parse(input, options) {
       peg$c57 = function(f) {
         return f;
       },
-      peg$c58 = function(e, alias) {
-        if (alias.length != 0) {
+      peg$c58 = function(e, as) {
+        if (as) {
           return {
             token: 'aliased_expression',
             expression: e,
-            alias: alias[2],
+            alias: as[2],
             location: location(),
           };
         } else {

@@ -399,13 +399,13 @@ GroupCondition = WS* b:BuiltInCall WS*
 {
   return f;
 }
-/ WS* '(' WS* e:Expression WS*  alias:( 'AS'i WS* Var )?  WS* ')' WS*
+/ WS* '(' WS* e:Expression WS*  as:( 'AS'i WS* Var )?  WS* ')' WS*
 {
-  if (alias.length != 0) {
+  if (as) {
     return {
       token: 'aliased_expression',
       expression: e,
-      alias: alias[2],
+      alias: as[2],
       location: location(),
     };
   } else {
