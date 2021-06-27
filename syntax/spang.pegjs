@@ -399,7 +399,7 @@ GroupCondition = WS* b:BuiltInCall WS*
 {
   return f;
 }
-/ WS* '(' WS* e:Expression WS*  as:( 'AS'i WS* Var )?  WS* ')' WS*
+/ WS* '(' WS* e:Expression WS* as:( 'AS'i WS* Var )? WS* ')' WS*
 {
   if (as) {
     return {
@@ -409,6 +409,7 @@ GroupCondition = WS* b:BuiltInCall WS*
       location: location(),
     };
   } else {
+    e.bracketted = 'true';
     return e;
   }
 }

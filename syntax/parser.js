@@ -501,6 +501,7 @@ function peg$parse(input, options) {
             location: location(),
           };
         } else {
+          e.bracketted = 'true';
           return e;
         }
       },
