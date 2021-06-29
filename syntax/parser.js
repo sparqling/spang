@@ -877,7 +877,7 @@ function peg$parse(input, options) {
             filters.push(block);
           } else if (block.token === 'bind') {
             binds.push(block);
-          } else if (block.token === 'triplespattern') {
+          } else if (block.token === 'triplesblock') {
             tmpPatterns.push(block);
           } else {
             if (tmpPatterns.length != 0 || filters.length != 0) {
@@ -910,15 +910,14 @@ function peg$parse(input, options) {
         }
       //      }
       },
-      peg$c152 = function(b, bs) {
-        let triples = b.triplesContext;
-        if (bs != null && typeof(bs) === 'object' &&
-            bs.length != null && bs[2] != null && bs[2].triplesContext != null) {
-          triples = triples.concat(bs[2].triplesContext);
+      peg$c152 = function(a, b) {
+        let triples = a.triplesContext;
+        if (b != null && b[2] != null && b[2].triplesContext != null) {
+          triples = triples.concat(b[2].triplesContext);
         }
         
         return {
-          token:'triplespattern',
+          token: 'triplesblock',
           triplesContext: triples,
           location: location(),
         }

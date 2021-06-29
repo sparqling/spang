@@ -860,7 +860,7 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
       filters.push(block);
     } else if (block.token === 'bind') {
       binds.push(block);
-    } else if (block.token === 'triplespattern') {
+    } else if (block.token === 'triplesblock') {
       tmpPatterns.push(block);
     } else {
       if (tmpPatterns.length != 0 || filters.length != 0) {
@@ -895,16 +895,15 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
 }
 
 // [55] TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
-TriplesBlock = b:TriplesSameSubjectPath bs:(WS*  '.' TriplesBlock? )?
+TriplesBlock = a:TriplesSameSubjectPath b:(WS* '.' TriplesBlock? )?
 {
-  let triples = b.triplesContext;
-  if (bs != null && typeof(bs) === 'object' &&
-      bs.length != null && bs[2] != null && bs[2].triplesContext != null) {
-    triples = triples.concat(bs[2].triplesContext);
+  let triples = a.triplesContext;
+  if (b != null && b[2] != null && b[2].triplesContext != null) {
+    triples = triples.concat(b[2].triplesContext);
   }
   
   return {
-    token:'triplespattern',
+    token: 'triplesblock',
     triplesContext: triples,
     location: location(),
   }
