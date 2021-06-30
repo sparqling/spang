@@ -1333,21 +1333,18 @@ VerbPath = Path
 VerbSimple = Var
 
 // [86] ObjectListPath ::= ObjectPath ( ',' ObjectPath )*
-ObjectListPath = obj:ObjectPath WS* objs:(',' WS* ObjectPath)*
+ObjectListPath = o:ObjectPath WS* os:(',' WS* ObjectPath)*
 {
-  var toReturn = [];
-  
-  toReturn.push(obj);
-  
-  for(var i=0; i<objs.length; i++) {
-    for(var j=0; j<objs[i].length; j++) {
-      if(typeof(objs[i][j])=="object" && objs[i][j].token != null) {
-        toReturn.push(objs[i][j]);
+  let ret = [o];
+  for (let i = 0; i < os.length; i++) {
+    for (let j = 0; j < os[i].length; j++) {
+      if (typeof(os[i][j]) == "object" && os[i][j].token != null) {
+        ret.push(os[i][j]);
       }
     }
   }
   
-  return toReturn;
+  return ret;
 }
 
 // [87] ObjectPath ::= GraphNodePath

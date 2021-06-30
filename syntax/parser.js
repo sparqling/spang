@@ -1258,20 +1258,17 @@ function peg$parse(input, options) {
           triplesContext: triplesContext,
         };
       },
-      peg$c195 = function(obj, objs) {
-        var toReturn = [];
-        
-        toReturn.push(obj);
-        
-        for(var i=0; i<objs.length; i++) {
-          for(var j=0; j<objs[i].length; j++) {
-            if(typeof(objs[i][j])=="object" && objs[i][j].token != null) {
-              toReturn.push(objs[i][j]);
+      peg$c195 = function(o, os) {
+        let ret = [o];
+        for (let i = 0; i < os.length; i++) {
+          for (let j = 0; j < os[i].length; j++) {
+            if (typeof(os[i][j]) == "object" && os[i][j].token != null) {
+              ret.push(os[i][j]);
             }
           }
         }
         
-        return toReturn;
+        return ret;
       },
       peg$c196 = "|",
       peg$c197 = peg$literalExpectation("|", false),
