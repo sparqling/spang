@@ -1252,14 +1252,14 @@ function peg$parse(input, options) {
           }
         }
         
-        for(var i=0; i<rest.length; i++) {
-          var tok = rest[i][3];
-          if(!tok)
+        for (let i = 0; i < rest.length; i++) {
+          if (!rest[i][3]) {
             continue;
-          var newVerb  = tok[0];
-          var newObjsList = tok[2] || []; // not 1 but 2 (?)
-          for(var j=0; j<newObjsList.length; j++) {
-            if(newObjsList[j].triplesContext != null) {
+          }
+          const newVerb  = rest[i][3][0];
+          const newObjsList = rest[i][3][2] || [];
+          for (let j = 0; j < newObjsList.length; j++) {
+            if (newObjsList[j].triplesContext != null) {
               triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
               pairs.push([newVerb, newObjsList[j].chainSubject]);
             } else {
