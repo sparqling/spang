@@ -2371,16 +2371,21 @@ function peg$parse(input, options) {
       peg$c447 = "^^",
       peg$c448 = peg$literalExpectation("^^", false),
       peg$c449 = function(s, e) {
-        if(typeof(e) === "string" && e.length > 0) {
-          return {token:'literal', value:s.value, lang:e.slice(1), type:null,  location: location()}
-        } else {
-          if(e != null && typeof(e) === "object") {
-            e.shift(); // remove the '^^' char
-            return {token:'literal', value:s.value, lang:null, type:e[0],  location: location()}
-          } else {
-            return { token:'literal', value:s.value, lang:null, type:null,  location: location() }
-          }
+        let ret = {
+          token:'literal',
+          value: s.value,
+          lang: null,
+          type: null,
+          location: location(),
+        };
+
+        if (typeof(e) === "string" && e.length > 0) {
+          ret.lang = e.slice(1);
+        } else if (e != null && typeof(e) === "object") {
+          ret.type = e[1];
         }
+
+        return ret;
       },
       peg$c450 = "true",
       peg$c451 = peg$literalExpectation("TRUE", true),
@@ -2507,7 +2512,7 @@ function peg$parse(input, options) {
       peg$c486 = /^[a-zA-Z0-9]/,
       peg$c487 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"]], false, false),
       peg$c488 = function(a, b) {
-        if(b.length===0) {
+        if (b.length===0) {
           return ("@"+a.join('')).toLowerCase();
         } else {
           return ("@"+a.join('')+"-"+b[0][1].join('')).toLowerCase();

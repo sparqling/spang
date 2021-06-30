@@ -2624,16 +2624,21 @@ IRIrefOrFunction = i:IRIref WS* args:ArgList?
 // [129] RDFLiteral ::= String ( LANGTAG | ( '^^' IRIref ) )?
 RDFLiteral = s:String e:( LANGTAG / ('^^' IRIref) )?
 {
-  if(typeof(e) === "string" && e.length > 0) {
-    return {token:'literal', value:s.value, lang:e.slice(1), type:null,  location: location()}
-  } else {
-    if(e != null && typeof(e) === "object") {
-      e.shift(); // remove the '^^' char
-      return {token:'literal', value:s.value, lang:null, type:e[0],  location: location()}
-    } else {
-      return { token:'literal', value:s.value, lang:null, type:null,  location: location() }
-    }
+  let ret = {
+    token:'literal',
+    value: s.value,
+    lang: null,
+    type: null,
+    location: location(),
+  };
+
+  if (typeof(e) === "string" && e.length > 0) {
+    ret.lang = e.slice(1);
+  } else if (e != null && typeof(e) === "object") {
+    ret.type = e[1];
   }
+
+  return ret;
 }
 
 // [130] NumericLiteral ::= NumericLiteralUnsigned | NumericLiteralPositive | NumericLiteralNegative
@@ -2815,7 +2820,7 @@ VAR3 = '{{' v:VARNAME '}}'
 // [145] LANGTAG ::= '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
 LANGTAG = '@' a:[a-zA-Z]+ b:('-' [a-zA-Z0-9]+)*
 {
-  if(b.length===0) {
+  if (b.length===0) {
     return ("@"+a.join('')).toLowerCase();
   } else {
     return ("@"+a.join('')+"-"+b[0][1].join('')).toLowerCase();
