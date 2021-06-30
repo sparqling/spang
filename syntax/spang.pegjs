@@ -1601,26 +1601,32 @@ TriplesNodePath
 BlankNodePropertyListPath = WS* '[' WS* pl:PropertyListPathNotEmpty ']' WS*
 {
   GlobalBlankNodeCounter++;
-  var subject = {token:'blank', value:'_:'+GlobalBlankNodeCounter};
-  var newTriples =  [];
 
-  for(var i=0; i< pl.pairs.length; i++) {
-    var pair = pl.pairs[i];
-    var triple = {}
-    triple.subject = subject;
-    triple.predicate = pair[0];
-    if(pair[1].length != null)
-      pair[1] = pair[1][0]
+  const subject = {
+    token: 'blank',
+    value: '_:' + GlobalBlankNodeCounter,
+  };
+
+  let newTriples =  [];
+  for (let i = 0; i < pl.pairs.length; i++) {
+    const pair = pl.pairs[i];
+    let triple = {
+      subject: subject,
+      predicate: pair[0],
+    };
+    if (pair[1].length != null) {
+      pair[1] = pair[1][0];
+    }
     triple.object = pair[1];
     newTriples.push(triple);
   }
 
   return {
     token: 'triplesnode',
-    location: location(),
     kind: 'blanknodepropertylist',
+    chainSubject: subject,
     triplesContext: pl.triplesContext.concat(newTriples),
-    chainSubject: subject
+    location: location(),
   };
 }
 
