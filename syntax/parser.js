@@ -895,10 +895,6 @@ function peg$parse(input, options) {
           }
         }
 
-      //      if(patterns.length == 1) {
-      //          patterns[0].filters = filters;
-      //          return patterns[0];
-      //      } else  {
         return {
           token: 'groupgraphpattern',
           filters: filters,
@@ -906,7 +902,6 @@ function peg$parse(input, options) {
           patterns: patterns,
           location: location(),
         }
-      //      }
       },
       peg$c152 = function(a, b) {
         let triples = a.triplesContext;

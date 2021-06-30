@@ -878,10 +878,6 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
     }
   }
 
-//      if(patterns.length == 1) {
-//          patterns[0].filters = filters;
-//          return patterns[0];
-//      } else  {
   return {
     token: 'groupgraphpattern',
     filters: filters,
@@ -889,7 +885,6 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
     patterns: patterns,
     location: location(),
   }
-//      }
 }
 
 // [55] TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
