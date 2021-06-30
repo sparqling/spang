@@ -2667,7 +2667,7 @@ function peg$parse(input, options) {
       peg$c580 = peg$classExpectation([["\u203F", "\u2040"]], false, false),
       peg$c581 = function(init, rpart) { return init+rpart.join('') },
       peg$c582 = function(base, rest) { 
-        if(rest[rest.length-1] == '.'){
+        if (rest[rest.length-1] == '.') {
           throw new Error("Wrong PN_PREFIX, cannot finish with '.'")
         } else {
           return base + rest.join('');
