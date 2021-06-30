@@ -1254,39 +1254,32 @@ TriplesSameSubjectPath = WS* s:VarOrTerm WS* list:PropertyListPathNotEmpty
 }
 / WS* tn:TriplesNodePath WS* pairs:PropertyListPath
 {
-  var triplesContext = tn.triplesContext;
-  var subject = tn.chainSubject;
-
-  if(pairs != null && pairs.pairs != null) {
-    for(var i=0; i< pairs.pairs.length; i++) {
-      var pair = pairs.pairs[i];
-      if(pair[1].length != null)
-        pair[1] = pair[1][0]
-
-      if(tn.token === "triplesnodecollection") {
-        for(var j=0; j<subject.length; j++) {
-          var subj = subject[j];
-          if(subj.triplesContext != null) {
-            var triple = {subject: subj.chainSubject, predicate: pair[0], object: pair[1]}
-            triplesContext.concat(subj.triplesContext);
+  let triplesContext = tn.triplesContext;
+  if (pairs != null && pairs.pairs != null) {
+    for (let i = 0; i < pairs.pairs.length; i++) {
+      const pair = pairs.pairs[i];
+      if (pair[1].length != null) {
+        pair[1] = pair[1][0];
+      }
+      if (tn.token === "triplesnodecollection") {
+        for (let j = 0; j < tn.chainSubject.length; j++) {
+          if (tn.chainSubject[j].triplesContext != null) {
+            triplesContext.concat(tn.chainSubject[j].triplesContext);
           } else {
-            var triple = {subject: subject[j], predicate: pair[0], object: pair[1]}
-            triplesContext.push(triple);
+            triplesContext.push({ subject: tn.chainSubject[j], predicate: pair[0], object: pair[1] });
           }
         }
       } else {
-        var triple = {subject: subject, predicate: pair[0], object: pair[1]}
-        triplesContext.push(triple);
+        triplesContext.push({ subject: tn.chainSubject, predicate: pair[0], object: pair[1] });
       }
     }
   }
 
-  var tokenParsed = {};
-  tokenParsed.token = "triplessamesubject";
-  tokenParsed.triplesContext = triplesContext;
-  tokenParsed.chainSubject = subject;
-
-  return tokenParsed;
+  return {
+    token: "triplessamesubject",
+    chainSubject: tn.chainSubject,
+    triplesContext: triplesContext,
+  };
 }
 
 // [82] PropertyListPath ::= PropertyListPathNotEmpty?
