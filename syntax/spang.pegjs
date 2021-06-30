@@ -1109,6 +1109,7 @@ ConstructTriples = b:TriplesSameSubject bs:( WS* '.' WS* ConstructTriples? )?
 TriplesSameSubject = WS* s:VarOrTerm WS* pairs:PropertyListNotEmpty
 {
   let triplesContext = pairs.triplesContext;
+
   if (pairs.pairs) {
     for (let i=0; i < pairs.pairs.length; i++) {
       let pair = pairs.pairs[i];
@@ -1132,33 +1133,32 @@ TriplesSameSubject = WS* s:VarOrTerm WS* pairs:PropertyListNotEmpty
 }
 / WS* tn:TriplesNode WS* pairs:PropertyList
 {
-  var triplesContext = tn.triplesContext;
-  var subject = tn.chainSubject;
-  
+  let triplesContext = tn.triplesContext;
+
   if (pairs.pairs) {
     for (let i=0; i < pairs.pairs.length; i++) {
-      var pair = pairs.pairs[i];
+      const pair = pairs.pairs[i];
       if (pair[1].length != null) {
         pair[1] = pair[1][0]
       }
       if (tn.token === "triplesnodecollection") {
-        for (let j = 0; j < subject.length; j++) {
-          if (subject[j].triplesContext != null) {
-            triplesContext.concat(subject[j].triplesContext);
+        for (let j = 0; j < tn.chainSubject.length; j++) {
+          if (tn.chainSubject[j].triplesContext != null) {
+            triplesContext.concat(tn.chainSubject[j].triplesContext);
           } else {
-            triplesContext.push({subject: subject[j], predicate: pair[0], object: pair[1]});
+            triplesContext.push({ subject: tn.chainSubject[j], predicate: pair[0], object: pair[1] });
           }
         }
       } else {
-        triplesContext.push({subject: subject, predicate: pair[0], object: pair[1]});
+        triplesContext.push({ subject: tn.chainSubject, predicate: pair[0], object: pair[1] });
       }
     }
   }
   
   return {
     token: "triplessamesubject",
+    chainSubject: tn.chainSubject,
     triplesContext: triplesContext,
-    chainSubject: subject,
   }
 }
 
