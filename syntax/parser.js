@@ -2360,13 +2360,12 @@ function peg$parse(input, options) {
         }
       },
       peg$c446 = function(i, args) {
-        var fcall = {};
-        fcall.token = "expression";
-        fcall.expressionType = 'irireforfunction';
-        fcall.iriref = i;
-        fcall.args = (args != null ? args.value : args);
-        
-        return fcall;
+        return {
+          token: "expression",
+          expressionType: 'irireforfunction',
+          iriref: i,
+          args: (args != null ? args.value : args),
+        };
       },
       peg$c447 = "^^",
       peg$c448 = peg$literalExpectation("^^", false),

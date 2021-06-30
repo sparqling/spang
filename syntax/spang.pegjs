@@ -2609,16 +2609,14 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 }
 
 // [128] IRIrefOrFunction ::= IRIref ArgList?
-// error?? Something has gone wrong with numeration in the rules!!
 IRIrefOrFunction = i:IRIref WS* args:ArgList?
 {
-  var fcall = {};
-  fcall.token = "expression";
-  fcall.expressionType = 'irireforfunction';
-  fcall.iriref = i;
-  fcall.args = (args != null ? args.value : args);
-  
-  return fcall;
+  return {
+    token: "expression",
+    expressionType: 'irireforfunction',
+    iriref: i,
+    args: (args != null ? args.value : args),
+  };
 }
 
 // [129] RDFLiteral ::= String ( LANGTAG | ( '^^' IRIref ) )?
