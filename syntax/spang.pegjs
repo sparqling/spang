@@ -311,7 +311,7 @@ AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause
 {
   const dataset = { named: [], implicit: [] };
   gs.forEach((g) => {
-    if(g.kind === 'implicit') {
+    if (g.kind === 'implicit') {
       dataset.implicit.push(g.graph);
     } else {
       dataset.named.push(g.graph);
@@ -662,32 +662,30 @@ DeleteWhere = 'DELETE'i WS* 'WHERE'i WS* p:GroupGraphPattern
 // [41] Modify ::= ( 'WITH' IRIref )? ( DeleteClause InsertClause? | InsertClause ) UsingClause* 'WHERE' GroupGraphPattern
 Modify = wg:('WITH'i WS* IRIref)? WS* dic:( DeleteClause WS* InsertClause? / InsertClause ) WS* uc:UsingClause* WS* 'WHERE'i WS* p:GroupGraphPattern WS*
 {
-  var query = {};
-  query.kind = 'modify';
+  let query = {
+    kind: 'modify',
+    with: null,
+    insert: null,
+    delete: null,
+    pattern: p,
+  };
   
-  if(wg != "" && wg != null) {
+  if (wg != "" && wg != null) {
     query.with = wg[2];
-  } else {
-    query.with = null;
   }
   
-  
-  if(dic.length === 3 && (dic[2] === ''|| dic[2] == null)) {
+  if (dic.length === 3 && (dic[2] === ''|| dic[2] == null)) {
     query.delete = dic[0];
-    query.insert = null;
-  } else if(dic.length === 3 && dic[0].length != null && dic[1].length != null && dic[2].length != null) {
+  } else if (dic.length === 3 && dic[0].length != null && dic[1].length != null && dic[2].length != null) {
     query.delete = dic[0];
     query.insert = dic[2];
   } else  {
     query.insert = dic;
-    query.delete = null;
   }
   
-  if(uc != '') {
+  if (uc != '') {
     query.using = uc;
   }
-  
-  query.pattern = p;
   
   return query;
 }

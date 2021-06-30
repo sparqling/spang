@@ -421,7 +421,7 @@ function peg$parse(input, options) {
       peg$c41 = function(gs, w) {
         const dataset = { named: [], implicit: [] };
         gs.forEach((g) => {
-          if(g.kind === 'implicit') {
+          if (g.kind === 'implicit') {
             dataset.implicit.push(g.graph);
           } else {
             dataset.named.push(g.graph);
@@ -726,32 +726,30 @@ function peg$parse(input, options) {
       peg$c125 = "with",
       peg$c126 = peg$literalExpectation("WITH", true),
       peg$c127 = function(wg, dic, uc, p) {
-        var query = {};
-        query.kind = 'modify';
+        let query = {
+          kind: 'modify',
+          with: null,
+          insert: null,
+          delete: null,
+          pattern: p,
+        };
         
-        if(wg != "" && wg != null) {
+        if (wg != "" && wg != null) {
           query.with = wg[2];
-        } else {
-          query.with = null;
         }
         
-        
-        if(dic.length === 3 && (dic[2] === ''|| dic[2] == null)) {
+        if (dic.length === 3 && (dic[2] === ''|| dic[2] == null)) {
           query.delete = dic[0];
-          query.insert = null;
-        } else if(dic.length === 3 && dic[0].length != null && dic[1].length != null && dic[2].length != null) {
+        } else if (dic.length === 3 && dic[0].length != null && dic[1].length != null && dic[2].length != null) {
           query.delete = dic[0];
           query.insert = dic[2];
         } else  {
           query.insert = dic;
-          query.delete = null;
         }
         
-        if(uc != '') {
+        if (uc != '') {
           query.using = uc;
         }
-        
-        query.pattern = p;
         
         return query;
       },
