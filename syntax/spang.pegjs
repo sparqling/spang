@@ -2955,9 +2955,8 @@ NIL = '(' WS* ')'
 }
 
 // [162] WS ::= #x20 | #x9 | #xD | #xA
-// WS = [\u0020] / [\u0009] / [\u000D] / [\u000A] / COMMENT
-WS = COMMENT / [\u0020] / [\u0009] / [\u000D] / [\u000A]
-// SPACE | TAB | CR | LF
+// add COMMENT
+WS = COMMENT / SPACE_OR_TAB / NEW_LINE
 
 SPACE_OR_TAB = [\u0020\u0009]
 NEW_LINE = [\u000A\u000D]
@@ -2968,15 +2967,10 @@ HEADER_LINE = h:('#' NON_NEW_LINE* NEW_LINE)
   return flattenString(h);
 }
 
-// COMMENT ::= '#' ( [^#xA#xD] )*
-// COMMENT = comment:('#' ([^\u000A\u000D])*)
-// COMMENT = comment:('#' NON_NEW_LINE*)
 COMMENT = comment:(SPACE_OR_TAB* '#' NON_NEW_LINE*)
 {
-  var loc = location().start.line;
-  // var str = flattenString(comment).trim()
-  var str = flattenString(comment)
-  Comments[loc] = str;
+  const line = location().start.line;
+  Comments[line] = flattenString(comment);
 
   return '';
 }
