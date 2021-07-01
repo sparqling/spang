@@ -2769,10 +2769,10 @@ BlankNode = l:BLANK_NODE_LABEL
 }
 
 // [139] IRIREF ::= '<' ([^<>"{}|^`\]-[#x00-#x20])* '>'
-// incomplete??
-IRIREF = '<' iri_ref:[^<>\"\{\}|^`\\]* '>'
+// check
+IRIREF = '<' i:[^<>\"\{\}|^`\\]* '>'
 {
-  return iri_ref.join('')
+  return i.join('')
 }
 
 // [140] PNAME_NS ::= PN_PREFIX? ':'
@@ -2788,7 +2788,6 @@ PNAME_LN = p:PNAME_NS s:PN_LOCAL
 }
 
 // [142] BLANK_NODE_LABEL ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
-// BLANK_NODE_LABEL ::= ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
 // BLANK_NODE_LABEL ::= '_:' PN_LOCAL
 BLANK_NODE_LABEL = '_:' l:PN_LOCAL 
 {
@@ -2901,45 +2900,70 @@ INTEGER_POSITIVE = '+' d:INTEGER
 
 // [150] DECIMAL_POSITIVE ::= '+' DECIMAL
 DECIMAL_POSITIVE = '+' d:DECIMAL
-{ d.value = "+"+d.value; return d }
+{
+  d.value = "+" + d.value;
+  return d;
+}
 
 // [151] DOUBLE_POSITIVE ::= '+' DOUBLE
 DOUBLE_POSITIVE = '+' d:DOUBLE
-{ d.value = "+"+d.value; return d }
+{
+  d.value = "+" + d.value;
+  return d;
+}
 
 // [152] INTEGER_NEGATIVE ::= '-' INTEGER
 INTEGER_NEGATIVE = '-' d:INTEGER
-{ d.value = "-"+d.value; return d; }
+{
+  d.value = "-" + d.value;
+  return d;
+}
 
 // [153] DECIMAL_NEGATIVE ::= '-' DECIMAL
 DECIMAL_NEGATIVE = '-' d:DECIMAL
-{ d.value = "-"+d.value; return d; }
+{
+  d.value = "-" + d.value;
+  return d;
+}
 
 // [154] DOUBLE_NEGATIVE ::= '-' DOUBLE
 DOUBLE_NEGATIVE = '-' d:DOUBLE
-{ d.value = "-"+d.value; return d; }
+{
+  d.value = "-" + d.value;
+  return d;
+}
 
 // [155] EXPONENT ::= [eE] [+-]? [0-9]+
 EXPONENT = a:[eE] b:[+-]? c:[0-9]+
-{ return flattenString([a,b,c]) }
+{
+  return flattenString([a,b,c]);
+}
 
 // [156] STRING_LITERAL1 ::= "'" ( ([^#x27#x5C#xA#xD]) | ECHAR )* "'"
 STRING_LITERAL1 = "'" content:([^\u0027\u005C\u000A\u000D] / ECHAR)* "'"
-{ return flattenString(content) }
+{
+  return flattenString(content);
+}
 
 // [157] STRING_LITERAL2 ::= '"' ( ([^#x22#x5C#xA#xD]) | ECHAR )* '"'
 STRING_LITERAL2 = '"' content:([^\u0022\u005C\u000A\u000D] / ECHAR)* '"'
-{ return flattenString(content) }
+{
+  return flattenString(content);
+}
 
 // [158] STRING_LITERAL_LONG1 ::= "'''" ( ( "'" | "''" )? ( [^'\] | ECHAR ) )* "'''"
-// check??
+// check
 STRING_LITERAL_LONG1 = "'''" content:([^\'\\] / ECHAR)* "'''"
-{ return flattenString(content) }
+{
+  return flattenString(content);
+}
 
 // [159] STRING_LITERAL_LONG2 ::= '"""' ( ( '"' | '""' )? ( [^"\] | ECHAR ) )* '"""'
-// check??
+// check
 STRING_LITERAL_LONG2 = '"""' content:([^\"\\] / ECHAR)* '"""'
-{ return flattenString(content) }
+{
+  return flattenString(content);
+}
 
 // [160] ECHAR ::= '\' [tbnrf\"']
 ECHAR = '\\' [tbnrf\\\"\']
