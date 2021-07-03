@@ -2585,15 +2585,20 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
     expression: e,
   }
 }
-/ 'GROUP_CONCAT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression s:(';' WS* 'SEPARATOR'i WS* '=' WS* String WS*)? ')' WS*
+/ 'GROUP_CONCAT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression s:( WS* ';' WS* 'SEPARATOR'i WS* '=' WS* String)? WS* ')' WS*
 {
+  let sep = null;
+  if (s.length) {
+    sep = s[7];
+  }
+
   return {
     token: 'expression',
     expressionType: 'aggregate',
     aggregateType: 'group_concat',
-    distinct: Boolean(d),
     expression: e,
-    separator: s,
+    separator: sep,
+    distinct: Boolean(d),
   }
 }
 
