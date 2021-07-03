@@ -929,7 +929,7 @@ GraphGraphPattern = WS* 'GRAPH'i WS* g:VarOrIri WS* gg:GroupGraphPattern
 
 // [59] ServiceGraphPattern ::= 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern
 // add SILENT
-ServiceGraphPattern = 'SERVICE' v:VarOrIri ggp:GroupGraphPattern
+ServiceGraphPattern = 'SERVICE' WS* v:VarOrIri WS* ggp:GroupGraphPattern
 {
   return {
     token: 'servicegraphpattern',
