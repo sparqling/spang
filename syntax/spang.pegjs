@@ -1354,14 +1354,14 @@ ObjectPath = GraphNodePath
 Path = PathAlternative
 
 // [89] PathAlternative ::= PathSequence ( '|' PathSequence )*
-PathAlternative = first:PathSequence rest:( '|' PathSequence)*
+PathAlternative = first:PathSequence rest:( WS* '|' WS* PathSequence )*
 {
   if (rest == null || rest.length === 0) {
     return first;
   }
   let acum = [first];
   for (let i = 0; i < rest.length; i++) {
-    acum.push(rest[i][1]);
+    acum.push(rest[i][3]);
   }
   return {
     token: 'path',
@@ -1437,6 +1437,7 @@ PathPrimary = IRIref
 / '!' PathNegatedPropertySet
 / '(' p:Path ')'
 {
+  p.bracketted = true;
   return p;
 }
 
