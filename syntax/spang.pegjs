@@ -1766,54 +1766,35 @@ ConditionalAndExpression = v:ValueLogical vs:(WS* '&&' WS* ValueLogical)*
 ValueLogical = RelationalExpression
 
 // [114] RelationalExpression ::= NumericExpression ( '=' NumericExpression | '!=' NumericExpression | '<' NumericExpression | '>' NumericExpression | '<=' NumericExpression | '>=' NumericExpression | 'IN' ExpressionList | 'NOT' 'IN' ExpressionList )?
-RelationalExpression = op1:NumericExpression op2:(WS* '=' WS* NumericExpression / WS* '!=' WS* NumericExpression /
-                                                  WS* '<' WS* NumericExpression / WS* '>' WS* NumericExpression /
-                                                  WS* '<=' WS* NumericExpression / WS* '>=' WS* NumericExpression /
-                                                  WS* 'IN'i WS* ExpressionList / WS* 'NOT'i WS* 'IN'i WS* ExpressionList)*
+RelationalExpression = e1:NumericExpression e2:(
+                       WS* '=' WS* NumericExpression /
+                       WS* '!=' WS* NumericExpression /
+                       WS* '<' WS* NumericExpression /
+                       WS* '>' WS* NumericExpression /
+                       WS* '<=' WS* NumericExpression /
+                       WS* '>=' WS* NumericExpression /
+                       WS* 'IN'i WS* ExpressionList /
+                       WS* 'NOT'i WS* 'IN'i WS* ExpressionList
+                     )*
 {
-  if (op2.length === 0) {
-    return op1;
-  }
+  if (e2.length) {
+    const o1 = e1;
+    let op = e2[0][1].toUpperCase();
+    let o2 = e2[0][3];
+    if (op === 'NOT') {
+      op += ' ' + e2[0][3].toUpperCase();
+      o2 = e2[0][5];
+    }
 
-  if (op2[0][1] === 'i' || op2[0][1] === 'I' || op2[0][1] === 'n' || op2[0][1] === 'N') {
-    var exp = {};
-    
-    if (op2[0][1] === 'i' || op2[0][1] === 'I') {
-      var operator = "=";
-      exp.expressionType = "conditionalor"
-    } else {
-      var operator = "!=";
-      exp.expressionType = "conditionaland"
+    return {
+      token: "expression",
+      expressionType: "relationalexpression",
+      operator: op,
+      op1: o1,
+      op2: o2,
     }
-    var lop = op1;
-    var rops = []
-    for (let opi = 0; opi < op2[0].length; opi++) {
-      if (op2[0][opi].token === "args") {
-        rops = op2[0][opi].value;
-        break;
-      }
-    }
-    
-    exp.token = "expression";
-    exp.operands = [];
-    for (let i = 0; i < rops.length; i++) {
-      exp.operands.push({
-        token: "expression",
-        expressionType: "relationalexpression",
-        operator: operator,
-        op1: lop,
-        op2: rops[i],
-      });
-    }
-    return exp;
-  }
-
-  return {
-    expressionType: "relationalexpression",
-    op1: op1,
-    operator: op2[0][1],
-    op2: op2[0][3],
-    token: "expression",
+  } else {
+    return e1;
   }
 }
 
