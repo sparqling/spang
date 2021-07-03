@@ -1374,20 +1374,22 @@ PathAlternative = first:PathSequence rest:( WS* '|' WS* PathSequence )*
 }
 
 // [90] PathSequence ::= PathEltOrInverse ( '/' PathEltOrInverse )*
-PathSequence = first:PathEltOrInverse rest:( '/' PathEltOrInverse)*
+PathSequence = first:PathEltOrInverse rest:( WS* '/' WS* PathEltOrInverse )*
 {
-  if (rest == null || rest.length === 0) {
+  if (rest.length) {
+    let arr = [first];
+    for (let i = 0; i < rest.length; i++) {
+      arr.push(rest[i][3]);
+    }
+
+    return {
+      token: 'path',
+      kind: 'sequence',
+      value: arr,
+      location: location(),
+    };
+  } else {
     return first;
-  }
-  let acum = [first];
-  for (let i = 0; i < rest.length; i++) {
-    acum.push(rest[i][1]);
-  }
-  return {
-    token: 'path',
-    kind: 'sequence',
-    value: acum,
-    location: location(),
   }
 }
 

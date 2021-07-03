@@ -1292,18 +1292,20 @@ function peg$parse(input, options) {
       peg$c199 = "/",
       peg$c200 = peg$literalExpectation("/", false),
       peg$c201 = function(first, rest) {
-        if (rest == null || rest.length === 0) {
+        if (rest.length) {
+          let arr = [first];
+          for (let i = 0; i < rest.length; i++) {
+            arr.push(rest[i][3]);
+          }
+
+          return {
+            token: 'path',
+            kind: 'sequence',
+            value: arr,
+            location: location(),
+          };
+        } else {
           return first;
-        }
-        let acum = [first];
-        for (let i = 0; i < rest.length; i++) {
-          acum.push(rest[i][1]);
-        }
-        return {
-          token: 'path',
-          kind: 'sequence',
-          value: acum,
-          location: location(),
         }
       },
       peg$c202 = function(p, mod) {
@@ -9821,25 +9823,47 @@ function peg$parse(input, options) {
   }
 
   function peg$parsePathSequence() {
-    var s0, s1, s2, s3, s4, s5;
+    var s0, s1, s2, s3, s4, s5, s6, s7;
 
     s0 = peg$currPos;
     s1 = peg$parsePathEltOrInverse();
     if (s1 !== peg$FAILED) {
       s2 = [];
       s3 = peg$currPos;
-      if (input.charCodeAt(peg$currPos) === 47) {
-        s4 = peg$c199;
-        peg$currPos++;
-      } else {
-        s4 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c200); }
+      s4 = [];
+      s5 = peg$parseWS();
+      while (s5 !== peg$FAILED) {
+        s4.push(s5);
+        s5 = peg$parseWS();
       }
       if (s4 !== peg$FAILED) {
-        s5 = peg$parsePathEltOrInverse();
+        if (input.charCodeAt(peg$currPos) === 47) {
+          s5 = peg$c199;
+          peg$currPos++;
+        } else {
+          s5 = peg$FAILED;
+          if (peg$silentFails === 0) { peg$fail(peg$c200); }
+        }
         if (s5 !== peg$FAILED) {
-          s4 = [s4, s5];
-          s3 = s4;
+          s6 = [];
+          s7 = peg$parseWS();
+          while (s7 !== peg$FAILED) {
+            s6.push(s7);
+            s7 = peg$parseWS();
+          }
+          if (s6 !== peg$FAILED) {
+            s7 = peg$parsePathEltOrInverse();
+            if (s7 !== peg$FAILED) {
+              s4 = [s4, s5, s6, s7];
+              s3 = s4;
+            } else {
+              peg$currPos = s3;
+              s3 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s3;
+            s3 = peg$FAILED;
+          }
         } else {
           peg$currPos = s3;
           s3 = peg$FAILED;
@@ -9851,18 +9875,40 @@ function peg$parse(input, options) {
       while (s3 !== peg$FAILED) {
         s2.push(s3);
         s3 = peg$currPos;
-        if (input.charCodeAt(peg$currPos) === 47) {
-          s4 = peg$c199;
-          peg$currPos++;
-        } else {
-          s4 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c200); }
+        s4 = [];
+        s5 = peg$parseWS();
+        while (s5 !== peg$FAILED) {
+          s4.push(s5);
+          s5 = peg$parseWS();
         }
         if (s4 !== peg$FAILED) {
-          s5 = peg$parsePathEltOrInverse();
+          if (input.charCodeAt(peg$currPos) === 47) {
+            s5 = peg$c199;
+            peg$currPos++;
+          } else {
+            s5 = peg$FAILED;
+            if (peg$silentFails === 0) { peg$fail(peg$c200); }
+          }
           if (s5 !== peg$FAILED) {
-            s4 = [s4, s5];
-            s3 = s4;
+            s6 = [];
+            s7 = peg$parseWS();
+            while (s7 !== peg$FAILED) {
+              s6.push(s7);
+              s7 = peg$parseWS();
+            }
+            if (s6 !== peg$FAILED) {
+              s7 = peg$parsePathEltOrInverse();
+              if (s7 !== peg$FAILED) {
+                s4 = [s4, s5, s6, s7];
+                s3 = s4;
+              } else {
+                peg$currPos = s3;
+                s3 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s3;
+              s3 = peg$FAILED;
+            }
           } else {
             peg$currPos = s3;
             s3 = peg$FAILED;
