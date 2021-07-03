@@ -1356,18 +1356,20 @@ Path = PathAlternative
 // [89] PathAlternative ::= PathSequence ( '|' PathSequence )*
 PathAlternative = first:PathSequence rest:( WS* '|' WS* PathSequence )*
 {
-  if (rest == null || rest.length === 0) {
+  if (rest.length) {
+    let arr = [first];
+    for (let i = 0; i < rest.length; i++) {
+      arr.push(rest[i][3]);
+    }
+
+    return {
+      token: 'path',
+      kind: 'alternative',
+      value: arr,
+      location: location(),
+    };
+  } else {
     return first;
-  }
-  let acum = [first];
-  for (let i = 0; i < rest.length; i++) {
-    acum.push(rest[i][3]);
-  }
-  return {
-    token: 'path',
-    kind: 'alternative',
-    value: acum,
-    location: location(),
   }
 }
 

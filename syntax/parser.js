@@ -1273,18 +1273,20 @@ function peg$parse(input, options) {
       peg$c196 = "|",
       peg$c197 = peg$literalExpectation("|", false),
       peg$c198 = function(first, rest) {
-        if (rest == null || rest.length === 0) {
+        if (rest.length) {
+          let arr = [first];
+          for (let i = 0; i < rest.length; i++) {
+            arr.push(rest[i][3]);
+          }
+
+          return {
+            token: 'path',
+            kind: 'alternative',
+            value: arr,
+            location: location(),
+          };
+        } else {
           return first;
-        }
-        let acum = [first];
-        for (let i = 0; i < rest.length; i++) {
-          acum.push(rest[i][3]);
-        }
-        return {
-          token: 'path',
-          kind: 'alternative',
-          value: acum,
-          location: location(),
         }
       },
       peg$c199 = "/",
