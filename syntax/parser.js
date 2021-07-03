@@ -1522,15 +1522,12 @@ function peg$parse(input, options) {
         return gn[1];
       },
       peg$c224 = function(v) {
-        var term = {location: location()};
-
-        term.token = 'var';
-
-        // term.value = v;
-        term.prefix = v.prefix;
-        term.value = v.value;
-
-        return term;
+        return {
+          token: 'var',
+          prefix: v.prefix,
+          value: v.value,
+          location: location(),
+        }
       },
       peg$c225 = "||",
       peg$c226 = peg$literalExpectation("||", false),

@@ -1663,15 +1663,12 @@ VarOrIri = (Var /IRIref)
 // [108] Var ::= VAR1 | VAR2
 Var = WS* v:(VAR1 / VAR2 / VAR3) WS*
 {
-  var term = {location: location()};
-
-  term.token = 'var';
-
-  // term.value = v;
-  term.prefix = v.prefix;
-  term.value = v.value;
-
-  return term;
+  return {
+    token: 'var',
+    prefix: v.prefix,
+    value: v.value,
+    location: location(),
+  }
 }
 
 // [109] GraphTerm ::= IRIref | RDFLiteral | NumericLiteral | BooleanLiteral | BlankNode | NIL
