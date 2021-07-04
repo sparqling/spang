@@ -303,7 +303,15 @@ ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* 
 }
 
 // [11] DescribeQuery ::= 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
-DescribeQuery = 'DESCRIBE'i ( VarOrIri+ / '*' ) DatasetClause* WhereClause? SolutionModifier
+DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* DatasetClause* WS* WhereClause? WS* SolutionModifier
+// todo: dataset, where, modifier
+{
+  return {
+    token: 'executableunit',
+    kind: 'describe',
+    value: v,
+  }
+}
 
 // [12] AskQuery ::= 'ASK' DatasetClause* WhereClause SolutionModifier
 // add SolutionModifier
