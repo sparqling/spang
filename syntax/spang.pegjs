@@ -146,7 +146,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
 
 // [8] SubSelect ::= SelectClause WhereClause SolutionModifier ValuesClause
 // add ValuesClause
-SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
+SubSelect = s:SelectClause WS* w:WhereClause sm:SolutionModifier
 {
   let query = {
     token: 'subselect',
@@ -176,41 +176,39 @@ SubSelect = s:SelectClause w:WhereClause sm:SolutionModifier
 
 // [9] SelectClause ::= 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( ( Var | ( '(' Expression 'AS' Var ')' ) )+ | '*' )
 SelectClause = WS* 'SELECT'i WS* mod:( 'DISTINCT'i / 'REDUCED'i )? WS*
-  proj:( ( ( WS* Var WS* ) / ( WS* '(' WS* Expression WS* 'AS'i WS* Var WS* ')' WS* ) )+ / ( WS* '*' WS* )  ) 
+  proj:( ( ( WS* Var ) / ( WS* '(' WS* Expression WS* 'AS'i WS* Var WS* ')' ) )+ / '*' )
 {
-  let s = {};
-
-  if (mod) {
-    s.modifier = mod.toUpperCase();
-  }
-
-  if (proj.length === 3 && proj[1] === "*") {
-    s.vars = [{
-      token: 'variable',
-      kind: '*',
-      location: location(),
-    }];
+  if (proj.length === 1 && proj[0] === "*") {
+    return {
+      vars: [{
+        token: 'variable',
+        kind: '*',
+        location: location(),
+      }],
+      modifier: mod?.toUpperCase(),
+    };
   } else {
-    s.vars = proj.map((elem) => {
-      if (elem.length === 3) {
-        return {
-          token: 'variable',
-          kind: 'var',
-          value: elem[1],
-        };
-      } else {
-        return {
-          token: 'variable',
-          kind: 'aliased',
-          expression: elem[3],
-          alias: elem[7],
-          location: location(),
-        };
-      }
-    });
+    return {
+      vars: proj.map((elem) => {
+        if (elem.length === 2) {
+          return {
+            token: 'variable',
+            kind: 'var',
+            value: elem[1],
+          };
+        } else {
+          return {
+            token: 'variable',
+            kind: 'aliased',
+            expression: elem[3],
+            alias: elem[7],
+            location: location(),
+          };
+        }
+      }),
+      modifier: mod?.toUpperCase(),
+    };
   }
-
-  return s;
 }
 
 // [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
