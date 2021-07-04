@@ -2088,7 +2088,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'RAND',
+    builtincall: 'rand',
   }
 }
 / 'ABS'i WS* '(' WS* e:Expression WS* ')'

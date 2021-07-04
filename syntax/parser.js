@@ -1827,7 +1827,7 @@ function peg$parse(input, options) {
         return {
           token: 'expression',
           expressionType: 'builtincall',
-          builtincall: 'RAND',
+          builtincall: 'rand',
         }
       },
       peg$c289 = "abs",
