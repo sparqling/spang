@@ -416,11 +416,12 @@ function peg$parse(input, options) {
       },
       peg$c37 = "describe",
       peg$c38 = peg$literalExpectation("DESCRIBE", true),
-      peg$c39 = function(v) {
+      peg$c39 = function(v, w) {
         return {
           token: 'executableunit',
           kind: 'describe',
           value: v,
+          pattern: w,
         }
       },
       peg$c40 = "ask",
@@ -4101,7 +4102,7 @@ function peg$parse(input, options) {
                     s9 = peg$parseSolutionModifier();
                     if (s9 !== peg$FAILED) {
                       peg$savedPos = s0;
-                      s1 = peg$c39(s3);
+                      s1 = peg$c39(s3, s7);
                       s0 = s1;
                     } else {
                       peg$currPos = s0;
