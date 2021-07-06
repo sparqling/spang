@@ -1,4 +1,5 @@
 #!/usr/bin/env spang2
+# @endpoint test
 # @title Count triples from graph
 
 SELECT (COUNT(*) AS ?count)

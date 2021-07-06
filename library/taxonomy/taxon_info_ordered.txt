@@ -5,7 +5,7 @@
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCodeMt>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode2>
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/rank>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Species>
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/scientificName>	"Homo sapiens"
-<http://purl.org/dc/terms/identifier>	"9606"^^<http://www.w3.org/2001/XMLSchema#integer>
+<http://purl.org/dc/terms/identifier>	9606
 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon>
 <http://www.w3.org/2000/01/rdf-schema#label>	"Homo sapiens"
 <http://www.w3.org/2000/01/rdf-schema#seeAlso>	<http://purl.uniprot.org/taxonomy/9606>

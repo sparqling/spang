@@ -1,5 +1,7 @@
 #!/usr/bin/env spang2
+# @endpoint test
 # Count instances for each class
+
 SELECT (COUNT(?instance) AS ?count) ?class
 FROM <http://ddbj.nig.ac.jp/ontologies/taxonomy/>
 WHERE {

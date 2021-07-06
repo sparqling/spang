@@ -7,7 +7,7 @@
 <http://www.w3.org/2002/07/owl#sameAs>	<http://www.berkeleybop.org/ontologies/owl/NCBITaxon#9606>
 <http://www.w3.org/2002/07/owl#sameAs>	<http://www.ncbi.nlm.nih.gov/taxonomy/9606>
 <http://www.w3.org/2000/01/rdf-schema#subClassOf>	<http://identifiers.org/taxonomy/9605>
-<http://purl.org/dc/terms/identifier>	"9606"^^<http://www.w3.org/2001/XMLSchema#integer>
+<http://purl.org/dc/terms/identifier>	9606
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/authority>	"Homo sapiens Linnaeus, 1758"
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/commonName>	"man"
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/genbankCommonName>	"human"

@@ -1,8 +1,8 @@
-"2098119"^^<http://www.w3.org/2001/XMLSchema#integer>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon>
-"29"^^<http://www.w3.org/2001/XMLSchema#integer>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Rank>
-"28"^^<http://www.w3.org/2001/XMLSchema#integer>	<http://www.w3.org/2002/07/owl#DatatypeProperty>
-"20"^^<http://www.w3.org/2001/XMLSchema#integer>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode>
-"7"^^<http://www.w3.org/2001/XMLSchema#integer>	<http://www.w3.org/2002/07/owl#ObjectProperty>
-"5"^^<http://www.w3.org/2001/XMLSchema#integer>	<http://www.w3.org/2002/07/owl#FunctionalProperty>
-"4"^^<http://www.w3.org/2001/XMLSchema#integer>	<http://www.w3.org/2002/07/owl#Class>
-"1"^^<http://www.w3.org/2001/XMLSchema#integer>	<http://www.w3.org/2002/07/owl#Ontology>
+2098119	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon>
+29	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Rank>
+28	<http://www.w3.org/2002/07/owl#DatatypeProperty>
+20	<http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode>
+7	<http://www.w3.org/2002/07/owl#ObjectProperty>
+5	<http://www.w3.org/2002/07/owl#FunctionalProperty>
+4	<http://www.w3.org/2002/07/owl#Class>
+1	<http://www.w3.org/2002/07/owl#Ontology>
