@@ -1823,19 +1823,13 @@ AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* Multiplicati
     return op1;
   }
 
-  let ex = {
-    token: 'expression',
-    expressionType: 'additiveexpression',
-    summand: op1,
-    summands: [],
-  }
-
+  let summands = [];
   ops.forEach((op) => {
     if (op.length == 4 && typeof(op[1]) === "string") {
-      ex.summands.push({ operator: op[1], expression: op[3] });
+      summands.push({ operator: op[1], expression: op[3] });
     } else {
       let sum = {};
-      var firstFactor = sum[0];
+      const firstFactor = sum[0];
       var operator = sum[1][1];
       var secondFactor = sum[1][3];
       var operator = null;
@@ -1851,11 +1845,16 @@ AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* Multiplicati
         operator: firstFactor,
         factors: [ { operator: operator, expression: secondFactor } ],
       };
-      ex.summands.push(sum);
+      summands.push(sum);
     }
   });
-  
-  return ex;
+
+  return {
+    token: 'expression',
+    expressionType: 'additiveexpression',
+    summand: op1,
+    summands: summands,
+  };
 }
 
 // [117] MultiplicativeExpression ::= UnaryExpression ( '*' UnaryExpression | '/' UnaryExpression )*

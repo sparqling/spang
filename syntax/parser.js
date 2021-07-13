@@ -1620,19 +1620,13 @@ function peg$parse(input, options) {
           return op1;
         }
 
-        let ex = {
-          token: 'expression',
-          expressionType: 'additiveexpression',
-          summand: op1,
-          summands: [],
-        }
-
+        let summands = [];
         ops.forEach((op) => {
           if (op.length == 4 && typeof(op[1]) === "string") {
-            ex.summands.push({ operator: op[1], expression: op[3] });
+            summands.push({ operator: op[1], expression: op[3] });
           } else {
             let sum = {};
-            var firstFactor = sum[0];
+            const firstFactor = sum[0];
             var operator = sum[1][1];
             var secondFactor = sum[1][3];
             var operator = null;
@@ -1648,11 +1642,16 @@ function peg$parse(input, options) {
               operator: firstFactor,
               factors: [ { operator: operator, expression: secondFactor } ],
             };
-            ex.summands.push(sum);
+            summands.push(sum);
           }
         });
-        
-        return ex;
+
+        return {
+          token: 'expression',
+          expressionType: 'additiveexpression',
+          summand: op1,
+          summands: summands,
+        };
       },
       peg$c252 = function(e1, es) {
         if (es.length === 0) {
