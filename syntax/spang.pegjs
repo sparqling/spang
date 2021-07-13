@@ -1424,12 +1424,11 @@ PathElt = p:PathPrimary mod:PathMod?
 PathEltOrInverse = PathElt
 / '^' elt:PathElt
 {
-    var path = {};
-    path.token = 'path';
-    path.kind = 'inversePath';
-    path.value = elt;
-    
-    return path;
+  return {
+    token: 'path',
+    kind: 'inversePath',
+    value: elt,
+  };
 }
 
 // [93] PathMod ::= '?' | '*' | '+'

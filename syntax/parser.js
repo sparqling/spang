@@ -1334,12 +1334,11 @@ function peg$parse(input, options) {
       peg$c204 = "^",
       peg$c205 = peg$literalExpectation("^", false),
       peg$c206 = function(elt) {
-          var path = {};
-          path.token = 'path';
-          path.kind = 'inversePath';
-          path.value = elt;
-          
-          return path;
+        return {
+          token: 'path',
+          kind: 'inversePath',
+          value: elt,
+        };
       },
       peg$c207 = "?",
       peg$c208 = peg$literalExpectation("?", false),
