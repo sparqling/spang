@@ -1175,10 +1175,8 @@ PropertyList = PropertyListNotEmpty?
 // [77] PropertyListNotEmpty ::= Verb ObjectList ( ';' ( Verb ObjectList )? )*
 PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* ObjectList )? )*
 {
-  let tokenParsed = {};
-  tokenParsed.token = 'propertylist';
-  var triplesContext = [];
-  var pairs = [];
+  let pairs = [];
+  let triplesContext = [];
   for (let i = 0; i < ol.length; i++) {
     if (ol[i].triplesContext != null) {
       triplesContext = triplesContext.concat(ol[i].triplesContext);
@@ -1193,9 +1191,11 @@ PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* Ob
   }
   
   for (let i = 0; i < rest.length; i++) {
-    var tok = rest[i][3];
-    var newVerb  = tok[0];
-    var newObjsList = tok[2] || [];
+    if (!rest[i][3]) {
+      continue;
+    }
+    const newVerb  = rest[i][3][0];
+    const newObjsList = rest[i][3][2] || [];
     for (let j = 0; j < newObjsList.length; j++) {
       if (newObjsList[j].triplesContext != null) {
         triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
@@ -1206,10 +1206,11 @@ PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* Ob
     }
   }
   
-  tokenParsed.pairs = pairs;
-  tokenParsed.triplesContext = triplesContext;
-  
-  return tokenParsed;
+  return {
+    token: 'propertylist',
+    pairs: pairs,
+    triplesContext: triplesContext,
+  };
 }
 
 // [78] Verb ::= VarOrIri | 'a'

@@ -1125,10 +1125,8 @@ function peg$parse(input, options) {
         }
       },
       peg$c188 = function(v, ol, rest) {
-        let tokenParsed = {};
-        tokenParsed.token = 'propertylist';
-        var triplesContext = [];
-        var pairs = [];
+        let pairs = [];
+        let triplesContext = [];
         for (let i = 0; i < ol.length; i++) {
           if (ol[i].triplesContext != null) {
             triplesContext = triplesContext.concat(ol[i].triplesContext);
@@ -1143,9 +1141,11 @@ function peg$parse(input, options) {
         }
         
         for (let i = 0; i < rest.length; i++) {
-          var tok = rest[i][3];
-          var newVerb  = tok[0];
-          var newObjsList = tok[2] || [];
+          if (!rest[i][3]) {
+            continue;
+          }
+          const newVerb  = rest[i][3][0];
+          const newObjsList = rest[i][3][2] || [];
           for (let j = 0; j < newObjsList.length; j++) {
             if (newObjsList[j].triplesContext != null) {
               triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
@@ -1156,10 +1156,11 @@ function peg$parse(input, options) {
           }
         }
         
-        tokenParsed.pairs = pairs;
-        tokenParsed.triplesContext = triplesContext;
-        
-        return tokenParsed;
+        return {
+          token: 'propertylist',
+          pairs: pairs,
+          triplesContext: triplesContext,
+        };
       },
       peg$c189 = "a",
       peg$c190 = peg$literalExpectation("a", false),
