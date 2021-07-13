@@ -925,13 +925,11 @@ OptionalGraphPattern = WS* 'OPTIONAL'i WS* v:GroupGraphPattern
 // [58] GraphGraphPattern ::= 'GRAPH' VarOrIri GroupGraphPattern
 GraphGraphPattern = WS* 'GRAPH'i WS* g:VarOrIri WS* gg:GroupGraphPattern
 {
-  for (let i = 0; i < gg.patterns.length; i++) {
-    for (let j = 0; j < gg.patterns[i].triplesContext.length; j++) {
-      gg.patterns[i].triplesContext[j].graph = g;
-    }
+  return {
+    token: 'graphgraphpattern',
+    graph: g,
+    value: gg,
   }
-
-  return gg;
 }
 
 // [59] ServiceGraphPattern ::= 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern

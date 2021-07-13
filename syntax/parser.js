@@ -931,13 +931,11 @@ function peg$parse(input, options) {
         }
       },
       peg$c157 = function(g, gg) {
-        for (let i = 0; i < gg.patterns.length; i++) {
-          for (let j = 0; j < gg.patterns[i].triplesContext.length; j++) {
-            gg.patterns[i].triplesContext[j].graph = g;
-          }
+        return {
+          token: 'graphgraphpattern',
+          graph: g,
+          value: gg,
         }
-
-        return gg;
       },
       peg$c158 = "SERVICE",
       peg$c159 = peg$literalExpectation("SERVICE", false),
