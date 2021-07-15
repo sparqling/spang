@@ -85,7 +85,12 @@ if (opts.subject || opts.predicate || opts.object ||
     const syncRequest = require('sync-request');
     sparqlTemplate = syncRequest('GET', templateURL).getBody('utf8');
   } else {
-    sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
+    try {
+      sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
+    } catch (err) {
+      console.error(`cannot open ${templatePath}`);
+      process.exit(1);
+    }
   }
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
   if (metadata.option && !opts.resetOption) {
