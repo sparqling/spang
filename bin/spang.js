@@ -124,6 +124,17 @@ if (opts.fmt) {
 
 const dbMap = search_db_name.listup();
 
+if (opts.listNickName) {
+  console.log('SPARQL endpoints');
+  const maxLen = Object.keys(dbMap)
+    .map((key) => key.length)
+    .reduce((a, b) => Math.max(a, b));
+  for (const entry in dbMap) {
+    console.log(` ${entry.padEnd(maxLen, ' ')} ${dbMap[entry].url}`);
+  }
+  process.exit(0);
+}
+
 if (program.args.length < 1) {
   if (!opts.subject && !opts.predicate && !opts.object && !opts.number && !opts.from && !opts.graph && !opts.limit) {
     console.error(`SPANG v${version}: Specify a SPARQL query (template or shortcut).\n`);
@@ -159,17 +170,6 @@ if (templateFileSpecified && opts.help) {
   process.exit(0);
 } else if (opts.help) {
   program.help();
-  process.exit(0);
-}
-
-if (opts.listNickName) {
-  console.log('SPARQL endpoints');
-  const maxLen = Object.keys(dbMap)
-    .map((key) => key.length)
-    .reduce((a, b) => Math.max(a, b));
-  for (const entry in dbMap) {
-    console.log(` ${entry.padEnd(maxLen, ' ')} ${dbMap[entry].url}`);
-  }
   process.exit(0);
 }
 
