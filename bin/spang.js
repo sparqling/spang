@@ -412,22 +412,6 @@ function printTsv(tsv) {
   }
 }
 
-function getTemplateURL(templatePath) {
-  let match = /^github:\/\/([^\/]+)\/([^\/]+)\/(.+)/.exec(templatePath);
-  if (match) {
-    return `https://raw.githubusercontent.com/${match[1]}/${match[2]}/master/${match[3]}`;
-  }
-
-  match = /^https:\/\/github.com\/([^\/]+)\/([^\/]+)\/blob\/(.+)/.exec(templatePath);
-  if (match) {
-    return `https://raw.githubusercontent.com/${match[1]}/${match[2]}/${match[3]}`;
-  }
-
-  if (/^(http|https):\/\//.test(templatePath)) {
-    return templatePath;
-  }
-}
-
 function getDB() {
   if (opts.stdin) {
     return '';
