@@ -83,7 +83,12 @@ if (opts.subject || opts.predicate || opts.object ||
   const templateURL = prefixModule.expandPrefixedUri(templatePath);
   if (templateURL) {
     const syncRequest = require('sync-request');
-    sparqlTemplate = syncRequest('GET', templateURL).getBody('utf8');
+    try {
+      sparqlTemplate = syncRequest('GET', templateURL).getBody('utf8');
+    } catch (err) {
+      console.error(`cannot open ${templateURL}`);
+      process.exit(1);
+    }
   } else {
     try {
       sparqlTemplate = fs.readFileSync(templatePath, 'utf8');
