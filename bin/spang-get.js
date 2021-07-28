@@ -23,10 +23,16 @@ initializeConfig(opts);
 const uri = prefixModule.expandPrefixedUri(alias.replaceIfAny(program.args[0]));
 
 if (uri) {
-  if (program.quit) {
+  if (opts.quit) {
     console.log(uri);
+    process.exit(0);
   } else {
-    const text = syncRequest('GET', uri).getBody('utf8');
-    console.log(text);
+    try {
+      const text = syncRequest('GET', uri).getBody('utf8');
+      console.log(text);
+    } catch (err) {
+      console.error(`cannot open ${uri}`);
+      process.exit(1);
+    }
   }
 }
