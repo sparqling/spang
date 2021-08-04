@@ -12,17 +12,17 @@ const readFile = (path) => fs.readFileSync(path, 'utf8').toString();
 const opts = program
   .option('-c, --command <COMMAND>', 'command', 'spang2')
   .option('-e, --endpoint <ENDPOINT>', 'target endpoint')
+  .option('-t, --time', 'output time')
   .option('-n, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
   .option('-a, --average', 'calculate average time')
   .option('-s, --sort', 'sort resulting lines before validation')
   .option('-d, --delimiter <DELIMITER>', 'delimiter of output', '\t')
-  .option('-m, --method <METHOD>', 'method of HTTP requers (GET or POST)', 'GET')
+  .option('-m, --method <METHOD>', 'GET or POST')
   .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
   .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
   .option('--output-error', 'output to stderr')
   .option('--sec', 'output in "sec" (default: in "ms")')
-  .option('-H, --no-header', 'output without header')
-  .option('-T, --no-time', 'output without time')
+  .option('-H, --header', 'output header')
   .option('-V, --no-validation', 'without validation of the result')
   .option('-v, --verbose', 'output progress to stderr')
   .arguments('[json_or_queries...]')
@@ -113,7 +113,13 @@ function measureQuery(queryPath, expected, sort) {
     if (opts.verbose) {
       console.error(`query: ${column}`);
     }
-    let arguments = ['--time', queryPath, '--method', opts.method];
+    let arguments = [queryPath];
+    if (opts.time) {
+      arguments.push('--time');
+    }
+    if (opts.method) {
+      arguments = arguments.concat(['--method', opts.method]);
+    }
     if (opts.endpoint) {
       arguments = arguments.concat(['--endpoint', opts.endpoint]);
     }
