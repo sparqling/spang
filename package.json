@@ -37,6 +37,7 @@
   },
   "bin": {
     "spang2": "./bin/spang.js",
+    "spang-fmt": "./bin/spang-fmt.js",
     "spang-get": "./bin/spang-get.js",
     "spang-bench": "./bin/spang-bench.js",
     "spang-neo": "./bin/spang-neo.js"
