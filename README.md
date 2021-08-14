@@ -60,6 +60,7 @@ npm link
 ```
 
 ## Using SPARQL client
+For the help message, just type the command
 ```
 spang2
 ```
@@ -70,8 +71,6 @@ $ npm test
 ```
 
 ## Using SPARQL formatter
-
-It can be used in the command line in a web site.
 
 ### Usage in command line
 
@@ -87,6 +86,8 @@ WHERE {
 ```
 
 ### Usage on a web site
+
+See: https://github.com/sparqling/sparql-formatter
 
 An example web site:<br>
 https://spang.dbcls.jp/example.html
