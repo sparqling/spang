@@ -1,4 +1,5 @@
 # SPANG
+`spang2` is a commmand-line SPARQL client implemented in JavaScript.
 
 ## Installation
 `spang2` requires `node` (version >= 14).
@@ -6,7 +7,26 @@
 node -v
 ```
 
-### Using node on Mac
+### Install node on Ubuntu
+If you do not have `npm`, install it.
+```
+sudo apt install -y npm
+```
+The defualt directory for modules is `/usr/local/`, which requires `sudo`.
+Configure the directory.
+```
+npm set prefix ~/.npm-global
+```
+The configuration is saved in `~/.npmrc`, so you can also configure by editing it.
+
+Install `n` to manage `node` version.
+```
+npm install -g n
+n stable
+node -v
+```
+
+### Install node on Mac
 If you do not have `brew`, install it.
 ```
 brew -v
@@ -36,39 +56,12 @@ Install.
 cd spang
 npm install
 npm link
+```
+```
 spang2
 ```
 
-### node on Ubuntu
-If you do not have `npm`, you need `npm`.
-```
-sudo apt install -y npm
-```
-The defualt directory for modules is `/usr/local/`, which requires `sudo`.
-Configure the directory.
-```
-npm set prefix ~/.npm-global
-```
-The configuration is saved in `~/.npmrc`, so you can also configure by editing it.
-
-Install `n` to manage `node` version.
-```
-npm install -g n
-n stable
-node -v
-```
-
 ## SPARQL client
-
-`spang2` is a commmand-line SPARQL client. It is now re-implemented in JavaScript, and comes with new features.
-
-### Installation
-```
-$ git clone git@github.com/hchiba1/spang.git
-$ cd spang
-$ npm install
-$ npm link
-```
 
 ### Test examples
 ```
