@@ -6,8 +6,9 @@
 ```
 node -v
 ```
+If you have installed it, skip installation of `node`.
 
-### Install node on Ubuntu
+### Installation of `node` on Ubuntu
 If you do not have `npm`, install it.
 ```
 sudo apt install -y npm
@@ -26,7 +27,7 @@ n stable
 node -v
 ```
 
-### Install node on Mac
+### Installation of `node` on Mac
 If you do not have `brew`, install it.
 ```
 brew -v
@@ -45,7 +46,7 @@ Now you can use `node`. Check the version.
 node -v
 ```
 
-### Install spang
+### Installation of spang
 Download from GitHub.
 ```
 git clone https://github.com/hchiba1/spang.git
@@ -66,12 +67,6 @@ spang2
 ### Test examples
 ```
 $ npm test
-```
-
-### Update spang.js
-Update the `js/spang.js` as follows after editing any other JS codes
-```
-$ npm run browserify
 ```
 
 ## SPARQL formatter
@@ -136,8 +131,16 @@ WHERE {
 }
 ```
 
-### Update spfmt.js
-`js/spfmt.js` should be updated as follows after after modifying parser or formatter codes.
+
+## For maintainers
+
+### Update `js/*.js`
+`js/*.js` should be updated for those who call spang functions through their Web applications.
+
+* `js/spang.js` should be updated after modifying codes.
+* `js/spfmt.js` should be updated after modifying parser or formatter codes.
+
+Update the `js/*.js` by converting codes using `browserify` as follows.
 ```
 $ npm run browserify
 ```
