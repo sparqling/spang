@@ -58,27 +58,38 @@ cd spang
 npm install
 npm link
 ```
+
+## Using SPARQL client
 ```
 spang2
 ```
-
-## SPARQL client
 
 ### Test examples
 ```
 $ npm test
 ```
 
-## SPARQL formatter
+## Using SPARQL formatter
 
-`spfmt` is a SPARQL formatter written in JavaScript.
+It can be used in the command line in a web site.
 
-It can be used in a web site or in the command line.
+### Usage in command line
+
+```
+$ cat messy.rq 
+SELECT * WHERE         {         ?s ?p ?o }
+
+$ spfmt messy.rq 
+SELECT *
+WHERE {
+    ?s ?p ?o .
+}
+```
+
+### Usage on a web site
 
 An example web site:<br>
 https://spang.dbcls.jp/example.html
-
-### Usage on a web site
 
 * Download `spfmt.js` and use it in your HTML.
 
@@ -114,27 +125,9 @@ WHERE {
      };
     </script>
 ```
-### Usage in command line
-
-#### Requirements
-- npm (>= 6.12.0)
-
-#### Usage
-```
-$ cat messy.rq 
-SELECT * WHERE         {         ?s ?p ?o }
-
-$ spfmt messy.rq 
-SELECT *
-WHERE {
-    ?s ?p ?o .
-}
-```
-
 
 ## For maintainers
 
-### Update `js/*.js`
 `js/*.js` should be updated for those who call spang functions through their Web applications.
 
 * `js/spang.js` should be updated after modifying codes.
@@ -144,6 +137,9 @@ Update the `js/*.js` by converting codes using `browserify` as follows.
 ```
 $ npm run browserify
 ```
+
+### Requirements
+- npm (>= 6.12.0)
 
 ## SPARQL specifications
 
