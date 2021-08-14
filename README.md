@@ -1,5 +1,63 @@
 # SPANG
 
+## Installation
+`spang2` requires `node` (version >= 14).
+```
+node -v
+```
+
+### Using node on Mac
+If you do not have `brew`, install it.
+```
+brew -v
+```
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+Install `nodebrew` using `brew`.
+```
+brew install nodebrew
+mkdir -p ~/.nodebrew/src
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+```
+Now you can use `node`. Check the version.
+```
+node -v
+```
+
+### Install spang
+Download from GitHub.
+```
+git clone https://github.com/hchiba1/spang.git
+```
+
+Install.
+```
+cd spang
+npm install
+npm link
+spang2
+```
+
+### node on Ubuntu
+If you do not have `npm`, you need `npm`.
+```
+sudo apt install -y npm
+```
+The defualt directory for modules is `/usr/local/`, which requires `sudo`.
+Configure the directory.
+```
+npm set prefix ~/.npm-global
+```
+The configuration is saved in `~/.npmrc`, so you can also configure by editing it.
+
+Install `n` to manage `node` version.
+```
+npm install -g n
+n stable
+node -v
+```
+
 ## SPARQL client
 
 `spang2` is a commmand-line SPARQL client. It is now re-implemented in JavaScript, and comes with new features.
@@ -71,7 +129,6 @@ WHERE {
 ### Usage in command line
 
 #### Requirements
-- Node.js (>= 11.0.0)
 - npm (>= 6.12.0)
 
 #### Usage
