@@ -48,8 +48,8 @@ Options:
 $ npm test
 ```
 
-### Update spang_bundled.js
-Update the `js/spang_bundled.js` as follows after editing any other JS codes
+### Update spang.js
+Update the `js/spang.js` as follows after editing any other JS codes
 ```
 $ npm run browserify
 ```
@@ -65,36 +65,36 @@ https://spang.dbcls.jp/example.html
 
 ### Usage on a web site
 
-* Download `spfmt_bundled.js` and use it in your HTML.
+* Download `spfmt.js` and use it in your HTML.
 
 ```
-<script src="/js/spfmt_bundled.js"></script>
+<script src="/js/spfmt.js"></script>
 ```
 
-* Then you can use `spfmt.reformat`.
+* Then you can use `spfmt`.
 ```javascript
-spfmt.reformat("SELECT * WHERE {?s ?p ?o}");
+spfmt("SELECT * WHERE {?s ?p ?o}");
 /*
 SELECT *
 WHERE {
-    ?s ?p ?o .
+  ?s ?p ?o .
 }
 */
 ```
 
-* You can also call `spfmt_bundled.js` through the jsDelivr service.
+* You can also call `spfmt.js` through the jsDelivr service.
 ```
     <textarea id="sparql-text" rows=5></textarea>
     <button id="reformat-button">Reformat</button>
     <textarea id="sparql-text-after" rows=5></textarea>
     
-    <script src="https://cdn.jsdelivr.net/gh/hchiba1/spang@master/js/spfmt_bundled.js"></script>  
+    <script src="https://cdn.jsdelivr.net/gh/sparqling/spang@master/js/spfmt.js"></script>
     <script type="text/javascript">
      window.onload = () => {
          var textArea = 
              document.querySelector("#reformat-button").addEventListener('click', (event) => {
                  document.querySelector("#sparql-text-after").value =
-                     spfmt.reformat(document.querySelector("#sparql-text").value);
+                     spfmt(document.querySelector("#sparql-text").value);
              });
      };
     </script>
@@ -130,8 +130,8 @@ If you have globally installed mocha
 $ npm test
 ```
 
-### Update spfmt_bundled.js
-Update the `spfmt_bundled.js` as follows after editing any other JS codes
+### Update spfmt.js
+`js/spfmt.js` should be updated as follows after after modifying parser or formatter codes.
 ```
 $ npm run browserify
 ```
