@@ -67,7 +67,7 @@ spang2
 
 ### Test examples
 ```
-$ npm test
+npm test
 ```
 
 ## Using SPARQL formatter
@@ -136,7 +136,7 @@ WHERE {
 
 Update the `js/*.js` by converting codes using `browserify` as follows.
 ```
-$ npm run browserify
+npm run browserify
 ```
 
 ### Requirements
