@@ -63,15 +63,7 @@ Function = h:FunctionCall WS* b:GroupGraphPattern WS*
 UpdateUnit = Update
 
 // [4] Prologue ::= ( BaseDecl | PrefixDecl )*
-// Prologue  ::=  BaseDecl? PrefixDecl*
-Prologue = b:BaseDecl? WS* p:PrefixDecl*
-{
-  return {
-    token: 'prologue',
-    base: b,
-    prefixes: p,
-  }
-}
+Prologue = ( BaseDecl / PrefixDecl )*
 
 // [5] BaseDecl ::= 'BASE' IRIREF
 BaseDecl = WS* 'BASE'i WS* i:IRIREF
@@ -93,7 +85,7 @@ PrefixDecl = WS* 'PREFIX'i  WS* p:PNAME_NS  WS* l:IRIREF
 }
 
 // [7] SelectQuery ::= SelectClause DatasetClause* WhereClause SolutionModifier
-SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier WS* BindingsClause 
+SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
   const dataset = { named: [], implicit: [] };
   gs.forEach((g) => {
@@ -113,106 +105,84 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
     });
   }
 
-  let query = {
+  return {
     token: 'executableunit',
     kind: 'select',
     dataset: dataset,
     projection: s.vars,
     modifier: s.modifier,
     pattern: w,
+    limit: sm.limit,
+    offset: sm.offset,
+    group: sm.group,
+    having: sm.having,
+    order: sm.order,
     location: location(),
   }
-
-  if (sm != null) {
-    if (sm.limit != null) {
-      query.limit = sm.limit;
-    }
-    if (sm.offset != null) {
-      query.offset = sm.offset;
-    }
-    if (sm.group != null) {
-      query.group = sm.group;
-    }
-    if (sm.having != null) {
-      query.having = sm.having;
-    }
-    if (sm.order != null && sm.order != "") {
-      query.order = sm.order;
-    }
-  }
-
-  return query;
 }
 
 // [8] SubSelect ::= SelectClause WhereClause SolutionModifier ValuesClause
 // add ValuesClause
 SubSelect = s:SelectClause WS* w:WhereClause sm:SolutionModifier
 {
-  let query = {
+  return {
     token: 'subselect',
     kind: 'select',
     projection: s.vars,
     modifier: s.modifier,
     pattern: w,
+    limit: sm.limit,
+    offset: sm.offset,
+    group: sm.group,
+    order: sm.order,
   };
-
-  if (sm != null) {
-    if (sm.limit != null) {
-      query.limit = sm.limit;
-    }
-    if (sm.offset != null) {
-      query.offset = sm.offset;
-    }
-    if (sm.group != null) {
-      query.group = sm.group;
-    }
-    if (sm.order != null && sm.order != "") {
-      query.order = sm.order;
-    }
-  }
-  
-  return query;
 }
 
 // [9] SelectClause ::= 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( ( Var | ( '(' Expression 'AS' Var ')' ) )+ | '*' )
-SelectClause = WS* 'SELECT'i WS* mod:( 'DISTINCT'i / 'REDUCED'i )? WS*
-  proj:( ( ( WS* Var ) / ( WS* '(' WS* Expression WS* 'AS'i WS* Var WS* ')' ) )+ / '*' )
+SelectClause = 'SELECT'i WS* m:( 'DISTINCT'i / 'REDUCED'i )? WS*
+  vs:(
+    (
+      ( WS* Var ) /
+      ( WS* '(' WS* Expression WS* 'AS'i WS* Var WS* ')' )
+    )+ /
+    '*'
+  )
 {
-  if (proj.length === 1 && proj[0] === "*") {
-    return {
-      vars: [{
-        token: 'variable',
-        kind: '*',
-        location: location(),
-      }],
-      modifier: mod?.toUpperCase(),
-    };
+  let vars;
+  if (vs === "*") {
+    vars = [{
+      token: 'variable',
+      kind: '*',
+      location: location(),
+    }];
   } else {
-    return {
-      vars: proj.map((elem) => {
-        if (elem.length === 2) {
-          return {
-            token: 'variable',
-            kind: 'var',
-            value: elem[1],
-          };
-        } else {
-          return {
-            token: 'variable',
-            kind: 'aliased',
-            expression: elem[3],
-            alias: elem[7],
-            location: location(),
-          };
-        }
-      }),
-      modifier: mod?.toUpperCase(),
-    };
+    vars = vs.map((v) => {
+      if (v.length === 2) {
+        return {
+          token: 'variable',
+          kind: 'var',
+          value: v[1],
+        };
+      } else {
+        return {
+          token: 'variable',
+          kind: 'aliased',
+          expression: v[3],
+          alias: v[7],
+          location: location(),
+        };
+      }
+    });
   }
+
+  return {
+    vars: vars,
+    modifier: m?.toUpperCase(),
+  };
 }
 
 // [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
-ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
+ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
   const dataset = { named:[], implicit:[] };
   gs.forEach((g) => {
@@ -231,30 +201,19 @@ ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* 
     });
   }
   
-  let query = {
+  return {
     kind: 'construct',
     token: 'executableunit',
     dataset: dataset,
     template: t,
     pattern: w,
+    limit: sm.limit,
+    offset: sm.offset,
+    order: sm.order,
     location: location(),
   };
-
-  if (sm != null) {
-    if (sm.limit != null) {
-      query.limit = sm.limit;
-    }
-    if (sm.offset != null) {
-      query.offset = sm.offset;
-    }
-    if (sm.order != null && sm.order != "") {
-      query.order = sm.order;
-    }
-  }
-
-  return query
 }
-/ WS* 'CONSTRUCT'i WS* gs:DatasetClause* WS* 'WHERE'i WS* '{' WS* t:TriplesTemplate? WS* '}' WS* sm:SolutionModifier
+/ 'CONSTRUCT'i WS* gs:DatasetClause* WS* 'WHERE'i WS* '{' WS* t:TriplesTemplate? WS* '}' WS* sm:SolutionModifier
 {
   let dataset = { named: [], implicit: [] };
   gs.forEach((g) => {
@@ -273,7 +232,7 @@ ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* 
     });
   }
   
-  let query = {
+  return {
     kind: 'construct',
     token: 'executableunit',
     dataset: dataset,
@@ -282,22 +241,11 @@ ConstructQuery = WS* 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* 
       token: "basicgraphpattern",
       triplesContext: t.triplesContext
     },
+    limit: sm.limit,
+    offset: sm.offset,
+    order: sm.order,
     location: location(),
   };
-  
-  if (sm != null) {
-    if (sm.limit != null) {
-      query.limit = sm.limit;
-    }
-    if (sm.offset != null) {
-      query.offset = sm.offset;
-    }
-    if (sm.order != null && sm.order != "") {
-      query.order = sm.order;
-    }
-  }
-
-  return query
 }
 
 // [11] DescribeQuery ::= 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
@@ -501,12 +449,6 @@ OffsetClause = 'OFFSET'i WS* i:INTEGER WS*
   };
 }
 
-// BindingsClause ::= ( 'BINDINGS' Var* '{' ( '(' BindingValue+ ')' | NIL )* '}' )?
-BindingsClause = ( 'BINDINGS' Var* '{' ( '(' BindingValue+ ')' / NIL )* '}' )?
-
-// BindingValue ::= IRIref | RDFLiteral | NumericLiteral | BooleanLiteral | 'UNDEF'
-BindingValue = IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 'UNDEF'
-
 // [28] ValuesClause ::= ( 'VALUES' DataBlock )?
 ValuesClause = b:( 'VALUES'i DataBlock )?
 {
@@ -518,19 +460,20 @@ ValuesClause = b:( 'VALUES'i DataBlock )?
 }
 
 // [29] Update ::= Prologue ( Update1 ( ';' Update )? )?
-// Update ::= Prologue Update1 ( ';' Update? )?
-Update = p:Prologue WS* u:Update1 us:( WS* ';' WS* Update? )?
+Update = p:Prologue u:( WS* Update1 ( WS* ';' WS* Update )? )? WS*
 {
   let query = {
     token: 'update',
     prologue: p,
+    units: [],
   };
   
-  let units = [u];
-  if (us != null && us.length != null && us[3] != null && us[3].units != null) {
-    units = units.concat(us[3].units);
+  if (u) {
+    query.units = [u[1]];
+    if (u[2]) {
+      query.units = query.units.concat(u[2][3].units);
+    }
   }
-  query.units = units;
 
   return query;
 }
@@ -658,7 +601,7 @@ DeleteWhere = 'DELETE'i WS* 'WHERE'i WS* p:GroupGraphPattern
   }
 
   return {
-    kind: 'modify',
+    kind: 'deletewhere',
     pattern: p,
     delete: quads,
     with: null,
@@ -667,33 +610,31 @@ DeleteWhere = 'DELETE'i WS* 'WHERE'i WS* p:GroupGraphPattern
 }
 
 // [41] Modify ::= ( 'WITH' IRIref )? ( DeleteClause InsertClause? | InsertClause ) UsingClause* 'WHERE' GroupGraphPattern
-Modify = wg:('WITH'i WS* IRIref)? WS* dic:( DeleteClause WS* InsertClause? / InsertClause ) WS* uc:UsingClause* WS* 'WHERE'i WS* p:GroupGraphPattern WS*
+Modify = w:( 'WITH'i WS* IRIref WS* )? m:( DeleteClause WS* InsertClause? / InsertClause ) WS* u:UsingClause* WS* 'WHERE'i WS* p:GroupGraphPattern WS*
 {
   let query = {
     kind: 'modify',
-    with: null,
-    insert: null,
-    delete: null,
-    pattern: p,
   };
-  
-  if (wg != "" && wg != null) {
-    query.with = wg[2];
+
+  if (w) {
+    query.with = w[2];
   }
-  
-  if (dic.length === 3 && (dic[2] === ''|| dic[2] == null)) {
-    query.delete = dic[0];
-  } else if (dic.length === 3 && dic[0].length != null && dic[1].length != null && dic[2].length != null) {
-    query.delete = dic[0];
-    query.insert = dic[2];
-  } else  {
-    query.insert = dic;
+
+  if (m.length === 3) {
+    query.delete = m[0];
+    if (m[2]) {
+      query.insert = m[2];
+    }
+  } else {
+    query.insert = m;
   }
-  
-  if (uc != '') {
-    query.using = uc;
+
+  if (u.length) {
+    query.using = u;
   }
-  
+
+  query.pattern = p;
+
   return query;
 }
 
@@ -751,40 +692,32 @@ GraphRefAll = g:GraphRef
 }
 
 // [48] QuadPattern ::= '{' Quads '}'
-QuadPattern = WS* '{' WS* qs:Quads WS* '}' WS*
+QuadPattern = WS* '{' WS* q:Quads WS* '}' WS*
 {
-  return qs.quadsContext;
+  return q;
 }
 
 // [49] QuadData ::= '{' Quads '}'
-QuadData = WS* '{' WS* qs:Quads WS* '}' WS*
+QuadData = WS* '{' WS* q:Quads WS* '}' WS*
 {
-  return qs.quadsContext;
+  return q;
 }
 
 // [50] Quads ::= TriplesTemplate? ( QuadsNotTriples '.'? TriplesTemplate? )*
 Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
 {
   let quads = [];
-  if (ts != null && ts.triplesContext != null) {
-    for (var i=0; i<ts.triplesContext.length; i++) {
-      let triple = ts.triplesContext[i]
-      triple.graph = null;
-      quads.push(triple)
-    }
-  }
 
-  if (qs && qs.length>0 && qs[0].length > 0) {
-    quads = quads.concat(qs[0][0].quadsContext);
-    
-    if (qs[0][2] != null && qs[0][2].triplesContext != null) {
-      for (let i = 0; i < qs[0][2].triplesContext.length; i++) {
-        let triple = qs[0][2].triplesContext[i]
-        triple.graph = null;
-        quads.push(triple)
-      }
-    }
-  }
+  ts?.triplesContext.forEach((t) => {
+    quads.push(t)
+  });
+
+  qs.forEach((q) => {
+    quads = quads.concat(q[0].quadsContext);
+    q[2]?.triplesContext.forEach((t) => {
+      quads.push(t)
+    });
+  });
   
   return {
     token:'quads',
@@ -797,13 +730,11 @@ Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
 QuadsNotTriples = WS* 'GRAPH'i WS* g:VarOrIri WS* '{' WS* ts:TriplesTemplate? WS* '}' WS*
 {
   let quads = [];
-  if (ts!=null) {
-    for (let i = 0; i < ts.triplesContext.length; i++) {
-      let triple = ts.triplesContext[i];
-      triple.graph = g;
-      quads.push(triple)
-    }
-  }
+  ts?.triplesContext.forEach((t) => {
+    let triple = t;
+    triple.graph = g;
+    quads.push(triple)
+  });
   
   return {
     token:'quadsnottriples',
@@ -813,17 +744,13 @@ QuadsNotTriples = WS* 'GRAPH'i WS* g:VarOrIri WS* '{' WS* ts:TriplesTemplate? WS
 }
 
 // [52] TriplesTemplate ::= TriplesSameSubject ( '.' TriplesTemplate? )?
-TriplesTemplate = b:TriplesSameSubject bs:(WS* '.' WS* TriplesTemplate? )?
+TriplesTemplate = b:TriplesSameSubject bs:( WS* '.' WS* TriplesTemplate? )?
 {
   let triples = b.triplesContext;
-  if (bs != null && typeof(bs) === 'object') {
-    if (bs.length != null) {
-      if (bs[3] != null && bs[3].triplesContext!=null) {
-        triples = triples.concat(bs[3].triplesContext);
-      }
-    }
+  if (bs && bs[3]) {
+    triples = triples.concat(bs[3].triplesContext);
   }
-  
+
   return {
     token:'triplestemplate',
     triplesContext: triples,
@@ -2624,7 +2551,7 @@ IRIrefOrFunction = i:IRIref WS* args:ArgList?
 }
 
 // [129] RDFLiteral ::= String ( LANGTAG | ( '^^' IRIref ) )?
-RDFLiteral = s:String e:( LANGTAG / ('^^' IRIref) )?
+RDFLiteral = s:String e:( LANGTAG / ( '^^' IRIref ) )?
 {
   let ret = {
     token:'literal',
@@ -2634,9 +2561,9 @@ RDFLiteral = s:String e:( LANGTAG / ('^^' IRIref) )?
     location: location(),
   };
 
-  if (typeof(e) === "string" && e.length > 0) {
-    ret.lang = e.slice(1);
-  } else if (e != null && typeof(e) === "object") {
+  if (typeof(e) === "string") {
+    ret.lang = e;
+  } else if (e) {
     ret.type = e[1];
   }
 
@@ -2660,18 +2587,16 @@ BooleanLiteral = 'TRUE'i
 {
   return {
     token: "literal",
-    lang: null,
-    type: "http://www.w3.org/2001/XMLSchema#boolean",
     value: true,
+    type: "http://www.w3.org/2001/XMLSchema#boolean",
   }
 }
 / 'FALSE'i
 {
   return {
     token: "literal",
-    lang: null,
-    type: "http://www.w3.org/2001/XMLSchema#boolean",
     value: false,
+    type: "http://www.w3.org/2001/XMLSchema#boolean",
   }
 }
 
@@ -2821,11 +2746,13 @@ VAR3 = '{{' v:VARNAME '}}'
 // [145] LANGTAG ::= '@' [a-zA-Z]+ ('-' [a-zA-Z0-9]+)*
 LANGTAG = '@' a:[a-zA-Z]+ b:('-' [a-zA-Z0-9]+)*
 {
-  if (b.length===0) {
-    return ("@"+a.join('')).toLowerCase();
-  } else {
-    return ("@"+a.join('')+"-"+b[0][1].join('')).toLowerCase();
+  let lang = a.join('');
+
+  if (b.length) {
+    lang += '-' + b[0][1].join('');
   }
+
+  return lang.toLowerCase();
 }
 
 // [146] INTEGER ::= [0-9]+
@@ -2833,9 +2760,8 @@ INTEGER = d:[0-9]+
 {
   return {
     token: "literal",
-    lang: null,
-    type: "http://www.w3.org/2001/XMLSchema#integer",
     value: flattenString(d),
+    type: "http://www.w3.org/2001/XMLSchema#integer",
   }
 }
 
@@ -2845,18 +2771,16 @@ DECIMAL = a:[0-9]+ b:'.' c:[0-9]*
 {
   return {
     token: "literal",
-    lang: null,
-    type: "http://www.w3.org/2001/XMLSchema#decimal",
     value: flattenString([a, b, c]),
+    type: "http://www.w3.org/2001/XMLSchema#decimal",
   }
 }
 / a:'.' b:[0-9]+
 {
   return {
     token: "literal",
-    lang: null,
-    type: "http://www.w3.org/2001/XMLSchema#decimal",
     value: flattenString([a, b]),
+    type: "http://www.w3.org/2001/XMLSchema#decimal",
   }
 }
 
@@ -2865,27 +2789,24 @@ DOUBLE = a:[0-9]+ b:'.' c:[0-9]* e:EXPONENT
 {
   return {
     token: "literal",
-    lang: null,
-    type: "http://www.w3.org/2001/XMLSchema#double",
     value: flattenString([a, b, c, e]),
+    type: "http://www.w3.org/2001/XMLSchema#double",
   }
 }
 / a:'.' b:[0-9]+ c:EXPONENT
 {
   return {
     token: "literal",
-    lang: null,
-    type: "http://www.w3.org/2001/XMLSchema#double",
     value: flattenString([a, b, c]),
+    type: "http://www.w3.org/2001/XMLSchema#double",
   }
 }
 / a:[0-9]+ b:EXPONENT
 {
   return {
     token: "literal",
-    lang: null,
-    type: "http://www.w3.org/2001/XMLSchema#double",
     value: flattenString([a, b]),
+    type: "http://www.w3.org/2001/XMLSchema#double",
   }
 }
 
