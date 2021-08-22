@@ -123,7 +123,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
 
 // [8] SubSelect ::= SelectClause WhereClause SolutionModifier ValuesClause
 // add ValuesClause
-SubSelect = s:SelectClause WS* w:WhereClause sm:SolutionModifier
+SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier
 {
   return {
     token: 'subselect',
@@ -238,7 +238,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
     dataset: dataset,
     template: t,
     pattern: {
-      token: "basicgraphpattern",
+      token: 'bgp',
       triplesContext: t.triplesContext
     },
     limit: sm.limit,
@@ -262,7 +262,7 @@ DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* DatasetClause* WS* w:W
 
 // [12] AskQuery ::= 'ASK' DatasetClause* WhereClause SolutionModifier
 // add SolutionModifier
-AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause 
+AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause WS*
 {
   const dataset = { named: [], implicit: [] };
   gs.forEach((g) => {
@@ -322,7 +322,7 @@ NamedGraphClause = 'NAMED'i WS* s:SourceSelector
 SourceSelector = IRIref
 
 // [17] WhereClause ::= 'WHERE'? GroupGraphPattern
-WhereClause = ('WHERE'i)? WS* g:GroupGraphPattern WS*
+WhereClause = ('WHERE'i)? WS* g:GroupGraphPattern
 {
   return g;
 }
@@ -759,11 +759,7 @@ TriplesTemplate = b:TriplesSameSubject bs:( WS* '.' WS* TriplesTemplate? )?
 }
 
 // [53] GroupGraphPattern ::= '{' ( SubSelect | GroupGraphPatternSub ) '}'
-GroupGraphPattern = '{' WS* p:SubSelect  WS* '}'
-{
-  return p;
-}
-/ '{' WS* p:GroupGraphPatternSub WS* '}' 
+GroupGraphPattern = '{' WS* p:( SubSelect / GroupGraphPatternSub )  WS* '}'
 {
   return p;
 }
@@ -771,62 +767,31 @@ GroupGraphPattern = '{' WS* p:SubSelect  WS* '}'
 // [54] GroupGraphPatternSub ::= TriplesBlock? ( GraphPatternNotTriples '.'? TriplesBlock? )*
 GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'? WS* TriplesBlock? )*
 {
-  let blocks = [];
-  if (tb != null && tb != []) {
-    blocks.push(tb);
-  }
-  for (let i = 0; i < tbs.length; i++) {
-    for (let j = 0; j < tbs[i].length; j++) {
-      if (tbs[i][j] != null && tbs[i][j].token != null) {
-        blocks.push(tbs[i][j]);
-      }
-    }
-  }
-
-  let filters = [];
-  let binds = [];
   let patterns = [];
-  let tmpPatterns = [];
-  blocks.forEach((block) => {
-    if (block.token === 'filter') {
-      filters.push(block);
-    } else if (block.token === 'bind') {
-      binds.push(block);
-    } else if (block.token === 'triplesblock') {
-      tmpPatterns.push(block);
-    } else {
-      if (tmpPatterns.length != 0 || filters.length != 0) {
-        const tmpContext = tmpPatterns.map(pattern => pattern.triplesContext).flat();
-        if (tmpContext.length > 0) {
-          patterns.push({ token: 'basicgraphpattern', triplesContext: tmpContext, location: location() });
-        }
-        tmpPatterns = [];
-      }
-      patterns.push(block);
+
+  if (tb) {
+    patterns.push(tb);
+  }
+  tbs.forEach((b) => {
+    patterns.push(b[0]);
+    if (b[4]) {
+      patterns.push(b[4]);
     }
   });
-  if (tmpPatterns.length != 0 || filters.length != 0) {
-    const tmpContext = tmpPatterns.map(pattern => pattern.triplesContext).flat();
-    if (tmpContext.length > 0) {
-      patterns.push({ token: 'basicgraphpattern', triplesContext: tmpContext, location: location() });
-    }
-  }
 
   return {
-    token: 'groupgraphpattern',
-    filters: filters,
-    binds: binds,
+    token: 'ggps',
     patterns: patterns,
     location: location(),
   }
 }
 
 // [55] TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
-TriplesBlock = a:TriplesSameSubjectPath b:(WS* '.' TriplesBlock? )?
+TriplesBlock = a:TriplesSameSubjectPath b:( WS* '.' WS* TriplesBlock? )?
 {
   let triples = a.triplesContext;
-  if (b != null && b[2] != null && b[2].triplesContext != null) {
-    triples = triples.concat(b[2].triplesContext);
+  if (b && b[3]) {
+    triples = triples.concat(b[3].triplesContext);
   }
   
   return {
@@ -1038,24 +1003,21 @@ ConstructTriples = b:TriplesSameSubject bs:( WS* '.' WS* ConstructTriples? )?
 }
 
 // [75] TriplesSameSubject ::= VarOrTerm PropertyListNotEmpty | TriplesNode PropertyList
-TriplesSameSubject = WS* s:VarOrTerm WS* pairs:PropertyListNotEmpty
+TriplesSameSubject = s:VarOrTerm WS* pairs:PropertyListNotEmpty
 {
   let triplesContext = pairs.triplesContext;
 
-  if (pairs.pairs) {
-    for (let i=0; i < pairs.pairs.length; i++) {
-      let pair = pairs.pairs[i];
-      if (pair[1].length != null) {
-        pair[1] = pair[1][0]
-      }
-      if (s.token && s.token === 'triplesnodecollection') {
-        triplesContext.push({ subject: s.chainSubject[0], predicate: pair[0], object: pair[1] });
-        triplesContext = triplesContext.concat(s.triplesContext);
-      } else {
-        triplesContext.push({ subject: s, predicate: pair[0], object: pair[1] });
-      }
+  pairs.pairs.forEach((pair) => {
+    if (pair[1].length != null) {
+      pair[1] = pair[1][0]
     }
-  }
+    if (s.token && s.token === 'triplesnodecollection') {
+      triplesContext.push({ subject: s.chainSubject[0], predicate: pair[0], object: pair[1] });
+      triplesContext = triplesContext.concat(s.triplesContext);
+    } else {
+      triplesContext.push({ subject: s, predicate: pair[0], object: pair[1] });
+    }
+  });
   
   return {
     token: 'triplessamesubject',
@@ -1102,34 +1064,31 @@ PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* Ob
 {
   let pairs = [];
   let triplesContext = [];
-  for (let i = 0; i < ol.length; i++) {
-    if (ol[i].triplesContext != null) {
-      triplesContext = triplesContext.concat(ol[i].triplesContext);
-      if (ol[i].token === 'triplesnodecollection' && ol[i].chainSubject.length != null) {
-        pairs.push([v, ol[i].chainSubject[0]]);
+  ol.forEach((o) => {
+    if (o.triplesContext) {
+      triplesContext = triplesContext.concat(o.triplesContext);
+      if (o.token === 'triplesnodecollection' && o.chainSubject.length ) {
+        pairs.push([v, o.chainSubject[0]]);
       } else {
-        pairs.push([v, ol[i].chainSubject]);
+        pairs.push([v, o.chainSubject]);
       }
     } else {
-      pairs.push([v, ol[i]])
+      pairs.push([v, o])
     }
-  }
+  });
   
-  for (let i = 0; i < rest.length; i++) {
-    if (!rest[i][3]) {
-      continue;
+  rest.forEach((r) => {
+    if (r[3]) {
+      r[3][2].forEach((o) => {
+        if (o.triplesContext) {
+          triplesContext = triplesContext.concat(o.triplesContext);
+          pairs.push([r[3][0], o.chainSubject]);
+        } else {
+          pairs.push([r[3][0], o])
+        }
+      });
     }
-    const newVerb  = rest[i][3][0];
-    const newObjsList = rest[i][3][2] || [];
-    for (let j = 0; j < newObjsList.length; j++) {
-      if (newObjsList[j].triplesContext != null) {
-        triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
-        pairs.push([newVerb, newObjsList[j].chainSubject]);
-      } else {
-        pairs.push([newVerb, newObjsList[j]])
-      }
-    }
-  }
+  });
   
   return {
     token: 'propertylist',
@@ -1152,17 +1111,13 @@ Verb = VarOrIri
 }
 
 // [79] ObjectList ::= Object ( ',' Object )*
-ObjectList = o:Object WS* os:( ',' WS* Object )*
+ObjectList = o:Object os:( WS* ',' WS* Object )*
 {
   let ret = [o];
 
-  for (let i = 0; i < os.length; i++) {
-    for (let j = 0; j < os[i].length; j++) {
-      if (typeof(os[i][j]) == "object" && os[i][j].token != null) {
-        ret.push(os[i][j]);
-      }
-    }
-  }
+  os.forEach((oi) => {
+    ret.push(oi[3]);
+  });
 
   return ret;
 }
@@ -1171,7 +1126,7 @@ ObjectList = o:Object WS* os:( ',' WS* Object )*
 Object = GraphNode
 
 // [81] TriplesSameSubjectPath ::= VarOrTerm PropertyListPathNotEmpty | TriplesNodePath PropertyListPath
-TriplesSameSubjectPath = WS* s:VarOrTerm WS* list:PropertyListPathNotEmpty
+TriplesSameSubjectPath = s:VarOrTerm WS* list:PropertyListPathNotEmpty
 {
   let triplesContext = list.triplesContext;
 
@@ -1223,34 +1178,31 @@ PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath res
 {
   let pairs = [];
   let triplesContext = [];
-  for (let i = 0; i < ol.length; i++) {
-    if (ol[i].triplesContext != null) {
-      triplesContext = triplesContext.concat(ol[i].triplesContext);
-      if (ol[i].token==='triplesnodecollection' && ol[i].chainSubject.length != null) {
-        pairs.push([v, ol[i].chainSubject[0]]);
+  ol.forEach((o) => {
+    if (o.triplesContext) {
+      triplesContext = triplesContext.concat(o.triplesContext);
+      if (o.token === 'triplesnodecollection' && o.chainSubject.length ) {
+        pairs.push([v, o.chainSubject[0]]);
       } else {
-        pairs.push([v, ol[i].chainSubject]);
+        pairs.push([v, o.chainSubject]);
       }
     } else {
-      pairs.push([v, ol[i]])
+      pairs.push([v, o])
     }
-  }
-  
-  for (let i = 0; i < rest.length; i++) {
-    if (!rest[i][3]) {
-      continue;
+  });
+
+  rest.forEach((r) => {
+    if (r[3]) {
+      r[3][2].forEach((o) => {
+        if (o.triplesContext) {
+          triplesContext = triplesContext.concat(o.triplesContext);
+          pairs.push([r[3][0], o.chainSubject]);
+        } else {
+          pairs.push([r[3][0], o])
+        }
+      });
     }
-    const newVerb  = rest[i][3][0];
-    const newObjsList = rest[i][3][2] || [];
-    for (let j = 0; j < newObjsList.length; j++) {
-      if (newObjsList[j].triplesContext != null) {
-        triplesContext = triplesContext.concat(newObjsList[j].triplesContext);
-        pairs.push([newVerb, newObjsList[j].chainSubject]);
-      } else {
-        pairs.push([newVerb, newObjsList[j]])
-      }
-    }
-  }
+  });
   
   return {
     token: 'propertylist',
@@ -1266,17 +1218,14 @@ VerbPath = Path
 VerbSimple = Var
 
 // [86] ObjectListPath ::= ObjectPath ( ',' ObjectPath )*
-ObjectListPath = o:ObjectPath WS* os:(',' WS* ObjectPath)*
+ObjectListPath = o:ObjectPath os:( WS* ',' WS* ObjectPath )*
 {
   let ret = [o];
-  for (let i = 0; i < os.length; i++) {
-    for (let j = 0; j < os[i].length; j++) {
-      if (typeof(os[i][j]) == "object" && os[i][j].token != null) {
-        ret.push(os[i][j]);
-      }
-    }
-  }
-  
+
+  os.forEach((oi) => {
+    ret.push(oi[3]);
+  });
+
   return ret;
 }
 
@@ -1586,22 +1535,22 @@ CollectionPath = WS* '(' WS* gn:GraphNodePath+ WS* ')' WS*
 }
 
 // [104] GraphNode ::= VarOrTerm | TriplesNode
-GraphNode = gn:(WS* VarOrTerm WS* / WS* TriplesNode WS*)
+GraphNode = WS* gn:( VarOrTerm / TriplesNode )
 {
-  return gn[1];
+  return gn;
 }
 
 // [105] GraphNodePath ::= VarOrTerm | TriplesNodePath
-GraphNodePath =gn:(WS* VarOrTerm WS* / WS* TriplesNodePath WS*)
+GraphNodePath = WS* gn:( VarOrTerm / TriplesNodePath )
 {
-  return gn[1];
+  return gn;
 }
 
 // [106] VarOrTerm ::= Var | GraphTerm
-VarOrTerm = (Var / GraphTerm)
+VarOrTerm = Var / GraphTerm
 
 // [107] VarOrIri ::= Var | IRIref
-VarOrIri = (Var /IRIref)
+VarOrIri = Var / IRIref
 
 // [108] Var ::= VAR1 | VAR2
 Var = WS* v:(VAR1 / VAR2 / VAR3) WS*
