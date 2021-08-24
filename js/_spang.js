@@ -2,9 +2,11 @@ spang = {};
 spang.embed = require('../lib/embed_parameter.js').embedParameter;
 spang.request = require('request');
 spang.prefix = require('../lib/prefix.js');
+const metadataModule = require('../lib/metadata.js');
 const version = require('../package.json').version;
 const syncRequest = require('sync-request');
-spang.constructSparql = require('../lib/construct_sparql.js').constructSparql;
+const { jsonToTsv } = require('../lib/util.js');
+spang.makeSparql = require('../lib/make_sparql.js').makeSparql;
 
 spang.getTemplate = (url, callback) => {
   var options = {
@@ -25,28 +27,48 @@ spang.getTemplate = (url, callback) => {
   });
 };
 
-spang.prefix.loadPrefixFileByURL('https://raw.githubusercontent.com/hchiba1/spang2/master/etc/prefix');
-
+spang.prefix.loadPrefixFile('https://raw.githubusercontent.com/hchiba1/spang2/master/etc/prefix');
 spang.shortcut = require('../lib/shortcut.js').shortcut;
-
-bind_trailing_args = (fn, ...bound_args) =>
-{
-    return function(...args) {
-        return fn(...args, ...bound_args);
-    };
-}
-
-spang.shortcut = bind_trailing_args(spang.shortcut, spang.prefix.getPrefixMap());
 
 spang.query = (sparqlTemplate, endpoint, options, callback) => {
   var sparql, metadata;
-  [sparql, metadata] = spang.constructSparql(sparqlTemplate, options.param);
+  metadata = metadataModule.retrieveMetadata(sparqlTemplate);
+  sparql = spang.makeSparql(sparqlTemplate, {}, options.param, []);
   if(!endpoint) {
     endpoint = metadata.endpoint;
   }
-  // if (!(/^(http|https):\/\//.test(endpoint))) {
-  //   [endpoint, retrieveByGet] = require('./search_db_name.js').searchDBName(endpoint, syncRequest("GET", url).getBody('utf8'));
-  // }
-  console.log(sparql);
-  require('../lib/query_sparql.js')(endpoint, sparql, options.format, options.get, callback);
+  require('../lib/query_sparql.js')(endpoint, sparql, options.format, options.get, (error, code, bodies) => {
+    if (bodies.length === 1) {
+      callback(error, code, bodies[0]);
+    }
+    else if (['tsv', 'text', 'n-triples', 'nt', 'turtle', 'ttl'].includes(options.format)) {
+      let result = '';
+      switch (options.format) {
+      case 'tsv':
+        result += jsonToTsv(bodies[0], Boolean(options.vars), Boolean(options.abbr));
+        for (let i = 1; i < bodies.length; i++) {
+          result += '\n' + jsonToTsv(bodies[i], false, Boolean(options.abbr));
+        }
+        break;
+      case 'text':
+        result += bodies[0];
+        // remove header line for i > 0
+        for (let i = 1; i < bodies.length; i++) {
+          if (!bodies[i - 1].endsWith('\n')) {
+            result += '\n';
+          }
+          result += bodies[i].substring(bodies[i].indexOf('\n') + 1);
+        }
+        break;
+      default:
+        for (let i = 0; i < bodies.length; i++) {
+          result += bodies[i];
+          result += "\n";
+        }
+      }
+      callback(status, code, result);
+    } else {
+      callback("The resut has multiple pages but the specified format does not support them.", code, bodies);
+    }
+  });
 };

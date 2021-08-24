@@ -20,6 +20,7 @@ const alias = require('../lib/alias.js');
 const util = require('../lib/util.js');
 const initializeConfig = require('../lib/config.js').initialize;
 const { getReasonPhrase } = require('http-status-codes');
+const jsonToTsv = util.jsonToTsv;
 
 let templatePath;
 
@@ -264,7 +265,7 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
   let end = new Date() - start;
   if (bodies.length === 1) {
     if (opts.outfmt === 'tsv') {
-      printTsv(jsonToTsv(bodies[0], Boolean(opts.vars)));
+      printTsv(jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr)));
     } else if (bodies[0].slice(-1) === '\n') {
       process.stdout.write(bodies[0]);
     } else {
@@ -279,9 +280,9 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     let outputStr = '';
     switch (opts.outfmt) {
       case 'tsv':
-        outputStr += jsonToTsv(bodies[0], Boolean(opts.vars));
+      outputStr += jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr));
         for (let i = 1; i < bodies.length; i++) {
-          outputStr += '\n' + jsonToTsv(bodies[i]);
+          outputStr += '\n' + jsonToTsv(bodies[i], false, Boolean(opts.abbr));
         }
         printTsv(outputStr);
         break;
@@ -338,7 +339,7 @@ function queryLocalFile(db) {
 
   const result = ret.toString();
   if (opts.outfmt === 'tsv') {
-    printTsv(jsonToTsv(result, Boolean(opts.vars)));
+    printTsv(jsonToTsv(result, Boolean(opts.vars), Boolean(opts.abbr)));
   } else {
     process.stdout.write(result);
   }
@@ -349,50 +350,6 @@ function queryLocalFile(db) {
   if (tmpFile) {
     fs.unlinkSync(tmpFile);
   }
-}
-
-function jsonToTsv(body, withHeader = false) {
-  const obj = JSON.parse(body);
-  const vars = obj.head.vars;
-  const bindings = obj.results.bindings;
-  let tsv = '';
-  if (withHeader) {
-    tsv += vars.join('\t') + '\n';
-  }
-  tsv += bindings.map((b) => getBindings(vars, b).join('\t')).join('\n');
-  return tsv;
-}
-
-function getBindings(vars, b) {
-  return vars.map((v) => {
-    if (!b[v]) {
-      return '';
-    }
-    if (b[v].type === 'uri') {
-      if (opts.abbr) {
-        return prefixModule.abbreviateURL(b[v].value);
-      } else {
-        return `<${b[v].value}>`;
-      }
-    } else if (b[v]['xml:lang']) {
-      const lang = b[v]['xml:lang'];
-      return `"${b[v].value}"@${lang}`;
-    } else if (b[v].type === 'typed-literal' || b[v].type === 'literal' && b[v].datatype) {
-      if (b[v].datatype === 'http://www.w3.org/2001/XMLSchema#integer' ||
-          b[v].datatype === 'http://www.w3.org/2001/XMLSchema#decimal' ||
-          b[v].datatype === 'http://www.w3.org/2001/XMLSchema#double') {
-        return b[v].value;
-      } else if (opts.abbr) {
-        return `"${b[v].value}"^^${prefixModule.abbreviateURL(b[v].datatype)}`;
-      } else {
-        return `"${b[v].value}"^^<${b[v].datatype}>`;
-      }
-    } else if (b[v].type === 'bnode') {
-      return `_:${b[v].value}`;
-    } else {
-      return `"${b[v].value}"`;
-    }
-  });
 }
 
 function printTsv(tsv) {
