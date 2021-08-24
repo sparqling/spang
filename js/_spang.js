@@ -10,7 +10,7 @@ spang.makeSparql = require('../lib/make_sparql.js').makeSparql;
 
 spang.getTemplate = (url, callback) => {
   var options = {
-    uri: url, 
+    uri: spang.prefix.expandPrefixedUri(url), 
     followAllRedirects: true,
     headers:{ 
       'User-agent': `SPANG/${version}`, 
