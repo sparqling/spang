@@ -594,11 +594,8 @@ const acceptHeaderMap = {
   "js"       : "application/javascript",
 };
 
-let bodies = [];
-
 module.exports = (endpoint, query, format, byGet, callback) => {
-  bodies = [];
-  queryAll(endpoint, query, format, byGet, 0, 0, callback);
+  queryAll(endpoint, query, format, byGet, 0, 0, [], callback);
 };
 
 function queryOnce(endpoint, query, format, byGet, afterQueryOnce) {
@@ -628,7 +625,7 @@ function queryOnce(endpoint, query, format, byGet, afterQueryOnce) {
   });
 }
 
-function queryAll(endpoint, query, format, byGet, currentOffset, pageSize, callback) {
+function queryAll(endpoint, query, format, byGet, currentOffset, pageSize, bodies, callback) {
   let currentQuery = query;
   if (pageSize > 0) {
     currentQuery += ` LIMIT ${pageSize}`;
@@ -644,7 +641,7 @@ function queryAll(endpoint, query, format, byGet, currentOffset, pageSize, callb
       if (maxrows) {
         maxrows = parseInt(maxrows);
         console.error(`Querying for the next page (OFFSET ${currentOffset + maxrows} LIMIT ${maxrows})...`);
-        queryAll(endpoint, query, format, byGet, currentOffset + maxrows, maxrows, callback);
+        queryAll(endpoint, query, format, byGet, currentOffset + maxrows, maxrows, bodies, callback);
       } else {
         callback(false, 200, bodies);
       }
