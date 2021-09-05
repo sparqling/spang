@@ -33,7 +33,7 @@ if (opts.debug) {
 } else if (opts.json) {
   console.log(JSON.stringify(syntaxTree, selector, 2));
 } else {
-  console.log(formatter.format(syntaxTree, program.indent));
+  console.log(formatter.format(syntaxTree, opts.indent));
 }
 
 function selector(key, value) {
