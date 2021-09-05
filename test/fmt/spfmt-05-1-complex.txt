@@ -6,8 +6,7 @@ SELECT DISTINCT ?gene ?score ?gene_label ?source
 WHERE {
     ?gda sio:SIO_000253 ?source .
     ?dga sio:SIO_000216/sio:SIO_000300 ?score .
-    ?dga sio:SIO_000628 ?gene .
-    ?dga sio:SIO_000628 ?disease .
+    ?dga sio:SIO_000628 ?gene, ?disease .
     ?gene a ncit:C16612 .
     ?gene rdfs:label ?gene_label .
 }

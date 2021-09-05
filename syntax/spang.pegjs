@@ -1,17 +1,5 @@
 {
   let Comments = {};
-
-  let GlobalBlankNodeCounter = 0;
-
-  function flattenString(arr) {
-    return arr.map((a) => {
-      if (typeof(a) === 'string') {
-        return a;
-      } else {
-        return a.join('');
-      }
-    }).join('');
-  }
 }
 
 DOCUMENT = h:(HEADER_LINE*) WS* s:SPARQL WS* f:(Function*) WS*
@@ -44,8 +32,8 @@ Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / Desc
     token: 'query',
     prologue: p,
     body: q,
+    inlineData: v,
     functions: f,
-    inlineData: v
   }
 }
 
@@ -112,8 +100,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
     projection: s.vars,
     modifier: s.modifier,
     pattern: w,
-    limit: sm.limit,
-    offset: sm.offset,
+    limitoffset: sm.limitoffset,
     group: sm.group,
     having: sm.having,
     order: sm.order,
@@ -131,8 +118,7 @@ SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier
     projection: s.vars,
     modifier: s.modifier,
     pattern: w,
-    limit: sm.limit,
-    offset: sm.offset,
+    limitoffset: sm.limitoffset,
     group: sm.group,
     order: sm.order,
   };
@@ -149,7 +135,7 @@ SelectClause = 'SELECT'i WS* m:( 'DISTINCT'i / 'REDUCED'i )? WS*
   )
 {
   let vars;
-  if (vs === "*") {
+  if (vs === '*') {
     vars = [{
       token: 'variable',
       kind: '*',
@@ -207,8 +193,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
     dataset: dataset,
     template: t,
     pattern: w,
-    limit: sm.limit,
-    offset: sm.offset,
+    limitoffset: sm.limitoffset,
     order: sm.order,
     location: location(),
   };
@@ -236,13 +221,8 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
     kind: 'construct',
     token: 'executableunit',
     dataset: dataset,
-    template: t,
-    pattern: {
-      token: 'bgp',
-      triplesContext: t.triplesContext
-    },
-    limit: sm.limit,
-    offset: sm.offset,
+    pattern: t,
+    limitoffset: sm.limitoffset,
     order: sm.order,
     location: location(),
   };
@@ -333,8 +313,7 @@ SolutionModifier = gc:GroupClause? h:HavingClause? oc:OrderClause? lo:LimitOffse
   return {
     group: gc,
     order: oc,
-    limit: lo?.limit,
-    offset: lo?.offset,
+    limitoffset: lo,
     having: h,
   }
 }
@@ -420,16 +399,10 @@ OrderCondition = direction:( 'ASC'i / 'DESC'i ) WS* e:BrackettedExpression WS*
 // [25] LimitOffsetClauses ::= LimitClause OffsetClause? | OffsetClause LimitClause?
 LimitOffsetClauses = cls:( LimitClause OffsetClause? / OffsetClause LimitClause? )
 {
-  let acum = {};
-
-  cls.forEach((cl) => {
-    if (cl != null && cl.limit != null) {
-      acum.limit = cl.limit;
-    } else if (cl != null && cl.offset != null){
-      acum.offset = cl.offset;
-    }
-  });
-  
+  let acum = [cls[0]];
+  if (cls[1]) {
+    acum.push(cls[1]);
+  }
   return acum;
 }
 
@@ -479,7 +452,7 @@ Update = p:Prologue u:( WS* Update1 ( WS* ';' WS* Update )? )? WS*
 }
 
 // [30] Update1 ::= Load | Clear | Drop | Add | Move | Copy | Create | InsertData | DeleteData | DeleteWhere | Modify
-Update1 = Load / Clear / Drop / Create / InsertData / DeleteData / DeleteWhere / Modify
+Update1 = Load / Clear / Drop / Add / Move / Copy / Create / InsertData / DeleteData / DeleteWhere / Modify
 
 // [31] Load ::= 'LOAD' 'SILENT'? IRIref ( 'INTO' GraphRef )?
 // Load ::= 'LOAD' IRIref ( 'INTO' GraphRef )?
@@ -528,34 +501,34 @@ Create = 'CREATE'i WS* 'SILENT'i? WS* ref:GraphRef
 }
 
 // [35] Add ::= 'ADD' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-// check
-Add = 'ADD'i WS* 'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
+Add = 'ADD'i WS* s:'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
 {
   return {
     token: 'executableunit',
     kind: 'add',
+    silent: s,
     graphs: [g1, g2],
   }
 }
 
 // [36] Move ::= 'MOVE' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-// check
-Move = 'MOVE'i WS* 'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
+Move = 'MOVE'i WS* s:'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
 {
   return {
     token: 'executableunit',
     kind: 'move',
+    silent: s,
     graphs: [g1, g2],
   }
 }
 
 // [37] Copy ::= 'COPY' 'SILENT'? GraphOrDefault 'TO' GraphOrDefault
-// check
-Copy = 'COPY'i WS* 'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
+Copy = 'COPY'i WS* s:'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
 {
   return {
     token: 'executableunit',
     kind: 'copy',
+    silent: s,
     graphs: [g1, g2],
   }
 }
@@ -583,29 +556,9 @@ DeleteData = 'DELETE'i WS* 'DATA'i qs:QuadData
 // [40] DeleteWhere ::= 'DELETE WHERE' QuadPattern
 DeleteWhere = 'DELETE'i WS* 'WHERE'i WS* p:GroupGraphPattern
 {
-  let patternsCollection = p.patterns[0];
-  if (patternsCollection.triplesContext == null && patternsCollection.patterns != null) {
-    patternsCollection = patternsCollection.patterns[0].triplesContext;
-  } else {
-    patternsCollection = patternsCollection.triplesContext;
-  }
-
-  let quads = [];
-  for (let i = 0; i < patternsCollection.length; i++) {
-    quads.push({
-      subject: patternsCollection[i].subject,
-      predicate: patternsCollection[i].predicate,
-      object: patternsCollection[i].object,
-      graph: patternsCollection[i].graph,
-    });
-  }
-
   return {
     kind: 'deletewhere',
     pattern: p,
-    delete: quads,
-    with: null,
-    using: null,
   };
 }
 
@@ -661,7 +614,6 @@ UsingClause = WS* 'USING'i WS* g:( IRIref / 'NAMED'i WS* IRIref )
 }
 
 // [45] GraphOrDefault ::= 'DEFAULT' | 'GRAPH'? IRIref
-// check
 GraphOrDefault = 'DEFAULT' / 'GRAPH'i? WS* i:IRIref
 {
   return i;
@@ -707,21 +659,19 @@ QuadData = WS* '{' WS* q:Quads WS* '}' WS*
 Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
 {
   let quads = [];
-
-  ts?.triplesContext.forEach((t) => {
-    quads.push(t)
-  });
-
+  if (ts) {
+    quads = quads.concat(ts);
+  }
   qs.forEach((q) => {
-    quads = quads.concat(q[0].quadsContext);
-    q[2]?.triplesContext.forEach((t) => {
-      quads.push(t)
-    });
+    quads = quads.concat(q[0]);
+    if (q[2]) {
+      quads = quads.concat(q[2]);
+    }
   });
-  
+
   return {
     token:'quads',
-    quadsContext: quads,
+    triplesblock: quads,
     location: location(),
   }
 }
@@ -729,31 +679,21 @@ Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
 // [51] QuadsNotTriples ::= 'GRAPH' VarOrIri '{' TriplesTemplate? '}'
 QuadsNotTriples = WS* 'GRAPH'i WS* g:VarOrIri WS* '{' WS* ts:TriplesTemplate? WS* '}' WS*
 {
-  let quads = [];
-  ts?.triplesContext.forEach((t) => {
-    let triple = t;
-    triple.graph = g;
-    quads.push(triple)
-  });
-  
-  return {
-    token:'quadsnottriples',
-    quadsContext: quads,
-    location: location(),
-  }
+  ts.graph = g;
+  return ts;
 }
 
 // [52] TriplesTemplate ::= TriplesSameSubject ( '.' TriplesTemplate? )?
 TriplesTemplate = b:TriplesSameSubject bs:( WS* '.' WS* TriplesTemplate? )?
 {
-  let triples = b.triplesContext;
+  let triplesblock = [b];
   if (bs && bs[3]) {
-    triples = triples.concat(bs[3].triplesContext);
+    triplesblock = triplesblock.concat(bs[3].triplesblock);
   }
 
   return {
     token:'triplestemplate',
-    triplesContext: triples,
+    triplesblock: triplesblock,
     location: location(),
   };
 }
@@ -780,7 +720,7 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
   });
 
   return {
-    token: 'ggps',
+    token: 'ggp',
     patterns: patterns,
     location: location(),
   }
@@ -789,14 +729,14 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
 // [55] TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
 TriplesBlock = a:TriplesSameSubjectPath b:( WS* '.' WS* TriplesBlock? )?
 {
-  let triples = a.triplesContext;
+  let triplesblock = [a];
   if (b && b[3]) {
-    triples = triples.concat(b[3].triplesContext);
+    triplesblock = triplesblock.concat(b[3].triplesblock);
   }
-  
+
   return {
     token: 'triplesblock',
-    triplesContext: triples,
+    triplesblock: triplesblock,
     location: location(),
   }
 }
@@ -860,10 +800,6 @@ InlineDataOneVar = WS* v:Var WS* '{' WS* d:DataBlockValue* '}'
 {
   return {
     token: 'inlineData',
-    // values: [{
-    //   'var': v,
-    //   'value': d
-    // }]
     var: v,
     values: d,
     location: location(),
@@ -877,7 +813,6 @@ InlineDataFull = WS*  '(' WS* vars:(Var*) WS* ')' WS* '{' WS* vals:( DataBlockTu
   return {
     token: 'inlineDataFull',
     variables: vars,
-    // values: vars.map((v, i) => { return  { 'var': v, 'value': vals[i] }; })
     values: vals,
     location: location(),
   };
@@ -942,7 +877,7 @@ Constraint = BrackettedExpression / BuiltInCall / FunctionCall
 FunctionCall = i:IRIref WS* args:ArgList
 {
   return {
-    token: "expression",
+    token: 'expression',
     expressionType: 'functioncall',
     iriref: i,
     args: args.value,
@@ -986,18 +921,14 @@ ConstructTemplate = '{' WS* ts:ConstructTriples? WS* '}'
 // [74] ConstructTriples ::= TriplesSameSubject ( '.' ConstructTriples? )?
 ConstructTriples = b:TriplesSameSubject bs:( WS* '.' WS* ConstructTriples? )?
 {
-  let triples = b.triplesContext;
-  if (bs != null && typeof(bs) === 'object') {
-    if (bs.length != null) {
-      if (bs[3] != null && bs[3].triplesContext != null) {
-        triples = triples.concat(bs[3].triplesContext);
-      }
-    }
+  let triplesblock = [b];
+  if (bs && bs[3]) {
+    triplesblock = triplesblock.concat(bs[3].triplesblock);
   }
-  
+
   return {
     token:'triplestemplate',
-    triplesContext: triples,
+    triplesblock: triplesblock,
     location: location(),
   }
 }
@@ -1005,54 +936,18 @@ ConstructTriples = b:TriplesSameSubject bs:( WS* '.' WS* ConstructTriples? )?
 // [75] TriplesSameSubject ::= VarOrTerm PropertyListNotEmpty | TriplesNode PropertyList
 TriplesSameSubject = s:VarOrTerm WS* pairs:PropertyListNotEmpty
 {
-  let triplesContext = pairs.triplesContext;
-
-  pairs.pairs.forEach((pair) => {
-    if (pair[1].length != null) {
-      pair[1] = pair[1][0]
-    }
-    if (s.token && s.token === 'triplesnodecollection') {
-      triplesContext.push({ subject: s.chainSubject[0], predicate: pair[0], object: pair[1] });
-      triplesContext = triplesContext.concat(s.triplesContext);
-    } else {
-      triplesContext.push({ subject: s, predicate: pair[0], object: pair[1] });
-    }
-  });
-  
   return {
     token: 'triplessamesubject',
     chainSubject: s,
-    triplesContext: triplesContext,
+    propertylist: pairs,
   }
 }
 / WS* tn:TriplesNode WS* pairs:PropertyList
 {
-  let triplesContext = tn.triplesContext;
-
-  if (pairs.pairs) {
-    for (let i=0; i < pairs.pairs.length; i++) {
-      const pair = pairs.pairs[i];
-      if (pair[1].length != null) {
-        pair[1] = pair[1][0]
-      }
-      if (tn.token === "triplesnodecollection") {
-        for (let j = 0; j < tn.chainSubject.length; j++) {
-          if (tn.chainSubject[j].triplesContext != null) {
-            triplesContext.concat(tn.chainSubject[j].triplesContext);
-          } else {
-            triplesContext.push({ subject: tn.chainSubject[j], predicate: pair[0], object: pair[1] });
-          }
-        }
-      } else {
-        triplesContext.push({ subject: tn.chainSubject, predicate: pair[0], object: pair[1] });
-      }
-    }
-  }
-  
   return {
-    token: "triplessamesubject",
-    chainSubject: tn.chainSubject,
-    triplesContext: triplesContext,
+    token: 'triplessamesubject',
+    chainSubject: tn,
+    propertylist: pairs,
   }
 }
 
@@ -1063,37 +958,16 @@ PropertyList = PropertyListNotEmpty?
 PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* ObjectList )? )*
 {
   let pairs = [];
-  let triplesContext = [];
-  ol.forEach((o) => {
-    if (o.triplesContext) {
-      triplesContext = triplesContext.concat(o.triplesContext);
-      if (o.token === 'triplesnodecollection' && o.chainSubject.length ) {
-        pairs.push([v, o.chainSubject[0]]);
-      } else {
-        pairs.push([v, o.chainSubject]);
-      }
-    } else {
-      pairs.push([v, o])
-    }
-  });
-  
+  pairs.push([v, ol]);
   rest.forEach((r) => {
     if (r[3]) {
-      r[3][2].forEach((o) => {
-        if (o.triplesContext) {
-          triplesContext = triplesContext.concat(o.triplesContext);
-          pairs.push([r[3][0], o.chainSubject]);
-        } else {
-          pairs.push([r[3][0], o])
-        }
-      });
+      pairs.push([r[3][0], r[3][2]]);
     }
   });
-  
+
   return {
     token: 'propertylist',
     pairs: pairs,
-    triplesContext: triplesContext,
   };
 }
 
@@ -1105,7 +979,7 @@ Verb = VarOrIri
     token: 'uri',
     prefix: null,
     suffix: null,
-    value: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+    value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
     location: location(),
   }
 }
@@ -1128,45 +1002,18 @@ Object = GraphNode
 // [81] TriplesSameSubjectPath ::= VarOrTerm PropertyListPathNotEmpty | TriplesNodePath PropertyListPath
 TriplesSameSubjectPath = s:VarOrTerm WS* list:PropertyListPathNotEmpty
 {
-  let triplesContext = list.triplesContext;
-
-  list.pairs.forEach((pair) => {
-    triplesContext.push({ subject: s, predicate: pair[0], object: pair[1] });
-  });
-
   return {
     token: 'triplessamesubject',
     chainSubject: s,
-    triplesContext: triplesContext,
+    propertylist: list,
   }
 }
 / WS* tn:TriplesNodePath WS* pairs:PropertyListPath
 {
-  let triplesContext = tn.triplesContext;
-  if (pairs != null && pairs.pairs != null) {
-    for (let i = 0; i < pairs.pairs.length; i++) {
-      const pair = pairs.pairs[i];
-      if (pair[1].length != null) {
-        pair[1] = pair[1][0];
-      }
-      if (tn.token === "triplesnodecollection") {
-        for (let j = 0; j < tn.chainSubject.length; j++) {
-          if (tn.chainSubject[j].triplesContext != null) {
-            triplesContext.concat(tn.chainSubject[j].triplesContext);
-          } else {
-            triplesContext.push({ subject: tn.chainSubject[j], predicate: pair[0], object: pair[1] });
-          }
-        }
-      } else {
-        triplesContext.push({ subject: tn.chainSubject, predicate: pair[0], object: pair[1] });
-      }
-    }
-  }
-
   return {
-    token: "triplessamesubject",
-    chainSubject: tn.chainSubject,
-    triplesContext: triplesContext,
+    token: 'triplessamesubject',
+    chainSubject: tn,
+    propertylist: pairs,
   };
 }
 
@@ -1177,37 +1024,16 @@ PropertyListPath = PropertyListPathNotEmpty?
 PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath rest:( WS* ';' WS* ( ( VerbPath / VerbSimple ) WS* ObjectList )? )*
 {
   let pairs = [];
-  let triplesContext = [];
-  ol.forEach((o) => {
-    if (o.triplesContext) {
-      triplesContext = triplesContext.concat(o.triplesContext);
-      if (o.token === 'triplesnodecollection' && o.chainSubject.length ) {
-        pairs.push([v, o.chainSubject[0]]);
-      } else {
-        pairs.push([v, o.chainSubject]);
-      }
-    } else {
-      pairs.push([v, o])
+  pairs.push([v, ol]);
+  rest.forEach((r) => {
+    if (r[3]) {
+      pairs.push([r[3][0], r[3][2]]);
     }
   });
 
-  rest.forEach((r) => {
-    if (r[3]) {
-      r[3][2].forEach((o) => {
-        if (o.triplesContext) {
-          triplesContext = triplesContext.concat(o.triplesContext);
-          pairs.push([r[3][0], o.chainSubject]);
-        } else {
-          pairs.push([r[3][0], o])
-        }
-      });
-    }
-  });
-  
   return {
     token: 'propertylist',
     pairs: pairs,
-    triplesContext: triplesContext,
   };
 }
 
@@ -1321,7 +1147,7 @@ PathPrimary = IRIref
     token: 'uri',
     prefix: null,
     suffix: null,
-    value: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+    value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
     location: location(),
   }
 }
@@ -1344,180 +1170,41 @@ Integer = INTEGER
 // [98] TriplesNode ::= Collection | BlankNodePropertyList
 TriplesNode = c:Collection
 {
-  var triplesContext = [];
-  var chainSubject = [];
-
-  var triple = null;
-
-  // catch NIL
-  /*
-   if(c.length == 1 && c[0].token && c[0].token === 'nil') {
-   GlobalBlankNodeCounter++;
-   return  {token: "triplesnodecollection",
-   triplesContext:[{subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-   predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-   object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))}}],
-   chainSubject:{token:'blank', value:("_:"+GlobalBlankNodeCounter)}};
-
-   }
-   */
-
-  // other cases
-  for(var i=0; i<c.length; i++) {
-    GlobalBlankNodeCounter++;
-    //_:b0  rdf:first  1 ;
-    //rdf:rest   _:b1 .
-    var nextObject = null;
-    if(c[i].chainSubject == null && c[i].triplesContext == null) {
-      nextObject = c[i];
-    } else {
-      nextObject = c[i].chainSubject;
-      triplesContext = triplesContext.concat(nextObject.triplesContext);
-    }
-    triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-              predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#first'},
-              object:nextObject };
-
-    if(i==0) {
-      chainSubject.push(triple.subject);
-    }
-
-    triplesContext.push(triple);
-
-    if(i===(c.length-1)) {
-      triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-                object:   {token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'}};
-    } else {
-      triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-                object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))} };
-    }
-
-    triplesContext.push(triple);
-  }
-
-  return {token:"triplesnodecollection", triplesContext:triplesContext, chainSubject:chainSubject};
+  return {
+    token: 'triplesnodecollection',
+    collection: c,
+    location: location(),
+  };
 }
 / BlankNodePropertyList
 
 // [99] BlankNodePropertyList ::= '[' PropertyListNotEmpty ']'
 BlankNodePropertyList = WS* '[' WS* pl:PropertyListNotEmpty WS* ']' WS*
 {
-  GlobalBlankNodeCounter++;
-  var subject = {token:'blank', value:'_:'+GlobalBlankNodeCounter};
-  var newTriples =  [];
-
-  for(var i=0; i< pl.pairs.length; i++) {
-    var pair = pl.pairs[i];
-    var triple = {}
-    triple.subject = subject;
-    triple.predicate = pair[0];
-    if(pair[1].length != null)
-      pair[1] = pair[1][0]
-    triple.object = pair[1];
-    newTriples.push(triple);
-  }
-
   return {
     token: 'triplesnode',
+    pairs: pl,
     location: location(),
-    kind: 'blanknodepropertylist',
-    triplesContext: pl.triplesContext.concat(newTriples),
-    chainSubject: subject
   };
 }
 
 // [100] TriplesNodePath ::= CollectionPath | BlankNodePropertyListPath
-TriplesNodePath
-    = c:CollectionPath {
-    var triplesContext = [];
-    var chainSubject = [];
-
-    var triple = null;
-
-    // catch NIL
-    /*
-     if(c.length == 1 && c[0].token && c[0].token === 'nil') {
-     GlobalBlankNodeCounter++;
-     return  {token: "triplesnodecollection",
-     triplesContext:[{subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-     predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-     object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))}}],
-     chainSubject:{token:'blank', value:("_:"+GlobalBlankNodeCounter)}};
-
-     }
-     */
-
-    // other cases
-    for(var i=0; i<c.length; i++) {
-        GlobalBlankNodeCounter++;
-        //_:b0  rdf:first  1 ;
-        //rdf:rest   _:b1 .
-        var nextObject = null;
-        if(c[i].chainSubject == null && c[i].triplesContext == null) {
-            nextObject = c[i];
-        } else {
-            nextObject = c[i].chainSubject;
-            triplesContext = triplesContext.concat(c[i].triplesContext);
-        }
-        triple = {
-            subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-            predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#first'},
-            object:nextObject
-        };
-
-        if(i==0) {
-            chainSubject.push(triple.subject);
-        }
-
-        triplesContext.push(triple);
-
-        if(i===(c.length-1)) {
-            triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-                object:   {token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'}};
-        } else {
-            triple = {subject: {token:'blank', value:("_:"+GlobalBlankNodeCounter)},
-                predicate:{token:'uri', prefix:null, suffix:null, value:'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest'},
-                object:  {token:'blank', value:("_:"+(GlobalBlankNodeCounter+1))} };
-        }
-
-        triplesContext.push(triple);
-    }
-
-      return {token:"triplesnodecollection", triplesContext:triplesContext, chainSubject:chainSubject,  location: location()};
-} / BlankNodePropertyListPath
+TriplesNodePath = c:CollectionPath
+{
+  return {
+    token: 'triplesnodecollection',
+    collection: c,
+    location: location(),
+  };
+}
+/ BlankNodePropertyListPath
 
 // [101] BlankNodePropertyListPath ::= '[' PropertyListPathNotEmpty ']'
-BlankNodePropertyListPath = WS* '[' WS* pl:PropertyListPathNotEmpty ']' WS*
+BlankNodePropertyListPath = WS* '[' WS* pl:PropertyListPathNotEmpty WS* ']' WS*
 {
-  GlobalBlankNodeCounter++;
-
-  const subject = {
-    token: 'blank',
-    value: '_:' + GlobalBlankNodeCounter,
-  };
-
-  let newTriples =  [];
-  for (let i = 0; i < pl.pairs.length; i++) {
-    const pair = pl.pairs[i];
-    let triple = {
-      subject: subject,
-      predicate: pair[0],
-    };
-    if (pair[1].length != null) {
-      pair[1] = pair[1][0];
-    }
-    triple.object = pair[1];
-    newTriples.push(triple);
-  }
-
   return {
     token: 'triplesnode',
-    kind: 'blanknodepropertylist',
-    chainSubject: subject,
-    triplesContext: pl.triplesContext.concat(newTriples),
+    pairs: pl,
     location: location(),
   };
 }
@@ -1565,90 +1252,36 @@ Var = WS* v:(VAR1 / VAR2 / VAR3) WS*
 
 // [109] GraphTerm ::= IRIref | RDFLiteral | NumericLiteral | BooleanLiteral | BlankNode | NIL
 GraphTerm = IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / BlankNode / NIL
-/*
- = t:IRIref {
- var term = {};
- term.token = 'graphterm';
- term.term = 'iri';
- term.value = t;
- return term;
- }
- / t:RDFLiteral {
- var term = {};
- term.token = 'graphterm'
- term.term = 'literal'
- term.value = t
- return term;
- }
- / t:NumericLiteral {
- var term = {};
- term.token = 'graphterm'
- term.term = 'numericliteral'
- term.value = t
- return term;
- }
- / t:BooleanLiteral  {
- var term = {};
- term.token = 'graphterm'
- term.term = 'booleanliteral'
- term.value = t
- return term;
- }
- / t:BlankNode {
- var term = {};
- term.token = 'graphterm'
- term.term = 'blanknode'
- term.value = t
- return term;
- }
- / t:NIL {
- var term = {};
- term.token = 'graphterm'
- term.term = 'nil'
- term.value = t
- return term;
- }
- */
 
 // [110] Expression ::= ConditionalOrExpression
 Expression = ConditionalOrExpression
 
 // [111] ConditionalOrExpression ::= ConditionalAndExpression ( '||' ConditionalAndExpression )*
-ConditionalOrExpression = v:ConditionalAndExpression vs:(WS* '||' WS* ConditionalAndExpression)*
+ConditionalOrExpression = v:ConditionalAndExpression vs:( WS* '||' WS* ConditionalAndExpression )*
 {
-  if (vs.length === 0) {
+  if (vs.length) {
+    return {
+      token: 'expression',
+      expressionType: 'conditionalor',
+      operands: [v].concat(vs.map(op => op[3])),
+    };
+  } else {
     return v;
   }
-
-  let operands = [v];
-  for (let i = 0; i < vs.length; i++) {
-    operands.push(vs[i][3]);
-  }
-
-  return {
-    token: "expression",
-    expressionType: "conditionalor",
-    operands: operands,
-  };
 }
 
 // [112] ConditionalAndExpression ::= ValueLogical ( '&&' ValueLogical )*
-ConditionalAndExpression = v:ValueLogical vs:(WS* '&&' WS* ValueLogical)*
+ConditionalAndExpression = v:ValueLogical vs:( WS* '&&' WS* ValueLogical )*
 {
-  if (vs.length === 0) {
+  if (vs.length) {
+    return {
+      token: 'expression',
+      expressionType: 'conditionaland',
+      operands: [v].concat(vs.map(op => op[3])),
+    };
+  } else {
     return v;
   }
-
-  let operands = [v];
-  for (let i = 0; i < vs.length; i++) {
-    operands.push(vs[i][3]);
-  }  
-
-  return {
-    token: "expression",
-    expressionType: "conditionaland",
-    operands: operands,
-  };
 }
 
 // [113] ValueLogical ::= RelationalExpression
@@ -1676,8 +1309,8 @@ RelationalExpression = e1:NumericExpression e2:(
     }
 
     return {
-      token: "expression",
-      expressionType: "relationalexpression",
+      token: 'expression',
+      expressionType: 'relationalexpression',
       operator: op,
       op1: o1,
       op2: o2,
@@ -1697,58 +1330,37 @@ AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* Multiplicati
     return op1;
   }
 
-  let summands = [];
+  let arr = [];
   ops.forEach((op) => {
-    if (op.length == 4 && typeof(op[1]) === "string") {
-      summands.push({ operator: op[1], expression: op[3] });
-    } else {
-      let sum = {};
-      const firstFactor = sum[0];
-      var operator = sum[1][1];
-      var secondFactor = sum[1][3];
-      var operator = null;
-      if (firstFactor.value < 0) {
-        sum.operator = '-';
-        firstFactor.value = - firstFactor.value;
-      } else {
-        sum.operator = '+';
-      }
-      sum.expression = {
-        token: 'expression',
-        expressionType: 'multiplicativeexpression',
-        operator: firstFactor,
-        factors: [ { operator: operator, expression: secondFactor } ],
-      };
-      summands.push(sum);
+    if (op.length == 4) {
+      arr.push({
+        operator: op[1],
+        expression: op[3],
+      });
     }
   });
 
   return {
     token: 'expression',
     expressionType: 'additiveexpression',
-    summand: op1,
-    summands: summands,
+    op1: op1,
+    ops: arr,
   };
 }
 
 // [117] MultiplicativeExpression ::= UnaryExpression ( '*' UnaryExpression | '/' UnaryExpression )*
-MultiplicativeExpression = e1:UnaryExpression es:(WS* '*' WS* UnaryExpression / WS* '/' WS* UnaryExpression)*
+MultiplicativeExpression = e1:UnaryExpression es:( WS* '*' WS* UnaryExpression / WS* '/' WS* UnaryExpression )*
 {
-  if (es.length === 0) {
+  if (es.length) {
+    return {
+      token: 'expression',
+      expressionType: 'multiplicativeexpression',
+      factor: e1,
+      factors: es.map((e) => ({ operator: e[1], expression: e[3] })),
+    };
+  } else {
     return e1;
   }
-  
-  let ret = {
-    token: 'expression',
-    expressionType: 'multiplicativeexpression',
-    factor: e1,
-    factors: [],
-  };
-  es.forEach((e) => {
-    ret.factors.push({ operator: e[1], expression: e[3] });
-  });
-  
-  return ret;
 }
 
 // [118] UnaryExpression ::= '!' PrimaryExpression | '+' PrimaryExpression | '-' PrimaryExpression | PrimaryExpression
@@ -1757,7 +1369,7 @@ UnaryExpression = '!' WS* e:PrimaryExpression
   return {
     token: 'expression',
     expressionType: 'unaryexpression',
-    unaryexpression: "!",
+    unaryexpression: '!',
     expression: e,
   }
 }
@@ -1766,7 +1378,7 @@ UnaryExpression = '!' WS* e:PrimaryExpression
   return {
     token: 'expression',
     expressionType: 'unaryexpression',
-    unaryexpression: "+",
+    unaryexpression: '+',
     expression: v,
   }
 }
@@ -1775,7 +1387,7 @@ UnaryExpression = '!' WS* e:PrimaryExpression
   return {
     token: 'expression',
     expressionType: 'unaryexpression',
-    unaryexpression: "-",
+    unaryexpression: '-',
     expression: v,
   }
 }
@@ -2000,7 +1612,7 @@ BuiltInCall = Aggregate
   return {
     token: 'expression',
     expressionType: 'builtincall',
-    builtincall: 'ROUND',
+    builtincall: 'round',
     args: [e],
   }
 }
@@ -2492,7 +2104,7 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 IRIrefOrFunction = i:IRIref WS* args:ArgList?
 {
   return {
-    token: "expression",
+    token: 'expression',
     expressionType: 'irireforfunction',
     iriref: i,
     args: (args != null ? args.value : args),
@@ -2504,18 +2116,17 @@ RDFLiteral = s:String e:( LANGTAG / ( '^^' IRIref ) )?
 {
   let ret = {
     token:'literal',
+    quote: s.quote,
     value: s.value,
-    lang: null,
-    type: null,
-    location: location(),
   };
 
-  if (typeof(e) === "string") {
+  if (typeof(e) === 'string') {
     ret.lang = e;
   } else if (e) {
     ret.type = e[1];
   }
 
+  ret.location = location();
   return ret;
 }
 
@@ -2535,53 +2146,22 @@ NumericLiteralNegative = DOUBLE_NEGATIVE / DECIMAL_NEGATIVE / INTEGER_NEGATIVE
 BooleanLiteral = 'TRUE'i
 {
   return {
-    token: "literal",
+    token: 'literal',
     value: true,
-    type: "http://www.w3.org/2001/XMLSchema#boolean",
+    type: 'http://www.w3.org/2001/XMLSchema#boolean',
   }
 }
 / 'FALSE'i
 {
   return {
-    token: "literal",
+    token: 'literal',
     value: false,
-    type: "http://www.w3.org/2001/XMLSchema#boolean",
+    type: 'http://www.w3.org/2001/XMLSchema#boolean',
   }
 }
 
 // [135] String ::= STRING_LITERAL1 | STRING_LITERAL2 | STRING_LITERAL_LONG1 | STRING_LITERAL_LONG2
-String = s:STRING_LITERAL_LONG1 
-{
-  return {
-    token: 'string',
-    value: s,
-    location: location(),
-  }
-}
-/ s:STRING_LITERAL_LONG2 
-{
-  return {
-    token: 'string',
-    value: s,
-    location: location(),
-  }
-}
-/ s:STRING_LITERAL1 
-{
-  return {
-    token: 'string',
-    value: s,
-    location: location(),
-  }
-}
-/ s:STRING_LITERAL2 
-{
-  return {
-    token:'string',
-    value: s,
-    location: location(),
-  }
-}
+String = STRING_LITERAL_LONG1 / STRING_LITERAL_LONG2 / STRING_LITERAL1 / STRING_LITERAL2
 
 // [136] IRIref ::= IRIREF | PrefixedName
 IRIref = iri:IRIREF
@@ -2630,12 +2210,10 @@ BlankNode = l:BLANK_NODE_LABEL
     location: location(),
   }
 }
-/ ANON 
+/ ANON
 { 
-  GlobalBlankNodeCounter++;
   return {
     token: 'blank',
-    value: '_:' + GlobalBlankNodeCounter,
     location: location(),
   }
 }
@@ -2670,7 +2248,7 @@ BLANK_NODE_LABEL = '_:' l:PN_LOCAL
 VAR1 = '?' v:VARNAME 
 {
   return {
-    prefix: "?",
+    prefix: '?',
     value: v,
   }
 }
@@ -2679,7 +2257,7 @@ VAR1 = '?' v:VARNAME
 VAR2 = '$' v:VARNAME 
 {
   return {
-    prefix: "$",
+    prefix: '$',
     value: v,
   }
 }
@@ -2705,145 +2283,166 @@ LANGTAG = '@' a:[a-zA-Z]+ b:('-' [a-zA-Z0-9]+)*
 }
 
 // [146] INTEGER ::= [0-9]+
-INTEGER = d:[0-9]+
+INTEGER = [0-9]+
 {
   return {
-    token: "literal",
-    value: flattenString(d),
-    type: "http://www.w3.org/2001/XMLSchema#integer",
+    token: 'literal',
+    value: text(),
+    type: 'http://www.w3.org/2001/XMLSchema#integer',
   }
 }
 
 // [147] DECIMAL ::= [0-9]* '.' [0-9]+
-// DECIMAL ::= [0-9]+ '.' [0-9]* | '.' [0-9]+
-DECIMAL = a:[0-9]+ b:'.' c:[0-9]*
+DECIMAL = [0-9]* '.' [0-9]+
 {
   return {
-    token: "literal",
-    value: flattenString([a, b, c]),
-    type: "http://www.w3.org/2001/XMLSchema#decimal",
-  }
-}
-/ a:'.' b:[0-9]+
-{
-  return {
-    token: "literal",
-    value: flattenString([a, b]),
-    type: "http://www.w3.org/2001/XMLSchema#decimal",
+    token: 'literal',
+    value: text(),
+    type: 'http://www.w3.org/2001/XMLSchema#decimal',
   }
 }
 
 // [148] DOUBLE ::= [0-9]+ '.' [0-9]* EXPONENT | '.' ([0-9])+ EXPONENT | ([0-9])+ EXPONENT
-DOUBLE = a:[0-9]+ b:'.' c:[0-9]* e:EXPONENT
+DOUBLE = [0-9]+ '.' [0-9]* EXPONENT
 {
   return {
-    token: "literal",
-    value: flattenString([a, b, c, e]),
-    type: "http://www.w3.org/2001/XMLSchema#double",
+    token: 'literal',
+    value: text(),
+    type: 'http://www.w3.org/2001/XMLSchema#double',
   }
 }
-/ a:'.' b:[0-9]+ c:EXPONENT
+/ '.' [0-9]+ EXPONENT
 {
   return {
-    token: "literal",
-    value: flattenString([a, b, c]),
-    type: "http://www.w3.org/2001/XMLSchema#double",
+    token: 'literal',
+    value: text(),
+    type: 'http://www.w3.org/2001/XMLSchema#double',
   }
 }
-/ a:[0-9]+ b:EXPONENT
+/ [0-9]+ EXPONENT
 {
   return {
-    token: "literal",
-    value: flattenString([a, b]),
-    type: "http://www.w3.org/2001/XMLSchema#double",
+    token: 'literal',
+    value: text(),
+    type: 'http://www.w3.org/2001/XMLSchema#double',
   }
 }
 
 // [149] INTEGER_POSITIVE ::= '+' INTEGER
 INTEGER_POSITIVE = '+' d:INTEGER
 {
-  d.value = "+" + d.value;
+  d.value = '+' + d.value;
   return d;
 }
 
 // [150] DECIMAL_POSITIVE ::= '+' DECIMAL
 DECIMAL_POSITIVE = '+' d:DECIMAL
 {
-  d.value = "+" + d.value;
+  d.value = '+' + d.value;
   return d;
 }
 
 // [151] DOUBLE_POSITIVE ::= '+' DOUBLE
 DOUBLE_POSITIVE = '+' d:DOUBLE
 {
-  d.value = "+" + d.value;
+  d.value = '+' + d.value;
   return d;
 }
 
 // [152] INTEGER_NEGATIVE ::= '-' INTEGER
 INTEGER_NEGATIVE = '-' d:INTEGER
 {
-  d.value = "-" + d.value;
+  d.value = '-' + d.value;
   return d;
 }
 
 // [153] DECIMAL_NEGATIVE ::= '-' DECIMAL
 DECIMAL_NEGATIVE = '-' d:DECIMAL
 {
-  d.value = "-" + d.value;
+  d.value = '-' + d.value;
   return d;
 }
 
 // [154] DOUBLE_NEGATIVE ::= '-' DOUBLE
 DOUBLE_NEGATIVE = '-' d:DOUBLE
 {
-  d.value = "-" + d.value;
+  d.value = '-' + d.value;
   return d;
 }
 
 // [155] EXPONENT ::= [eE] [+-]? [0-9]+
-EXPONENT = a:[eE] b:[+-]? c:[0-9]+
-{
-  return flattenString([a,b,c]);
-}
+EXPONENT = [eE] [+-]? [0-9]+
 
 // [156] STRING_LITERAL1 ::= "'" ( ([^#x27#x5C#xA#xD]) | ECHAR )* "'"
-STRING_LITERAL1 = "'" content:([^\u0027\u005C\u000A\u000D] / ECHAR)* "'"
+STRING_LITERAL1 = "'" s:( [^\u0027\u005C\u000A\u000D] / ECHAR )* "'"
 {
-  return flattenString(content);
+  return {
+    token: 'string',
+    quote: "'",
+    value: s.join(''), // except ' \ LF CR
+  };
 }
 
 // [157] STRING_LITERAL2 ::= '"' ( ([^#x22#x5C#xA#xD]) | ECHAR )* '"'
-STRING_LITERAL2 = '"' content:([^\u0022\u005C\u000A\u000D] / ECHAR)* '"'
+STRING_LITERAL2 = '"' s:( [^\u0022\u005C\u000A\u000D] / ECHAR )* '"'
 {
-  return flattenString(content);
+  return {
+    token: 'string',
+    quote: '"',
+    value: s.join(''), // except " \ LF CR
+  };
 }
 
 // [158] STRING_LITERAL_LONG1 ::= "'''" ( ( "'" | "''" )? ( [^'\] | ECHAR ) )* "'''"
-// check
-STRING_LITERAL_LONG1 = "'''" content:([^\'\\] / ECHAR)* "'''"
+STRING_LITERAL_LONG1 = "'''" s:( ( "''" / "'" )? ( [^\'\\] / ECHAR ) )* "'''"
 {
-  return flattenString(content);
+  return {
+    token: 'string',
+    quote: "'''",
+    value: s.map((c) => {
+      if (c[0]) {
+        return c[0] + c[1];
+      } else {
+        return c[1];
+      }
+    }).join(''),
+  };
 }
 
 // [159] STRING_LITERAL_LONG2 ::= '"""' ( ( '"' | '""' )? ( [^"\] | ECHAR ) )* '"""'
-// check
-STRING_LITERAL_LONG2 = '"""' content:([^\"\\] / ECHAR)* '"""'
+STRING_LITERAL_LONG2 = '"""' s:( ( '""' / '"' )? ( [^\"\\] / ECHAR ) )* '"""'
 {
-  return flattenString(content);
+
+  return {
+    token: 'string',
+    quote: '"""',
+    value: s.map((c) => {
+      if (c[0]) {
+        return c[0] + c[1];
+      } else {
+        return c[1];
+      }
+    }).join(''),
+  }
 }
 
 // [160] ECHAR ::= '\' [tbnrf\"']
 ECHAR = '\\' [tbnrf\\\"\']
+{
+  return text();
+}
 
 // [161] NIL ::= '(' WS* ')'
 NIL = '(' WS* ')'
 {
   return {
-    token: "triplesnodecollection",
+    token: 'triplesnodecollection',
+    chainSubject: [{
+      token: 'uri',
+      value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil',
+    }],
     location: location(),
-    triplesContext:[],
-    chainSubject:[{token:'uri', value:"http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"}]};
+  };
 }
 
 // [162] WS ::= #x20 | #x9 | #xD | #xA
@@ -2854,15 +2453,15 @@ SPACE_OR_TAB = [\u0020\u0009]
 NEW_LINE = [\u000A\u000D]
 NON_NEW_LINE = [^\u000A\u000D]
 
-HEADER_LINE = h:('#' NON_NEW_LINE* NEW_LINE)
+HEADER_LINE = '#' NON_NEW_LINE* NEW_LINE
 {
-  return flattenString(h);
+  return text();
 }
 
-COMMENT = comment:(SPACE_OR_TAB* '#' NON_NEW_LINE*)
+COMMENT = SPACE_OR_TAB* '#' NON_NEW_LINE*
 {
   const line = location().start.line;
-  Comments[line] = flattenString(comment);
+  Comments[line] = text();
 
   return '';
 }
@@ -2877,8 +2476,10 @@ PN_CHARS_BASE = [A-Z] / [a-z] / [\u00C0-\u00D6] / [\u00D8-\u00F6] / [\u00F8-\u02
 PN_CHARS_U = PN_CHARS_BASE / '_'
 
 // [166] VARNAME ::= ( PN_CHARS_U | [0-9] ) ( PN_CHARS_U | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040] )*
-VARNAME = init:( PN_CHARS_U / [0-9] ) rpart:( PN_CHARS_U / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040])*
-{ return init+rpart.join('') }
+VARNAME = ( PN_CHARS_U / [0-9] ) ( PN_CHARS_U / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040] )*
+{
+  return text();
+}
 
 // [167] PN_CHARS ::= PN_CHARS_U | '-' | [0-9] | #x00B7 | [#x0300-#x036F] | [#x203F-#x2040]
 PN_CHARS = PN_CHARS_U / '-' / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040]
@@ -2910,7 +2511,7 @@ PLX = PERCENT / PN_LOCAL_ESC
 // [171] PERCENT ::= '%' HEX HEX
 PERCENT = h:('%' HEX HEX)
 {
-  return h.join("");
+  return h.join('');
 }
 
 // [172] HEX ::= [0-9] | [A-F] | [a-f]
@@ -2919,5 +2520,5 @@ HEX = [0-9] / [A-F] / [a-f]
 // [173] PN_LOCAL_ESC ::= '\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%' )
 PN_LOCAL_ESC = '\\' c:( '_' / '~' / '.' / '-' / '!' / '$' / '&' / "'" / '(' / ')' / '*' / '+' / ',' / ';' / ':' / '=' / '/' / '?' / '#' / '@' / '%' )
 {
-  return "\\"+c;
+  return '\\' + c;
 }
