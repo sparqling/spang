@@ -63,7 +63,7 @@ BaseDecl = WS* 'BASE'i WS* i:IRIREF
 }
 
 // [6] PrefixDecl ::= 'PREFIX' PNAME_NS IRIREF
-PrefixDecl = WS* 'PREFIX'i  WS* p:PNAME_NS  WS* l:IRIREF
+PrefixDecl = WS* 'PREFIX'i WS* p:PNAME_NS WS* l:IRIREF
 {
   return {
     token: 'prefix',
@@ -109,8 +109,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
 }
 
 // [8] SubSelect ::= SelectClause WhereClause SolutionModifier ValuesClause
-// add ValuesClause
-SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier
+SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier v:ValuesClause
 {
   return {
     token: 'subselect',
@@ -121,6 +120,7 @@ SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier
     limitoffset: sm.limitoffset,
     group: sm.group,
     order: sm.order,
+    inlineData: v,
   };
 }
 
@@ -229,20 +229,22 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
 }
 
 // [11] DescribeQuery ::= 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
-DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* DatasetClause* WS* w:WhereClause? WS* SolutionModifier
-// todo: dataset, modifier
+DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* gs:DatasetClause* WS* w:WhereClause? WS* sm:SolutionModifier
 {
   return {
     token: 'executableunit',
     kind: 'describe',
+    dataset: dataset,
     value: v,
     pattern: w,
+    limitoffset: sm.limitoffset,
+    order: sm.order,
+    location: location(),
   }
 }
 
 // [12] AskQuery ::= 'ASK' DatasetClause* WhereClause SolutionModifier
-// add SolutionModifier
-AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause WS*
+AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
   const dataset = { named: [], implicit: [] };
   gs.forEach((g) => {
@@ -266,6 +268,9 @@ AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause WS*
     token: 'executableunit',
     dataset: dataset,
     pattern: w,
+    limitoffset: sm.limitoffset,
+    group: sm.group,
+    order: sm.order,
     location: location(),
   }
 }
@@ -302,9 +307,9 @@ NamedGraphClause = 'NAMED'i WS* s:SourceSelector
 SourceSelector = IRIref
 
 // [17] WhereClause ::= 'WHERE'? GroupGraphPattern
-WhereClause = ('WHERE'i)? WS* g:GroupGraphPattern
+WhereClause = 'WHERE'i? WS* ggp:GroupGraphPattern
 {
-  return g;
+  return ggp;
 }
 
 // [18] SolutionModifier ::= GroupClause? HavingClause? OrderClause? LimitOffsetClauses?
@@ -317,7 +322,7 @@ SolutionModifier = gc:GroupClause? h:HavingClause? oc:OrderClause? lo:LimitOffse
     having: h,
   }
 }
-                             
+
 // [19] GroupClause ::= 'GROUP' 'BY' GroupCondition+
 GroupClause = 'GROUP'i WS* 'BY'i WS* conds:GroupCondition+
 {
@@ -425,7 +430,7 @@ OffsetClause = 'OFFSET'i WS* i:INTEGER WS*
 // [28] ValuesClause ::= ( 'VALUES' DataBlock )?
 ValuesClause = b:( 'VALUES'i DataBlock )?
 {
-  if (b != null) {
+  if (b) {
     return b[1];
   } else {
     return null;
@@ -455,15 +460,15 @@ Update = p:Prologue u:( WS* Update1 ( WS* ';' WS* Update )? )? WS*
 Update1 = Load / Clear / Drop / Add / Move / Copy / Create / InsertData / DeleteData / DeleteWhere / Modify
 
 // [31] Load ::= 'LOAD' 'SILENT'? IRIref ( 'INTO' GraphRef )?
-// Load ::= 'LOAD' IRIref ( 'INTO' GraphRef )?
-Load = 'LOAD'i WS* sg:IRIref WS* dg:( 'INTO'i WS* GraphRef)?
+Load = 'LOAD'i WS* s:'SILENT'i? WS* sg:IRIref WS* dg:( 'INTO'i WS* GraphRef )?
 {
   let query = {
     kind: 'load',
     token: 'executableunit',
+    silent: s,
     sourceGraph: sg,
   };
-  if (dg != null) {
+  if (dg) {
     query.destinyGraph = dg[2];
   }
 
@@ -471,31 +476,34 @@ Load = 'LOAD'i WS* sg:IRIref WS* dg:( 'INTO'i WS* GraphRef)?
 }
 
 // [32] Clear ::= 'CLEAR' 'SILENT'? GraphRefAll
-Clear = 'CLEAR'i WS* 'SILENT'i? WS* ref:GraphRefAll
+Clear = 'CLEAR'i WS* s:'SILENT'i? WS* ref:GraphRefAll
 {
   return {
     token: 'executableunit',
     kind: 'clear',
+    silent: s,
     destinyGraph: ref,
   }
 }
 
 // [33] Drop ::= 'DROP' 'SILENT'? GraphRefAll
-Drop = 'DROP'i  WS* 'SILENT'i? WS* ref:GraphRefAll
+Drop = 'DROP'i  WS* s:'SILENT'i? WS* ref:GraphRefAll
 {
   return {
     token: 'executableunit',
     kind: 'drop',
+    silent: s,
     destinyGraph: ref,
   }
 }
 
 // [34] Create ::= 'CREATE' 'SILENT'? GraphRef
-Create = 'CREATE'i WS* 'SILENT'i? WS* ref:GraphRef
+Create = 'CREATE'i WS* s:'SILENT'i? WS* ref:GraphRef
 {
   return {
     token: 'executableunit',
     kind: 'create',
+    silent: s,
     destinyGraph: ref,
   }
 }
@@ -765,12 +773,12 @@ GraphGraphPattern = WS* 'GRAPH'i WS* g:VarOrIri WS* gg:GroupGraphPattern
 }
 
 // [59] ServiceGraphPattern ::= 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern
-// add SILENT
-ServiceGraphPattern = 'SERVICE' WS* v:VarOrIri WS* ggp:GroupGraphPattern
+ServiceGraphPattern = 'SERVICE' WS* s:'SILENT'i? WS* v:VarOrIri WS* ggp:GroupGraphPattern
 {
   return {
     token: 'servicegraphpattern',
     value: [v, ggp],
+    silent: s,
     location: location(),
   }
 }
@@ -807,8 +815,7 @@ InlineDataOneVar = WS* v:Var WS* '{' WS* d:DataBlockValue* '}'
 }
 
 // [64] InlineDataFull ::= ( NIL | '(' Var* ')' ) '{' ( '(' DataBlockValue* ')' | NIL )* '}'
-// for simplicity, ignore NIL, and use DataBlockTuple instead of '(' DataBlockValue* ')'
-InlineDataFull = WS*  '(' WS* vars:(Var*) WS* ')' WS* '{' WS* vals:( DataBlockTuple)* WS* '}'
+InlineDataFull = WS* '(' WS* vars:Var* ')' WS* '{' WS* vals:DataBlockTuple* '}'
 {
   return {
     token: 'inlineDataFull',
@@ -818,14 +825,13 @@ InlineDataFull = WS*  '(' WS* vars:(Var*) WS* ')' WS* '{' WS* vals:( DataBlockTu
   };
 }
 
-// for simplicity, DataBlockTuple is used
-DataBlockTuple = '(' WS* val:(DataBlockValue*) WS* ')' WS*
+DataBlockTuple = '(' WS* vs:DataBlockValue* ')' WS*
 {
-  return val;
+  return vs;
 }
 
 // [65] DataBlockValue ::= iri | RDFLiteral | NumericLiteral | BooleanLiteral | 'UNDEF'
-DataBlockValue = WS* v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 'UNDEF') WS*
+DataBlockValue = v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 'UNDEF') WS*
 {
   return v;
 }
@@ -843,21 +849,15 @@ MinusGraphPattern = 'MINUS'i WS* ggp:GroupGraphPattern
 // [67] GroupOrUnionGraphPattern ::= GroupGraphPattern ( 'UNION' GroupGraphPattern )*
 GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* 'UNION'i WS* GroupGraphPattern )*
 {
-  if (b.length === 0) {
+  if (b.length) {
+    return {
+      token: 'unionpattern',
+      value: [a].concat(b.map((elem) => elem[3])),
+      location: location(),
+    };
+  } else {
     return a;
   }
-
-  let lastToken = {
-    token: 'graphunionpattern',
-    location: location(),
-    value: [a],
-  };
-
-  for (let i = 0; i < b.length; i++) {
-    lastToken.value.push(b[i][3]);
-  }
-
-  return lastToken;
 }
 
 // [68] Filter ::= 'FILTER' Constraint
@@ -1102,22 +1102,18 @@ PathSequence = first:PathEltOrInverse rest:( WS* '/' WS* PathEltOrInverse )*
 }
 
 // [91] PathElt ::= PathPrimary PathMod?
-PathElt = p:PathPrimary mod:PathMod?
+PathElt = p:PathPrimary m:PathMod?
 {
-  if (p.token && p.token != 'path' && mod == '') {
-    p.kind = 'primary' // for debug
+  if (p.token === 'path') {
+    p.modifier = m;
     return p;
-  }
-  if (p.token && p.token != 'path' && mod != '') {
+  } else {
     return {
       token: 'path',
       kind: 'element',
       value: p,
-      modifier: mod,
+      modifier: m,
     }
-  } else {
-    p.modifier = mod;
-    return p;
   }
 }
 
@@ -1134,10 +1130,7 @@ PathEltOrInverse = PathElt
 
 // [93] PathMod ::= '?' | '*' | '+'
 // PathMod = ( '*' / '?' / '+' / '{' ( Integer ( ',' ( '}' / Integer '}' ) / '}' ) / ',' Integer '}' ) )
-PathMod = m:('?' / '*' / '+')
-{
-  return m;
-}
+PathMod = '?' / '*' / '+'
 
 // [94] PathPrimary ::= IRIref | 'a' | '!' PathNegatedPropertySet | '(' Path ')'
 PathPrimary = IRIref
@@ -1240,7 +1233,7 @@ VarOrTerm = Var / GraphTerm
 VarOrIri = Var / IRIref
 
 // [108] Var ::= VAR1 | VAR2
-Var = WS* v:(VAR1 / VAR2 / VAR3) WS*
+Var = WS* v:( VAR1 / VAR2 / VAR3 ) WS*
 {
   return {
     token: 'var',
@@ -2238,10 +2231,9 @@ PNAME_LN = p:PNAME_NS s:PN_LOCAL
 }
 
 // [142] BLANK_NODE_LABEL ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
-// BLANK_NODE_LABEL ::= '_:' PN_LOCAL
-BLANK_NODE_LABEL = '_:' l:PN_LOCAL 
+BLANK_NODE_LABEL = '_:' ( PN_CHARS_U / [0-9] ) ((PN_CHARS/'.')* PN_CHARS)?
 {
-  return l
+  return text();
 }
 
 // [143] VAR1 ::= '?' VARNAME
@@ -2485,40 +2477,28 @@ VARNAME = ( PN_CHARS_U / [0-9] ) ( PN_CHARS_U / [0-9] / [\u00B7] / [\u0300-\u036
 PN_CHARS = PN_CHARS_U / '-' / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040]
 
 // [168] PN_PREFIX ::= PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)?
-// add '_'
-PN_PREFIX = base:PN_CHARS_U rest:(PN_CHARS / '.')*
-{ 
-  if (rest[rest.length-1] == '.') {
-    throw new Error("Wrong PN_PREFIX, cannot finish with '.'")
-  } else {
-    return base + rest.join('');
-  }
+// PN_PREFIX = PN_CHARS_BASE ((PN_CHARS/'.')* PN_CHARS)?
+PN_PREFIX = PN_CHARS_U (PN_CHARS / '.')*
+{
+  return text();
 }
 
 // [169] PN_LOCAL ::= (PN_CHARS_U | ':' | [0-9] | PLX ) ((PN_CHARS | '.' | ':' | PLX)* (PN_CHARS | ':' | PLX) )?
-// similar to BLANK_NODE_LABEL??
-// base:(PN_CHARS_U / [0-9] / ':' / PLX) rest:((PN_CHARS / '.' / ':' / PLX)* (PN_CHARS / ':' / PLX))?
-  // '$' is added
-  // still missing something at the end??
-PN_LOCAL = base:('$' / PN_CHARS_U / [0-9] / ':' / PLX) rest:(PN_CHARS / '.' / ':' / PLX)* 
+// PN_LOCAL = (PN_CHARS_U / ':' / [0-9] / PLX ) ((PN_CHARS / '.' / ':' / PLX)* (PN_CHARS / ':' / PLX))?
+// '$' is added
+PN_LOCAL = ( '$' / PN_CHARS_U / ':' / [0-9] / PLX ) (PN_CHARS / '.' / ':' / PLX)*
 {
-  return base + (rest||[]).join('');
+  return text();
 }
 
 // [170] PLX ::= PERCENT | PN_LOCAL_ESC
 PLX = PERCENT / PN_LOCAL_ESC
 
 // [171] PERCENT ::= '%' HEX HEX
-PERCENT = h:('%' HEX HEX)
-{
-  return h.join('');
-}
+PERCENT = '%' HEX HEX
 
 // [172] HEX ::= [0-9] | [A-F] | [a-f]
 HEX = [0-9] / [A-F] / [a-f]
 
 // [173] PN_LOCAL_ESC ::= '\' ( '_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%' )
-PN_LOCAL_ESC = '\\' c:( '_' / '~' / '.' / '-' / '!' / '$' / '&' / "'" / '(' / ')' / '*' / '+' / ',' / ';' / ':' / '=' / '/' / '?' / '#' / '@' / '%' )
-{
-  return '\\' + c;
-}
+PN_LOCAL_ESC = '\\' ( '_' / '~' / '.' / '-' / '!' / '$' / '&' / "'" / '(' / ')' / '*' / '+' / ',' / ';' / ':' / '=' / '/' / '?' / '#' / '@' / '%' )
