@@ -277,23 +277,27 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     return;
   }
   if (['tsv', 'text', 'n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
-    let outputStr = '';
     switch (opts.outfmt) {
       case 'tsv':
-      outputStr += jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr));
+        console.log(jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr)));
         for (let i = 1; i < bodies.length; i++) {
-          outputStr += '\n' + jsonToTsv(bodies[i], false, Boolean(opts.abbr));
+          console.log(jsonToTsv(bodies[i], false, Boolean(opts.abbr)));
         }
-        printTsv(outputStr);
+        if (opts.sort) {
+          console.error('Cannot sort lines');
+        }
+        if (opts.alignColumn) {
+          console.error('Cannot align columns');
+        }
         break;
       case 'text':
-        outputStr += bodies[0];
-        // remove header line for i > 0
+        let outputStr = bodies[0];
         for (let i = 1; i < bodies.length; i++) {
           if (!bodies[i - 1].endsWith('\n')) {
             outputStr += '\n';
           }
           outputStr += bodies[i].substring(bodies[i].indexOf('\n') + 1);
+          // remove header line for i > 0
         }
         printTsv(outputStr);
         break;
