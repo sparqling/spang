@@ -271,25 +271,27 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     } else {
       console.log(bodies[0]);
     }
-  } else if (opts.outfmt === 'tsv') {
-    console.log(jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr)));
-    for (let i = 1; i < bodies.length; i++) {
-      console.log(jsonToTsv(bodies[i], false, Boolean(opts.abbr)));
+  } else if (['tsv', 'text'].includes(opts.outfmt)) {
+    if (opts.outfmt === 'tsv') {
+      console.log(jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr)));
+      for (let i = 1; i < bodies.length; i++) {
+        console.log(jsonToTsv(bodies[i], false, Boolean(opts.abbr)));
+      }
+    } else if (opts.outfmt === 'text') {
+      console.log(bodies[0]);
+      for (let i = 1; i < bodies.length; i++) {
+        if (!bodies[i - 1].endsWith('\n')) {
+          console.log();
+        }
+        const after_header = bodies[i].indexOf('\n') + 1;
+        console.log(bodies[i].substring(after_header));
+      }
     }
     if (opts.sort) {
-      console.error('Cannot sort lines');
+      console.error('Cannot sort lines with pagination');
     }
     if (opts.alignColumn) {
-      console.error('Cannot align columns');
-    }
-  } else if (opts.outfmt === 'text') {
-    console.log(bodies[0]);
-    for (let i = 1; i < bodies.length; i++) {
-      if (!bodies[i - 1].endsWith('\n')) {
-        console.log();
-      }
-      const after_header = bodies[i].indexOf('\n') + 1;
-      console.log(bodies[i].substring(after_header));
+      console.error('Cannot align columns with pagination');
     }
   } else if (['n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
     for (let i = 0; i < bodies.length; i++) {
