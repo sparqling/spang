@@ -271,12 +271,7 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     } else {
       console.log(bodies[0]);
     }
-    if (opts.time) {
-      console.error('Time of query: %dms', end);
-    }
-    return;
-  }
-  if (['tsv', 'text', 'n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
+  } else if (['tsv', 'text', 'n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
     switch (opts.outfmt) {
       case 'tsv':
         console.log(jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr)));
@@ -311,6 +306,9 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     for (let i = 0; i < bodies.length; i++) {
       fs.writeFileSync(`result${i + 1}.out`, bodies[i]);
     }
+  }
+  if (opts.time) {
+    console.error('Time of query: %dms', end);
   }
 });
 
