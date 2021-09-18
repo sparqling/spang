@@ -266,6 +266,12 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
   if (bodies.length === 1) {
     if (opts.outfmt === 'tsv') {
       printTsv(jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr)));
+    } else if (opts.outfmt === 'text') {
+      const header_pos = bodies[0].indexOf('\n');
+      if (opts.vars) {
+        process.stdout.write(bodies[0].substring(0, header_pos + 1).replace(/"/g, ''));
+      }
+      process.stdout.write(bodies[0].substring(header_pos + 1));
     } else if (bodies[0].slice(-1) === '\n') {
       process.stdout.write(bodies[0]);
     } else {
@@ -278,13 +284,12 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
         console.log(jsonToTsv(bodies[i], false, Boolean(opts.abbr)));
       }
     } else if (opts.outfmt === 'text') {
-      console.log(bodies[0]);
-      for (let i = 1; i < bodies.length; i++) {
-        if (!bodies[i - 1].endsWith('\n')) {
-          console.log();
-        }
-        const after_header = bodies[i].indexOf('\n') + 1;
-        console.log(bodies[i].substring(after_header));
+      const header_pos = bodies[0].indexOf('\n');
+      if (opts.vars) {
+        process.stdout.write(bodies[0].substring(0, header + 1).replace(/"/g, ''));
+      }
+      for (let i = 0; i < bodies.length; i++) {
+        process.stdout.write(bodies[i].substring(header + 1));
       }
     }
     if (opts.sort) {
