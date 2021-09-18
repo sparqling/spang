@@ -271,35 +271,30 @@ querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, 
     } else {
       console.log(bodies[0]);
     }
-  } else if (['tsv', 'text', 'n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
-    switch (opts.outfmt) {
-      case 'tsv':
-        console.log(jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr)));
-        for (let i = 1; i < bodies.length; i++) {
-          console.log(jsonToTsv(bodies[i], false, Boolean(opts.abbr)));
-        }
-        if (opts.sort) {
-          console.error('Cannot sort lines');
-        }
-        if (opts.alignColumn) {
-          console.error('Cannot align columns');
-        }
-        break;
-      case 'text':
-        let outputStr = bodies[0];
-        for (let i = 1; i < bodies.length; i++) {
-          if (!bodies[i - 1].endsWith('\n')) {
-            outputStr += '\n';
-          }
-          outputStr += bodies[i].substring(bodies[i].indexOf('\n') + 1);
-          // remove header line for i > 0
-        }
-        printTsv(outputStr);
-        break;
-      default:
-        for (let i = 0; i < bodies.length; i++) {
-          console.log(bodies[i]);
-        }
+  } else if (opts.outfmt === 'tsv') {
+    console.log(jsonToTsv(bodies[0], Boolean(opts.vars), Boolean(opts.abbr)));
+    for (let i = 1; i < bodies.length; i++) {
+      console.log(jsonToTsv(bodies[i], false, Boolean(opts.abbr)));
+    }
+    if (opts.sort) {
+      console.error('Cannot sort lines');
+    }
+    if (opts.alignColumn) {
+      console.error('Cannot align columns');
+    }
+  } else if (opts.outfmt === 'text') {
+    let outputStr = bodies[0];
+    for (let i = 1; i < bodies.length; i++) {
+      if (!bodies[i - 1].endsWith('\n')) {
+        outputStr += '\n';
+      }
+      outputStr += bodies[i].substring(bodies[i].indexOf('\n') + 1);
+      // remove header line for i > 0
+    }
+    printTsv(outputStr);
+  } else if (['n-triples', 'nt', 'turtle', 'ttl'].includes(opts.outfmt)) {
+    for (let i = 0; i < bodies.length; i++) {
+      console.log(bodies[i]);
     }
   } else {
     console.error('The results are paginated. Those pages are saved as result1.out, result2.out,....');
