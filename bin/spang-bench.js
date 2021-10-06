@@ -12,7 +12,6 @@ const readFile = (path) => fs.readFileSync(path, 'utf8').toString();
 const opts = program
   .option('-c, --command <COMMAND>', 'command', 'spang2')
   .option('-e, --endpoint <ENDPOINT>', 'target endpoint')
-  .option('-t, --time', 'output time')
   .option('-n, --iteration <ITERATION_NUM>', 'number of iteration of measurement', 1)
   .option('-a, --average', 'calculate average time')
   .option('-s, --sort', 'sort resulting lines before validation')
@@ -23,6 +22,7 @@ const opts = program
   .option('--output-error', 'output to stderr')
   .option('--sec', 'output in "sec" (default: in "ms")')
   .option('-H, --header', 'output header')
+  .option('-T, --no-time', 'output without time')
   .option('-V, --no-validation', 'without validation of the result')
   .option('-v, --verbose', 'output progress to stderr')
   .arguments('[json_or_queries...]')
