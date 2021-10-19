@@ -82,7 +82,7 @@ if (opts.subject || opts.predicate || opts.object ||
 } else if (templatePath != null) {
   templatePath = alias.replaceIfAny(templatePath);
   const templateURL = prefixModule.expandPrefixedUri(templatePath);
-  if (templateURL) {
+  if (util.isValidUrl(templateURL)) {
     const syncRequest = require('sync-request');
     try {
       sparqlTemplate = syncRequest('GET', templateURL).getBody('utf8');
