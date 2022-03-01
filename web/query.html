@@ -48,7 +48,7 @@
     <br>
     <textarea id="code" name="code" data-endpoint="http://example.com"></textarea>
     <br>
-    <button id="submit_button_query" type="button" style="display: none;">
+    <button id="submit_button_query" type="button" >
       Exec
     </button>
   </form>
@@ -64,7 +64,7 @@
   selector("#breadcrumb-library").href = `./library.html?name=${libraryName}`;
   selector("#breadcrumb-current").innerText = queryName;
   
-  $(document).ready(function() {
+  $(document).ready(function(event) {
     let textArea = document.getElementById("code");
     let originalValue = textArea.value;
 
@@ -84,10 +84,14 @@
         }
       }
     });
+
+    const historyTraversal = event.persisted ||
+      ( typeof window.performance != "undefined" &&
+        window.performance.navigation.type === 2 );
     $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
       let matadata = spang.retrieveMetadata(res);
 
-      if(!editor.getDoc().getValue()) {
+      if ( !historyTraversal ) {
         editor.getDoc().setValue(spang.makeSparql(res, metadata, {}, []));
       }
 
@@ -105,10 +109,9 @@
           }
         );
       }
-      $('#submit_button_query').show();
     });
-    
   });
+  
 
 </script>
 
