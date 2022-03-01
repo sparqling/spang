@@ -965,7 +965,7 @@ function getBindings(vars, b, abbreviate) {
         return `"${b[v].value}"^^<${b[v].datatype}>`;
       }
     } else if (b[v].type === 'bnode') {
-      return `_:${b[v].value}`;
+      return `<${b[v].value}>`;
     } else {
       return `"${b[v].value}"`;
     }
@@ -986,6 +986,16 @@ exports.jsonToTsv = (body, withHeader = false, abbreviate = false) => {
 
   return tsv;
 };
+
+exports.isValidUrl = (_string) => {
+  let url_string; 
+  try {
+    url_string = new URL(_string);
+  } catch (_) {
+    return false;  
+  }
+  return url_string.protocol === "http:" || url_string.protocol === "https:" ;
+}
 
 }).call(this,require("buffer").Buffer)
 },{"../lib/prefix.js":3,"buffer":8}],6:[function(require,module,exports){

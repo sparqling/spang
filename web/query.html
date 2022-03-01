@@ -28,7 +28,7 @@
       SPANG
     </a>
     &gt;&gt;
-    <a href="/index.html">
+    <a href="./index.html">
       Library
     </a>
     &gt;&gt;
@@ -47,7 +47,7 @@
     <br>
     <textarea id="code" name="code" data-endpoint="http://example.com"></textarea>
     <br>
-    <button id="submit_button_query" type="button">
+    <button id="submit_button_query" type="button" style="display: none;">
       Exec
     </button>
   </form>
@@ -83,25 +83,30 @@
         }
       }
     });
-    
     $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
-      editor.getDoc().setValue(res);
+      let matadata = spang.retrieveMetadata(res);
+
+      if(!editor.getDoc().getValue()) {
+        editor.getDoc().setValue(spang.makeSparql(res, metadata, {}, []));
+      }
+
+      let endpoint = metadata.endpoint;
+      if (endpoint === "https://query.wikidata.org/") {
+        $('#submit_button_query').on('click',
+          function () {
+            window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
+          }
+        );
+      } else if (endpoint) {
+        $('#submit_button_query').on('click',
+          function () {
+            window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
+          }
+        );
+      }
+      $('#submit_button_query').show();
     });
     
-    let endpoint = $('#code').data('endpoint');
-    if (endpoint == "https://query.wikidata.org/") {
-      $('#submit_button_query').on('click',
-        function () {
-          window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
-        }
-      );
-    } else {
-      $('#submit_button_query').on('click',
-        function () {
-          window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
-        }
-      );
-    }
   });
 
 </script>

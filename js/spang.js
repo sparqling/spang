@@ -8,6 +8,7 @@ const version = require('../package.json').version;
 const syncRequest = require('sync-request');
 const { jsonToTsv } = require('../lib/util.js');
 spang.makeSparql = require('../lib/make_sparql.js').makeSparql;
+spang.retrieveMetadata = metadataModule.retrieveMetadata;
 
 spang.getTemplate = (url, callback) => {
   var options = {
@@ -34,7 +35,7 @@ spang.shortcut = require('../lib/shortcut.js').shortcut;
 spang.query = (sparqlTemplate, endpoint, options, callback) => {
   var sparql, metadata;
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
-  sparql = spang.makeSparql(sparqlTemplate, {}, options.param, []);
+  sparql = spang.makeSparql(sparqlTemplate, metadata, options.param, []);
   if(!endpoint) {
     endpoint = metadata.endpoint;
   }
@@ -857,7 +858,7 @@ function getBindings(vars, b, abbreviate) {
         return `"${b[v].value}"^^<${b[v].datatype}>`;
       }
     } else if (b[v].type === 'bnode') {
-      return `_:${b[v].value}`;
+      return `<${b[v].value}>`;
     } else {
       return `"${b[v].value}"`;
     }
@@ -878,6 +879,16 @@ exports.jsonToTsv = (body, withHeader = false, abbreviate = false) => {
 
   return tsv;
 };
+
+exports.isValidUrl = (_string) => {
+  let url_string; 
+  try {
+    url_string = new URL(_string);
+  } catch (_) {
+    return false;  
+  }
+  return url_string.protocol === "http:" || url_string.protocol === "https:" ;
+}
 
 }).call(this,require("buffer").Buffer)
 },{"../lib/prefix.js":6,"buffer":119}],11:[function(require,module,exports){

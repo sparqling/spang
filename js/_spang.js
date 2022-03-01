@@ -7,6 +7,7 @@ const version = require('../package.json').version;
 const syncRequest = require('sync-request');
 const { jsonToTsv } = require('../lib/util.js');
 spang.makeSparql = require('../lib/make_sparql.js').makeSparql;
+spang.retrieveMetadata = metadataModule.retrieveMetadata;
 
 spang.getTemplate = (url, callback) => {
   var options = {
@@ -33,7 +34,7 @@ spang.shortcut = require('../lib/shortcut.js').shortcut;
 spang.query = (sparqlTemplate, endpoint, options, callback) => {
   var sparql, metadata;
   metadata = metadataModule.retrieveMetadata(sparqlTemplate);
-  sparql = spang.makeSparql(sparqlTemplate, {}, options.param, []);
+  sparql = spang.makeSparql(sparqlTemplate, metadata, options.param, []);
   if(!endpoint) {
     endpoint = metadata.endpoint;
   }
