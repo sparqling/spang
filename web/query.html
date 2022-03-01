@@ -60,7 +60,7 @@
   let libraryName = params.get("library");
   let queryName = params.get("query");
   selector("#breadcrumb-library").innerText = libraryName;
-  selector("#breadcrumb-library").href = `/library.html?name=${libraryName}`;
+  selector("#breadcrumb-library").href = `./library.html?name=${libraryName}`;
   selector("#breadcrumb-current").innerText = queryName;
   
   $(document).ready(function() {
