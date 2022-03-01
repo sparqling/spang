@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)http://localhost:7070/library -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="./css/application.css" data-turbolinks-track="reload">
+  <title>
+    SPANG
+  </title>
+  <link rel="shortcut icon" type="image/x-icon"
+        href="./favicon.ico">
+  <link rel="stylesheet" href="./SPANG_files/common-header-and-footer.css">
+  <script src="./js/common.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body style="padding-top: 24px;">
+<script id="common-header-and-footer__script" src="./SPANG_files/common-header-and-footer.js" style="display: block"
+        type="text/javascript"></script>
+<div class="content_wrapper_wide">
+  <div class="small">
+    <a href="https://spang.dbcls.jp/">
+      SPANG
+    </a>
+    &gt;&gt;
+    <a href="/index.html">
+      Library
+    </a>
+    &gt;&gt;
+    <label id="breadcrumb-current">
+    </label>
+  </div>
+
+  <p>
+  </p>
+  <h1 id="title"></h1>
+  <div id="contents-area">
+  </div>
+  <p></p>
+
+</div>
+
+
+</body>
+<script>
+  let params = new URLSearchParams(window.location.search);
+  let libraryName = params.get("name");
+  selector("#breadcrumb-current").innerText = libraryName;
+  selector("#title").innerText = `SPARQL library for ${libraryName}`;
+  
+  $.get(`https://api.github.com/repos/${repo}/contents/library/${libraryName}`, (res) => {
+    for (let file of res) {
+      if (file.type === 'file') {
+        let link = document.createElement('a');
+        link.className = "link_title";
+        link.innerText = file.name;
+        link.href = `/query.html?library=${libraryName}&query=${file.name}`;
+        let area = document.querySelector('#contents-area');
+        area.appendChild(link);
+        area.appendChild(document.createElement("br"));
+        area.appendChild(document.createElement("br"));
+      }
+    }
+  });
+  
+
+</script>
+
+</html>

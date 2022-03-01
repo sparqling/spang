@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)http://localhost:7070/library -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="./css/application.css">
+  <title>
+    SPANG
+  </title>
+  <link rel="shortcut icon" type="image/x-icon"
+        href="./favicon.ico">
+  <link rel="stylesheet" href="./SPANG_files/common-header-and-footer.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sparql/sparql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+  <script src="./js/sparql-support.js"></script>
+  <script src="./js/common.js"></script>
+</head>
+<body style="padding-top: 24px;">
+<script id="common-header-and-footer__script" src="./SPANG_files/common-header-and-footer.js" style="display: block"
+        type="text/javascript"></script>
+<div class="content_wrapper_wide">
+  <div class="small">
+    <a href="https://spang.dbcls.jp/">
+      SPANG
+    </a>
+    &gt;&gt;
+    <a href="/index.html">
+      Library
+    </a>
+    &gt;&gt;
+    <a id="breadcrumb-library">
+    </a>
+    &gt;&gt;
+    <label id="breadcrumb-current">
+    </label>
+  </div>
+
+  <p>
+  </p>
+  <h1>Execute SPARQL query</h1>
+  <form>
+    <br>
+    <br>
+    <textarea id="code" name="code" data-endpoint="http://example.com"></textarea>
+    <br>
+    <button id="submit_button_query" type="button">
+      Exec
+    </button>
+  </form>
+</div>
+
+
+</body>
+<script>
+  let params = new URLSearchParams(window.location.search);
+  let libraryName = params.get("library");
+  let queryName = params.get("query");
+  selector("#breadcrumb-library").innerText = libraryName;
+  selector("#breadcrumb-library").href = `/library.html?name=${libraryName}`;
+  selector("#breadcrumb-current").innerText = queryName;
+  
+  $(document).ready(function() {
+    let textArea = document.getElementById("code");
+    let originalValue = textArea.value;
+
+    let editor = CodeMirror.fromTextArea(textArea, {
+      mode: "application/sparql-query",
+      matchBrackets: true,
+      autoCloseBrackets: true,
+      lineNumbers: true,
+      sparqlSupportAutoComp: true,
+      scrollbarStyle: "null",
+      viewportMargin: Infinity,
+      extraKeys: {
+        "Tab": function (instance) {
+          return false;
+        }, "Ctrl-Space": function (instance) {
+          return false;
+        }
+      }
+    });
+    
+    $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
+      editor.getDoc().setValue(res);
+    });
+    
+    let endpoint = $('#code').data('endpoint');
+    if (endpoint == "https://query.wikidata.org/") {
+      $('#submit_button_query').on('click',
+        function () {
+          window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
+        }
+      );
+    } else {
+      $('#submit_button_query').on('click',
+        function () {
+          window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
+        }
+      );
+    }
+  });
+
+</script>
+
+</html>
