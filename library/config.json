@@ -1,5 +1,6 @@
-{
-  "agrold": {
+[
+  {
+    "name": "agrold",
     "title": "AgroLD",
     "sparql_editor": "yasgui",
     "endpoint": "http://agrold.southgreen.fr/sparql",
@@ -15,7 +16,8 @@
       "list_pathway.rq"
     ]
   },
-  "disgenet": {
+  {
+    "name": "disgenet",
     "title": "DisGenet",
     "sparql_editor": "yasgui",
     "endpoint": "http://rdf.disgenet.org/sparql/",
@@ -25,60 +27,71 @@
     ],
     "schema": "http://www.disgenet.org/web/DisGeNET/menu/rdf#schema"
   },
-  "wikipathways": {
+  {
+    "name": "wikipathways",
     "title": "WikiPathways",
     "endpoint": "http://sparql.wikipathways.org/"
   },
-  "dbpedia": {
+  {
+    "name": "dbpedia",
     "title": "DBpedia",
     "sparql_editor": "yasgui",
     "endpoint": "http://dbpedia.org/sparql"
   },
-  "uniprot": {
+  {
+    "name": "uniprot",
     "title": "UniProt",
     "sparql_editor": "yasgui",
     "endpoint": "http://sparql.uniprot.org"
   },
-  "atlas": {
+  {
+    "name": "atlas",
     "title": "Expression Atlas",
     "sparql_editor": "yasgui",
     "endpoint": "http://www.ebi.ac.uk/rdf/services/sparql",
     "schema": "http://www.ebi.ac.uk/rdf/documentation/atlas"
   },
-  "chembl": {
+  {
+    "name": "chembl",
     "title": "ChEMBL",
     "sparql_editor": "yasgui",
     "endpoint": "http://www.ebi.ac.uk/rdf/services/sparql",
     "schema": "http://www.ebi.ac.uk/rdf/documentation/chembl"
   },
-  "ensembl": {
+  {
+    "name": "ensembl",
     "title": "Ensembl",
     "sparql_editor": "yasgui",
     "endpoint": "http://www.ebi.ac.uk/rdf/services/sparql",
     "schema": "http://www.ebi.ac.uk/rdf/documentation/chembl"
   },
-  "mbgd": {
+  {
+    "name": "mbgd",
     "title": "MBGD",
     "sparql_editor": "mbgd2015",
     "endpoint": "http://mbgd.genome.ad.jp:8047/sparql",
     "legend": "0"
   },
-  "wikidata": {
+  {
+    "name": "wikidata",
     "title": "Wikidata",
     "sparql_editor": "yasgui",
     "endpoint": "https://query.wikidata.org/"
   },
-  "oma": {
+  {
+    "name": "oma",
     "title": "OMA",
     "sparql_editor": "yasgui",
     "endpoint": "https://sparql.omabrowser.org/sparql"
   },
-  "togogenome": {
+  {
+    "name": "togogenome",
     "title": "TogoGenome",
     "sparql_editor": "yasgui",
     "endpoint": "http://togogenome.org/sparql"
   },
-  "homologene": {
+  {
+    "name": "homologene",
     "title": "HomoloGene",
     "endpoint": "https://orth.dbcls.jp/sparql",
     "queries": [
@@ -88,15 +101,17 @@
       "category_all.rq"
     ]
   },
-  "keggoc": {
+  {
+    "name": "keggoc",
     "title": "KEGG OC",
     "endpoint": "https://www.genome.jp/oc/proxy/sparql/",
     "queries": [
       "multi.rq"
     ]
   },
-  "general": {
+  {
+    "name": "general",
     "title": "general use",
     "endpoint": "http://dbpedia.org/sparql"
   }
-}
+]
