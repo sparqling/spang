@@ -46,7 +46,7 @@
   <form>
     <br>
     <br>
-    <textarea id="code" name="code" data-endpoint="http://example.com"></textarea>
+    <textarea id="code" name="code"></textarea>
     <br>
     <button id="submit_button_query" type="button" >
       Exec
@@ -91,20 +91,20 @@
     $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
       let matadata = spang.retrieveMetadata(res);
 
-      if ( !historyTraversal ) {
-        editor.getDoc().setValue(spang.makeSparql(res, metadata, {}, []));
-      }
+      editor.setValue(historyTraversal ? localStorage.getItem("lastQuery") : spang.makeSparql(res, metadata, {}, []));
 
       let endpoint = metadata.endpoint;
       if (endpoint === "https://query.wikidata.org/") {
         $('#submit_button_query').on('click',
           function () {
+            localStorage.setItem("lastQuery", editor.getValue());
             window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
           }
         );
       } else if (endpoint) {
         $('#submit_button_query').on('click',
           function () {
+            localStorage.setItem("lastQuery", editor.getValue());
             window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
           }
         );
