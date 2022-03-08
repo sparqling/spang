@@ -1,6 +1,6 @@
 #!/usr/bin/env spang2
 # @title Free text search in Virtuoso (count instances of each class)
-# @endpoint dbpedia
+# @endpoint https://dbpedia.org/sparql
 # @param arg1=okazaki 
 
 SELECT DISTINCT ?class ?instance ?label

@@ -1,10 +1,12 @@
+#!/usr/bin/env spang2
 # @title 
+# @endpoint https://dbpedia.org/sparql
 # @param arg1=Salmonella 
 
 SELECT ?label ?abst
 WHERE {
-    dbpedia:$arg1 rdfs:label ?label .
-    dbpedia:$arg1 dbo:abstract ?abst .
+    dbpedia:{{arg1}} rdfs:label ?label .
+    dbpedia:{{arg1}} dbo:abstract ?abst .
 
     BIND(lang(?label) AS ?lang)
     BIND(lang(?abst) AS ?abst_lang)
