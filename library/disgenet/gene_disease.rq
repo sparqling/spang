@@ -1,4 +1,6 @@
+#!/usr/bin/env spang2
 # @title Get disease associated with NCBI gene ID
+# @endpoint http://rdf.disgenet.org/sparql/
 # @param arg1=675 
 
 SELECT ?disease_name ?score ?publication ?date
