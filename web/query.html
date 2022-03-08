@@ -97,12 +97,14 @@
       selector("#breadcrumb-library").href = `./library.html?name=${libraryName}`;
       selector("#breadcrumb-current").innerText = queryName;
 
-      if(libraryConfig.endpoint) {
-        document.querySelector("#endpoint-div").innerHTML = `Endpoint: ${libraryConfig.title} ( <a href="${libraryConfig.endpoint}">${libraryConfig.endpoint}</a> )`;
-        $('#submit_button_query').show();
-      } 
       $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
         let metadata = spang.retrieveMetadata(res);
+        endpoint = metadata.endpoint || endpoint;
+
+        if(endpoint) {
+          document.querySelector("#endpoint-div").innerHTML = `Endpoint: ${libraryConfig.title} ( <a href="${endpoint}">${endpoint}</a> )`;
+          $('#submit_button_query').show();
+        }
         if(historyTraversal) {
           editor.setValue(localStorage.getItem("lastQuery"));
         } else {
