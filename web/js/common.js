@@ -1,4 +1,4 @@
 const repo = "sparqling/spang";
-const tag = "master";
+const tag = "develop";
 
 let selector = document.querySelector.bind(document);
