@@ -1,8 +1,11 @@
+#!/usr/bin/env spang2
+# @endpoint https://sparql.wikipathways.org/sparql
 # @title Get pathway from gene name
 
-#stdin geneid:1577
+# @input (geneid:1577)
 # SELECT ?source (COUNT(?gene) AS ?count)
 # SELECT ?type (COUNT(?pathway) AS ?count)
+PREFIX geneid: <https://identifiers.org/ncbigene/>
 SELECT ?gene_label ?organism_name ?pathway_label ?pathway
 WHERE {
     ?gene rdfs:label ?gene_label ;
@@ -10,7 +13,7 @@ WHERE {
     ?pathway a wp:Pathway ;
              dc:title ?pathway_label ;
              wp:organismName ?organism_name .
-    VALUES (?gene) { $STDIN }
+    VALUES (?gene) { {{INPUT}} }
 }
 # ORDER BY DESC(?count)
 
