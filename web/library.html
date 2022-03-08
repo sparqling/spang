@@ -61,7 +61,6 @@
   function showQuery(library, query) {
     $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${library}/${query}`, (res) => {
       let metadata = spang.retrieveMetadata(res);
-      console.log(metadata);
       addLink(query, `./query.html?library=${library}&query=${query}`, '', false);
       area.appendChild(document.createElement("br"));
       if(metadata.title) {
@@ -71,7 +70,6 @@
         area.appendChild(div);
       }
       if(metadata.param && metadata.param.size > 0) {
-        console.log(metadata.param);
         let div = document.createElement('div');
         div.className = "indented";
         div.innerText = `(ex: ${ Array.from(metadata.param.values()).join(', ')})`;

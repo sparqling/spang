@@ -83,6 +83,7 @@
         }
       }
     });
+    editor.setValue("");
     
     const historyTraversal = event.persisted ||
       ( typeof window.performance != "undefined" &&
@@ -103,11 +104,10 @@
       $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
         let metadata = spang.retrieveMetadata(res);
         if(historyTraversal) {
-          editor.setValue(localStorage.getItem("lastQuery"))
+          editor.setValue(localStorage.getItem("lastQuery"));
         } else {
           let sparql = spang.makeSparql(res, metadata, {}, []);
           let lines = sparql.split("\n");
-          console.log(lines);
           lines = lines.filter(line => !line.startsWith("#!")); // Remove shebang line
           lines = lines.filter(line => !(line.startsWith("#") && line.substring(1).trim().startsWith("@option"))); // Remove lines of @option
           editor.setValue(lines.join("\n"));
