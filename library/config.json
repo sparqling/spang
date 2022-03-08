@@ -42,6 +42,11 @@
     "name": "uniprot",
     "title": "UniProt",
     "sparql_editor": "yasgui",
+    "queries": [
+      "count_org",
+      "enst.rq",
+      "filter_by_go.rq",
+    ],
     "endpoint": "http://sparql.uniprot.org"
   },
   {
