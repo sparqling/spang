@@ -63,13 +63,13 @@
     "endpoint": "http://www.ebi.ac.uk/rdf/services/sparql",
     "schema": "http://www.ebi.ac.uk/rdf/documentation/chembl"
   },
-  {
-    "name": "ensembl",
-    "title": "Ensembl",
-    "sparql_editor": "yasgui",
-    "endpoint": "http://www.ebi.ac.uk/rdf/services/sparql",
-    "schema": "http://www.ebi.ac.uk/rdf/documentation/chembl"
-  },
+  // {
+  //   "name": "ensembl",
+  //   "title": "Ensembl",
+  //   "sparql_editor": "yasgui",
+  //   "endpoint": "http://www.ebi.ac.uk/rdf/services/sparql",
+  //   "schema": "http://www.ebi.ac.uk/rdf/documentation/chembl"
+  // },
   {
     "name": "mbgd",
     "title": "MBGD",
