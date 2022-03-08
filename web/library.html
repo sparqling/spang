@@ -10,8 +10,9 @@
   <link rel="shortcut icon" type="image/x-icon"
         href="./favicon.ico">
   <link rel="stylesheet" href="./SPANG_files/common-header-and-footer.css">
-  <script src="./js/common.js"></script>
+  <script src="https://unpkg.com/json5@^2.0.0/dist/index.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="./js/common.js"></script>
 </head>
 <body style="padding-top: 24px;">
 <script id="common-header-and-footer__script" src="./SPANG_files/common-header-and-footer.js" style="display: block"
@@ -33,7 +34,7 @@
   <p>
   </p>
   <h1 id="title"></h1>
-  <div id="contents-area">
+  <div id="contents-area" class="content_wrapper">
   </div>
   <p></p>
 
@@ -44,25 +45,47 @@
 <script>
   let params = new URLSearchParams(window.location.search);
   let libraryName = params.get("name");
+  let area = document.querySelector('#contents-area');
   selector("#breadcrumb-current").innerText = libraryName;
   selector("#title").innerText = `SPARQL library for ${libraryName}`;
-  
-  $.get(`https://api.github.com/repos/${repo}/contents/library/${libraryName}`, (res) => {
-    for (let file of res) {
-      if (file.type === 'file') {
-        let link = document.createElement('a');
-        link.className = "link_title";
-        link.innerText = file.name;
-        link.href = `./query.html?library=${libraryName}&query=${file.name}`;
-        let area = document.querySelector('#contents-area');
-        area.appendChild(link);
-        area.appendChild(document.createElement("br"));
-        area.appendChild(document.createElement("br"));
+
+  function addLink(text, url, className = null) {
+    let link = document.createElement('a');
+    console.log(className);
+    link.className = className === null ? "link_title" : className;
+    link.innerText = text;
+    link.href = url;
+    area.appendChild(link);
+    area.appendChild(document.createElement("br"));
+    area.appendChild(document.createElement("br"));
+  }
+
+  onConfigLoad.push(() => {
+    let libraryConfig = configList.find(config => config.name === libraryName);
+    if(libraryConfig.schema) {
+      addLink(`${libraryConfig.title} RDF schema`, libraryConfig.schema);
+    }
+    if(libraryConfig.endpoint) {
+      addLink(`${libraryConfig.title} RDF endpoint`, libraryConfig.endpoint);
+    }
+    let subHeader = document.createElement('h2');
+    subHeader.innerText = "Select SPARQL template";
+    area.appendChild(subHeader);
+    
+    if(libraryConfig.queries) {
+      for (let query of libraryConfig.queries) {
+        addLink(query, `./query.html?library=${libraryName}&query=${query}`, '');
       }
+    } else {
+      $.get(`https://api.github.com/repos/${repo}/contents/library/${libraryName}?ref=${tag}`, (res) => {
+        for (let file of res) {
+          if (file.type === 'file' && file.name.endsWith(".rq")) {
+            addLink(file.name, `./query.html?library=${libraryName}&query=${file.name}`);
+          }
+        }
+      });
     }
   });
   
-
 </script>
-
 </html>

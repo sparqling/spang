@@ -10,6 +10,7 @@
   <link rel="shortcut icon" type="image/x-icon"
         href="./favicon.ico">
   <link rel="stylesheet" href="./SPANG_files/common-header-and-footer.css">
+  <script src="https://unpkg.com/json5@^2.0.0/dist/index.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
@@ -17,6 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
   <script src='https://cdn.jsdelivr.net/gh/sparqling/spang@864c3ac/js/spang.min.js'></script>
+  
   <script src="./js/sparql-support.js"></script>
   <script src="./js/common.js"></script>
 </head>
@@ -44,11 +46,12 @@
   </p>
   <h1>Execute SPARQL query</h1>
   <form>
+    <div id="endpoint-div"></div>
     <br>
     <br>
     <textarea id="code" name="code"></textarea>
     <br>
-    <button id="submit_button_query" type="button" >
+    <button id="submit_button_query" type="button" style="display: none;">
       Exec
     </button>
   </form>
@@ -85,31 +88,49 @@
       }
     });
 
+    function addLink(text, url, className = null) {
+      let link = document.createElement('a');
+      console.log(className);
+      link.className = className === null ? "link_title" : className;
+      link.innerText = text;
+      link.href = url;
+      area.appendChild(link);
+      area.appendChild(document.createElement("br"));
+      area.appendChild(document.createElement("br"));
+    }
+
     const historyTraversal = event.persisted ||
       ( typeof window.performance != "undefined" &&
         window.performance.navigation.type === 2 );
-    $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
-      let matadata = spang.retrieveMetadata(res);
+    onConfigLoad.push(() => {
+      let libraryConfig = configList.find(config => config.name === libraryName);
+      let endpoint = libraryConfig.endpoint;
+      if(libraryConfig.endpoint) {
+        document.querySelector("#endpoint-div").innerHTML = `Endpoint: ${libraryConfig.title} ( <a href="${libraryConfig.endpoint}">${libraryConfig.endpoint}</a>)`;
+        $('#submit_button_query').show();
+      } 
+      $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
+        let matadata = spang.retrieveMetadata(res);
 
-      editor.setValue(historyTraversal ? localStorage.getItem("lastQuery") : spang.makeSparql(res, metadata, {}, []));
+        editor.setValue(historyTraversal ? localStorage.getItem("lastQuery") : spang.makeSparql(res, metadata, {}, []));
 
-      let endpoint = metadata.endpoint;
-      if (endpoint === "https://query.wikidata.org/") {
-        $('#submit_button_query').on('click',
-          function () {
-            localStorage.setItem("lastQuery", editor.getValue());
-            window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
-          }
-        );
-      } else if (endpoint) {
-        $('#submit_button_query').on('click',
-          function () {
-            localStorage.setItem("lastQuery", editor.getValue());
-            window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
-          }
-        );
-      }
-    });
+        if (endpoint === "https://query.wikidata.org/") {
+          $('#submit_button_query').on('click',
+            function () {
+              localStorage.setItem("lastQuery", editor.getValue());
+              window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
+            }
+          );
+        } else if (endpoint) {
+          $('#submit_button_query').on('click',
+            function () {
+              localStorage.setItem("lastQuery", editor.getValue());
+              window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
+            }
+          );
+        }
+      });
+    })
   });
   
 
