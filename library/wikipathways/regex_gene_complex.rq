@@ -1,4 +1,6 @@
+#!/usr/bin/env spang2
 # @title Get complex from gene name
+# @endpoint https://sparql.wikipathways.org/sparql
 # @param arg1=cyp 
 
 # SELECT ?source (COUNT(?gene) AS ?count)
@@ -14,7 +16,7 @@ WHERE {
     # ?complex a wp:Interaction .
     ?complex a wp:Complex .
     ?complex dct:isPartOf/wp:organismName ?organism_name .
-    FILTER regex(str(?gene_label), "$arg1", "i")
+    FILTER regex(str(?gene_label), "{{arg1}}", "i")
     # FILTER (?type != wp:Pathway)
     # MINUS {
     # 	?complex a wp:Pathway .
