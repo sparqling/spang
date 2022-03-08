@@ -46,36 +46,38 @@
   let libraryName = params.get("name");
   let area = document.querySelector('#contents-area');
 
-  function addLink(text, url, className = null, addNewlines = true) {
+  function addLink(text, url, target, className = null, addNewlines = true) {
     let link = document.createElement('a');
     link.className = className === null ? "link_title" : className;
     link.innerText = text;
     link.href = url;
-    area.appendChild(link);
+    target.appendChild(link);
     if(addNewlines) {
-      area.appendChild(document.createElement("br"));
-      area.appendChild(document.createElement("br"));
+      target.appendChild(document.createElement("br"));
+      target.appendChild(document.createElement("br"));
     }
   }
   
   function showQuery(library, query) {
+    let queryArea = document.createElement('div');
+    area.appendChild(queryArea);
     $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${library}/${query}`, (res) => {
       let metadata = spang.retrieveMetadata(res);
-      addLink(query, `./query.html?library=${library}&query=${query}`, '', false);
-      area.appendChild(document.createElement("br"));
+      addLink(query, `./query.html?library=${library}&query=${query}`, queryArea, '', false);
+      queryArea.appendChild(document.createElement("br"));
       if(metadata.title) {
         let div = document.createElement('div');
         div.className = "indented";
         div.innerText = metadata.title;
-        area.appendChild(div);
+        queryArea.appendChild(div);
       }
       if(metadata.param && metadata.param.size > 0) {
         let div = document.createElement('div');
         div.className = "indented";
         div.innerText = `(ex: ${ Array.from(metadata.param.values()).join(', ')})`;
-        area.appendChild(div);
+        queryArea.appendChild(div);
       }
-      area.appendChild(document.createElement("br"));
+      queryArea.appendChild(document.createElement("br"));
     });
   }
 
@@ -85,10 +87,10 @@
     selector("#breadcrumb-current").innerText = title;
     selector("#title").innerText = `SPARQL library for ${title}`;
     if(libraryConfig.schema) {
-      addLink(`${libraryConfig.title} RDF schema`, libraryConfig.schema);
+      addLink(`${libraryConfig.title} RDF schema`, libraryConfig.schema, area);
     }
     if(libraryConfig.endpoint) {
-      addLink(`${libraryConfig.title} RDF endpoint`, libraryConfig.endpoint);
+      addLink(`${libraryConfig.title} RDF endpoint`, libraryConfig.endpoint, area);
     }
     let subHeader = document.createElement('h2');
     subHeader.innerText = "Select SPARQL template";
