@@ -1,4 +1,6 @@
+#!/usr/bin/env spang2
 # @title Get specific gda, e.g. NCBI gene ID 4204 and C0035372("Rett Syndrome")
+# @endpoint http://rdf.disgenet.org/sparql/
 
 PREFIX pmid: <http://identifiers.org/pubmed/>
 PREFIX disgenet_source: <http://rdf.disgenet.org/v4.0.0/void/>
