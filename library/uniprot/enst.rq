@@ -1,5 +1,6 @@
 #!/usr/bin/env spang2
-# @endpoint uniprot
+# @endpoint https://sparql.uniprot.org
+# @option -ac
 
 PREFIX enst: <http://rdf.ebi.ac.uk/resource/ensembl.transcript/>
 
