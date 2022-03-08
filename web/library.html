@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="./SPANG_files/common-header-and-footer.css">
   <script src="https://unpkg.com/json5@^2.0.0/dist/index.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src='https://cdn.jsdelivr.net/gh/sparqling/spang@864c3ac/js/spang.min.js'></script>
   <script src="./js/common.js"></script>
 </head>
 <body style="padding-top: 24px;">
@@ -47,15 +48,39 @@
   let libraryName = params.get("name");
   let area = document.querySelector('#contents-area');
 
-  function addLink(text, url, className = null) {
+  function addLink(text, url, className = null, addNewlines = true) {
     let link = document.createElement('a');
-    console.log(className);
     link.className = className === null ? "link_title" : className;
     link.innerText = text;
     link.href = url;
     area.appendChild(link);
-    area.appendChild(document.createElement("br"));
-    area.appendChild(document.createElement("br"));
+    if(addNewlines) {
+      area.appendChild(document.createElement("br"));
+      area.appendChild(document.createElement("br"));
+    }
+  }
+  
+  function showQuery(library, query) {
+    $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${library}/${query}`, (res) => {
+      let metadata = spang.retrieveMetadata(res);
+      console.log(metadata);
+      addLink(query, `./query.html?library=${library}&query=${query}`, '', false);
+      area.appendChild(document.createElement("br"));
+      if(metadata.title) {
+        let div = document.createElement('div');
+        div.className = "indented";
+        div.innerText = metadata.title;
+        area.appendChild(div);
+      }
+      if(metadata.param && metadata.param.size > 0) {
+        console.log(metadata.param);
+        let div = document.createElement('div');
+        div.className = "indented";
+        div.innerText = `(ex: ${ Array.from(metadata.param.values()).join(', ')})`;
+        area.appendChild(div);
+      }
+      area.appendChild(document.createElement("br"));
+    });
   }
 
   onConfigLoad.push(() => {
@@ -75,13 +100,13 @@
     
     if(libraryConfig.queries) {
       for (let query of libraryConfig.queries) {
-        addLink(query, `./query.html?library=${libraryName}&query=${query}`, '');
+        showQuery(libraryName, query)
       }
     } else {
       $.get(`https://api.github.com/repos/${repo}/contents/library/${libraryName}?ref=${tag}`, (res) => {
         for (let file of res) {
           if (file.type === 'file' && file.name.endsWith(".rq")) {
-            addLink(file.name, `./query.html?library=${libraryName}&query=${file.name}`);
+            showQuery(libraryName, file.name);
           }
         }
       });

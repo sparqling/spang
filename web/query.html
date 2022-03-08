@@ -113,7 +113,7 @@
         $('#submit_button_query').show();
       } 
       $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
-        let matadata = spang.retrieveMetadata(res);
+        let metadata = spang.retrieveMetadata(res);
 
         editor.setValue(historyTraversal ? localStorage.getItem("lastQuery") : spang.makeSparql(res, metadata, {}, []));
 
