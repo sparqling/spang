@@ -1,5 +1,5 @@
 #!/usr/bin/env spang2
-# @endpoint disgenet
+# @endpoint http://rdf.disgenet.org/sparql/
 
 PREFIX sio: <http://semanticscience.org/resource/>
 PREFIX ncit: <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#>
