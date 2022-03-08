@@ -46,8 +46,6 @@
   let params = new URLSearchParams(window.location.search);
   let libraryName = params.get("name");
   let area = document.querySelector('#contents-area');
-  selector("#breadcrumb-current").innerText = libraryName;
-  selector("#title").innerText = `SPARQL library for ${libraryName}`;
 
   function addLink(text, url, className = null) {
     let link = document.createElement('a');
@@ -62,6 +60,9 @@
 
   onConfigLoad.push(() => {
     let libraryConfig = configList.find(config => config.name === libraryName);
+    let title = libraryConfig.title || libraryName;
+    selector("#breadcrumb-current").innerText = title;
+    selector("#title").innerText = `SPARQL library for ${title}`;
     if(libraryConfig.schema) {
       addLink(`${libraryConfig.title} RDF schema`, libraryConfig.schema);
     }

@@ -63,9 +63,6 @@
   let params = new URLSearchParams(window.location.search);
   let libraryName = params.get("library");
   let queryName = params.get("query");
-  selector("#breadcrumb-library").innerText = libraryName;
-  selector("#breadcrumb-library").href = `./library.html?name=${libraryName}`;
-  selector("#breadcrumb-current").innerText = queryName;
   
   $(document).ready(function(event) {
     let textArea = document.getElementById("code");
@@ -105,6 +102,12 @@
     onConfigLoad.push(() => {
       let libraryConfig = configList.find(config => config.name === libraryName);
       let endpoint = libraryConfig.endpoint;
+      let title = libraryConfig.title || libraryName;
+
+      selector("#breadcrumb-library").innerText = title;
+      selector("#breadcrumb-library").href = `./library.html?name=${libraryName}`;
+      selector("#breadcrumb-current").innerText = queryName;
+
       if(libraryConfig.endpoint) {
         document.querySelector("#endpoint-div").innerHTML = `Endpoint: ${libraryConfig.title} ( <a href="${libraryConfig.endpoint}">${libraryConfig.endpoint}</a>)`;
         $('#submit_button_query').show();
