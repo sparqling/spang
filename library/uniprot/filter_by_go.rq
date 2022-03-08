@@ -1,11 +1,12 @@
+#!/usr/bin/env spang2
 # @title Filter UniProt IDs by GO annotation
-# @param arg1=GO_0045202 
+# @endpoint https://sparql.uniprot.org
+# @input (uniprot:K9Z723) (uniprot:A0A024R9E7) (uniprot:A2CJ03)
+# @param arg1=GO_0045202
 
-#stdin uniprot:K9Z723
-#stdin uniprot:A0A024R9E7
 SELECT ?uniprot
 WHERE {
-    VALUES (?uniprot) { $STDIN }
-    ?uniprot up:classifiedWith obo:$arg1 .
+    VALUES (?uniprot) { {{INPUT}} }
+    ?uniprot up:classifiedWith obo:{{arg1}} .
 }
 
