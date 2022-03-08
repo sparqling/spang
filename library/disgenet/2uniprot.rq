@@ -1,0 +1,13 @@
+#!/usr/bin/env spang2
+# @endpoint http://rdf.disgenet.org/sparql/
+
+PREFIX sio: <http://semanticscience.org/resource/>
+PREFIX ncit: <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#>
+
+SELECT ?uniprot
+WHERE {
+  VALUES ?gda { <http://rdf.disgenet.org/resource/gda/DGN00274e6606ba4ab4767281f531e9d3cc> }
+  ?gda sio:SIO_000628 ?gene . # "refers to"
+  ?gene a ncit:C16612 . # Gene
+  ?gene sio:SIO_010078 ?uniprot . # "encodes"
+}
