@@ -13,4 +13,4 @@ WHERE {
   ?super up:rank "superkingdom" ;
       up:scientificName ?superkingdom .
 }
-ORDER BY ?superkingdom
+ORDER BY ?superkingdom ?name
