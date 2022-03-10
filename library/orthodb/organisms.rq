@@ -1,12 +1,12 @@
 #!/usr/bin/env spang2
 # @endpoint https://sparql.orthodb.org/sparql
-# @option --time -vac
+# @option --time -vacs
 
 PREFIX : <http://purl.orthodb.org/>
 
-SELECT ?superkingdom ?name ?org ?taxid
+SELECT ?super ?name ?organism ?taxid
 WHERE {
-  ?org a :Organism ;
+  ?organism a :Organism ;
       up:scientificName ?name ;
       obo:RO_0002162 ?taxid .
   ?taxid rdfs:subClassOf+ ?super .
