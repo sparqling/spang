@@ -1,6 +1,6 @@
 #!/usr/bin/env spang2
+# @endpoint https://sparql.orthodb.org/sparql
 # @endpoint https://orth.dbcls.jp/sparql-proxy-orthodb
-## @endpoint https://sparql.orthodb.org/sparql
 # @option --time -vac
 
 SELECT ?superkingdom (COUNT(?organism) AS ?count)
