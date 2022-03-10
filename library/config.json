@@ -90,6 +90,12 @@
     "endpoint": "https://sparql.omabrowser.org/sparql"
   },
   {
+    "name": "orthodb",
+    "title": "OrthoDB",
+    "sparql_editor": "yasgui",
+    "endpoint": "https://sparql.orthodb.org/sparql"
+  },
+  {
     "name": "togogenome",
     "title": "TogoGenome",
     "sparql_editor": "yasgui",
