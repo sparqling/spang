@@ -4,7 +4,7 @@
 
 PREFIX : <http://purl.orthodb.org/>
 
-SELECT ?super ?name ?organism ?taxid
+SELECT ?superkingdom ?name ?organism ?taxid
 WHERE {
   ?organism a :Organism ;
       up:scientificName ?name ;
@@ -13,3 +13,4 @@ WHERE {
   ?super up:rank "superkingdom" ;
       up:scientificName ?superkingdom .
 }
+ORDER BY ?superkingdom
