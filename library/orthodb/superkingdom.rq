@@ -3,10 +3,15 @@
 # @endpoint https://orth.dbcls.jp/sparql-proxy-orthodb
 # @option --time -vac
 
+PREFIX : <http://purl.orthodb.org/>
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX up: <http://purl.uniprot.org/core/>
+
 SELECT ?superkingdom (COUNT(?organism) AS ?count)
 FROM <http://purl.orthodb.org/odb10v1/>
 WHERE {
-  ?organism a orthodb:Organism ;
+  ?organism a :Organism ;
       obo:RO_0002162 ?taxid .
   ?taxid rdfs:subClassOf+ ?super .
   ?super up:rank "superkingdom" ;
