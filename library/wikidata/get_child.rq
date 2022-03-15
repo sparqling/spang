@@ -1,3 +1,5 @@
+#!/usr/bin/env spang2
+# @endpoint https://query.wikidata.org/sparql
 # @title Get children of a specific person
 # @param arg1=wd:Q171977 
 
