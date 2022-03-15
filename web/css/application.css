@@ -238,6 +238,16 @@ li.cm-ss_subres_li_invalid {
     float: right;
 }
 
+#res_div_query table th {
+    text-align: left;
+    padding: 0px 10px 0px 10px;
+}
+
+#res_div_query table td {
+    text-align: left;
+    padding: 0px 10px 0px 10px;
+}
+
 
 .CodeMirror-sizer { min-height: 330px !important; max-height: 660px !important; }
 .CodeMirror {height: auto !important; min-height: 330px;
@@ -247,3 +257,4 @@ li.cm-ss_subres_li_invalid {
     font-family: Monaco, "Courier New", monospace;
     font-size: 13px;
 }
+

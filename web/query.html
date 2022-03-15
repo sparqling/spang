@@ -53,6 +53,10 @@
     <button id="submit_button_query" type="button" style="display: none;">
       Exec
     </button>
+    
+    <div id="inner_mode_div">
+      <div id="res_div_query" class="cm-ss_result" style="width: 100%;"></div>
+    </div>
   </form>
 </div>
 
@@ -73,6 +77,8 @@
       autoCloseBrackets: true,
       lineNumbers: true,
       sparqlSupportAutoComp: true,
+      sparqlSupportQueries: "query", // Tabbed interface
+      // sparqlSupportInnerMode: "query", // Inner mode
       scrollbarStyle: "null",
       viewportMargin: Infinity,
       extraKeys: {
@@ -84,6 +90,33 @@
       }
     });
     editor.setValue("");
+    
+    function showQueryResult(endpoint, query) {
+      $.post("https://spang.dbcls.jp/sparql-proxy",{
+        query,
+        endpoint
+      }, (res) => {
+        let queryArea = $("#res_div_query");
+        let resultHTML = "<table><thead>";
+        let vars = res.head.vars;
+        for(let v of vars) {
+          resultHTML += `<th>${v}</th>`;
+        } 
+        resultHTML += "</thead>";
+        resultHTML += "<tbody>";
+        for(let b of res.results.bindings) {
+          resultHTML += "<tr>";
+          for(let v of vars) {
+            resultHTML += `<td>${b[v].value}</td>`; 
+          }
+          resultHTML += "</tr>";
+        }
+        resultHTML += "</tbody></table>";
+        
+        queryArea[0].innerHTML = resultHTML;
+        queryArea.show();
+      }, "json");
+    }
     
     const historyTraversal = event.persisted ||
       ( typeof window.performance != "undefined" &&
@@ -108,29 +141,40 @@
         if(historyTraversal) {
           editor.setValue(localStorage.getItem("lastQuery"));
         } else {
-          let sparql = spang.makeSparql(res, metadata, {}, []);
-          let lines = sparql.split("\n");
-          lines = lines.filter(line => !line.startsWith("#!")); // Remove shebang line
-          lines = lines.filter(line => !(line.startsWith("#") && line.substring(1).trim().startsWith("@option"))); // Remove lines of @option
-          editor.setValue(lines.join("\n"));
+          try {
+            let sparql = spang.makeSparql(res, metadata, {}, []);
+            let lines = sparql.split("\n");
+            lines = lines.filter(line => !line.startsWith("#!")); // Remove shebang line
+            lines = lines.filter(line => !(line.startsWith("#") && line.substring(1).trim().startsWith("@option"))); // Remove lines of @option
+            editor.setValue(lines.join("\n"));
+          } catch (e) {
+            editor.setValue(res);
+          }
         }
 
 
-        if (endpoint === "https://query.wikidata.org/") {
-          $('#submit_button_query').on('click',
-            function () {
-              localStorage.setItem("lastQuery", editor.getValue());
-              window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
-            }
-          );
-        } else if (endpoint) {
-          $('#submit_button_query').on('click',
-            function () {
-              localStorage.setItem("lastQuery", editor.getValue());
-              window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
-            }
-          );
-        }
+        $('#submit_button_query').on('click',
+          function () {
+            localStorage.setItem("lastQuery", editor.getValue());
+            showQueryResult(endpoint, editor.getValue())
+            // window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
+          }
+        );
+        // if (endpoint === "https://query.wikidata.org/") {
+        //   $('#submit_button_query').on('click',
+        //     function () {
+        //       localStorage.setItem("lastQuery", editor.getValue());
+        //       window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
+        //     }
+        //   );
+        // } else if (endpoint) {
+        //   $('#submit_button_query').on('click',
+        //     function () {
+        //       localStorage.setItem("lastQuery", editor.getValue());
+        //       // window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
+        //     }
+        //   );
+        // }
       });
     })
   });
