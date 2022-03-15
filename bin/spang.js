@@ -197,7 +197,7 @@ program.args.slice(1).forEach((arg) => {
 let db = getDB();
 
 if (opts.debug) {
-  console.error(db);
+  console.error(`Endpoint: ${db}`);
   sparqlTemplate = sparql.expandTemplate(sparqlTemplate, metadata, paramsMap, paramsArr, input);
   console.log(sparql.makePortable(sparqlTemplate, dbMap));
   process.exit(0);
