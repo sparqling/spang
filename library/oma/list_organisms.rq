@@ -1,11 +1,11 @@
 #!/usr/bin/env spang2
-
 # @title List available species
-# @endpoint oma
+# @endpoint https://sparql.omabrowser.org/sparql
+# @option -a
 
 SELECT ?taxid ?name
 WHERE {
   ?taxid a up:Taxon ;
       up:scientificName ?name ;
       up:rank up:Species .
-} 
+}
