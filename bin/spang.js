@@ -52,6 +52,8 @@ let opts = program
   .option('--stdin', 'read rdf data source from stdin. The format must be Turtle.')
   .option('--time', 'measure time of query execution (exluding construction of query)')
   .option('-r, --reset-option', 'ignore options specified in query file metadata')
+  .option('-x, --use-proxy', 'Use proxy')
+  .option('--proxy <ENDPOINT>', 'Endpoint to be used as proxy', 'https://spang.dbcls.jp/sparql-proxy')
   .version(version)
   .helpOption(false)
   .option('-h, --help', 'display help for command') // handle help explicitly
@@ -241,8 +243,10 @@ if (!/^(http|https):\/\//.test(db)) {
   }
 }
 
+const proxy = opts.useProxy ? opts.proxy : null;
+
 let start = new Date();
-querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
+querySparql(db, proxy, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
   if (error) {
     if (error.code === 'ENOTFOUND') {
       console.error(`${error.code} ${error.syscall} ${error.hostname}`);
