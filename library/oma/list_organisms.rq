@@ -1,6 +1,6 @@
 #!/usr/bin/env spang2
 # @title List available species
-# @endpoint https://sparql.omabrowser.org/sparql
+# @endpoint https://sparql.omabrowser.org/sparql/
 # @option -a
 
 SELECT ?taxid ?name
