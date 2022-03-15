@@ -3,6 +3,9 @@
 # @title Get children of a specific person
 # @param arg1=wd:Q171977 
 
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
 SELECT ?child ?gender_en ?label_en ?descr_en ?birth_date ?death_date ?img
 WHERE {
     $arg1 wdt:P40 ?child .
