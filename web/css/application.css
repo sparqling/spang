@@ -258,3 +258,45 @@ li.cm-ss_subres_li_invalid {
     font-size: 13px;
 }
 
+
+/* tables */
+table.table {
+    font-family: Arial;
+    background-color: #FFF;
+    font-size: 12pt;
+    width: 100%;
+    text-align: left;
+}
+
+table.table thead tr th, table.table tfoot tr th {
+    background-color: #eee8aa;
+    border-collapse: collapse;
+    border-spacing: 1px;
+    border: 1px #E3E3E3 solid;
+
+    font-size: 12pt;
+    padding: 1px;
+}
+
+table.tablesorter thead tr .tablesorter-header {
+    font-family: Arial;
+}
+
+table.table tbody td {
+    border-collapse: collapse;
+    border: 1px #E3E3E3 solid;
+    padding: 1px;
+    vertical-align: top;
+}
+
+table.table tbody tr.odd td {
+    background-color: #F0F0F6;
+}
+
+table.tablesorter thead tr .tablesorter-headerAsc {
+    background-color: linen;
+}
+
+table.tablesorter thead tr .tablesorter-headerDesc {
+    background-color: beige;
+}
