@@ -1,6 +1,6 @@
 # @title Get UniProt IDs for a specific disease, e.g. C0751955 ("Brain Infarction")
 # @endpoint http://rdf.disgenet.org/sparql/
-# @prefix https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio
+# @prefix https://raw.githubusercontent.com/sparqling/spang/master/prefix/bio
 # @param arg1=C0751955 
 
 PREFIX uniprot: <http://purl.uniprot.org/uniprot/>
