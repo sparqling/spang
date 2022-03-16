@@ -49,6 +49,7 @@ let opts = program
   .option('--fmt', 'format the query')
   .option('-i, --indent <DEPTH>', 'indent depth; use with --fmt', 2)
   .option('-l, --list-nick-name', 'list up available nicknames of endpoints and quit')
+  .option('--set-vars', 'replace SPARQL variables using PARAMS')
   .option('--stdin', 'read rdf data source from stdin. The format must be Turtle.')
   .option('--time', 'measure time of query execution (exluding construction of query)')
   .option('-r, --reset-option', 'ignore options specified in query file metadata')
@@ -206,7 +207,7 @@ if (opts.debug) {
 }
 
 if (templateFileSpecified) {
-  sparqlTemplate = sparql.makeSparql(sparqlTemplate, metadata, paramsMap, paramsArr, input);
+  sparqlTemplate = sparql.makeSparql(sparqlTemplate, metadata, paramsMap, paramsArr, opts.setVars, input);
   if (opts.limit) {
     if (!sparqlTemplate.endsWith('\n')) {
       sparqlTemplate += '\n';

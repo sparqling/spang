@@ -1,5 +1,6 @@
 # @title Get information for a taxonomy ID
 # @param taxid=taxid:2
+# @option --set-vars
 PREFIX taxid: <http://identifiers.org/taxonomy/>
 
 SELECT ?p ?o
