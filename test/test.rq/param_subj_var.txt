@@ -1,0 +1,29 @@
+rdf:type	taxon:Taxon
+rdfs:label	"Bacteria"
+rdfs:seeAlso	upTax:2
+owl:sameAs	oboTax:2
+owl:sameAs	oboOwl:NCBITaxon#2
+owl:sameAs	<http://www.berkeleybop.org/ontologies/owl/NCBITaxon#2>
+owl:sameAs	taxonomy:2
+owl:sameAs	taxon:2
+rdfs:subClassOf	taxid:131567
+dcterms:identifier	2
+taxon:blastName	"bacteria"
+taxon:genbankCommonName	"eubacteria"
+taxon:geneticCode	taxon:GeneticCode11
+taxon:inPart	"Monera"
+taxon:inPart	"Procaryotae"
+taxon:inPart	"Prokaryota"
+taxon:inPart	"Prokaryotae"
+taxon:inPart	"prokaryote"
+taxon:inPart	"prokaryotes"
+taxon:rank	taxon:Superkingdom
+taxon:scientificName	"Bacteria"
+taxon:uniqueName	"Bacteria <prokaryotes>"
+taxon:uniqueName	"Monera <Bacteria>"
+taxon:uniqueName	"Procaryotae <Bacteria>"
+taxon:uniqueName	"Prokaryota <Bacteria>"
+taxon:uniqueName	"Prokaryotae <Bacteria>"
+taxon:uniqueName	"bacteria <blast2>"
+taxon:uniqueName	"prokaryote <Bacteria>"
+taxon:uniqueName	"prokaryotes <Bacteria>"

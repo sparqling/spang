@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @param id = taxid:2
+# @option --set-vars -a
+
+SELECT *
+WHERE {
+  ?id a taxon:Taxon; ?p ?o.
+}

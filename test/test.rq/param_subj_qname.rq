@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @param id = 2
+# @option -a
+
+SELECT *
+WHERE {
+  taxid:$id ?p ?o.
+}
