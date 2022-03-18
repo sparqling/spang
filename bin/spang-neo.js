@@ -2,6 +2,7 @@
 
 fs = require('fs');
 
+const program = require('commander');
 const request = require('request');
 const syncRequest = require('sync-request');
 const columnify = require('columnify');
@@ -18,7 +19,7 @@ let parameterArr = [];
 let parameterMap = {};
 let retrieveByGet = false;
 
-const commander = require('commander')
+let opts = program
   .option('-e, --endpoint <ENDPOINT>', 'target endpoint (alias in ~/.spang/endpoints)', 'http://localhost:7474/db/data/transaction/commit')
   .option('--user <USER>', 'username', 'neo4j')
   .option('--pass <PASS>', 'password', 'neo4j')
@@ -40,24 +41,24 @@ const commander = require('commander')
   .arguments('[QUERY_TEMPLATE] [par1=val1,par2=val2,...]')
   .action((s) => {
     templatePath = s;
-  });
-
-commander.parse(process.argv);
+  })
+  .parse(process.argv)
+  .opts();
 
 const dbMap = search_db_name.listup();
 
-if (commander.args.length < 1) {
-  if (!commander.node && !commander.props && !commander.ret && !commander.count && !commander.relation && !commander.id && !commander.limit) {
+if (program.args.length < 1) {
+  if (!opts.node && !opts.props && !opts.ret && !opts.count && !opts.relation && !opts.id && !opts.limit) {
     console.error('Specify a query (template or shortcut).\n');
-    commander.help();
-  } else if (!commander.endpoint && !dbMap['default']) {
+    program.help();
+  } else if (!opts.endpoint && !dbMap['default']) {
     console.error('Specify the target endpoint (using -e option or in <QUERY_TEMPLATE>).\n');
-    commander.help();
+    program.help();
   }
 }
 
-if (commander.node || commander.props || commander.ret || (commander.limit && !templatePath) ||
-    commander.count || commander.id || commander.relation) {
+if (opts.node || opts.props || opts.ret || (opts.limit && !templatePath) ||
+    opts.count || opts.id || opts.relation) {
   queryTemplate = shortcut();
   templateSpecified = false;
   metadata = {};
@@ -69,14 +70,14 @@ if (commander.node || commander.props || commander.ret || (commander.limit && !t
   }
   metadata = metadataModule.retrieveMetadata(queryTemplate);
   if (metadata.option) {
-    let args = process.argv;
+    let args = program.args;
     args = args.concat(metadata.option.split(/\s+/));
-    commander.parse(args);
+    opts.parse(args);
   }
   templateSpecified = true;
 }
 
-if (commander.list_nick_name) {
+if (opts.list_nick_name) {
   console.log('endpoints');
   const maxLen = Object.keys(dbMap)
     .map((key) => key.length)
@@ -87,13 +88,13 @@ if (commander.list_nick_name) {
   process.exit(0);
 }
 
-if (commander.param) {
-  const params = commander.param.split(',');
+if (opts.param) {
+  const params = opts.param.split(',');
   parameterArr = parameterArr.concat(params);
 }
 
-if (commander.args.length > 1) {
-  const params = commander.args.slice(1).map((par) => par.split(','));
+if (program.args.length > 1) {
+  const params = program.args.slice(1).map((par) => par.split(','));
   parameterArr = parameterArr.concat(params.flat());
 }
 
@@ -115,26 +116,26 @@ parameterArr.forEach((par) => {
 
 if (templateSpecified) {
   queryTemplate = constructCypher(queryTemplate, metadata, parameterMap, positionalArguments);
-  if (commander.limit) {
+  if (opts.limit) {
     if (!queryTemplate.endsWith('\n')) {
       queryTemplate += '\n';
     }
-    queryTemplate += `LIMIT ${commander.limit}\n`;
+    queryTemplate += `LIMIT ${opts.limit}\n`;
   }
 }
 
-if (commander.show_query) {
+if (opts.show_query) {
   process.stdout.write(queryTemplate);
   process.exit(0);
 }
 
-if (commander.show_metadata) {
+if (opts.show_metadata) {
   console.log(JSON.stringify(metadata));
   process.exit(0);
 }
 
-if (commander.endpoint) {
-  db = commander.endpoint;
+if (opts.endpoint) {
+  db = opts.endpoint;
 } else if (metadata.endpoint) {
   db = metadata.endpoint;
 } else if (dbMap['default']) {
@@ -188,11 +189,11 @@ jsonToTsv = (body, withHeader) => {
 };
 
 printTsv = (tsv) => {
-  if (commander.align_column) {
+  if (opts.align_column) {
     console.log(
-      columnify(csvParse(tsv, { columns: Boolean(commander.vars), delimiter: '\t', relax: true }), {
+      columnify(csvParse(tsv, { columns: Boolean(opts.vars), delimiter: '\t', relax: true }), {
         // relax csvParse to accept "hoge"^^xsd:string
-        showHeaders: Boolean(commander.vars),
+        showHeaders: Boolean(opts.vars),
         headingTransform: (x) => x
       }).replace(/\s+$/gm, '')
     );
@@ -211,10 +212,10 @@ function queryCypher(endpoint, query) {
     body: query
   };
 
-  if (commander.user && commander.pass) {
+  if (opts.user && opts.pass) {
     options.auth = {
-      user: commander.user,
-      password: commander.pass
+      user: opts.user,
+      password: opts.pass
     };
   }
 
@@ -229,12 +230,12 @@ function queryCypher(endpoint, query) {
       console.error(body);
     } else {
       let end = new Date() - start;
-      if (commander.format == 'tsv') {
-        printTsv(jsonToTsv(body, Boolean(commander.vars)));
+      if (opts.format == 'tsv') {
+        printTsv(jsonToTsv(body, Boolean(opts.vars)));
       } else {
         console.log(body);
       }
-      if (commander.time) {
+      if (opts.time) {
         console.error('Time of query: %dms', end);
       }
     }
@@ -270,50 +271,50 @@ function shortcut() {
   let cypher = 'MATCH ';
 
   let node = 'n';
-  if (commander.node) {
-    node += ` ${commander.node}`;
+  if (opts.node) {
+    node += ` ${opts.node}`;
   }
-  if (commander.props) {
-    node += ` { ${commander.props} }`;
+  if (opts.props) {
+    node += ` { ${opts.props} }`;
   }
 
   let where = '';
-  if (commander.id) {
-    where = ` WHERE id(n)=${commander.id}`;
+  if (opts.id) {
+    where = ` WHERE id(n)=${opts.id}`;
   }
 
   let limit = ' LIMIT 10';
-  if (commander.limit) {
-    limit = ` LIMIT ${commander.limit}`;
+  if (opts.limit) {
+    limit = ` LIMIT ${opts.limit}`;
   }
 
   let retNode = 'n';
-  if (commander.ret) {
-    retNode = commander.ret.split(',').map(v => {
+  if (opts.ret) {
+    retNode = opts.ret.split(',').map(v => {
       return v.includes('.') ? v : `n.${v}`;
     }).join(',');
   }
   retNode += limit;
-  if (commander.count) {
+  if (opts.count) {
     retNode = 'COUNT(n)';
   }
 
-  if (commander.relation) {
-    cypher += `(n1)-[r:${commander.relation}]->(n2)`;
+  if (opts.relation) {
+    cypher += `(n1)-[r:${opts.relation}]->(n2)`;
     cypher += ' RETURN ';
-    if (commander.count) {
+    if (opts.count) {
       cypher += 'COUNT(r)';
     } else {
-      if (commander.ret) {
-        const vars1 = commander.ret.split(',').map(v => `n1.${v}`).join(',');
-        const vars2 = commander.ret.split(',').map(v => `n2.${v}`).join(',');
+      if (opts.ret) {
+        const vars1 = opts.ret.split(',').map(v => `n1.${v}`).join(',');
+        const vars2 = opts.ret.split(',').map(v => `n2.${v}`).join(',');
         cypher += `${vars1},${vars2}`;
       } else {
         cypher += `n1,n2`;
       }
       cypher += limit;
     }
-  // } else if (commander.edges) {
+  // } else if (opts.edges) {
   //   cypher += '(n)-[r]->() RETURN COUNT(r)';
   } else {
     cypher += `(${node})${where} RETURN ${retNode}`;
