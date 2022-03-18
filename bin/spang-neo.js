@@ -34,6 +34,7 @@ let opts = program
   .option('-L, --limit <LIMIT>', 'LIMIT output')
   .option('-C, --count', 'shortcut to COUNT results')
   .option('-q, --show_query', 'show query and quit')
+  .option('--path', 'output path')
   .option('--show_metadata', 'show metadata and quit')
   .option('--param <PARAMS>', 'parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")')
   .option('--time', 'measure time of query execution (exluding construction of query)')
@@ -164,13 +165,31 @@ jsonToTsv = (body, withHeader) => {
   let tsv = '';
 
   if (obj.results.length > 0) {
-    if (withHeader) {
-      tsv += obj.results[0].columns.join('\t') + '\n';
-    }
-    data = obj.results[0].data;
-    if (data.length > 0) {
-      tsv +=
-        data
+    const columns = obj.results[0].columns;
+    const data = obj.results[0].data;
+    if (opts.path) {
+      if (columns.length === data[0].row.length && data[0].row.length === data[0].meta.length) {
+        for (let i=0; i<columns.length; i++) {
+          if (withHeader) {
+            tsv += columns[i] + '\n';
+          }
+          let row = data[0].row[i];
+          let meta = data[0].meta[i];
+          if (row.length === meta.length) {
+            for (let j=0; j<row.length; j++) {
+              tsv += JSON.stringify(meta[j]) + '\t' + JSON.stringify(row[j]) + '\n';
+            }
+            tsv += '\n';
+          }
+        }
+      }
+    } else {
+      if (withHeader) {
+        tsv += columns.join('\t') + '\n';
+      }
+      if (data.length > 0) {
+        tsv +=
+          data
           .map((elem) => {
             row = elem.row.map(JSON.stringify);
             meta = elem.meta
@@ -179,10 +198,11 @@ jsonToTsv = (body, withHeader) => {
             return row.concat(meta).join('\t');
           })
           .join('\n') + '\n';
+      }
     }
-  }
-  if (obj.errors.length > 0) {
-    tsv += obj.errors.map(JSON.stringify).join('\n') + '\n';
+    if (obj.errors.length > 0) {
+      tsv += obj.errors.map(JSON.stringify).join('\n') + '\n';
+    }
   }
 
   return tsv;
