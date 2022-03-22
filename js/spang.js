@@ -422,6 +422,7 @@ exports.retrieveMetadata = (sparql) => {
 
 },{}],6:[function(require,module,exports){
 const parser = require('./template_parser');
+const metadataModule = require('./metadata.js');
 const fs = require('fs');
 const expandHomeDir = require('expand-home-dir');
 
@@ -581,7 +582,52 @@ exports.extractPrefixes = (sparql) => {
   const parsedQuery = parser.parse(sparql);
   return Object.fromEntries(parsedQuery.prologue.filter(x => x.prefix && x.local).map((x) => [x.prefix, x.local]));
 }
-},{"./template_parser":9,"expand-home-dir":185,"fs":133,"sync-request":412}],7:[function(require,module,exports){
+
+exports.extractPrefixesAll = (sparql) => {
+  let ret = {};
+
+  const metadata = metadataModule.retrieveMetadata(sparql);
+  if (metadata.prefix) {
+    let contents;
+    if (/^(http|https):\/\//.test(metadata.prefix)) {
+      const syncRequest = require('sync-request');
+      contents = syncRequest('GET', metadata.prefix).getBody('utf8');
+    } else {
+      const filePath = expandHomeDir(metadata.prefix);
+      if (fs.existsSync(filePath)) {
+        contents = fs.readFileSync(filePath, 'utf8');
+      }
+    }
+    contents.split('\n').forEach((line) => {
+      tokens = line.split(/\s+/);
+      if (tokens.length == 3 &&
+          tokens[0] == 'PREFIX' &&
+          tokens[1].endsWith(':') &&
+          tokens[2].startsWith('<') &&
+          tokens[2].endsWith('>')) {
+        const prefix = tokens[1].substr(0, tokens[1].length - 1);
+        const local = tokens[2].substr(1, tokens[2].length - 2);
+        ret[prefix] = local;
+      }
+      // const mat = line.trim().match(/^PREFIX\s+(\S+):\s+<(.+)>$/i);
+      // if (mat) {
+      //   const prefix = mat[1];
+      //   const local = mat[2];
+      //   ret[prefix] = local;
+      // }
+    });
+  }
+
+  parser.parse(sparql).prologue.forEach((x) => {
+    if (x.prefix && x.local) {
+      ret[x.prefix] = x.local;
+    }
+  });
+
+  return ret;
+}
+
+},{"./metadata.js":5,"./template_parser":9,"expand-home-dir":185,"fs":133,"sync-request":412}],7:[function(require,module,exports){
 const request = require('request');
 const version = require('../package.json').version;
 const acceptHeaderMap = {
@@ -34058,36 +34104,53 @@ utils.intFromLE = intFromLE;
 arguments[4][68][0].apply(exports,arguments)
 },{"buffer":88,"dup":68}],182:[function(require,module,exports){
 module.exports={
-  "name": "elliptic",
-  "version": "6.5.4",
-  "description": "EC cryptography",
-  "main": "lib/elliptic.js",
-  "files": [
-    "lib"
+  "_args": [
+    [
+      "elliptic@6.5.4",
+      "/home/chiba/github/hchiba1/spang"
+    ]
   ],
-  "scripts": {
-    "lint": "eslint lib test",
-    "lint:fix": "npm run lint -- --fix",
-    "unit": "istanbul test _mocha --reporter=spec test/index.js",
-    "test": "npm run lint && npm run unit",
-    "version": "grunt dist && git add dist/"
+  "_development": true,
+  "_from": "elliptic@6.5.4",
+  "_id": "elliptic@6.5.4",
+  "_inBundle": false,
+  "_integrity": "sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==",
+  "_location": "/elliptic",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "elliptic@6.5.4",
+    "name": "elliptic",
+    "escapedName": "elliptic",
+    "rawSpec": "6.5.4",
+    "saveSpec": null,
+    "fetchSpec": "6.5.4"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:indutny/elliptic"
-  },
-  "keywords": [
-    "EC",
-    "Elliptic",
-    "curve",
-    "Cryptography"
+  "_requiredBy": [
+    "/browserify-sign",
+    "/create-ecdh"
   ],
-  "author": "Fedor Indutny <fedor@indutny.com>",
-  "license": "MIT",
+  "_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.5.4.tgz",
+  "_spec": "6.5.4",
+  "_where": "/home/chiba/github/hchiba1/spang",
+  "author": {
+    "name": "Fedor Indutny",
+    "email": "fedor@indutny.com"
+  },
   "bugs": {
     "url": "https://github.com/indutny/elliptic/issues"
   },
-  "homepage": "https://github.com/indutny/elliptic",
+  "dependencies": {
+    "bn.js": "^4.11.9",
+    "brorand": "^1.1.0",
+    "hash.js": "^1.0.0",
+    "hmac-drbg": "^1.0.1",
+    "inherits": "^2.0.4",
+    "minimalistic-assert": "^1.0.1",
+    "minimalistic-crypto-utils": "^1.0.1"
+  },
+  "description": "EC cryptography",
   "devDependencies": {
     "brfs": "^2.0.2",
     "coveralls": "^3.1.0",
@@ -34103,20 +34166,33 @@ module.exports={
     "istanbul": "^0.4.5",
     "mocha": "^8.0.1"
   },
-  "dependencies": {
-    "bn.js": "^4.11.9",
-    "brorand": "^1.1.0",
-    "hash.js": "^1.0.0",
-    "hmac-drbg": "^1.0.1",
-    "inherits": "^2.0.4",
-    "minimalistic-assert": "^1.0.1",
-    "minimalistic-crypto-utils": "^1.0.1"
-  }
-
-,"_resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.5.4.tgz"
-,"_integrity": "sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ=="
-,"_from": "elliptic@6.5.4"
+  "files": [
+    "lib"
+  ],
+  "homepage": "https://github.com/indutny/elliptic",
+  "keywords": [
+    "EC",
+    "Elliptic",
+    "curve",
+    "Cryptography"
+  ],
+  "license": "MIT",
+  "main": "lib/elliptic.js",
+  "name": "elliptic",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/indutny/elliptic.git"
+  },
+  "scripts": {
+    "lint": "eslint lib test",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "npm run lint && npm run unit",
+    "unit": "istanbul test _mocha --reporter=spec test/index.js",
+    "version": "grunt dist && git add dist/"
+  },
+  "version": "6.5.4"
 }
+
 },{}],183:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -89784,7 +89860,7 @@ function extend() {
 },{}],438:[function(require,module,exports){
 module.exports={
   "name": "spang",
-  "version": "2.4.2",
+  "version": "2.4.5",
   "description": "JavaScript implementation of SPANG",
   "repository": {
     "type": "git",
@@ -89803,6 +89879,7 @@ module.exports={
     "expand-home-dir": "0.0.3",
     "fs": "0.0.1-security",
     "http-status-codes": "^2.1.4",
+    "json5": "^2.2.1",
     "ls": "^0.2.1",
     "mustache": "4.0.0",
     "request": "^2.85.0",

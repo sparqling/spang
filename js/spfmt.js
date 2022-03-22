@@ -5,7 +5,7 @@ spfmt = (sparql, indentDepth = 2) => {
   return formatter.format(parser.parse(sparql), indentDepth);
 };
 
-},{"../lib/formatter.js":2,"../lib/template_parser":4}],2:[function(require,module,exports){
+},{"../lib/formatter.js":2,"../lib/template_parser":5}],2:[function(require,module,exports){
 let output;
 let commentsList;
 let currentIndent;
@@ -655,7 +655,51 @@ const getVar = (variable) => {
 };
 
 },{}],3:[function(require,module,exports){
+exports.retrieveMetadata = (sparql) => {
+  let metadata = {};
+
+  sparql.split("\n").forEach(line => {
+    if (line.startsWith('#')) {
+      const matched = line.substring(1).trim().match(/^@(\w+)\s+(.+)$/);
+      if (matched) {
+        const name = matched[1];
+        const value = matched[2];
+        if (name === 'param') {
+          if (!metadata['param']) {
+            metadata['param'] = new Map();
+          }
+          const param = value.match(/^\s*(\w+)\s*=\s*(.+)$/);
+          if (param) {
+            const par = param[1];
+            let val = param[2];
+            if (val.startsWith('"') && val.endsWith('"') ||
+                val.startsWith("'") && val.endsWith("'")) {
+              val = val.substring(1, val.length - 1);
+            }
+            metadata['param'].set(par, val);
+          } else {
+            console.warn(`Warning: metadata @param must be in the form of <par>=<val>`);
+          }
+        } else if (name === 'input') {
+          if (!metadata['input']) {
+            metadata['input'] = [];
+          }
+          metadata['input'].push(value);
+        } else if (metadata[name]) {
+          // console.warn(`Warning: metadata @${name} duplicates, only the first one will be handled`);
+        } else {
+          metadata[name] = value;
+        }
+      }
+    }
+  });
+
+  return metadata;
+};
+
+},{}],4:[function(require,module,exports){
 const parser = require('./template_parser');
+const metadataModule = require('./metadata.js');
 const fs = require('fs');
 const expandHomeDir = require('expand-home-dir');
 
@@ -815,7 +859,52 @@ exports.extractPrefixes = (sparql) => {
   const parsedQuery = parser.parse(sparql);
   return Object.fromEntries(parsedQuery.prologue.filter(x => x.prefix && x.local).map((x) => [x.prefix, x.local]));
 }
-},{"./template_parser":4,"expand-home-dir":9,"fs":7,"sync-request":19}],4:[function(require,module,exports){
+
+exports.extractPrefixesAll = (sparql) => {
+  let ret = {};
+
+  const metadata = metadataModule.retrieveMetadata(sparql);
+  if (metadata.prefix) {
+    let contents;
+    if (/^(http|https):\/\//.test(metadata.prefix)) {
+      const syncRequest = require('sync-request');
+      contents = syncRequest('GET', metadata.prefix).getBody('utf8');
+    } else {
+      const filePath = expandHomeDir(metadata.prefix);
+      if (fs.existsSync(filePath)) {
+        contents = fs.readFileSync(filePath, 'utf8');
+      }
+    }
+    contents.split('\n').forEach((line) => {
+      tokens = line.split(/\s+/);
+      if (tokens.length == 3 &&
+          tokens[0] == 'PREFIX' &&
+          tokens[1].endsWith(':') &&
+          tokens[2].startsWith('<') &&
+          tokens[2].endsWith('>')) {
+        const prefix = tokens[1].substr(0, tokens[1].length - 1);
+        const local = tokens[2].substr(1, tokens[2].length - 2);
+        ret[prefix] = local;
+      }
+      // const mat = line.trim().match(/^PREFIX\s+(\S+):\s+<(.+)>$/i);
+      // if (mat) {
+      //   const prefix = mat[1];
+      //   const local = mat[2];
+      //   ret[prefix] = local;
+      // }
+    });
+  }
+
+  parser.parse(sparql).prologue.forEach((x) => {
+    if (x.prefix && x.local) {
+      ret[x.prefix] = x.local;
+    }
+  });
+
+  return ret;
+}
+
+},{"./metadata.js":3,"./template_parser":5,"expand-home-dir":10,"fs":8,"sync-request":20}],5:[function(require,module,exports){
 (function (process){(function (){
 const parser = require('../syntax/parser.js');
 const makeRed = require('./util.js').makeRed;
@@ -871,7 +960,7 @@ const printError = (inputText, err) => {
 };
 
 }).call(this)}).call(this,require('_process'))
-},{"../syntax/parser.js":21,"./util.js":5,"_process":13}],5:[function(require,module,exports){
+},{"../syntax/parser.js":22,"./util.js":6,"_process":14}],6:[function(require,module,exports){
 (function (Buffer){(function (){
 const prefixModule = require('../lib/prefix.js');
 
@@ -1002,7 +1091,7 @@ exports.isValidUrl = (_string) => {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"../lib/prefix.js":3,"buffer":8}],6:[function(require,module,exports){
+},{"../lib/prefix.js":4,"buffer":9}],7:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -1154,9 +1243,9 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],7:[function(require,module,exports){
-
 },{}],8:[function(require,module,exports){
+
+},{}],9:[function(require,module,exports){
 (function (Buffer){(function (){
 /*!
  * The buffer module from node.js, for the browser.
@@ -2937,7 +3026,7 @@ function numberIsNaN (obj) {
 }
 
 }).call(this)}).call(this,require("buffer").Buffer)
-},{"base64-js":6,"buffer":8,"ieee754":11}],9:[function(require,module,exports){
+},{"base64-js":7,"buffer":9,"ieee754":12}],10:[function(require,module,exports){
 (function (process){(function (){
 var join = require("path").join;
 var homedir = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
@@ -2952,7 +3041,7 @@ function expandHomeDir (path) {
 }
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":13,"path":12}],10:[function(require,module,exports){
+},{"_process":14,"path":13}],11:[function(require,module,exports){
 "use strict";
 /**
  * A response from a web request
@@ -3014,7 +3103,7 @@ var Response = /** @class */ (function () {
 }());
 module.exports = Response;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -3101,7 +3190,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function (process){(function (){
 // 'path' module extracted from Node.js v8.11.1 (only the posix part)
 // transplited with Babel
@@ -3634,7 +3723,7 @@ posix.posix = posix;
 module.exports = posix;
 
 }).call(this)}).call(this,require('_process'))
-},{"_process":13}],13:[function(require,module,exports){
+},{"_process":14}],14:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -3820,7 +3909,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 var replace = String.prototype.replace;
@@ -3840,7 +3929,7 @@ module.exports = {
     RFC3986: 'RFC3986'
 };
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 var stringify = require('./stringify');
@@ -3853,7 +3942,7 @@ module.exports = {
     stringify: stringify
 };
 
-},{"./formats":14,"./parse":16,"./stringify":17}],16:[function(require,module,exports){
+},{"./formats":15,"./parse":17,"./stringify":18}],17:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -4029,7 +4118,7 @@ module.exports = function (str, opts) {
     return utils.compact(obj);
 };
 
-},{"./utils":18}],17:[function(require,module,exports){
+},{"./utils":19}],18:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils');
@@ -4241,7 +4330,7 @@ module.exports = function (object, opts) {
     return joined.length > 0 ? prefix + joined : '';
 };
 
-},{"./formats":14,"./utils":18}],18:[function(require,module,exports){
+},{"./formats":15,"./utils":19}],19:[function(require,module,exports){
 'use strict';
 
 var has = Object.prototype.hasOwnProperty;
@@ -4456,7 +4545,7 @@ module.exports = {
     merge: merge
 };
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 var handle_qs_js_1 = require("then-request/lib/handle-qs.js");
@@ -4527,7 +4616,7 @@ module.exports = doRequest;
 module.exports["default"] = doRequest;
 module.exports.FormData = fd;
 
-},{"http-response-object":10,"then-request/lib/handle-qs.js":20}],20:[function(require,module,exports){
+},{"http-response-object":11,"then-request/lib/handle-qs.js":21}],21:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
 var qs_1 = require("qs");
@@ -4547,7 +4636,7 @@ function handleQs(url, query) {
 }
 exports["default"] = handleQs;
 
-},{"qs":15}],21:[function(require,module,exports){
+},{"qs":16}],22:[function(require,module,exports){
 /*
  * Generated by PEG.js 0.10.0.
  *
