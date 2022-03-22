@@ -1,0 +1,9 @@
+#!/usr/bin/env spang2
+# @endpoint http://rdf.disgenet.org/sparql/
+
+SELECT *
+WHERE {
+  ?gda sio:SIO_000628 ?disease . # "refers to"
+  ?disease a ncit:C7057 . # "Disease, Disorder or Finding"
+  ?disease skos:exactMatch ?o .
+}

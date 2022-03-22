@@ -49,9 +49,12 @@ let opts = program
   .option('--fmt', 'format the query')
   .option('-i, --indent <DEPTH>', 'indent depth; use with --fmt', 2)
   .option('-l, --list-nick-name', 'list up available nicknames of endpoints and quit')
+  .option('--set-vars', 'replace SPARQL variables using PARAMS')
   .option('--stdin', 'read rdf data source from stdin. The format must be Turtle.')
   .option('--time', 'measure time of query execution (exluding construction of query)')
   .option('-r, --reset-option', 'ignore options specified in query file metadata')
+  .option('-x, --use-proxy', 'Use proxy')
+  .option('--proxy <ENDPOINT>', 'Endpoint to be used as proxy', 'https://spang.dbcls.jp/sparql-proxy')
   .version(version)
   .helpOption(false)
   .option('-h, --help', 'display help for command') // handle help explicitly
@@ -197,14 +200,14 @@ program.args.slice(1).forEach((arg) => {
 let db = getDB();
 
 if (opts.debug) {
-  console.error(db);
+  console.error(`Endpoint: ${db}`);
   sparqlTemplate = sparql.expandTemplate(sparqlTemplate, metadata, paramsMap, paramsArr, input);
   console.log(sparql.makePortable(sparqlTemplate, dbMap));
   process.exit(0);
 }
 
 if (templateFileSpecified) {
-  sparqlTemplate = sparql.makeSparql(sparqlTemplate, metadata, paramsMap, paramsArr, input);
+  sparqlTemplate = sparql.makeSparql(sparqlTemplate, metadata, paramsMap, paramsArr, opts.setVars, input);
   if (opts.limit) {
     if (!sparqlTemplate.endsWith('\n')) {
       sparqlTemplate += '\n';
@@ -241,8 +244,10 @@ if (!/^(http|https):\/\//.test(db)) {
   }
 }
 
+const proxy = opts.useProxy ? opts.proxy : null;
+
 let start = new Date();
-querySparql(db, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
+querySparql(db, proxy, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
   if (error) {
     if (error.code === 'ENOTFOUND') {
       console.error(`${error.code} ${error.syscall} ${error.hostname}`);

@@ -6,5 +6,5 @@ SELECT ?label
 WHERE {
   ?taxid rdfs:label ?label .
   ?taxid dct:identifier ?id .
-  FILTER (?id = "2")
+  FILTER (?id = 2)
 }

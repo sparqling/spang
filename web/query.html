@@ -9,7 +9,7 @@
   </title>
   <link rel="shortcut icon" type="image/x-icon"
         href="./favicon.ico">
-  <link rel="stylesheet" href="./SPANG_files/common-header-and-footer.css">
+  <script src="https://unpkg.com/json5@^2.0.0/dist/index.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
@@ -17,12 +17,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
   <script src='https://cdn.jsdelivr.net/gh/sparqling/spang@864c3ac/js/spang.min.js'></script>
+  <script id="common-header-and-footer__script" src="https://dbcls.rois.ac.jp/DBCLS-common-header-footer/v2/script/common-header-and-footer.js" type="text/javascript"></script>
+
+
   <script src="./js/sparql-support.js"></script>
   <script src="./js/common.js"></script>
 </head>
 <body style="padding-top: 24px;">
-<script id="common-header-and-footer__script" src="./SPANG_files/common-header-and-footer.js" style="display: block"
-        type="text/javascript"></script>
 <div class="content_wrapper_wide">
   <div class="small">
     <a href="https://spang.dbcls.jp/">
@@ -44,11 +45,12 @@
   </p>
   <h1>Execute SPARQL query</h1>
   <form>
+    <div id="endpoint-div"></div>
     <br>
     <br>
     <textarea id="code" name="code"></textarea>
     <br>
-    <button id="submit_button_query" type="button" >
+    <button id="submit_button_query" type="button" style="display: none;">
       Exec
     </button>
   </form>
@@ -60,9 +62,6 @@
   let params = new URLSearchParams(window.location.search);
   let libraryName = params.get("library");
   let queryName = params.get("query");
-  selector("#breadcrumb-library").innerText = libraryName;
-  selector("#breadcrumb-library").href = `./library.html?name=${libraryName}`;
-  selector("#breadcrumb-current").innerText = queryName;
   
   $(document).ready(function(event) {
     let textArea = document.getElementById("code");
@@ -84,32 +83,56 @@
         }
       }
     });
-
+    editor.setValue("");
+    
     const historyTraversal = event.persisted ||
       ( typeof window.performance != "undefined" &&
         window.performance.navigation.type === 2 );
-    $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
-      let matadata = spang.retrieveMetadata(res);
+    onConfigLoad.push(() => {
+      let libraryConfig = configList.find(config => config.name === libraryName);
+      let endpoint = libraryConfig.endpoint;
+      let title = libraryConfig.title || libraryName;
 
-      editor.setValue(historyTraversal ? localStorage.getItem("lastQuery") : spang.makeSparql(res, metadata, {}, []));
+      selector("#breadcrumb-library").innerText = title;
+      selector("#breadcrumb-library").href = `./library.html?name=${libraryName}`;
+      selector("#breadcrumb-current").innerText = queryName;
 
-      let endpoint = metadata.endpoint;
-      if (endpoint === "https://query.wikidata.org/") {
-        $('#submit_button_query').on('click',
-          function () {
-            localStorage.setItem("lastQuery", editor.getValue());
-            window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
-          }
-        );
-      } else if (endpoint) {
-        $('#submit_button_query').on('click',
-          function () {
-            localStorage.setItem("lastQuery", editor.getValue());
-            window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
-          }
-        );
-      }
-    });
+      $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${libraryName}/${queryName}`, (res) => {
+        let metadata = spang.retrieveMetadata(res);
+        endpoint = metadata.endpoint || endpoint;
+
+        if(endpoint) {
+          document.querySelector("#endpoint-div").innerHTML = `Endpoint: ${libraryConfig.title} ( <a href="${endpoint}">${endpoint}</a> )`;
+          $('#submit_button_query').show();
+        }
+        if(historyTraversal) {
+          editor.setValue(localStorage.getItem("lastQuery"));
+        } else {
+          let sparql = spang.makeSparql(res, metadata, {}, []);
+          let lines = sparql.split("\n");
+          lines = lines.filter(line => !line.startsWith("#!")); // Remove shebang line
+          lines = lines.filter(line => !(line.startsWith("#") && line.substring(1).trim().startsWith("@option"))); // Remove lines of @option
+          editor.setValue(lines.join("\n"));
+        }
+
+
+        if (endpoint === "https://query.wikidata.org/") {
+          $('#submit_button_query').on('click',
+            function () {
+              localStorage.setItem("lastQuery", editor.getValue());
+              window.location.assign(endpoint + '#' + encodeURIComponent(editor.getValue()))
+            }
+          );
+        } else if (endpoint) {
+          $('#submit_button_query').on('click',
+            function () {
+              localStorage.setItem("lastQuery", editor.getValue());
+              window.location.assign(endpoint + '?query=' + encodeURIComponent(editor.getValue()));
+            }
+          );
+        }
+      });
+    })
   });
   
 

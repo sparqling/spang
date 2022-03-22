@@ -9,13 +9,13 @@
   </title>
   <link rel="shortcut icon" type="image/x-icon"
         href="./favicon.ico">
-  <link rel="stylesheet" href="./SPANG_files/common-header-and-footer.css">
-  <script src="./js/common.js"></script>
+  <script src="https://unpkg.com/json5@^2.0.0/dist/index.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src='https://cdn.jsdelivr.net/gh/sparqling/spang@864c3ac/js/spang.min.js'></script>
+  <script src="./js/common.js"></script>
+  <script id="common-header-and-footer__script" src="https://dbcls.rois.ac.jp/DBCLS-common-header-footer/v2/script/common-header-and-footer.js" type="text/javascript"></script>
 </head>
 <body style="padding-top: 24px;">
-<script id="common-header-and-footer__script" src="./SPANG_files/common-header-and-footer.js" style="display: block"
-        type="text/javascript"></script>
 <div class="content_wrapper_wide">
   <div class="small">
     <a href="https://spang.dbcls.jp/">
@@ -33,7 +33,7 @@
   <p>
   </p>
   <h1 id="title"></h1>
-  <div id="contents-area">
+  <div id="contents-area" class="content_wrapper">
   </div>
   <p></p>
 
@@ -44,25 +44,72 @@
 <script>
   let params = new URLSearchParams(window.location.search);
   let libraryName = params.get("name");
-  selector("#breadcrumb-current").innerText = libraryName;
-  selector("#title").innerText = `SPARQL library for ${libraryName}`;
+  let area = document.querySelector('#contents-area');
+
+  function addLink(text, url, target, className = null, addNewlines = true) {
+    let link = document.createElement('a');
+    link.className = className === null ? "link_title" : className;
+    link.innerText = text;
+    link.href = url;
+    target.appendChild(link);
+    if(addNewlines) {
+      target.appendChild(document.createElement("br"));
+      target.appendChild(document.createElement("br"));
+    }
+  }
   
-  $.get(`https://api.github.com/repos/${repo}/contents/library/${libraryName}`, (res) => {
-    for (let file of res) {
-      if (file.type === 'file') {
-        let link = document.createElement('a');
-        link.className = "link_title";
-        link.innerText = file.name;
-        link.href = `./query.html?library=${libraryName}&query=${file.name}`;
-        let area = document.querySelector('#contents-area');
-        area.appendChild(link);
-        area.appendChild(document.createElement("br"));
-        area.appendChild(document.createElement("br"));
+  function showQuery(library, query) {
+    let queryArea = document.createElement('div');
+    area.appendChild(queryArea);
+    $.get(`https://raw.githubusercontent.com/${repo}/${tag}/library/${library}/${query}`, (res) => {
+      let metadata = spang.retrieveMetadata(res);
+      addLink(query, `./query.html?library=${library}&query=${query}`, queryArea, '', false);
+      queryArea.appendChild(document.createElement("br"));
+      if(metadata.title) {
+        let div = document.createElement('div');
+        div.className = "indented";
+        div.innerText = metadata.title;
+        queryArea.appendChild(div);
       }
+      if(metadata.param && metadata.param.size > 0) {
+        let div = document.createElement('div');
+        div.className = "indented";
+        div.innerText = `(ex: ${ Array.from(metadata.param.values()).join(', ')})`;
+        queryArea.appendChild(div);
+      }
+      queryArea.appendChild(document.createElement("br"));
+    });
+  }
+
+  onConfigLoad.push(() => {
+    let libraryConfig = configList.find(config => config.name === libraryName);
+    let title = libraryConfig.title || libraryName;
+    selector("#breadcrumb-current").innerText = title;
+    selector("#title").innerText = `SPARQL library for ${title}`;
+    if(libraryConfig.schema) {
+      addLink(`${libraryConfig.title} RDF schema`, libraryConfig.schema, area);
+    }
+    if(libraryConfig.endpoint) {
+      addLink(`${libraryConfig.title} RDF endpoint`, libraryConfig.endpoint, area);
+    }
+    let subHeader = document.createElement('h2');
+    subHeader.innerText = "Select SPARQL template";
+    area.appendChild(subHeader);
+    
+    if(libraryConfig.queries) {
+      for (let query of libraryConfig.queries) {
+        showQuery(libraryName, query)
+      }
+    } else {
+      $.get(`https://api.github.com/repos/${repo}/contents/library/${libraryName}?ref=${tag}`, (res) => {
+        for (let file of res) {
+          if (file.type === 'file' && file.name.endsWith(".rq")) {
+            showQuery(libraryName, file.name);
+          }
+        }
+      });
     }
   });
   
-
 </script>
-
 </html>

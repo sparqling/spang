@@ -1,17 +1,21 @@
+#!/usr/bin/env spang2
+# @endpoint https://sparql.omabrowser.org/sparql/
 # @title Get orthologs of a specific protein
-# @param arg1=ENSLACG00000002497 
+# @param ensg=ENSLACG00000002497
+# @option -a
+
+PREFIX orth: <http://purl.org/net/orth#>
 
 PREFIX lscr: <http://purl.org/lscr#>
 PREFIX ens: <http://rdf.ebi.ac.uk/resource/ensembl/>
 SELECT ?ortholog_protein ?OMA_link 
 WHERE {
-    ?cluster a oo:OrthologsCluster ;
-             oo:hasHomologousMember ?node1 ;
-             oo:hasHomologousMember ?node2 . 
-    ?node1 oo:hasHomologousMember* ?query_protein .
-    ?node2 oo:hasHomologousMember* ?ortholog_protein .
+    ?cluster a orth:OrthologsCluster ;
+             orth:hasHomologousMember ?node1 ;
+             orth:hasHomologousMember ?node2 . 
+    ?node1 orth:hasHomologousMember* ?query_protein .
+    ?node2 orth:hasHomologousMember* ?ortholog_protein .
     FILTER(?node1 != ?node2) 
-    ?query_protein sio:SIO_010079/lscr:xrefEnsemblGene ens:$arg1 .
+    ?query_protein sio:SIO_010079/lscr:xrefEnsemblGene ens:$ensg .
     ?ortholog_protein rdfs:seeAlso ?OMA_link . 
 }
-

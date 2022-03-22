@@ -1,0 +1,16 @@
+#!/usr/bin/env spang2
+# @endpoint https://sparql.orthodb.org/sparql
+# @option --time -vac
+
+PREFIX : <http://purl.orthodb.org/>
+
+SELECT ?superkingdom (COUNT(?organism) AS ?count)
+FROM <http://purl.orthodb.org/odb10v1/>
+WHERE {
+  ?organism a :Organism ;
+      obo:RO_0002162 ?taxid .
+  ?taxid rdfs:subClassOf+ ?super .
+  ?super up:rank "superkingdom" ;
+      up:scientificName ?superkingdom .
+}
+ORDER BY ?superkingdom

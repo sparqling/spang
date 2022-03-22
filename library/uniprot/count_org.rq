@@ -1,14 +1,13 @@
 #!/usr/bin/env spang2
-
 # @title Count proteins for each organism
-# @endpoint uniprot
+# @endpoint https://sparql.uniprot.org
+# @option -a
 
-SELECT ?org (COUNT(?org) AS ?count) ?org_name
+SELECT ?org (COUNT(?org) AS ?count)
 WHERE {
     ?protein a up:Protein ;
              up:organism ?org .
-    ?org up:scientificName ?org_name
+    # ?org up:scientificName ?org_name .
 }
-GROUP BY ?org ?org_name
+GROUP BY ?org
 ORDER BY DESC(?count)
-

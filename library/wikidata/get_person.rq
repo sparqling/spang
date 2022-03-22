@@ -1,5 +1,10 @@
+#!/usr/bin/env spang2
+# @endpoint https://query.wikidata.org/sparql
 # @title Get information of a specific person
 # @param arg1=wd:Q171977 
+
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
 SELECT ($arg1 AS ?person) ?gender_en ?label_en ?descr_en ?birth_date ?death_date ?img
 WHERE {

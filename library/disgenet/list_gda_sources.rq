@@ -1,6 +1,6 @@
 # @title List sources of gene-disease association
 # @endpoint http://rdf.disgenet.org/sparql/
-# @prefix https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio
+# @prefix https://raw.githubusercontent.com/sparqling/spang/master/prefix/bio
 
 SELECT ?source (COUNT(?source) AS ?count)
 WHERE {

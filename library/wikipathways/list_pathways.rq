@@ -1,4 +1,6 @@
+#!/usr/bin/env spang2
 # @title List of pathways
+# @endpoint https://sparql.wikipathways.org/sparql
 
 SELECT ?pathway ?organism ?name ?title
 WHERE {

@@ -1,11 +1,14 @@
+#!/usr/bin/env spang2
 # @title Get pathway from gene name
-# @param arg1=1577 
+# @endpoint https://sparql.wikipathways.org/sparql
+# @param id=1577 
 
 # SELECT ?source (COUNT(?gene) AS ?count)
 # SELECT ?type (COUNT(?pathway) AS ?count)
+PREFIX geneid: <https://identifiers.org/ncbigene/>
 SELECT ?gene_label ?organism_name ?pathway_label ?pathway
 WHERE {
-    geneid:$arg1 rdfs:label ?gene_label ;
+    geneid:{{id}} rdfs:label ?gene_label ;
                 dct:isPartOf ?pathway .
     ?pathway a wp:Pathway ;
              dc:title ?pathway_label ;

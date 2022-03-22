@@ -1,6 +1,6 @@
 #!/usr/bin/env spang2
 # @title Get instances of a type
-# @endpoint dbpedia
+# @endpoint https://dbpedia.org/sparql
 # @param type=SoccerPlayer
 
 SELECT ?s

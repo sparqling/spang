@@ -1,12 +1,16 @@
 #!/usr/bin/env spang2
 # @endpoint http://rdf.disgenet.org/sparql/
+# @param id=DGN00274e6606ba4ab4767281f531e9d3cc
 
 PREFIX sio: <http://semanticscience.org/resource/>
 PREFIX ncit: <http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 
-SELECT ?gene
+SELECT ?mesh
 WHERE {
   VALUES ?gda { <http://rdf.disgenet.org/resource/gda/DGN00274e6606ba4ab4767281f531e9d3cc> }
-  ?gda sio:SIO_000628 ?gene . # "refers to"
-  ?gene a ncit:C16612 . # Gene
+  ?gda sio:SIO_000628 ?disease . # "refers to"
+  ?disease a ncit:C7057 . # "Disease, Disorder or Finding"
+  ?disease skos:exactMatch ?mesh .
+  FILTER(regex(?mesh, "mesh"))
 }

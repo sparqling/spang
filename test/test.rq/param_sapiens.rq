@@ -1,0 +1,10 @@
+#!/usr/bin/env spang2
+# @endpoint test
+# @param type = taxon:Taxon
+# @param label = 'Homo sapiens'
+
+SELECT *
+WHERE {
+  ?s a $type;
+     rdfs:label "${label}".
+}

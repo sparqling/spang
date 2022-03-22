@@ -1,4 +1,6 @@
+#!/usr/bin/env spang2
 # @title Get pathway from gene name
+# @endpoint https://sparql.wikipathways.org/sparql
 # @param arg1=cyp 
 
 # SELECT ?source (COUNT(?gene) AS ?count)
@@ -12,7 +14,7 @@ WHERE {
     ?pathway a wp:Pathway .
     ?pathway dc:title ?pathway_label .
     ?pathway wp:organismName ?organism_name .
-    FILTER regex(str(?gene_label), "$arg1", "i")
+    FILTER regex(str(?gene_label), "{{arg1}}", "i")
 }
 # ORDER BY DESC(?count)
 ORDER BY ?organism_name ?gene_label

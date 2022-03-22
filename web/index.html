@@ -9,13 +9,12 @@
   </title>
   <link rel="shortcut icon" type="image/x-icon"
         href="./favicon.ico">
-  <link rel="stylesheet" href="./SPANG_files/common-header-and-footer.css">
-  <script src="./js/common.js"></script>
+  <script src="https://unpkg.com/json5@^2.0.0/dist/index.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="./js/common.js"></script>
+  <script id="common-header-and-footer__script" src="https://dbcls.rois.ac.jp/DBCLS-common-header-footer/v2/script/common-header-and-footer.js" type="text/javascript"></script>
 </head>
 <body style="padding-top: 24px;">
-<script id="common-header-and-footer__script" src="./SPANG_files/common-header-and-footer.js" style="display: block"
-        type="text/javascript"></script>
 <div class="content_wrapper_wide">
   <div class="small">
     <a href="https://spang.dbcls.jp/">
@@ -39,7 +38,7 @@
   <p>
   </p>
   <h2>Select the target SPARQL endpoint</h2>
-  <div id="contents-area">
+  <div id="contents-area" class="content_wrapper">
   </div>
   <p></p>
 
@@ -48,23 +47,18 @@
 
 </body>
 <script>
-
-  $.get(`https://api.github.com/repos/${repo}/contents/library`, (res) => {
-    for (let file of res) {
-      if (file.type === 'dir') {
-        let link = document.createElement('a');
-        link.className = "link_title";
-        link.innerText = file.name;
-        link.href = `./library.html?name=${file.name}`;
-        let area = document.querySelector('#contents-area');
-        area.appendChild(link);
-        area.appendChild(document.createElement("br"));
-        area.appendChild(document.createElement("br"));
-      }
+  onConfigLoad.push(() => {
+    for(let config of configList) {
+      let link = document.createElement('a');
+      link.className = "link_title";
+      link.innerText = config.title;
+      link.href = `./library.html?name=${config.name}`;
+      let area = document.querySelector('#contents-area');
+      area.appendChild(link);
+      area.appendChild(document.createElement("br"));
+      area.appendChild(document.createElement("br"));
     }
   });
-
-
 </script>
 
 </html>

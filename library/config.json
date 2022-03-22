@@ -1,21 +1,21 @@
 [
-  {
-    "name": "agrold",
-    "title": "AgroLD",
-    "sparql_editor": "yasgui",
-    "endpoint": "http://agrold.southgreen.fr/sparql",
-    "queries": [
-      "uniprot_info.rq",
-      "count_protein.rq",
-      "count_annotations.rq",
-      "count_resource.rq",
-      "list_protein.rq",
-      "list_graphs.rq",
-      "list_predicates.rq",
-      "list_annotations.rq",
-      "list_pathway.rq"
-    ]
-  },
+  // {
+  //   "name": "agrold",
+  //   "title": "AgroLD",
+  //   "sparql_editor": "yasgui",
+  //   "endpoint": "http://agrold.southgreen.fr/sparql",
+  //   "queries": [
+  //     "uniprot_info.rq",
+  //     "count_protein.rq",
+  //     "count_annotations.rq",
+  //     "count_resource.rq",
+  //     "list_protein.rq",
+  //     "list_graphs.rq",
+  //     "list_predicates.rq",
+  //     "list_annotations.rq",
+  //     "list_pathway.rq"
+  //   ]
+  // },
   {
     "name": "disgenet",
     "title": "DisGenet",
@@ -42,6 +42,11 @@
     "name": "uniprot",
     "title": "UniProt",
     "sparql_editor": "yasgui",
+    "queries": [
+      "count_org",
+      "enst.rq",
+      "filter_by_go.rq",
+    ],
     "endpoint": "http://sparql.uniprot.org"
   },
   {
@@ -58,13 +63,13 @@
     "endpoint": "http://www.ebi.ac.uk/rdf/services/sparql",
     "schema": "http://www.ebi.ac.uk/rdf/documentation/chembl"
   },
-  {
-    "name": "ensembl",
-    "title": "Ensembl",
-    "sparql_editor": "yasgui",
-    "endpoint": "http://www.ebi.ac.uk/rdf/services/sparql",
-    "schema": "http://www.ebi.ac.uk/rdf/documentation/chembl"
-  },
+  // {
+  //   "name": "ensembl",
+  //   "title": "Ensembl",
+  //   "sparql_editor": "yasgui",
+  //   "endpoint": "http://www.ebi.ac.uk/rdf/services/sparql",
+  //   "schema": "http://www.ebi.ac.uk/rdf/documentation/chembl"
+  // },
   {
     "name": "mbgd",
     "title": "MBGD",
@@ -83,6 +88,12 @@
     "title": "OMA",
     "sparql_editor": "yasgui",
     "endpoint": "https://sparql.omabrowser.org/sparql"
+  },
+  {
+    "name": "orthodb",
+    "title": "OrthoDB",
+    "sparql_editor": "yasgui",
+    "endpoint": "https://sparql.orthodb.org/sparql"
   },
   {
     "name": "togogenome",
