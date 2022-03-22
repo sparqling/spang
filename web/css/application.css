@@ -175,6 +175,7 @@ table#inner_result_table td {
 table#inner_result_table td a{
     text-decoration: none;
     color: #4886ad;
+    word-break: break-word;
 }
 
 table#inner_result_table th {
@@ -238,12 +239,12 @@ li.cm-ss_subres_li_invalid {
     float: right;
 }
 
-#res_div_query table th {
+#query_result_div table th {
     text-align: left;
-    padding: 0px 10px 0px 10px;
+    padding: 0px 20px 0px 10px;
 }
 
-#res_div_query table td {
+#query_result_div table td {
     text-align: left;
     padding: 0px 10px 0px 10px;
 }
@@ -280,6 +281,7 @@ table.table thead tr th, table.table tfoot tr th {
 
 table.tablesorter thead tr .tablesorter-header {
     font-family: Arial;
+    padding-right: 20px;
 }
 
 table.table tbody td {
@@ -299,4 +301,27 @@ table.tablesorter thead tr .tablesorter-headerAsc {
 
 table.tablesorter thead tr .tablesorter-headerDesc {
     background-color: beige;
+}
+
+.btn {
+    background: -moz-linear-gradient(top, #0099CC 0%, #006699);
+    background: -webkit-gradient(linear, left top, left bottom, from(#0099CC), to(#006699));
+    color: #FFF;
+    padding: 2px 5px;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    /* width: 150px; */
+    text-decoration: none;
+    /* font-weight: bold; */
+    text-align: center;
+    font-size: 13px;
+    display: block;
+
+    cursor: pointer;
+}
+
+#pager {
+    display: inline-flex;
 }

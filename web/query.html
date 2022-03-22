@@ -61,8 +61,8 @@
       Exec
     </button>
     
-    <div id="res_div_query" style="width: 100%; margin-top: 20px; display: none"></div>
   </form>
+  <div id="query_result_div" style="width: 100%; margin-top: 20px; display: none"></div>
 </div>
 
 
@@ -71,6 +71,7 @@
   let params = new URLSearchParams(window.location.search);
   let libraryName = params.get("library");
   let queryName = params.get("query");
+  let sorter;
   
   $(document).ready(function(event) {
     let textArea = document.getElementById("code");
@@ -83,7 +84,7 @@
       lineNumbers: true,
       sparqlSupportAutoComp: true,
       // sparqlSupportQueries: "query", // Tabbed interface
-      // sparqlSupportInnerMode: "query", // Inner mode
+      sparqlSupportInnerMode: false, // Inner mode
       scrollbarStyle: "null",
       viewportMargin: Infinity,
       extraKeys: {
@@ -102,8 +103,15 @@
         query,
         endpoint,
       }, (res) => {
-        let queryArea = $("#res_div_query");
-        let resultHTML = "<table id='inner_result_table' class='table'><thead>";
+        let queryArea = $("#query_result_div");
+        let resultHTML = '<label style="margin-left: 10px;">Filter by:</label> <input id="result-filter" data-column="all" type="search" style="margin-right: 30px;">' + 
+          '<div id="pager" style="float: right;">' +
+          '<button class="d-inline first btn"><<</button>' +
+          '<button class="d-inline prev btn"><</button> ' +
+          '<span style="display:inline-block; width: 200px; text-align: center" class="pagedisplay" data-pager-output-filtered="{startRow} &ndash; {endRow} / {filteredRows} of {totalRows} rows"></span>' +
+          '<button class="d-inline next btn">></button>' +
+          '<button class="d-inline last btn"> >> </button></div>'; 
+        resultHTML += "<table id='inner_result_table' class='table'><thead>";
         let vars = res.head.vars;
         for(let v of vars) {
           resultHTML += `<th>${v}</th>`;
@@ -130,10 +138,16 @@
         queryArea[0].innerHTML = resultHTML;
         queryArea.show();
 
-        let sorter = $('#inner_result_table').tablesorter(
-          {}
+        sorter = $('#inner_result_table').tablesorter(
+          {    
+            widgetOptions : {
+              filter_columnFilters: false,
+              filter_external: '#result-filter',
+            },
+            widgets: ["filter"],
+          }
         );
-        sorter.tablesorterPager({container: '#pager', size: "100"});
+        sorter.tablesorterPager({container: '#pager', size: 10});
       }, "json");
     }
     
