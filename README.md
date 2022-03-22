@@ -8,13 +8,20 @@ node -v
 ```
 If you have installed it, skip installation of `node`.
 
-### Installation of `node` on Ubuntu
+### Installation of `node` on Linux
 If you do not have `npm`, install it.
 ```
-sudo apt install -y npm
+sudo apt -y install npm
 ```
-The defualt directory for modules is `/usr/local/`, which requires `sudo`.
-Configure the directory.
+on Ubuntu, or
+```
+sudo yum -y install npm
+```
+on CentOS.
+
+The defualt directories for installation of npm modules are under `/usr/local/`, which requires `sudo`.
+
+You can change the directories as follows.
 ```
 npm set prefix ~/.npm-global
 ```
@@ -47,12 +54,12 @@ node -v
 ```
 
 ### Installation of spang
-Download from GitHub.
+Download the source code from GitHub.
 ```
-git clone https://github.com/hchiba1/spang.git
+git clone https://github.com/sparqling/spang
 ```
 
-Install.
+Install by using `npm` command.
 ```
 cd spang
 npm install
