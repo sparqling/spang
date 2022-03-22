@@ -18,7 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sparql/sparql.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
-  <script src='https://cdn.jsdelivr.net/gh/sparqling/spang@864c3ac/js/spang.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/gh/sparqling/spang@20f7036881778fd374ad8cf7967fabddbb65814a/js/spang.min.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
   <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.min.js"></script>
@@ -72,12 +72,13 @@
   let libraryName = params.get("library");
   let queryName = params.get("query");
   let sorter;
+  let editor;
   
   $(document).ready(function(event) {
     let textArea = document.getElementById("code");
     let originalValue = textArea.value;
 
-    let editor = CodeMirror.fromTextArea(textArea, {
+    editor = CodeMirror.fromTextArea(textArea, {
       mode: "application/sparql-query",
       matchBrackets: true,
       autoCloseBrackets: true,
@@ -96,13 +97,23 @@
       }
     });
     editor.setValue("");
-    
+
+    function swap(object){
+      var ret = {};
+      for(var key in object){
+        ret[object[key]] = key;
+      }
+      return ret;
+    }
     
     function showQueryResult(endpoint, query) {
       $.post("https://spang.dbcls.jp/sparql-proxy",{
         query,
         endpoint,
       }, (res) => {
+        // URI -> prefix
+        let prefixes = swap(spang.prefix.extractPrefixes(query));
+        
         let queryArea = $("#query_result_div");
         let resultHTML = '<label style="margin-left: 10px;">Filter by:</label> <input id="result-filter" data-column="all" type="search" style="margin-right: 30px;">' + 
           '<div id="pager" style="float: right;">' +
@@ -126,7 +137,15 @@
               if(b[v].type !== "uri") {
                 resultHTML += b[v].value;
               } else {
-                resultHTML += `<a href="${b[v].value}">${b[v].value}</a>`;
+                let uri = b[v].value;
+                let displayedText = uri;
+                for(let [u, p] of Object.entries(prefixes)) {
+                  if(displayedText.startsWith(u)) {
+                    displayedText = displayedText.replace(u, p + ':');
+                    break;
+                  }
+                }
+                resultHTML += `<a href="${uri}">${displayedText}</a>`;
               }
             }
             resultHTML += "</td>";
@@ -177,10 +196,12 @@
           try {
             let sparql = spang.makeSparql(res, metadata, {}, []);
             let lines = sparql.split("\n");
+            
             lines = lines.filter(line => !line.startsWith("#!")); // Remove shebang line
             lines = lines.filter(line => !(line.startsWith("#") && line.substring(1).trim().startsWith("@option"))); // Remove lines of @option
             editor.setValue(lines.join("\n"));
           } catch (e) {
+            console.log(e);
             editor.setValue(res);
           }
         }
