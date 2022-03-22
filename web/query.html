@@ -18,7 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sparql/sparql.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
-  <script src='https://cdn.jsdelivr.net/gh/sparqling/spang@20f7036881778fd374ad8cf7967fabddbb65814a/js/spang.min.js'></script>
+  <script src='https://cdn.jsdelivr.net/gh/sparqling/spang@123dc8d/js/spang.min.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
   <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.widgets.min.js"></script>
@@ -121,7 +121,7 @@
         endpoint,
       }, (res) => {
         // URI -> prefix
-        let prefixes = swap(spang.prefix.extractPrefixes(query));
+        let prefixes = swap(spang.prefix.extractPrefixesAll(query));
         
         let queryArea = $("#query_result_div");
         let resultHTML = '<button style="margin-right: 30px; margin-left: auto;" class="download-btn btn">Download TSV</button><br>' +
