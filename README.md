@@ -97,7 +97,7 @@ WHERE {
 See: https://github.com/sparqling/sparql-formatter
 
 An example web site:<br>
-https://spang.dbcls.jp/example.html
+https://spang.dbcls.jp/example_fmt.html
 
 * Download `spfmt.js` and use it in your HTML.
 
