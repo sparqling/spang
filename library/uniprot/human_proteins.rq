@@ -1,0 +1,10 @@
+#!/usr/bin/env spang2
+# @endpoint uniprot
+
+SELECT (COUNT(DISTINCT ?protein) AS ?count) ?subset ?comment
+WHERE {
+  ?protein up:proteome ?subset .
+  proteome:UP000005640 skos:narrower ?subset .
+  ?subset rdfs:comment ?comment .
+}
+ORDER BY DESC(?count)
