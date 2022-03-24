@@ -3,8 +3,8 @@
 
 SELECT (COUNT(DISTINCT ?protein) AS ?count) ?subset ?comment
 WHERE {
-  ?protein up:proteome ?subset .
   proteome:UP000005640 skos:narrower ?subset .
+  ?protein up:proteome ?subset .
   ?subset rdfs:comment ?comment .
 }
 ORDER BY DESC(?count)
