@@ -1,0 +1,17 @@
+#!/usr/bin/env spang2
+# @endpoint uniprot
+# @option -xa --time
+
+SELECT *
+WHERE {
+  {
+    SELECT ?protein (COUNT(DISTINCT ?subset) AS ?count)
+    WHERE {
+      proteome:UP000005640 skos:narrower ?subset .
+      ?protein up:proteome ?subset .
+    }
+  }
+  FILTER (?count > 1)
+  ?protein rdfs:label ?label .
+  ?protein up:proteome ?proteome .
+}

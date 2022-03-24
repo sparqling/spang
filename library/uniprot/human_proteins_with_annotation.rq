@@ -1,0 +1,14 @@
+#!/usr/bin/env spang2
+# @endpoint uniprot
+# @option -xa --time
+# @param annotation_type = Helix
+
+SELECT (COUNT(DISTINCT ?protein) AS ?count) ?comment
+WHERE {
+  proteome:UP000005640 skos:narrower ?subset .
+  ?subset rdfs:comment ?comment .
+  ?protein up:proteome ?subset ;
+      up:annotation ?annotation .
+  ?annotation a up:${annotation_type}_Annotation .
+}
+ORDER BY DESC(?count)
