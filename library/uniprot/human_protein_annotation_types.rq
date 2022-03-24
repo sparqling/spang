@@ -1,6 +1,6 @@
 #!/usr/bin/env spang2
 # @endpoint uniprot
-# @option -xvac
+# @option -xvac --time
 
 SELECT (COUNT(?protein) AS ?count) ?annotation_type
 WHERE {
