@@ -1,7 +1,7 @@
 #!/usr/bin/env spang2
 # @endpoint uniprot
 # @title Get function annotations of a UniProt entry
-# @param uniprot=P02649 
+# @param uniprot=P02649
 
 SELECT ?gene ?organism ?function
 WHERE {
