@@ -1,9 +1,12 @@
-# @title 
-# @param arg1=K9Z723 
+#!/usr/bin/env spang2
+# @endpoint uniprot
+# @title Get annotations of a UniProt entry
+# @param uniprot=K9Z723
+# @option -vac
 
 SELECT ?annot_type ?begin_pos ?end_pos ?property ?val ?conflict_seq
 WHERE {
-    uniprot:$arg1 up:annotation ?annot .
+    uniprot:${uniprot} up:annotation ?annot .
     ?annot a ?type ;
            ?property ?val .
     ?type rdfs:label ?annot_type .

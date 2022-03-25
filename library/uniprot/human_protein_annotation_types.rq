@@ -1,0 +1,12 @@
+#!/usr/bin/env spang2
+# @endpoint uniprot
+# @option -xvac --time
+
+SELECT (COUNT(?protein) AS ?count) ?annotation_type
+WHERE {
+  proteome:UP000005640 skos:narrower ?subset .
+  ?protein up:proteome ?subset ;
+      up:annotation ?annotation .
+  ?annotation a ?annotation_type .
+}
+ORDER BY DESC(?count)

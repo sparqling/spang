@@ -1,0 +1,12 @@
+#!/usr/bin/env spang2
+# @endpoint uniprot
+# @option
+
+SELECT ?proteome ?subset ?comment
+WHERE {
+  ?proteome a up:Proteome ;
+      up:organism upTax:9606 .
+  ?proteome skos:narrower ?subset .
+  ?subset rdfs:comment ?comment .
+}
+ORDER BY ?subset

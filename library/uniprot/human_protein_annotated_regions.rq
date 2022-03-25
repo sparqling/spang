@@ -1,0 +1,18 @@
+#!/usr/bin/env spang2
+# @option -xvac --time
+# @endpoint uniprot
+# @param annotation_type = Helix
+
+SELECT ?uniprot ?seq_length ?region_length
+WHERE {
+  proteome:UP000005640 skos:narrower ?subset .
+  ?uniprot up:proteome ?subset ;
+      up:annotation ?annotation .
+  ?annotation a up:${annotation_type}_Annotation ;
+      up:range ?range .
+  ?range faldo:begin/faldo:position ?begin_position ;
+         faldo:end/faldo:position ?end_position .
+  ?range faldo:begin/faldo:reference/rdf:value ?seq .
+  BIND(STRLEN(?seq) AS ?seq_length)
+  BIND((?end_position - ?begin_position + 1) AS ?region_length)
+}
