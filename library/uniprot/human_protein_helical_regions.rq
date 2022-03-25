@@ -3,7 +3,11 @@
 # @endpoint togosite
 # @param annotation_type = Helix
 
-SELECT ?uniprot ?mnemonic ?seq_length ?region_length
+PREFIX up: <http://purl.uniprot.org/core/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX faldo: <http://biohackathon.org/resource/faldo#>
+
+SELECT DISTINCT ?uniprot ?mnemonic ?seq_length ?region_length ?begin_position ?end_position
 FROM <http://rdf.integbio.jp/dataset/togosite/uniprot>
 WHERE {
   ?uniprot up:proteome ?subset ;
