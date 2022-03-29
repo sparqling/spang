@@ -30,6 +30,7 @@ spang.getTemplate = (url, callback) => {
 
 spang.prefix.loadPrefixFile('https://raw.githubusercontent.com/hchiba1/spang2/master/etc/prefix');
 spang.shortcut = require('../lib/shortcut.js').shortcut;
+spang.proxy = null;
 
 spang.query = (sparqlTemplate, endpoint, options, callback) => {
   var sparql, metadata;
@@ -38,7 +39,7 @@ spang.query = (sparqlTemplate, endpoint, options, callback) => {
   if(!endpoint) {
     endpoint = metadata.endpoint;
   }
-  require('../lib/query_sparql.js')(endpoint, sparql, options.format, options.get, (error, code, bodies) => {
+  require('../lib/query_sparql.js')(endpoint, spang.proxy, sparql, options.format, options.get, (error, code, bodies) => {
     if (bodies.length === 1) {
       callback(error, code, bodies[0]);
     }
