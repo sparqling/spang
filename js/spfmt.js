@@ -1047,6 +1047,7 @@ function getBindings(vars, b, abbreviate) {
       return `"${b[v].value}"@${lang}`;
     } else if (b[v].type === 'typed-literal' || (b[v].type === 'literal' && b[v].datatype)) {
       if (
+        b[v].datatype === 'http://www.w3.org/2001/XMLSchema#int' ||
         b[v].datatype === 'http://www.w3.org/2001/XMLSchema#integer' ||
         b[v].datatype === 'http://www.w3.org/2001/XMLSchema#decimal' ||
         b[v].datatype === 'http://www.w3.org/2001/XMLSchema#double'
