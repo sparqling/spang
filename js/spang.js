@@ -1,32 +1,27 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 spang = {};
 spang.embed = require('../lib/embed_parameter.js').embedParameter;
-spang.request = require('request');
 spang.prefix = require('../lib/prefix.js');
 const metadataModule = require('../lib/metadata.js');
 const version = require('../package.json').version;
-const syncRequest = require('sync-request');
 const { jsonToTsv } = require('../lib/util.js');
 spang.makeSparql = require('../lib/make_sparql.js').makeSparql;
 spang.retrieveMetadata = metadataModule.retrieveMetadata;
 
 spang.getTemplate = (url, callback) => {
-  var options = {
-    uri: spang.prefix.expandPrefixedUri(url), 
-    followAllRedirects: true,
-    headers:{ 
-      'User-agent': `SPANG/${version}`, 
-      'Accept': 'text/plain'
-    }
-  };
-  spang.request.get(options, function(error, response, body){
-    if (!error && response.statusCode == 200) {
-      callback(body);
-    } else {
-      console.log('error: '+ response.statusCode);
-      console.log(body);
-    }
-  });
+  fetch(spang.prefix.expandPrefixedUri(url))
+    .then(response => {
+      if (!response.ok || response.status !== 200) {
+        throw new Error(`fetch: ${response.status} ${response.statusText}`);
+      }
+      return(response.text());
+    })
+    .then(text => {
+      callback(text);
+    })
+    .catch(reason => {
+      console.log(reason);
+    });
 };
 
 spang.prefix.loadPrefixFile('https://raw.githubusercontent.com/hchiba1/spang2/master/etc/prefix');
@@ -76,7 +71,7 @@ spang.query = (sparqlTemplate, endpoint, options, callback) => {
   });
 };
 
-},{"../lib/embed_parameter.js":2,"../lib/make_sparql.js":4,"../lib/metadata.js":5,"../lib/prefix.js":6,"../lib/query_sparql.js":7,"../lib/shortcut.js":8,"../lib/util.js":10,"../package.json":438,"request":327,"sync-request":412}],2:[function(require,module,exports){
+},{"../lib/embed_parameter.js":2,"../lib/make_sparql.js":4,"../lib/metadata.js":5,"../lib/prefix.js":6,"../lib/query_sparql.js":7,"../lib/shortcut.js":8,"../lib/util.js":10,"../package.json":438}],2:[function(require,module,exports){
 const util = require('./util.js');
 const parser = require('./template_parser.js');
 const mustache = require('mustache');

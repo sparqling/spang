@@ -1,31 +1,26 @@
 spang = {};
 spang.embed = require('../lib/embed_parameter.js').embedParameter;
-spang.request = require('request');
 spang.prefix = require('../lib/prefix.js');
 const metadataModule = require('../lib/metadata.js');
 const version = require('../package.json').version;
-const syncRequest = require('sync-request');
 const { jsonToTsv } = require('../lib/util.js');
 spang.makeSparql = require('../lib/make_sparql.js').makeSparql;
 spang.retrieveMetadata = metadataModule.retrieveMetadata;
 
 spang.getTemplate = (url, callback) => {
-  var options = {
-    uri: spang.prefix.expandPrefixedUri(url), 
-    followAllRedirects: true,
-    headers:{ 
-      'User-agent': `SPANG/${version}`, 
-      'Accept': 'text/plain'
-    }
-  };
-  spang.request.get(options, function(error, response, body){
-    if (!error && response.statusCode == 200) {
-      callback(body);
-    } else {
-      console.log('error: '+ response.statusCode);
-      console.log(body);
-    }
-  });
+  fetch(spang.prefix.expandPrefixedUri(url))
+    .then(response => {
+      if (!response.ok || response.status !== 200) {
+        throw new Error(`fetch: ${response.status} ${response.statusText}`);
+      }
+      return(response.text());
+    })
+    .then(text => {
+      callback(text);
+    })
+    .catch(reason => {
+      console.log(reason);
+    });
 };
 
 spang.prefix.loadPrefixFile('https://raw.githubusercontent.com/hchiba1/spang2/master/etc/prefix');
