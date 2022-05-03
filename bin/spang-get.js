@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const program = require('commander');
-const syncRequest = require('sync-request');
+const axios = require('axios');
 const prefixModule = require('../lib/prefix.js');
 const initializeConfig = require('../lib/config.js').initialize;
 const alias = require('../lib/alias.js');
@@ -27,12 +27,13 @@ if (uri) {
     console.log(uri);
     process.exit(0);
   } else {
-    try {
-      const text = syncRequest('GET', uri).getBody('utf8');
-      console.log(text);
-    } catch (err) {
-      console.error(`cannot open ${uri}`);
-      process.exit(1);
-    }
+    axios.get(uri)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.error(`cannot open ${uri}`);
+        process.exit(1);
+      });
   }
 }
