@@ -3,7 +3,7 @@
 fs = require('fs');
 
 const program = require('commander');
-const request = require('request');
+const axios = require('axios');
 const syncRequest = require('sync-request');
 const columnify = require('columnify');
 const csvParse = require('csv-parse/lib/sync');
@@ -234,31 +234,37 @@ function queryCypher(endpoint, query) {
 
   if (opts.user && opts.pass) {
     options.auth = {
-      user: opts.user,
+      username: opts.user,
       password: opts.pass
     };
   }
 
   let start = new Date();
-  request.post(options, (error, response, body) => {
-    if (error !== null) {
-      console.error(error);
-      return false;
-    }
-    if (error || response.statusCode != 200) {
-      console.error('Error: ' + response.statusCode);
-      console.error(body);
+  axios.post(endpoint, JSON.parse(query), options).then(res => {
+    let end = new Date() - start;
+    const body = JSON.stringify(res.data);
+    if (opts.format == 'tsv') {
+      printTsv(jsonToTsv(body, Boolean(opts.vars)));
     } else {
-      let end = new Date() - start;
-      if (opts.format == 'tsv') {
-        printTsv(jsonToTsv(body, Boolean(opts.vars)));
-      } else {
-        console.log(body);
-      }
-      if (opts.time) {
-        console.error('Time of query: %dms', end);
-      }
+      console.log(body);
     }
+    if (opts.time) {
+      console.error('Time of query: %dms', end);
+    }
+    if (res.data.errors.length) {
+      console.error(`${res.status} ${res.statusText}`);
+      res.data.errors.forEach((e) => {
+        console.error('(' + e.code + ')');
+        console.error(e.message);
+      });
+    }
+  }).catch(err => {
+    const res = err.response;
+    console.error(`${err.code}: ${res.status} ${res.statusText}`);
+    res.data.errors.forEach((e) => {
+      console.error('(' + e.code + ')');
+      console.error(e.message);
+    });
   });
 }
 
