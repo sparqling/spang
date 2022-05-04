@@ -160,8 +160,7 @@ if (/^\w/.test(db)) {
   process.exit(-1);
 }
 
-jsonToTsv = (body, withHeader) => {
-  const obj = JSON.parse(body);
+function toTsv(obj, withHeader) {
   let tsv = '';
 
   if (obj.results.length > 0) {
@@ -208,7 +207,7 @@ jsonToTsv = (body, withHeader) => {
   return tsv;
 };
 
-printTsv = (tsv) => {
+function printTsv(tsv) {
   if (opts.align_column) {
     console.log(
       columnify(csvParse(tsv, { columns: Boolean(opts.vars), delimiter: '\t', relax: true }), {
@@ -242,11 +241,10 @@ function queryCypher(endpoint, query) {
   let start = new Date();
   axios.post(endpoint, JSON.parse(query), options).then(res => {
     let end = new Date() - start;
-    const body = JSON.stringify(res.data);
     if (opts.format == 'tsv') {
-      printTsv(jsonToTsv(body, Boolean(opts.vars)));
+      printTsv(toTsv(res.data, Boolean(opts.vars)));
     } else {
-      console.log(body);
+      console.log(res.data);
     }
     if (opts.time) {
       console.error('Time of query: %dms', end);
