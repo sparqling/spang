@@ -19,7 +19,6 @@ const querySparql = require('../lib/query_sparql.js');
 const alias = require('../lib/alias.js');
 const util = require('../lib/util.js');
 const initializeConfig = require('../lib/config.js').initialize;
-const { getReasonPhrase } = require('http-status-codes');
 const jsonToTsv = util.jsonToTsv;
 
 let templatePath;
@@ -247,26 +246,7 @@ if (!/^(http|https):\/\//.test(db)) {
 const proxy = opts.useProxy ? opts.proxy : null;
 
 let start = new Date();
-querySparql(db, proxy, sparqlTemplate, opts.outfmt, retrieveByGet, (error, statusCode, bodies) => {
-  if (error) {
-    if (error.code === 'ENOTFOUND') {
-      console.error(`${error.code} ${error.syscall} ${error.hostname}`);
-    } else if (error.code === 'ECONNREFUSED') {
-      console.error(`${error.code} ${error.syscall} ${error.address}:${error.port}`);
-    } else {
-      console.error(error);
-    }
-    return;
-  }
-  if (statusCode != 200) {
-    console.error(`${statusCode} ${getReasonPhrase(statusCode)}`);
-    if (statusCode != 404 && statusCode != 414 && statusCode != 503) {
-      for (let body of bodies) {
-        console.error(body);
-      }
-    }
-    return;
-  }
+querySparql(db, proxy, sparqlTemplate, opts.outfmt, retrieveByGet, (bodies) => {
   let end = new Date() - start;
   if (bodies.length === 1) {
     if (opts.outfmt === 'tsv') {
