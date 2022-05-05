@@ -1,32 +1,306 @@
-
-{ "head": { "link": [], "vars": ["p", "o"] },
-  "results": { "distinct": false, "ordered": true, "bindings": [
-    { "p": { "type": "uri", "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" }	, "o": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon" }},
-    { "p": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#label" }	, "o": { "type": "literal", "value": "Bacteria" }},
-    { "p": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#seeAlso" }	, "o": { "type": "uri", "value": "http://purl.uniprot.org/taxonomy/2" }},
-    { "p": { "type": "uri", "value": "http://www.w3.org/2002/07/owl#sameAs" }	, "o": { "type": "uri", "value": "http://purl.obolibrary.org/obo/NCBITaxon_2" }},
-    { "p": { "type": "uri", "value": "http://www.w3.org/2002/07/owl#sameAs" }	, "o": { "type": "uri", "value": "http://purl.org/obo/owl/NCBITaxon#2" }},
-    { "p": { "type": "uri", "value": "http://www.w3.org/2002/07/owl#sameAs" }	, "o": { "type": "uri", "value": "http://www.berkeleybop.org/ontologies/owl/NCBITaxon#2" }},
-    { "p": { "type": "uri", "value": "http://www.w3.org/2002/07/owl#sameAs" }	, "o": { "type": "uri", "value": "http://www.ncbi.nlm.nih.gov/taxonomy/2" }},
-    { "p": { "type": "uri", "value": "http://www.w3.org/2002/07/owl#sameAs" }	, "o": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/2" }},
-    { "p": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#subClassOf" }	, "o": { "type": "uri", "value": "http://identifiers.org/taxonomy/131567" }},
-    { "p": { "type": "uri", "value": "http://purl.org/dc/terms/identifier" }	, "o": { "type": "typed-literal", "datatype": "http://www.w3.org/2001/XMLSchema#integer", "value": "2" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/blastName" }	, "o": { "type": "literal", "value": "bacteria" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/genbankCommonName" }	, "o": { "type": "literal", "value": "eubacteria" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCode" }	, "o": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode11" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart" }	, "o": { "type": "literal", "value": "Monera" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart" }	, "o": { "type": "literal", "value": "Procaryotae" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart" }	, "o": { "type": "literal", "value": "Prokaryota" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart" }	, "o": { "type": "literal", "value": "Prokaryotae" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart" }	, "o": { "type": "literal", "value": "prokaryote" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart" }	, "o": { "type": "literal", "value": "prokaryotes" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/rank" }	, "o": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/Superkingdom" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/scientificName" }	, "o": { "type": "literal", "value": "Bacteria" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName" }	, "o": { "type": "literal", "value": "Bacteria <prokaryotes>" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName" }	, "o": { "type": "literal", "value": "Monera <Bacteria>" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName" }	, "o": { "type": "literal", "value": "Procaryotae <Bacteria>" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName" }	, "o": { "type": "literal", "value": "Prokaryota <Bacteria>" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName" }	, "o": { "type": "literal", "value": "Prokaryotae <Bacteria>" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName" }	, "o": { "type": "literal", "value": "bacteria <blast2>" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName" }	, "o": { "type": "literal", "value": "prokaryote <Bacteria>" }},
-    { "p": { "type": "uri", "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName" }	, "o": { "type": "literal", "value": "prokaryotes <Bacteria>" }} ] } }
+{
+  "head": {
+    "link": [],
+    "vars": [
+      "p",
+      "o"
+    ]
+  },
+  "results": {
+    "distinct": false,
+    "ordered": true,
+    "bindings": [
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://www.w3.org/2000/01/rdf-schema#label"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Bacteria"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://purl.uniprot.org/taxonomy/2"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://www.w3.org/2002/07/owl#sameAs"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://purl.obolibrary.org/obo/NCBITaxon_2"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://www.w3.org/2002/07/owl#sameAs"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://purl.org/obo/owl/NCBITaxon#2"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://www.w3.org/2002/07/owl#sameAs"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://www.berkeleybop.org/ontologies/owl/NCBITaxon#2"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://www.w3.org/2002/07/owl#sameAs"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://www.ncbi.nlm.nih.gov/taxonomy/2"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://www.w3.org/2002/07/owl#sameAs"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/2"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://www.w3.org/2000/01/rdf-schema#subClassOf"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://identifiers.org/taxonomy/131567"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://purl.org/dc/terms/identifier"
+        },
+        "o": {
+          "type": "typed-literal",
+          "datatype": "http://www.w3.org/2001/XMLSchema#integer",
+          "value": "2"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/blastName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "bacteria"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/genbankCommonName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "eubacteria"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCode"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode11"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Monera"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Procaryotae"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Prokaryota"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Prokaryotae"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart"
+        },
+        "o": {
+          "type": "literal",
+          "value": "prokaryote"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/inPart"
+        },
+        "o": {
+          "type": "literal",
+          "value": "prokaryotes"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/rank"
+        },
+        "o": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/Superkingdom"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/scientificName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Bacteria"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Bacteria <prokaryotes>"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Monera <Bacteria>"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Procaryotae <Bacteria>"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Prokaryota <Bacteria>"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "Prokaryotae <Bacteria>"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "bacteria <blast2>"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "prokaryote <Bacteria>"
+        }
+      },
+      {
+        "p": {
+          "type": "uri",
+          "value": "http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName"
+        },
+        "o": {
+          "type": "literal",
+          "value": "prokaryotes <Bacteria>"
+        }
+      }
+    ]
+  }
+}
