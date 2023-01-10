@@ -16,12 +16,13 @@ const opts = program
   .option('-a, --average', 'calculate average time')
   .option('-s, --sort', 'sort resulting lines before validation')
   .option('-d, --delimiter <DELIMITER>', 'delimiter of output', '\t')
-  .option('-m, --method <METHOD>', 'GET or POST')
+  .option('--sep <SEPARATOR>', 'separator inside of column', ' ')
+  .option('-m, --method <METHOD>', 'method of HTTP requers (GET or POST)', 'GET')
   .option('-p, --pattern <REGEX>', 'extra constraint for file pattern specified in regex')
   .option('--exclude <REGEX>', 'extra constraint for file pattern to be excluded specified in regex')
   .option('--output-error', 'output to stderr')
   .option('--sec', 'output in "sec" (default: in "ms")')
-  .option('-H, --header', 'output header')
+  .option('-H, --no-header', 'output without header')
   .option('-T, --no-time', 'output without time')
   .option('-V, --no-validation', 'without validation of the result')
   .option('-v, --verbose', 'output progress to stderr')
@@ -47,14 +48,14 @@ const pattern = opts.pattern ? new RegExp(opts.pattern) : null;
 const exclude = opts.exclude ? new RegExp(opts.exclude) : null;
 
 let header = [];
+if (opts.validation) {
+  header.push('valid');
+}
 if (opts.time) {
   header.push('time');
   if (opts.average) {
     header.push('average');
   }
-}
-if (opts.validation) {
-  header.push('valid');
 }
 header.push('name');
 
@@ -113,13 +114,7 @@ function measureQuery(queryPath, expected, sort) {
     if (opts.verbose) {
       console.error(`query: ${column}`);
     }
-    let arguments = [queryPath];
-    if (opts.time) {
-      arguments.push('--time');
-    }
-    if (opts.method) {
-      arguments = arguments.concat(['--method', opts.method]);
-    }
+    let arguments = ['--time', queryPath, '--method', opts.method];
     if (opts.endpoint) {
       arguments = arguments.concat(['--endpoint', opts.endpoint]);
     }
@@ -165,15 +160,15 @@ function measureQuery(queryPath, expected, sort) {
     }
   }
   if (opts.time) {
-    row['time'] = times.join(',');
+    row['time'] = times.join(opts.sep);
     if (opts.average) {
       let validTimes = times.filter((time) => time !== 'null');
-      const average = validTimes.map((t) => parseInt(t)).reduce((a, b) => a + b, 0) / validTimes.length;
+      const average = validTimes.map((t) => parseFloat(t)).reduce((a, b) => a + b, 0) / validTimes.length;
       row['average'] = average.toString();
     }
   }
   if (opts.validation) {
-    row['valid'] = validations.join(',');
+    row['valid'] = validations.join(opts.sep);
   }
   writer.write(row);
 }
