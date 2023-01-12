@@ -152,7 +152,7 @@ if (/^\w/.test(db)) {
       console.error(`${db}: no such endpoint`);
       process.exit(-1);
     }
-    [db, retrieveByGet] = search_db_name.searchDBName(db);
+    [db, retrieveByGet] = [dbMap[db].url, dbMap[db].byGet];
   }
   queryCypher(db, queryTemplate);
 } else {

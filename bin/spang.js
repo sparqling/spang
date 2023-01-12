@@ -38,6 +38,7 @@ let opts = program
   .option('-F, --from <FROM>', 'shortcut to search FROM specific graph (use alone or with -[SPOLN])')
   .option('-N, --number', 'shortcut to COUNT results (use alone or with -[SPO])')
   .option('-G, --graph', 'shortcut to search for graph names (use alone or with -[SPO])')
+  .option('--user-config <DIRECTORY>', 'user configuration directory (default: ~/.spang)')
   .option('--prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
   .option('-n, --ignore-user-prefix', 'ignore user-specific file (~/.spang/prefix) for test purpose')
   .option('--ignore-local-prefix', 'ignore local prefix files')
@@ -130,7 +131,7 @@ if (opts.fmt) {
   process.exit(0);
 }
 
-const dbMap = search_db_name.listup();
+const dbMap = search_db_name.listup(opts);
 
 if (opts.listNickName) {
   console.log('SPARQL endpoints');
@@ -235,11 +236,10 @@ if (!/^(http|https):\/\//.test(db)) {
   if (!dbMap[db]) {
     queryLocalFile(db);
     process.exit(0);
-  } else {
-    [db, retrieveByGet] = search_db_name.searchDBName(db);
-    if (opts.method && /^get$/i.test(opts.method)) {
-      retrieveByGet = true;
-    }
+  }
+  [db, retrieveByGet] = [dbMap[db].url, dbMap[db].byGet];
+  if (opts.method && /^get$/i.test(opts.method)) {
+    retrieveByGet = true;
   }
 }
 
