@@ -40,7 +40,7 @@ let opts = program
   .option('-G, --graph', 'shortcut to search for graph names (use alone or with -[SPO])')
   .option('--user-config <DIRECTORY>', 'user configuration directory (default: ~/.spang)')
   .option('--prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
-  .option('-n, --ignore-user-prefix', 'ignore user-specific file (~/.spang/prefix) for test purpose')
+  .option('-n, --ignore-user-config', 'ignore user configuration for test purpose')
   .option('--ignore-local-prefix', 'ignore local prefix files')
   .option('-m, --method <METHOD>', 'specify GET method (default: POST method)')
   .option('-q, --show-query', 'show query and quit')
