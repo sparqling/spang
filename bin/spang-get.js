@@ -6,7 +6,6 @@ const initializeConfig = require('../lib/config.js').initialize;
 const alias = require('../lib/alias.js');
 
 let opts = program
-  .option('-r, --prefix <PREFIX_FILES>', 'read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)')
   .option('-n, --ignore-user-config', 'ignore user configuration for test purpose')
   .option('-q, --quit', 'show expanded URI and quit')
   .version(require("../package.json").version)
