@@ -449,7 +449,13 @@ const addFunction = (func) => {
 const getAggregate = (expr) => {
   if (expr.aggregateType === 'count') {
     let distinct = expr.distinct ? 'DISTINCT ' : '';
-    return `COUNT(${distinct}${getExpression(expr.expression)})`;
+    let expression;
+    if (expr.expression === '*') {
+      expression = '*'
+    } else {
+      expression = getExpression(expr.expression);
+    }
+    return `COUNT(${distinct}${expression})`;
   } else if (expr.aggregateType === 'sum') {
     return `sum(?${expr.expression.value.value})`;
   } else if (expr.aggregateType === 'min') {

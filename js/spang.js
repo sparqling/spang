@@ -7422,13 +7422,17 @@ exports["default"] = handleQs;
 },{"qs":53}],59:[function(require,module,exports){
 module.exports={
   "name": "spang",
-  "version": "2.5.0",
-  "description": "JavaScript implementation of SPANG",
+  "version": "2.6.1",
+  "description": "SPARQL client for parameterized queries",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hchiba1/spang"
+    "url": "https://github.com/sparqling/spang"
   },
+  "author": "Hirokazu Chiba",
   "license": "MIT",
+  "keywords": [
+    "sparql"
+  ],
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
