@@ -41,7 +41,10 @@ brew -v
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
-Install `nodebrew` using `brew`.
+Install `node` or `nodebrew` using `brew`.
+```
+brew install node
+```
 ```
 brew install nodebrew
 mkdir -p ~/.nodebrew/src
