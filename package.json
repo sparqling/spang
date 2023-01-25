@@ -4,8 +4,9 @@
   "description": "SPARQL client for parameterized queries",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hchiba1/spang"
+    "url": "https://github.com/sparqling/spang"
   },
+  "author": "Hirokazu Chiba",
   "license": "MIT",
   "keywords": [
     "sparql"
