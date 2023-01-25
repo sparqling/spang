@@ -1,5 +1,4 @@
 # SPANG
-`spang2` is a commmand-line SPARQL client implemented in JavaScript.
 
 ## Installation
 `spang2` requires `node` (version >= 14).
