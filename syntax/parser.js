@@ -1035,7 +1035,6 @@ function peg$parse(input, options) {
         } else {
           return {
             token: 'path',
-            kind: 'element',
             value: p,
             modifier: m,
           }
@@ -1044,11 +1043,8 @@ function peg$parse(input, options) {
       peg$c199 = "^",
       peg$c200 = peg$literalExpectation("^", false),
       peg$c201 = function(elt) {
-        return {
-          token: 'path',
-          kind: 'inversePath',
-          value: elt,
-        };
+        elt.kind = 'inversePath';
+        return elt;
       },
       peg$c202 = "?",
       peg$c203 = peg$literalExpectation("?", false),
@@ -4146,11 +4142,11 @@ function peg$parse(input, options) {
       }
       if (s2 !== peg$FAILED) {
         s3 = [];
-        s4 = peg$parseConstraint();
+        s4 = peg$parseHavingCondition();
         if (s4 !== peg$FAILED) {
           while (s4 !== peg$FAILED) {
             s3.push(s4);
-            s4 = peg$parseConstraint();
+            s4 = peg$parseHavingCondition();
           }
         } else {
           s3 = peg$FAILED;
@@ -4163,6 +4159,34 @@ function peg$parse(input, options) {
           peg$currPos = s0;
           s0 = peg$FAILED;
         }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+    } else {
+      peg$currPos = s0;
+      s0 = peg$FAILED;
+    }
+
+    return s0;
+  }
+
+  function peg$parseHavingCondition() {
+    var s0, s1, s2, s3;
+
+    s0 = peg$currPos;
+    s1 = peg$parseConstraint();
+    if (s1 !== peg$FAILED) {
+      s2 = [];
+      s3 = peg$parseWS();
+      while (s3 !== peg$FAILED) {
+        s2.push(s3);
+        s3 = peg$parseWS();
+      }
+      if (s2 !== peg$FAILED) {
+        peg$savedPos = s0;
+        s1 = peg$c62(s1);
+        s0 = s1;
       } else {
         peg$currPos = s0;
         s0 = peg$FAILED;

@@ -373,7 +373,10 @@ HavingClause = 'HAVING' WS* h:HavingCondition+
 }
 
 // [22] HavingCondition ::= Constraint
-HavingCondition = Constraint
+HavingCondition = h:Constraint WS*
+{
+  return h;
+}
 
 // [23] OrderClause ::= 'ORDER' 'BY' OrderCondition+
 OrderClause = 'ORDER'i WS* 'BY'i WS* os:OrderCondition+ WS*
@@ -1119,7 +1122,6 @@ PathElt = p:PathPrimary m:PathMod?
   } else {
     return {
       token: 'path',
-      kind: 'element',
       value: p,
       modifier: m,
     }
@@ -1130,11 +1132,8 @@ PathElt = p:PathPrimary m:PathMod?
 PathEltOrInverse = PathElt
 / '^' elt:PathElt
 {
-  return {
-    token: 'path',
-    kind: 'inversePath',
-    value: elt,
-  };
+  elt.kind = 'inversePath';
+  return elt;
 }
 
 // [93] PathMod ::= '?' | '*' | '+'
