@@ -7422,7 +7422,7 @@ exports["default"] = handleQs;
 },{"qs":53}],59:[function(require,module,exports){
 module.exports={
   "name": "spang",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "SPARQL client for parameterized queries",
   "repository": {
     "type": "git",
