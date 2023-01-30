@@ -7,7 +7,7 @@ spfmt = (sparql, indentDepth = 2) => {
 
 },{"../lib/formatter.js":2,"../lib/template_parser":5}],2:[function(require,module,exports){
 let output;
-let commentsList;
+let comments;
 let currentIndent;
 let indentUnit = '  ';
 
@@ -15,7 +15,7 @@ exports.format = (syntaxTree, indentDepth = 2) => {
   indentUnit = ' '.repeat(indentDepth);
 
   output = [];
-  commentsList = syntaxTree.comments;
+  comments = syntaxTree.comments;
   currentIndent = '';
 
   if (syntaxTree.headers.length > 0) {
@@ -51,7 +51,9 @@ exports.format = (syntaxTree, indentDepth = 2) => {
     addInlineData(syntaxTree.inlineData);
   }
 
-  addComments();
+  while (comments.length > 0) {
+    output[output.length - 1] += comments.shift().text;
+  }
 
   return output.join('\n');
 };
@@ -68,26 +70,15 @@ const decreaseIndent = (depth = 1) => {
   currentIndent = currentIndent.substr(0, currentIndent.length - indentUnit.length * depth);
 };
 
-const addLine = (lineText, commentPtr = 0) => {
-  // 0 means min ptr, so no comments will be added.
-  addComments(commentPtr);
-  output.push(currentIndent + lineText);
+const addLine = (line) => {
+  output.push(currentIndent + line);
 };
 
-const addComments = (commentPtr = -1) => {
-  // -1 means 'max' ptr, so all comments will be added.
-  let commentAdded = false;
-  while (commentsList.length > 0 && (commentsList[0].line < commentPtr || commentPtr == -1)) {
-    const commentText = commentsList.shift().text;
-    if (commentAdded || commentPtr == -1 || output[output.length - 1] === '') {
-      // newline is necessary before comment
-      output.push(commentText);
-    } else {
-      // newline is not necessary
-      output[output.length - 1] += commentText;
-    }
-    commentAdded = true;
+const addLineWithComment = (line, pos) => {
+  while (comments.length && comments[0].pos < pos) {
+    output[output.length - 1] += comments.shift().text;
   }
+  addLine(line);
 };
 
 const addAsk = (ask) => {
@@ -159,6 +150,12 @@ const addUnit = (unit) => {
       silent = ' SILENT ';
     }
     addLine(`COPY${silent}${g1} TO ${g2}`);
+  } else if (unit.kind === 'load') {
+    let silent = ' ';
+    if (unit.silent) {
+      silent = ' SILENT ';
+    }
+    addLine(`LOAD${silent}${getUri(unit.sourceGraph)}`);
   }
 };
 
@@ -180,20 +177,21 @@ const addQuads = (quads) => {
 
 const addSelect = (select) => {
   const proj = select.projection;
-  const lastLine = proj[0].value ? proj[0].value.location.start.line : proj[0].location.start.line;
+  const pos = proj[0].value ? proj[0].value.location.start.offset : proj[0].location.start.offset;
+  const projEndPos = proj[0].value ? proj[0].value.location.end.offset : proj[0].location.end.offset;
 
   let args = '';
   if (select.modifier) {
     args += `${select.modifier.toString()} `;
   }
   args += proj.map(getProjection).join(' ');
-  addLine(`SELECT ${args}`, lastLine);
+  addLineWithComment(`SELECT ${args}`, pos);
 
   addDataset(select.dataset);
 
-  addLine('WHERE {', lastLine + 1);
+  addLineWithComment('WHERE {', projEndPos+1);
   addGroupGraphPatternSub(select.pattern);
-  addLine('}', select.pattern.location.end.line);
+  addLineWithComment('}', select.pattern.location.end.offset);
 
   addSolutionModifier(select);
 };
@@ -419,7 +417,7 @@ const addTriplesBlock = (triplesblock) => {
 const addTriplePath = (triplepath) => {
   const s = getTripleElem(triplepath.chainSubject);
   const props = getPropertyList(triplepath.propertylist, s?.length);
-  addLine(`${s}${props} .`);
+  addLineWithComment(`${s}${props} .`, triplepath.chainSubject.location.start.offset);
 };
 
 const getPropertyList = (propertylist, sLen = 4) => {
@@ -598,9 +596,12 @@ const getTripleElem = (elem) => {
       return literal;
     case 'path':
       if (elem.kind === 'alternative') {
-        let path = elem.value.map((e) => getPredicate(e)).join('|');
+        let path = elem.value.map((e) => getTripleElem(e)).join('|');
         if (elem.bracketted) {
           path = `(${path})`;
+        }
+        if (elem.modifier) {
+          path += elem.modifier;
         }
         return path;
       } else if (elem.kind === 'sequence') {
@@ -4791,7 +4792,7 @@ function peg$parse(input, options) {
         s.headers = h;
         s.comments = Object.entries(Comments).map(([loc, str]) => ({
           text: str,
-          line: parseInt(loc),
+          pos: parseInt(loc),
         }));
 
         if (s.functions) {
@@ -4997,6 +4998,15 @@ function peg$parse(input, options) {
       peg$c36 = "describe",
       peg$c37 = peg$literalExpectation("DESCRIBE", true),
       peg$c38 = function(v, gs, w, sm) {
+        let dataset = { named: [], implicit: [] };
+        gs.forEach((g) => {
+          if (g.kind === 'default') {
+            dataset.implicit.push(g.graph);
+          } else {
+            dataset.named.push(g.graph)
+          }
+        });
+
         return {
           token: 'executableunit',
           kind: 'describe',
@@ -5672,7 +5682,6 @@ function peg$parse(input, options) {
         } else {
           return {
             token: 'path',
-            kind: 'element',
             value: p,
             modifier: m,
           }
@@ -5681,11 +5690,8 @@ function peg$parse(input, options) {
       peg$c199 = "^",
       peg$c200 = peg$literalExpectation("^", false),
       peg$c201 = function(elt) {
-        return {
-          token: 'path',
-          kind: 'inversePath',
-          value: elt,
-        };
+        elt.kind = 'inversePath';
+        return elt;
       },
       peg$c202 = "?",
       peg$c203 = peg$literalExpectation("?", false),
@@ -6791,8 +6797,7 @@ function peg$parse(input, options) {
       peg$c526 = "#",
       peg$c527 = peg$literalExpectation("#", false),
       peg$c528 = function() {
-        const line = location().start.line;
-        Comments[line] = text();
+        Comments[location().start.offset] = text();
 
         return '';
       },
@@ -8784,11 +8789,11 @@ function peg$parse(input, options) {
       }
       if (s2 !== peg$FAILED) {
         s3 = [];
-        s4 = peg$parseConstraint();
+        s4 = peg$parseHavingCondition();
         if (s4 !== peg$FAILED) {
           while (s4 !== peg$FAILED) {
             s3.push(s4);
-            s4 = peg$parseConstraint();
+            s4 = peg$parseHavingCondition();
           }
         } else {
           s3 = peg$FAILED;
@@ -8801,6 +8806,34 @@ function peg$parse(input, options) {
           peg$currPos = s0;
           s0 = peg$FAILED;
         }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+    } else {
+      peg$currPos = s0;
+      s0 = peg$FAILED;
+    }
+
+    return s0;
+  }
+
+  function peg$parseHavingCondition() {
+    var s0, s1, s2, s3;
+
+    s0 = peg$currPos;
+    s1 = peg$parseConstraint();
+    if (s1 !== peg$FAILED) {
+      s2 = [];
+      s3 = peg$parseWS();
+      while (s3 !== peg$FAILED) {
+        s2.push(s3);
+        s3 = peg$parseWS();
+      }
+      if (s2 !== peg$FAILED) {
+        peg$savedPos = s0;
+        s1 = peg$c62(s1);
+        s0 = s1;
       } else {
         peg$currPos = s0;
         s0 = peg$FAILED;
@@ -24411,34 +24444,43 @@ function peg$parse(input, options) {
   }
 
   function peg$parseCOMMENT() {
-    var s0, s1, s2, s3, s4;
+    var s0, s1, s2, s3, s4, s5;
 
     s0 = peg$currPos;
-    s1 = [];
-    s2 = peg$parseSPACE_OR_TAB();
-    while (s2 !== peg$FAILED) {
-      s1.push(s2);
-      s2 = peg$parseSPACE_OR_TAB();
+    s1 = peg$parseNEW_LINE();
+    if (s1 === peg$FAILED) {
+      s1 = null;
     }
     if (s1 !== peg$FAILED) {
-      if (input.charCodeAt(peg$currPos) === 35) {
-        s2 = peg$c526;
-        peg$currPos++;
-      } else {
-        s2 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c527); }
+      s2 = [];
+      s3 = peg$parseSPACE_OR_TAB();
+      while (s3 !== peg$FAILED) {
+        s2.push(s3);
+        s3 = peg$parseSPACE_OR_TAB();
       }
       if (s2 !== peg$FAILED) {
-        s3 = [];
-        s4 = peg$parseNON_NEW_LINE();
-        while (s4 !== peg$FAILED) {
-          s3.push(s4);
-          s4 = peg$parseNON_NEW_LINE();
+        if (input.charCodeAt(peg$currPos) === 35) {
+          s3 = peg$c526;
+          peg$currPos++;
+        } else {
+          s3 = peg$FAILED;
+          if (peg$silentFails === 0) { peg$fail(peg$c527); }
         }
         if (s3 !== peg$FAILED) {
-          peg$savedPos = s0;
-          s1 = peg$c528();
-          s0 = s1;
+          s4 = [];
+          s5 = peg$parseNON_NEW_LINE();
+          while (s5 !== peg$FAILED) {
+            s4.push(s5);
+            s5 = peg$parseNON_NEW_LINE();
+          }
+          if (s4 !== peg$FAILED) {
+            peg$savedPos = s0;
+            s1 = peg$c528();
+            s0 = s1;
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
         } else {
           peg$currPos = s0;
           s0 = peg$FAILED;
