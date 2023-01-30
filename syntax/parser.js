@@ -351,6 +351,15 @@ function peg$parse(input, options) {
       peg$c36 = "describe",
       peg$c37 = peg$literalExpectation("DESCRIBE", true),
       peg$c38 = function(v, gs, w, sm) {
+        let dataset = { named: [], implicit: [] };
+        gs.forEach((g) => {
+          if (g.kind === 'default') {
+            dataset.implicit.push(g.graph);
+          } else {
+            dataset.named.push(g.graph)
+          }
+        });
+
         return {
           token: 'executableunit',
           kind: 'describe',

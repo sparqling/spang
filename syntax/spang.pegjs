@@ -231,6 +231,15 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
 // [11] DescribeQuery ::= 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
 DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* gs:DatasetClause* WS* w:WhereClause? WS* sm:SolutionModifier
 {
+  let dataset = { named: [], implicit: [] };
+  gs.forEach((g) => {
+    if (g.kind === 'default') {
+      dataset.implicit.push(g.graph);
+    } else {
+      dataset.named.push(g.graph)
+    }
+  });
+
   return {
     token: 'executableunit',
     kind: 'describe',
