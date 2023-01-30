@@ -145,7 +145,7 @@ function peg$parse(input, options) {
         s.headers = h;
         s.comments = Object.entries(Comments).map(([loc, str]) => ({
           text: str,
-          line: parseInt(loc),
+          pos: parseInt(loc),
         }));
 
         if (s.functions) {
@@ -2145,8 +2145,7 @@ function peg$parse(input, options) {
       peg$c526 = "#",
       peg$c527 = peg$literalExpectation("#", false),
       peg$c528 = function() {
-        const line = location().start.line;
-        Comments[line] = text();
+        Comments[location().start.offset] = text();
 
         return '';
       },

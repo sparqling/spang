@@ -7,7 +7,7 @@ DOCUMENT = h:(HEADER_LINE*) WS* s:SPARQL WS* f:(Function*) WS*
   s.headers = h;
   s.comments = Object.entries(Comments).map(([loc, str]) => ({
     text: str,
-    line: parseInt(loc),
+    pos: parseInt(loc),
   }));
 
   if (s.functions) {
@@ -2452,8 +2452,7 @@ HEADER_LINE = '#' NON_NEW_LINE* NEW_LINE
 
 COMMENT = SPACE_OR_TAB* '#' NON_NEW_LINE*
 {
-  const line = location().start.line;
-  Comments[line] = text();
+  Comments[location().start.offset] = text();
 
   return '';
 }
