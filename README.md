@@ -79,63 +79,6 @@ spang2
 npm test
 ```
 
-## Using SPARQL formatter
-
-### Usage in command line
-
-```
-$ cat messy.rq 
-SELECT * WHERE         {         ?s ?p ?o }
-
-$ spfmt messy.rq 
-SELECT *
-WHERE {
-    ?s ?p ?o .
-}
-```
-
-### Usage on a web site
-
-See: https://github.com/sparqling/sparql-formatter
-
-An example web site:<br>
-https://spang.dbcls.jp/example_fmt.html
-
-* Download `spfmt.js` and use it in your HTML.
-
-```
-<script src="/js/spfmt.js"></script>
-```
-
-* Then you can use `spfmt`.
-```javascript
-spfmt("SELECT * WHERE {?s ?p ?o}");
-/*
-SELECT *
-WHERE {
-  ?s ?p ?o .
-}
-*/
-```
-
-* You can also call `spfmt.js` through the jsDelivr service.
-```
-    <textarea id="sparql-text" rows=5></textarea>
-    <button id="reformat-button">Reformat</button>
-    <textarea id="sparql-text-after" rows=5></textarea>
-    
-    <script src="https://cdn.jsdelivr.net/gh/sparqling/spang@master/js/spfmt.js"></script>
-    <script type="text/javascript">
-     window.onload = () => {
-         var textArea = 
-             document.querySelector("#reformat-button").addEventListener('click', (event) => {
-                 document.querySelector("#sparql-text-after").value =
-                     spfmt(document.querySelector("#sparql-text").value);
-             });
-     };
-    </script>
-```
-
 ## For maintainers
 
 `js/*.js` should be updated for those who call spang functions through their Web applications.
