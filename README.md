@@ -1,6 +1,13 @@
 # SPANG
 
 ## Command line interface
+`spang2` requires `node` (version >= 14).
+```
+node -v
+```
+If you do not have `node`, see Installation of `node`.
+
+Installation:
 ```
 $ npm install -g spang
 ```
@@ -17,17 +24,13 @@ git clone https://github.com/sparqling/spang
 cd spang
 npm ci
 ```
-Optionally,
+Optional:
 ```
 $ npm link
 ```
 will make a symbolic link to `./bin/*` in your path.
 
 ## Installation of `node`
-`spang2` requires `node` (version >= 14).
-```
-node -v
-```
 
 ### Linux
 If you do not have `npm`, install it.
