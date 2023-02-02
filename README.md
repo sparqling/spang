@@ -95,7 +95,7 @@ npm run browserify
 ### Requirements
 - npm (>= 6.12.0)
 
-### Test examples
+### Test
 ```
 npm test
 ```
