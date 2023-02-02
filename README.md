@@ -1,13 +1,35 @@
 # SPANG
 
-## Installation
+## Command line interface
+```
+$ npm install -g spang
+```
+A symbolic link to `./bin/spang.js` will be created as `spang2` in your path.
+
+For the help message, just type the command
+```
+$ spang2
+```
+
+## Install from GitHub
+```
+git clone https://github.com/sparqling/spang
+cd spang
+npm ci
+```
+Optionally,
+```
+$ npm link
+```
+will make a symbolic link to `./bin/*` in your path.
+
+## Installation of `node`
 `spang2` requires `node` (version >= 14).
 ```
 node -v
 ```
-If you have installed it, skip installation of `node`.
 
-### Installation of `node` on Linux
+### Linux
 If you do not have `npm`, install it.
 ```
 sudo apt -y install npm
@@ -33,7 +55,7 @@ n stable
 node -v
 ```
 
-### Installation of `node` on Mac
+### Mac
 If you do not have `brew`, install it.
 ```
 brew -v
@@ -55,30 +77,6 @@ Now you can use `node`. Check the version.
 node -v
 ```
 
-### Installation of spang
-Download the source code from GitHub.
-```
-git clone https://github.com/sparqling/spang
-```
-
-Install by using `npm` command.
-```
-cd spang
-npm install
-npm link
-```
-
-## Using SPARQL client
-For the help message, just type the command
-```
-spang2
-```
-
-### Test examples
-```
-npm test
-```
-
 ## For maintainers
 
 `js/*.js` should be updated for those who call spang functions through their Web applications.
@@ -93,6 +91,11 @@ npm run browserify
 
 ### Requirements
 - npm (>= 6.12.0)
+
+### Test examples
+```
+npm test
+```
 
 ## SPARQL specifications
 
