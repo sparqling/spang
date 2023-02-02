@@ -232,6 +232,7 @@ function peg$parse(input, options) {
           pattern: w,
           limitoffset: sm.limitoffset,
           group: sm.group,
+          having: sm.having,
           order: sm.order,
           inlineData: v,
         };
@@ -431,9 +432,9 @@ function peg$parse(input, options) {
       peg$c50 = function(gc, h, oc, lo) {
         return {
           group: gc,
+          having: h,
           order: oc,
           limitoffset: lo,
-          having: h,
         }
       },
       peg$c51 = "group",
@@ -465,8 +466,8 @@ function peg$parse(input, options) {
       peg$c59 = function(v) {
         return v;
       },
-      peg$c60 = "HAVING",
-      peg$c61 = peg$literalExpectation("HAVING", false),
+      peg$c60 = "having",
+      peg$c61 = peg$literalExpectation("HAVING", true),
       peg$c62 = function(h) {
         return h;
       },
@@ -4124,8 +4125,8 @@ function peg$parse(input, options) {
     var s0, s1, s2, s3, s4;
 
     s0 = peg$currPos;
-    if (input.substr(peg$currPos, 6) === peg$c60) {
-      s1 = peg$c60;
+    if (input.substr(peg$currPos, 6).toLowerCase() === peg$c60) {
+      s1 = input.substr(peg$currPos, 6);
       peg$currPos += 6;
     } else {
       s1 = peg$FAILED;
