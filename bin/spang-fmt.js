@@ -6,6 +6,7 @@ const program = require('commander');
 const version = require('../package.json').version;
 const util = require('../lib/util.js');
 const formatter = require('../lib/formatter.js');
+const parser = require('../syntax/parser.js');
 
 let opts = program
   .option('-i, --indent <DEPTH>', "indent depth", 2)
@@ -26,7 +27,18 @@ if (program.args[0]) {
   sparqlQuery = fs.readFileSync(process.stdin.fd).toString();
 }
 
-const syntaxTree = util.parse(sparqlQuery);
+let syntaxTree;
+try {
+  syntaxTree = new parser.parse(sparqlQuery);
+} catch (err) {
+  if (opts.debug) {
+    console.log(JSON.stringify(err, undefined, 2));
+    console.error(err.message || '');
+  } else {
+    util.printError(sparqlQuery, err);
+  }
+  process.exit(1);
+}
 
 if (opts.debug) {
   console.log(JSON.stringify(syntaxTree, undefined, 2));

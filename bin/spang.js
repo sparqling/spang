@@ -17,6 +17,7 @@ const sparql = require('../lib/make_sparql.js');
 const querySparql = require('../lib/query_sparql.js');
 const alias = require('../lib/alias.js');
 const util = require('../lib/util.js');
+const parser = require('../syntax/parser.js');
 const initializeConfig = require('../lib/config.js').initialize;
 const jsonToTsv = util.jsonToTsv;
 
@@ -118,7 +119,18 @@ if (opts.fmt) {
   } else {
     sparqlQuery = input;
   }
-  const syntaxTree = util.parse(sparqlQuery);
+  let syntaxTree;
+  try {
+    syntaxTree = new parser.parse(sparqlQuery);
+  } catch (err) {
+    if (opts.debug) {
+      console.log(JSON.stringify(err, undefined, 2));
+      console.error(err.message || '');
+    } else {
+      util.printError(sparqlQuery, err);
+    }
+    process.exit(1);
+  }
   if (opts.debug) {
     console.log(JSON.stringify(syntaxTree, undefined, 2));
   } else if (opts.outfmt === 'json') {
