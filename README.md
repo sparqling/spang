@@ -1,13 +1,12 @@
 # SPANG
 
-## Command line interface
-`spang2` requires `node` (version >= 14).
-```
-node -v
-```
-If you do not have `node`, see Installation of `node`.
+Website: http://purl.org/spang
 
-Installation:
+npm: https://www.npmjs.com/package/spang
+
+Docker: https://hub.docker.com/r/sparqling/spang
+
+## Command line interface
 ```
 $ npm install -g spang
 ```
@@ -31,6 +30,11 @@ $ npm link
 will make a symbolic link to `./bin/*` in your path.
 
 ## Installation of `node`
+`spang2` requires `node` (version >= 14).
+```
+node -v
+```
+If you do not have `node`, install it as follows.
 
 ### Linux
 If you do not have `npm`, install it.
