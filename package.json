@@ -1,6 +1,6 @@
 {
   "name": "spang",
-  "version": "2.6.4",
+  "version": "2.7.0",
   "description": "SPARQL client for parameterized queries",
   "repository": {
     "type": "git",
