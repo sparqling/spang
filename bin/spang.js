@@ -8,7 +8,6 @@ const columnify = require('columnify');
 const temp = require('temp');
 
 const version = require('../package.json').version;
-const parser = require('../lib/template_parser');
 const formatter = require('../lib/formatter.js');
 const metadataModule = require('../lib/metadata.js');
 const prefixModule = require('../lib/prefix.js');
@@ -119,7 +118,7 @@ if (opts.fmt) {
   } else {
     sparqlQuery = input;
   }
-  const syntaxTree = parser.parse(sparqlQuery);
+  const syntaxTree = util.parse(sparqlQuery);
   if (opts.debug) {
     console.log(JSON.stringify(syntaxTree, undefined, 2));
   } else if (opts.outfmt === 'json') {
