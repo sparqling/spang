@@ -142,28 +142,41 @@ function peg$parse(input, options) {
       peg$startRuleFunction  = peg$parseDOCUMENT,
 
       peg$c0 = function(h, s, f) {
-        s.headers = h;
-        s.comments = Object.entries(Comments).map(([loc, str]) => ({
+        let ret = {};
+        if (h.length) {
+          ret = {
+            headers: h,
+            ...s,
+          };
+        } else {
+          ret = s;
+        }
+        ret.comments = Object.entries(Comments).map(([loc, str]) => ({
           text: str,
           pos: parseInt(loc),
         }));
 
         if (s.functions) {
-          s.functions = s.functions.concat(f);
+          ret.functions = s.functions.concat(f);
         } else {
-          s.functions = f;
+          ret.functions = f;
         }
 
-        return s;
+        return ret;
       },
       peg$c1 = function(p, f, q, v) {
-        return {
-          token: 'query',
+        let ret = {
           prologue: p,
           body: q,
-          inlineData: v,
-          functions: f,
+        };
+        if (v) {
+          ret.values = v;
         }
+        if (f) {
+          ret.functions = f;
+        }
+
+        return ret;
       },
       peg$c2 = function(h, b) {
         return {
@@ -177,17 +190,15 @@ function peg$parse(input, options) {
       peg$c4 = peg$literalExpectation("BASE", true),
       peg$c5 = function(i) {
         return {
-          token: 'base',
-          value: i,
+          base: i,
         }
       },
       peg$c6 = "prefix",
       peg$c7 = peg$literalExpectation("PREFIX", true),
-      peg$c8 = function(p, l) {
+      peg$c8 = function(p, i) {
         return {
-          token: 'prefix',
           prefix: p,
-          local: l,
+          iri: i,
         }
       },
       peg$c9 = function(s, gs, w, sm) {
@@ -210,8 +221,7 @@ function peg$parse(input, options) {
         }
 
         return {
-          token: 'executableunit',
-          kind: 'select',
+          type: 'select',
           dataset: dataset,
           projection: s.vars,
           modifier: s.modifier,
@@ -225,8 +235,7 @@ function peg$parse(input, options) {
       },
       peg$c10 = function(s, w, sm, v) {
         return {
-          token: 'subselect',
-          kind: 'select',
+          type: 'select',
           projection: s.vars,
           modifier: s.modifier,
           pattern: w,
@@ -234,7 +243,7 @@ function peg$parse(input, options) {
           group: sm.group,
           having: sm.having,
           order: sm.order,
-          inlineData: v,
+          values: v,
         };
       },
       peg$c11 = "select",
@@ -305,8 +314,7 @@ function peg$parse(input, options) {
         }
         
         return {
-          kind: 'construct',
-          token: 'executableunit',
+          type: 'construct',
           dataset: dataset,
           template: t,
           pattern: w,
@@ -340,8 +348,7 @@ function peg$parse(input, options) {
         }
         
         return {
-          kind: 'construct',
-          token: 'executableunit',
+          type: 'construct',
           dataset: dataset,
           pattern: t,
           limitoffset: sm.limitoffset,
@@ -362,8 +369,7 @@ function peg$parse(input, options) {
         });
 
         return {
-          token: 'executableunit',
-          kind: 'describe',
+          type: 'describe',
           dataset: dataset,
           value: v,
           pattern: w,
@@ -393,8 +399,7 @@ function peg$parse(input, options) {
         }
 
         return {
-          kind: 'ask',
-          token: 'executableunit',
+          type: 'ask',
           dataset: dataset,
           pattern: w,
           limitoffset: sm.limitoffset,
@@ -539,7 +544,6 @@ function peg$parse(input, options) {
       peg$c83 = peg$literalExpectation(";", false),
       peg$c84 = function(p, u) {
         let query = {
-          token: 'update',
           prologue: p,
           units: [],
         };
@@ -561,8 +565,7 @@ function peg$parse(input, options) {
       peg$c90 = peg$literalExpectation("INTO", true),
       peg$c91 = function(s, sg, dg) {
         let query = {
-          kind: 'load',
-          token: 'executableunit',
+          type: 'load',
           silent: s,
           sourceGraph: sg,
         };
@@ -576,8 +579,7 @@ function peg$parse(input, options) {
       peg$c93 = peg$literalExpectation("CLEAR", true),
       peg$c94 = function(s, ref) {
         return {
-          token: 'executableunit',
-          kind: 'clear',
+          type: 'clear',
           silent: s,
           destinyGraph: ref,
         }
@@ -586,8 +588,7 @@ function peg$parse(input, options) {
       peg$c96 = peg$literalExpectation("DROP", true),
       peg$c97 = function(s, ref) {
         return {
-          token: 'executableunit',
-          kind: 'drop',
+          type: 'drop',
           silent: s,
           destinyGraph: ref,
         }
@@ -596,8 +597,7 @@ function peg$parse(input, options) {
       peg$c99 = peg$literalExpectation("CREATE", true),
       peg$c100 = function(s, ref) {
         return {
-          token: 'executableunit',
-          kind: 'create',
+          type: 'create',
           silent: s,
           destinyGraph: ref,
         }
@@ -608,8 +608,7 @@ function peg$parse(input, options) {
       peg$c104 = peg$literalExpectation("TO", true),
       peg$c105 = function(s, g1, g2) {
         return {
-          token: 'executableunit',
-          kind: 'add',
+          type: 'add',
           silent: s,
           graphs: [g1, g2],
         }
@@ -618,8 +617,7 @@ function peg$parse(input, options) {
       peg$c107 = peg$literalExpectation("MOVE", true),
       peg$c108 = function(s, g1, g2) {
         return {
-          token: 'executableunit',
-          kind: 'move',
+          type: 'move',
           silent: s,
           graphs: [g1, g2],
         }
@@ -628,8 +626,7 @@ function peg$parse(input, options) {
       peg$c110 = peg$literalExpectation("COPY", true),
       peg$c111 = function(s, g1, g2) {
         return {
-          token: 'executableunit',
-          kind: 'copy',
+          type: 'copy',
           silent: s,
           graphs: [g1, g2],
         }
@@ -640,8 +637,7 @@ function peg$parse(input, options) {
       peg$c115 = peg$literalExpectation("DATA", true),
       peg$c116 = function(qs) {
         return {
-          token: 'executableunit',
-          kind: 'insertdata',
+          type: 'insertdata',
           quads: qs,
         }
       },
@@ -649,14 +645,13 @@ function peg$parse(input, options) {
       peg$c118 = peg$literalExpectation("DELETE", true),
       peg$c119 = function(qs) {
         return {
-          token: 'executableunit',
-          kind: 'deletedata',
+          type: 'deletedata',
           quads: qs,
         }
       },
       peg$c120 = function(p) {
         return {
-          kind: 'deletewhere',
+          type: 'deletewhere',
           pattern: p,
         };
       },
@@ -664,7 +659,7 @@ function peg$parse(input, options) {
       peg$c122 = peg$literalExpectation("WITH", true),
       peg$c123 = function(w, m, u, p) {
         let query = {
-          kind: 'modify',
+          type: 'modify',
         };
 
         if (w) {
@@ -774,7 +769,6 @@ function peg$parse(input, options) {
         });
 
         return {
-          token: 'ggp',
           patterns: patterns,
           location: location(),
         }
@@ -832,17 +826,15 @@ function peg$parse(input, options) {
       },
       peg$c158 = function(v, d) {
         return {
-          token: 'inlineData',
-          var: v,
-          values: d,
+          oneVar: v,
+          data: d,
           location: location(),
         };
       },
       peg$c159 = function(vars, vals) {
         return {
-          token: 'inlineDataFull',
           variables: vars,
-          values: vals,
+          data: vals,
           location: location(),
         };
       },

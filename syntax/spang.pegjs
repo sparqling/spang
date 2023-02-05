@@ -4,19 +4,27 @@
 
 DOCUMENT = h:(HEADER_LINE*) WS* s:SPARQL WS* f:(Function*) WS*
 {
-  s.headers = h;
-  s.comments = Object.entries(Comments).map(([loc, str]) => ({
+  let ret = {};
+  if (h.length) {
+    ret = {
+      headers: h,
+      ...s,
+    };
+  } else {
+    ret = s;
+  }
+  ret.comments = Object.entries(Comments).map(([loc, str]) => ({
     text: str,
     pos: parseInt(loc),
   }));
 
   if (s.functions) {
-    s.functions = s.functions.concat(f);
+    ret.functions = s.functions.concat(f);
   } else {
-    s.functions = f;
+    ret.functions = f;
   }
 
-  return s;
+  return ret;
 }
 
 SPARQL = QueryUnit / UpdateUnit
@@ -28,13 +36,18 @@ QueryUnit = Query
 // Function is added after Prologue
 Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
 {
-  return {
-    token: 'query',
+  let ret = {
     prologue: p,
     body: q,
-    inlineData: v,
-    functions: f,
+  };
+  if (v) {
+    ret.values = v;
   }
+  if (f) {
+    ret.functions = f;
+  }
+
+  return ret;
 }
 
 Function = h:FunctionCall WS* b:GroupGraphPattern WS*
@@ -57,18 +70,16 @@ Prologue = ( BaseDecl / PrefixDecl )*
 BaseDecl = WS* 'BASE'i WS* i:IRIREF
 {
   return {
-    token: 'base',
-    value: i,
+    base: i,
   }
 }
 
 // [6] PrefixDecl ::= 'PREFIX' PNAME_NS IRIREF
-PrefixDecl = WS* 'PREFIX'i WS* p:PNAME_NS WS* l:IRIREF
+PrefixDecl = WS* 'PREFIX'i WS* p:PNAME_NS WS* i:IRIREF
 {
   return {
-    token: 'prefix',
     prefix: p,
-    local: l,
+    iri: i,
   }
 }
 
@@ -94,8 +105,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
   }
 
   return {
-    token: 'executableunit',
-    kind: 'select',
+    type: 'select',
     dataset: dataset,
     projection: s.vars,
     modifier: s.modifier,
@@ -112,8 +122,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
 SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier v:ValuesClause
 {
   return {
-    token: 'subselect',
-    kind: 'select',
+    type: 'select',
     projection: s.vars,
     modifier: s.modifier,
     pattern: w,
@@ -121,7 +130,7 @@ SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier v:ValuesCla
     group: sm.group,
     having: sm.having,
     order: sm.order,
-    inlineData: v,
+    values: v,
   };
 }
 
@@ -189,8 +198,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
   }
   
   return {
-    kind: 'construct',
-    token: 'executableunit',
+    type: 'construct',
     dataset: dataset,
     template: t,
     pattern: w,
@@ -219,8 +227,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
   }
   
   return {
-    kind: 'construct',
-    token: 'executableunit',
+    type: 'construct',
     dataset: dataset,
     pattern: t,
     limitoffset: sm.limitoffset,
@@ -242,8 +249,7 @@ DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* gs:DatasetClause* WS* 
   });
 
   return {
-    token: 'executableunit',
-    kind: 'describe',
+    type: 'describe',
     dataset: dataset,
     value: v,
     pattern: w,
@@ -274,8 +280,7 @@ AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionMod
   }
 
   return {
-    kind: 'ask',
-    token: 'executableunit',
+    type: 'ask',
     dataset: dataset,
     pattern: w,
     limitoffset: sm.limitoffset,
@@ -454,7 +459,6 @@ ValuesClause = b:( 'VALUES'i DataBlock )?
 Update = p:Prologue u:( WS* Update1 ( WS* ';' WS* Update )? )? WS*
 {
   let query = {
-    token: 'update',
     prologue: p,
     units: [],
   };
@@ -476,8 +480,7 @@ Update1 = Load / Clear / Drop / Add / Move / Copy / Create / InsertData / Delete
 Load = 'LOAD'i WS* s:'SILENT'i? WS* sg:IRIref WS* dg:( 'INTO'i WS* GraphRef )?
 {
   let query = {
-    kind: 'load',
-    token: 'executableunit',
+    type: 'load',
     silent: s,
     sourceGraph: sg,
   };
@@ -492,8 +495,7 @@ Load = 'LOAD'i WS* s:'SILENT'i? WS* sg:IRIref WS* dg:( 'INTO'i WS* GraphRef )?
 Clear = 'CLEAR'i WS* s:'SILENT'i? WS* ref:GraphRefAll
 {
   return {
-    token: 'executableunit',
-    kind: 'clear',
+    type: 'clear',
     silent: s,
     destinyGraph: ref,
   }
@@ -503,8 +505,7 @@ Clear = 'CLEAR'i WS* s:'SILENT'i? WS* ref:GraphRefAll
 Drop = 'DROP'i  WS* s:'SILENT'i? WS* ref:GraphRefAll
 {
   return {
-    token: 'executableunit',
-    kind: 'drop',
+    type: 'drop',
     silent: s,
     destinyGraph: ref,
   }
@@ -514,8 +515,7 @@ Drop = 'DROP'i  WS* s:'SILENT'i? WS* ref:GraphRefAll
 Create = 'CREATE'i WS* s:'SILENT'i? WS* ref:GraphRef
 {
   return {
-    token: 'executableunit',
-    kind: 'create',
+    type: 'create',
     silent: s,
     destinyGraph: ref,
   }
@@ -525,8 +525,7 @@ Create = 'CREATE'i WS* s:'SILENT'i? WS* ref:GraphRef
 Add = 'ADD'i WS* s:'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
 {
   return {
-    token: 'executableunit',
-    kind: 'add',
+    type: 'add',
     silent: s,
     graphs: [g1, g2],
   }
@@ -536,8 +535,7 @@ Add = 'ADD'i WS* s:'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefa
 Move = 'MOVE'i WS* s:'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
 {
   return {
-    token: 'executableunit',
-    kind: 'move',
+    type: 'move',
     silent: s,
     graphs: [g1, g2],
   }
@@ -547,8 +545,7 @@ Move = 'MOVE'i WS* s:'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDe
 Copy = 'COPY'i WS* s:'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDefault
 {
   return {
-    token: 'executableunit',
-    kind: 'copy',
+    type: 'copy',
     silent: s,
     graphs: [g1, g2],
   }
@@ -558,8 +555,7 @@ Copy = 'COPY'i WS* s:'SILENT'i? WS* g1:GraphOrDefault WS* 'TO'i WS* g2:GraphOrDe
 InsertData = 'INSERT'i WS* 'DATA'i WS* qs:QuadData
 {
   return {
-    token: 'executableunit',
-    kind: 'insertdata',
+    type: 'insertdata',
     quads: qs,
   }
 }
@@ -568,8 +564,7 @@ InsertData = 'INSERT'i WS* 'DATA'i WS* qs:QuadData
 DeleteData = 'DELETE'i WS* 'DATA'i qs:QuadData
 {
   return {
-    token: 'executableunit',
-    kind: 'deletedata',
+    type: 'deletedata',
     quads: qs,
   }
 }
@@ -578,7 +573,7 @@ DeleteData = 'DELETE'i WS* 'DATA'i qs:QuadData
 DeleteWhere = 'DELETE'i WS* 'WHERE'i WS* p:GroupGraphPattern
 {
   return {
-    kind: 'deletewhere',
+    type: 'deletewhere',
     pattern: p,
   };
 }
@@ -587,7 +582,7 @@ DeleteWhere = 'DELETE'i WS* 'WHERE'i WS* p:GroupGraphPattern
 Modify = w:( 'WITH'i WS* IRIref WS* )? m:( DeleteClause WS* InsertClause? / InsertClause ) WS* u:UsingClause* WS* 'WHERE'i WS* p:GroupGraphPattern WS*
 {
   let query = {
-    kind: 'modify',
+    type: 'modify',
   };
 
   if (w) {
@@ -745,7 +740,6 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
   });
 
   return {
-    token: 'ggp',
     patterns: patterns,
     location: location(),
   }
@@ -824,9 +818,8 @@ DataBlock = InlineDataOneVar / InlineDataFull
 InlineDataOneVar = WS* v:Var WS* '{' WS* d:DataBlockValue* '}'
 {
   return {
-    token: 'inlineData',
-    var: v,
-    values: d,
+    oneVar: v,
+    data: d,
     location: location(),
   };
 }
@@ -835,9 +828,8 @@ InlineDataOneVar = WS* v:Var WS* '{' WS* d:DataBlockValue* '}'
 InlineDataFull = WS* '(' WS* vars:Var* ')' WS* '{' WS* vals:DataBlockTuple* '}'
 {
   return {
-    token: 'inlineDataFull',
     variables: vars,
-    values: vals,
+    data: vals,
     location: location(),
   };
 }
