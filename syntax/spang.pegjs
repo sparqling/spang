@@ -1,5 +1,5 @@
 {
-  let Comments = {};
+  let comments = {};
 }
 
 DOCUMENT = h:(HEADER_LINE*) WS* s:SPARQL WS* f:(Function*) WS*
@@ -13,15 +13,19 @@ DOCUMENT = h:(HEADER_LINE*) WS* s:SPARQL WS* f:(Function*) WS*
   } else {
     ret = s;
   }
-  ret.comments = Object.entries(Comments).map(([loc, str]) => ({
-    text: str,
-    pos: parseInt(loc),
-  }));
 
   if (s.functions) {
     ret.functions = s.functions.concat(f);
   } else {
     ret.functions = f;
+  }
+
+  const commentsArr = Object.entries(comments).map(([pos, text]) => ({
+    pos: parseInt(pos),
+    text: text,
+  }));
+  if (commentsArr.length) {
+    ret.comments = commentsArr;
   }
 
   return ret;
@@ -839,7 +843,7 @@ DataBlockTuple = '(' WS* vs:DataBlockValue* ')' WS*
   return vs;
 }
 
-// [65] DataBlockValue ::= iri | RDFLiteral | NumericLiteral | BooleanLiteral | 'UNDEF'
+// [65] DataBlockValue ::= IRIref | RDFLiteral | NumericLiteral | BooleanLiteral | 'UNDEF'
 DataBlockValue = v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 'UNDEF') WS*
 {
   return v;
@@ -2141,7 +2145,7 @@ NumericLiteralPositive = DOUBLE_POSITIVE / DECIMAL_POSITIVE / INTEGER_POSITIVE
 NumericLiteralNegative = DOUBLE_NEGATIVE / DECIMAL_NEGATIVE / INTEGER_NEGATIVE
 
 // [134] BooleanLiteral ::= 'true' | 'false'
-BooleanLiteral = 'TRUE'i
+BooleanLiteral = 'true'i
 {
   return {
     token: 'literal',
@@ -2149,7 +2153,7 @@ BooleanLiteral = 'TRUE'i
     type: 'http://www.w3.org/2001/XMLSchema#boolean',
   }
 }
-/ 'FALSE'i
+/ 'false'i
 {
   return {
     token: 'literal',
@@ -2217,8 +2221,8 @@ BlankNode = l:BLANK_NODE_LABEL
 }
 
 // [139] IRIREF ::= '<' ([^<>"{}|^`\]-[#x00-#x20])* '>'
-// check
-IRIREF = '<' i:[^<>\"\{\}|^`\\]* '>'
+// abobe notation is set difference in EBNF
+IRIREF = '<' i:[^<>"{}|^`\\\x00-\x20]* '>'
 {
   return i.join('')
 }
@@ -2236,7 +2240,9 @@ PNAME_LN = p:PNAME_NS s:PN_LOCAL
 }
 
 // [142] BLANK_NODE_LABEL ::= '_:' ( PN_CHARS_U | [0-9] ) ((PN_CHARS|'.')* PN_CHARS)?
-BLANK_NODE_LABEL = '_:' ( PN_CHARS_U / [0-9] ) ((PN_CHARS/'.')* PN_CHARS)?
+// BLANK_NODE_LABEL = '_:' ( PN_CHARS_U / [0-9] ) ((PN_CHARS / '.')* PN_CHARS)?
+// above does not work for pegjs
+BLANK_NODE_LABEL = '_:' ( PN_CHARS_U / [0-9] ) (PN_CHARS / '.' PN_CHARS)*
 {
   return text();
 }
@@ -2371,7 +2377,7 @@ DOUBLE_NEGATIVE = '-' d:DOUBLE
 EXPONENT = [eE] [+-]? [0-9]+
 
 // [156] STRING_LITERAL1 ::= "'" ( ([^#x27#x5C#xA#xD]) | ECHAR )* "'"
-STRING_LITERAL1 = "'" s:( [^\u0027\u005C\u000A\u000D] / ECHAR )* "'"
+STRING_LITERAL1 = "'" s:( [^\x27\x5C\x0A\x0D] / ECHAR )* "'"
 {
   return {
     token: 'string',
@@ -2381,7 +2387,7 @@ STRING_LITERAL1 = "'" s:( [^\u0027\u005C\u000A\u000D] / ECHAR )* "'"
 }
 
 // [157] STRING_LITERAL2 ::= '"' ( ([^#x22#x5C#xA#xD]) | ECHAR )* '"'
-STRING_LITERAL2 = '"' s:( [^\u0022\u005C\u000A\u000D] / ECHAR )* '"'
+STRING_LITERAL2 = '"' s:( [^\x22\x5C\x0A\x0D] / ECHAR )* '"'
 {
   return {
     token: 'string',
@@ -2446,9 +2452,9 @@ NIL = '(' WS* ')'
 // add COMMENT
 WS = COMMENT / SPACE_OR_TAB / NEW_LINE
 
-SPACE_OR_TAB = [\u0020\u0009]
-NEW_LINE = [\u000A\u000D]
-NON_NEW_LINE = [^\u000A\u000D]
+SPACE_OR_TAB = [\x20\x09]
+NEW_LINE = [\x0D\x0A]
+NON_NEW_LINE = [^\x0D\x0A]
 
 HEADER_LINE = '#' NON_NEW_LINE* NEW_LINE
 {
@@ -2457,7 +2463,7 @@ HEADER_LINE = '#' NON_NEW_LINE* NEW_LINE
 
 COMMENT = NEW_LINE? SPACE_OR_TAB* '#' NON_NEW_LINE*
 {
-  Comments[location().start.offset] = text();
+  comments[location().start.offset] = text();
 
   return '';
 }
@@ -2466,7 +2472,8 @@ COMMENT = NEW_LINE? SPACE_OR_TAB* '#' NON_NEW_LINE*
 ANON = '[' WS* ']'
 
 // [164] PN_CHARS_BASE ::= [A-Z] | [a-z] | [#x00C0-#x00D6] | [#x00D8-#x00F6] | [#x00F8-#x02FF] | [#x0370-#x037D] | [#x037F-#x1FFF] | [#x200C-#x200D] | [#x2070-#x218F] | [#x2C00-#x2FEF] | [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
-PN_CHARS_BASE = [A-Z] / [a-z] / [\u00C0-\u00D6] / [\u00D8-\u00F6] / [\u00F8-\u02FF] / [\u0370-\u037D] / [\u037F-\u1FFF] / [\u200C-\u200D] / [\u2070-\u218F] / [\u2C00-\u2FEF] / [\u3001-\uD7FF] / [\uF900-\uFDCF] / [\uFDF0-\uFFFD] / [\u1000-\uEFFF]
+// omit surrogate pairs [#x10000-#xEFFFF] because [\u{10000}-\u{EFFFF}] does not work in pegjs
+PN_CHARS_BASE = [A-Z] / [a-z] / [\u00C0-\u00D6] / [\u00D8-\u00F6] / [\u00F8-\u02FF] / [\u0370-\u037D] / [\u037F-\u1FFF] / [\u200C-\u200D] / [\u2070-\u218F] / [\u2C00-\u2FEF] / [\u3001-\uD7FF] / [\uF900-\uFDCF] / [\uFDF0-\uFFFD]
 
 // [165] PN_CHARS_U ::= PN_CHARS_BASE | '_'
 PN_CHARS_U = PN_CHARS_BASE / '_'
@@ -2481,16 +2488,19 @@ VARNAME = ( PN_CHARS_U / [0-9] ) ( PN_CHARS_U / [0-9] / [\u00B7] / [\u0300-\u036
 PN_CHARS = PN_CHARS_U / '-' / [0-9] / [\u00B7] / [\u0300-\u036F] / [\u203F-\u2040]
 
 // [168] PN_PREFIX ::= PN_CHARS_BASE ((PN_CHARS|'.')* PN_CHARS)?
-// PN_PREFIX = PN_CHARS_BASE ((PN_CHARS/'.')* PN_CHARS)?
-PN_PREFIX = PN_CHARS_U (PN_CHARS / '.')*
+// PN_PREFIX = PN_CHARS_BASE ((PN_CHARS / '.')* PN_CHARS)?
+// above does not work for pegjs
+// allows '_' for Fuction
+PN_PREFIX = PN_CHARS_U (PN_CHARS / '.' PN_CHARS)*
 {
   return text();
 }
 
 // [169] PN_LOCAL ::= (PN_CHARS_U | ':' | [0-9] | PLX ) ((PN_CHARS | '.' | ':' | PLX)* (PN_CHARS | ':' | PLX) )?
-// PN_LOCAL = (PN_CHARS_U / ':' / [0-9] / PLX ) ((PN_CHARS / '.' / ':' / PLX)* (PN_CHARS / ':' / PLX))?
+// PN_LOCAL = (PN_CHARS_U / ':' / [0-9] / PLX ) ((PN_CHARS / '.' / ':' / PLX)* (PN_CHARS / ':' / PLX) )?
+// above does not work for pegjs
 // '$' is added
-PN_LOCAL = ( '$' / PN_CHARS_U / ':' / [0-9] / PLX ) (PN_CHARS / '.' / ':' / PLX)*
+PN_LOCAL = ('$' / PN_CHARS_U / ':' / [0-9] / PLX ) ((PN_CHARS / ':' / PLX) / '.' (PN_CHARS / ':' / PLX) )*
 {
   return text();
 }
