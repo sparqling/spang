@@ -404,23 +404,9 @@ OrderCondition = direction:( 'ASC'i / 'DESC'i ) WS* e:BrackettedExpression WS*
 }
 / e:( Constraint / Var ) WS*
 {
-  if (e.token === 'var') {
-    return {
-      direction: 'ASC',
-      expression: {
-        value: e,
-        token:'expression',
-        expressionType:'atomic',
-        primaryexpression: 'var',
-        location: location(),
-      }
-    };
-  } else {
-    return {
-      direction: 'ASC',
-      expression: e,
-    };
-  }
+  return {
+    expression: e,
+  };
 }
 
 // [25] LimitOffsetClauses ::= LimitClause OffsetClause? | OffsetClause LimitClause?
@@ -1245,9 +1231,8 @@ VarOrIri = Var / IRIref
 Var = WS* v:( VAR1 / VAR2 / VAR3 ) WS*
 {
   return {
-    token: 'var',
-    prefix: v.prefix,
-    value: v.value,
+    varType: v.varType,
+    varName: v.varName,
     location: location(),
   }
 }
@@ -2251,8 +2236,8 @@ BLANK_NODE_LABEL = '_:' ( PN_CHARS_U / [0-9] ) (PN_CHARS / '.' PN_CHARS)*
 VAR1 = '?' v:VARNAME 
 {
   return {
-    prefix: '?',
-    value: v,
+    varType: '?',
+    varName: v,
   }
 }
 
@@ -2260,16 +2245,16 @@ VAR1 = '?' v:VARNAME
 VAR2 = '$' v:VARNAME 
 {
   return {
-    prefix: '$',
-    value: v,
+    varType: '$',
+    varName: v,
   }
 }
 
 VAR3 = '{{' v:VARNAME '}}'
 {
   return {
-    prefix: 'mustash',
-    value: v,
+    varType: 'mustash',
+    varName: v,
   }
 }
 

@@ -496,23 +496,9 @@ function peg$parse(input, options) {
         };
       },
       peg$c71 = function(e) {
-        if (e.token === 'var') {
-          return {
-            direction: 'ASC',
-            expression: {
-              value: e,
-              token:'expression',
-              expressionType:'atomic',
-              primaryexpression: 'var',
-              location: location(),
-            }
-          };
-        } else {
-          return {
-            direction: 'ASC',
-            expression: e,
-          };
-        }
+        return {
+          expression: e,
+        };
       },
       peg$c72 = function(cls) {
         let acum = [cls[0]];
@@ -1074,9 +1060,8 @@ function peg$parse(input, options) {
       },
       peg$c214 = function(v) {
         return {
-          token: 'var',
-          prefix: v.prefix,
-          value: v.value,
+          varType: v.varType,
+          varName: v.varName,
           location: location(),
         }
       },
@@ -1991,16 +1976,16 @@ function peg$parse(input, options) {
       },
       peg$c464 = function(v) {
         return {
-          prefix: '?',
-          value: v,
+          varType: '?',
+          varName: v,
         }
       },
       peg$c465 = "$",
       peg$c466 = peg$literalExpectation("$", false),
       peg$c467 = function(v) {
         return {
-          prefix: '$',
-          value: v,
+          varType: '$',
+          varName: v,
         }
       },
       peg$c468 = "{{",
@@ -2009,8 +1994,8 @@ function peg$parse(input, options) {
       peg$c471 = peg$literalExpectation("}}", false),
       peg$c472 = function(v) {
         return {
-          prefix: 'mustash',
-          value: v,
+          varType: 'mustash',
+          varName: v,
         }
       },
       peg$c473 = "@",
