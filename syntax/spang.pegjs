@@ -90,15 +90,21 @@ PrefixDecl = WS* 'PREFIX'i WS* p:PNAME_NS WS* i:IRIREF
 // [7] SelectQuery ::= SelectClause DatasetClause* WhereClause SolutionModifier
 SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
-  return {
-    type: 'select',
-    from: gs,
+  let ret = { type: 'select' };
+  if (gs.length) {
+    ret.from = gs;
+  }
+
+  ret = {
+    ...ret,
     vars: s.vars,
     modifier: s.modifier,
     pattern: w,
     ...sm,
     location: location(),
-  }
+  };
+
+  return ret;
 }
 
 // [8] SubSelect ::= SelectClause WhereClause SolutionModifier ValuesClause
@@ -153,49 +159,73 @@ SelectClause = 'SELECT'i WS* m:( 'DISTINCT'i / 'REDUCED'i )? WS*
 // [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
 ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
-  return {
-    type: 'construct',
-    from: gs,
+  let ret = { type: 'construct' };
+  if (gs.length) {
+    ret.from = gs;
+  }
+
+  ret = {
+    ...ret,
     template: t,
     pattern: w,
     ...sm,
     location: location(),
   };
+
+  return ret;
 }
 / 'CONSTRUCT'i WS* gs:DatasetClause* WS* 'WHERE'i WS* '{' WS* t:TriplesTemplate? WS* '}' WS* sm:SolutionModifier
 {
-  return {
-    type: 'construct',
-    from: gs,
+  let ret = { type: 'construct' };
+  if (gs.length) {
+    ret.from = gs;
+  }
+
+  ret = {
+    ...ret,
     pattern: t,
     ...sm,
     location: location(),
   };
+
+  return ret;
 }
 
 // [11] DescribeQuery ::= 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
 DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* gs:DatasetClause* WS* w:WhereClause? WS* sm:SolutionModifier
 {
-  return {
-    type: 'describe',
-    from: gs,
+  let ret = { type: 'describe' };
+  if (gs.length) {
+    ret.from = gs;
+  }
+
+  ret = {
+    ...ret,
     value: v,
     pattern: w,
     ...sm,
     location: location(),
-  }
+  };
+
+  return ret;
 }
 
 // [12] AskQuery ::= 'ASK' DatasetClause* WhereClause SolutionModifier
 AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
-  return {
-    type: 'ask',
-    from: gs,
+  let ret = { type: 'ask' };
+  if (gs.length) {
+    ret.from = gs;
+  }
+
+  ret = {
+    ...ret,
     pattern: w,
     ...sm,
     location: location(),
-  }
+  };
+
+  return ret;
 }
 
 // [13] DatasetClause ::= 'FROM' ( DefaultGraphClause | NamedGraphClause )

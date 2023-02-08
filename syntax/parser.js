@@ -206,15 +206,21 @@ function peg$parse(input, options) {
         }
       },
       peg$c9 = function(s, gs, w, sm) {
-        return {
-          type: 'select',
-          from: gs,
+        let ret = { type: 'select' };
+        if (gs.length) {
+          ret.from = gs;
+        }
+
+        ret = {
+          ...ret,
           vars: s.vars,
           modifier: s.modifier,
           pattern: w,
           ...sm,
           location: location(),
-        }
+        };
+
+        return ret;
       },
       peg$c10 = function(s, w, sm, v) {
         return {
@@ -269,14 +275,20 @@ function peg$parse(input, options) {
       peg$c26 = "construct",
       peg$c27 = peg$literalExpectation("CONSTRUCT", true),
       peg$c28 = function(t, gs, w, sm) {
-        return {
-          type: 'construct',
-          from: gs,
+        let ret = { type: 'construct' };
+        if (gs.length) {
+          ret.from = gs;
+        }
+
+        ret = {
+          ...ret,
           template: t,
           pattern: w,
           ...sm,
           location: location(),
         };
+
+        return ret;
       },
       peg$c29 = "where",
       peg$c30 = peg$literalExpectation("WHERE", true),
@@ -285,36 +297,54 @@ function peg$parse(input, options) {
       peg$c33 = "}",
       peg$c34 = peg$literalExpectation("}", false),
       peg$c35 = function(gs, t, sm) {
-        return {
-          type: 'construct',
-          from: gs,
+        let ret = { type: 'construct' };
+        if (gs.length) {
+          ret.from = gs;
+        }
+
+        ret = {
+          ...ret,
           pattern: t,
           ...sm,
           location: location(),
         };
+
+        return ret;
       },
       peg$c36 = "describe",
       peg$c37 = peg$literalExpectation("DESCRIBE", true),
       peg$c38 = function(v, gs, w, sm) {
-        return {
-          type: 'describe',
-          from: gs,
+        let ret = { type: 'describe' };
+        if (gs.length) {
+          ret.from = gs;
+        }
+
+        ret = {
+          ...ret,
           value: v,
           pattern: w,
           ...sm,
           location: location(),
-        }
+        };
+
+        return ret;
       },
       peg$c39 = "ask",
       peg$c40 = peg$literalExpectation("ASK", true),
       peg$c41 = function(gs, w, sm) {
-        return {
-          type: 'ask',
-          from: gs,
+        let ret = { type: 'ask' };
+        if (gs.length) {
+          ret.from = gs;
+        }
+
+        ret = {
+          ...ret,
           pattern: w,
           ...sm,
           location: location(),
-        }
+        };
+
+        return ret;
       },
       peg$c42 = "from",
       peg$c43 = peg$literalExpectation("FROM", true),
@@ -850,10 +880,7 @@ function peg$parse(input, options) {
       peg$c185 = peg$literalExpectation("a", false),
       peg$c186 = function() {
         return {
-          // iri: 'a',
-       'a': true,
-          // token: 'uri',
-          // value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+          'a': true,
           location: location(),
         }
       },
@@ -1837,7 +1864,6 @@ function peg$parse(input, options) {
           token: 'uri',
           prefix: p[0],
           suffix: p[1],
-          value: null,
           location: location(),
         }
       },
@@ -1846,7 +1872,6 @@ function peg$parse(input, options) {
           token: 'uri',
           prefix: p,
           suffix: '',
-          value: null,
           location: location(),
         }
       },
