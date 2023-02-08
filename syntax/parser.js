@@ -206,27 +206,9 @@ function peg$parse(input, options) {
         }
       },
       peg$c9 = function(s, gs, w, sm) {
-        const dataset = { named: [], implicit: [] };
-        gs.forEach((g) => {
-          if (g.kind === 'default') {
-            dataset.implicit.push(g.graph);
-          } else {
-            dataset.named.push(g.graph);
-          }
-        });
-
-        if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-          dataset.implicit.push({
-            token:'uri',
-            location: null,
-            prefix: null,
-            suffix: null,
-          });
-        }
-
         return {
           type: 'select',
-          dataset: dataset,
+          from: gs,
           vars: s.vars,
           modifier: s.modifier,
           pattern: w,
@@ -287,26 +269,9 @@ function peg$parse(input, options) {
       peg$c26 = "construct",
       peg$c27 = peg$literalExpectation("CONSTRUCT", true),
       peg$c28 = function(t, gs, w, sm) {
-        const dataset = { named:[], implicit:[] };
-        gs.forEach((g) => {
-          if (g.kind === 'default') {
-            dataset.implicit.push(g.graph);
-          } else {
-            dataset.named.push(g.graph);
-          }
-        });
-
-        if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-          dataset.implicit.push({
-            token:'uri',
-            prefix:null,
-            suffix:null,
-          });
-        }
-        
         return {
           type: 'construct',
-          dataset: dataset,
+          from: gs,
           template: t,
           pattern: w,
           ...sm,
@@ -320,26 +285,9 @@ function peg$parse(input, options) {
       peg$c33 = "}",
       peg$c34 = peg$literalExpectation("}", false),
       peg$c35 = function(gs, t, sm) {
-        let dataset = { named: [], implicit: [] };
-        gs.forEach((g) => {
-          if (g.kind === 'default') {
-            dataset.implicit.push(g.graph);
-          } else {
-            dataset.named.push(g.graph)
-          }
-        });
-
-        if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-          dataset.implicit.push({
-            token:'uri',
-            prefix:null,
-            suffix:null,
-          });
-        }
-        
         return {
           type: 'construct',
-          dataset: dataset,
+          from: gs,
           pattern: t,
           ...sm,
           location: location(),
@@ -348,18 +296,9 @@ function peg$parse(input, options) {
       peg$c36 = "describe",
       peg$c37 = peg$literalExpectation("DESCRIBE", true),
       peg$c38 = function(v, gs, w, sm) {
-        let dataset = { named: [], implicit: [] };
-        gs.forEach((g) => {
-          if (g.kind === 'default') {
-            dataset.implicit.push(g.graph);
-          } else {
-            dataset.named.push(g.graph)
-          }
-        });
-
         return {
           type: 'describe',
-          dataset: dataset,
+          from: gs,
           value: v,
           pattern: w,
           ...sm,
@@ -369,26 +308,9 @@ function peg$parse(input, options) {
       peg$c39 = "ask",
       peg$c40 = peg$literalExpectation("ASK", true),
       peg$c41 = function(gs, w, sm) {
-        const dataset = { named: [], implicit: [] };
-        gs.forEach((g) => {
-          if (g.kind === 'implicit') {
-            dataset.implicit.push(g.graph);
-          } else {
-            dataset.named.push(g.graph);
-          }
-        });
-
-        if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-          dataset.implicit.push({
-            token:'uri',
-            prefix:null,
-            suffix:null,
-          });
-        }
-
         return {
           type: 'ask',
-          dataset: dataset,
+          from: gs,
           pattern: w,
           ...sm,
           location: location(),
@@ -401,8 +323,6 @@ function peg$parse(input, options) {
       },
       peg$c45 = function(s) {
         return {
-          kind: 'default',
-          token: 'graphClause',
           graph: s,
           location: location(),
         }
@@ -411,9 +331,7 @@ function peg$parse(input, options) {
       peg$c47 = peg$literalExpectation("NAMED", true),
       peg$c48 = function(s) {
         return {
-          token: 'graphCluase',
-          kind: 'named',
-          graph: s,
+          namedGraph: s,
           location: location(),
         };
       },

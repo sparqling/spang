@@ -90,27 +90,9 @@ PrefixDecl = WS* 'PREFIX'i WS* p:PNAME_NS WS* i:IRIREF
 // [7] SelectQuery ::= SelectClause DatasetClause* WhereClause SolutionModifier
 SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
-  const dataset = { named: [], implicit: [] };
-  gs.forEach((g) => {
-    if (g.kind === 'default') {
-      dataset.implicit.push(g.graph);
-    } else {
-      dataset.named.push(g.graph);
-    }
-  });
-
-  if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-    dataset.implicit.push({
-      token:'uri',
-      location: null,
-      prefix: null,
-      suffix: null,
-    });
-  }
-
   return {
     type: 'select',
-    dataset: dataset,
+    from: gs,
     vars: s.vars,
     modifier: s.modifier,
     pattern: w,
@@ -171,26 +153,9 @@ SelectClause = 'SELECT'i WS* m:( 'DISTINCT'i / 'REDUCED'i )? WS*
 // [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
 ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
-  const dataset = { named:[], implicit:[] };
-  gs.forEach((g) => {
-    if (g.kind === 'default') {
-      dataset.implicit.push(g.graph);
-    } else {
-      dataset.named.push(g.graph);
-    }
-  });
-
-  if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-    dataset.implicit.push({
-      token:'uri',
-      prefix:null,
-      suffix:null,
-    });
-  }
-  
   return {
     type: 'construct',
-    dataset: dataset,
+    from: gs,
     template: t,
     pattern: w,
     ...sm,
@@ -199,26 +164,9 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
 }
 / 'CONSTRUCT'i WS* gs:DatasetClause* WS* 'WHERE'i WS* '{' WS* t:TriplesTemplate? WS* '}' WS* sm:SolutionModifier
 {
-  let dataset = { named: [], implicit: [] };
-  gs.forEach((g) => {
-    if (g.kind === 'default') {
-      dataset.implicit.push(g.graph);
-    } else {
-      dataset.named.push(g.graph)
-    }
-  });
-
-  if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-    dataset.implicit.push({
-      token:'uri',
-      prefix:null,
-      suffix:null,
-    });
-  }
-  
   return {
     type: 'construct',
-    dataset: dataset,
+    from: gs,
     pattern: t,
     ...sm,
     location: location(),
@@ -228,18 +176,9 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
 // [11] DescribeQuery ::= 'DESCRIBE' ( VarOrIri+ | '*' ) DatasetClause* WhereClause? SolutionModifier
 DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* gs:DatasetClause* WS* w:WhereClause? WS* sm:SolutionModifier
 {
-  let dataset = { named: [], implicit: [] };
-  gs.forEach((g) => {
-    if (g.kind === 'default') {
-      dataset.implicit.push(g.graph);
-    } else {
-      dataset.named.push(g.graph)
-    }
-  });
-
   return {
     type: 'describe',
-    dataset: dataset,
+    from: gs,
     value: v,
     pattern: w,
     ...sm,
@@ -250,26 +189,9 @@ DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* gs:DatasetClause* WS* 
 // [12] AskQuery ::= 'ASK' DatasetClause* WhereClause SolutionModifier
 AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
-  const dataset = { named: [], implicit: [] };
-  gs.forEach((g) => {
-    if (g.kind === 'implicit') {
-      dataset.implicit.push(g.graph);
-    } else {
-      dataset.named.push(g.graph);
-    }
-  });
-
-  if (dataset.named.length === 0 && dataset.implicit.length === 0) {
-    dataset.implicit.push({
-      token:'uri',
-      prefix:null,
-      suffix:null,
-    });
-  }
-
   return {
     type: 'ask',
-    dataset: dataset,
+    from: gs,
     pattern: w,
     ...sm,
     location: location(),
@@ -286,8 +208,6 @@ DatasetClause = 'FROM'i WS* gs:( DefaultGraphClause / NamedGraphClause ) WS*
 DefaultGraphClause = WS* s:SourceSelector
 {
   return {
-    kind: 'default',
-    token: 'graphClause',
     graph: s,
     location: location(),
   }
@@ -297,9 +217,7 @@ DefaultGraphClause = WS* s:SourceSelector
 NamedGraphClause = 'NAMED'i WS* s:SourceSelector
 {
   return {
-    token: 'graphCluase',
-    kind: 'named',
-    graph: s,
+    namedGraph: s,
     location: location(),
   };
 }
