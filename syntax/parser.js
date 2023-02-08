@@ -227,7 +227,7 @@ function peg$parse(input, options) {
         return {
           type: 'select',
           dataset: dataset,
-          projection: s.vars,
+          vars: s.vars,
           modifier: s.modifier,
           pattern: w,
           ...sm,
@@ -237,7 +237,7 @@ function peg$parse(input, options) {
       peg$c10 = function(s, w, sm, v) {
         return {
           type: 'select',
-          projection: s.vars,
+          vars: s.vars,
           modifier: s.modifier,
           pattern: w,
           ...sm,
@@ -262,24 +262,17 @@ function peg$parse(input, options) {
         let vars;
         if (vs === '*') {
           vars = [{
-            token: 'variable',
             kind: '*',
             location: location(),
           }];
         } else {
           vars = vs.map((v) => {
             if (v.length === 2) {
-              return {
-                token: 'variable',
-                kind: 'var',
-                value: v[1],
-              };
+              return v[1];
             } else {
               return {
-                token: 'variable',
-                kind: 'aliased',
                 expression: v[3],
-                alias: v[7],
+                as: v[7],
                 location: location(),
               };
             }

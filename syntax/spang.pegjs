@@ -111,7 +111,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
   return {
     type: 'select',
     dataset: dataset,
-    projection: s.vars,
+    vars: s.vars,
     modifier: s.modifier,
     pattern: w,
     ...sm,
@@ -124,7 +124,7 @@ SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier v:ValuesCla
 {
   return {
     type: 'select',
-    projection: s.vars,
+    vars: s.vars,
     modifier: s.modifier,
     pattern: w,
     ...sm,
@@ -145,24 +145,17 @@ SelectClause = 'SELECT'i WS* m:( 'DISTINCT'i / 'REDUCED'i )? WS*
   let vars;
   if (vs === '*') {
     vars = [{
-      token: 'variable',
       kind: '*',
       location: location(),
     }];
   } else {
     vars = vs.map((v) => {
       if (v.length === 2) {
-        return {
-          token: 'variable',
-          kind: 'var',
-          value: v[1],
-        };
+        return v[1];
       } else {
         return {
-          token: 'variable',
-          kind: 'aliased',
           expression: v[3],
-          alias: v[7],
+          as: v[7],
           location: location(),
         };
       }
