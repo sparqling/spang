@@ -114,10 +114,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
     projection: s.vars,
     modifier: s.modifier,
     pattern: w,
-    limitoffset: sm.limitoffset,
-    group: sm.group,
-    having: sm.having,
-    order: sm.order,
+    ...sm,
     location: location(),
   }
 }
@@ -130,10 +127,7 @@ SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier v:ValuesCla
     projection: s.vars,
     modifier: s.modifier,
     pattern: w,
-    limitoffset: sm.limitoffset,
-    group: sm.group,
-    having: sm.having,
-    order: sm.order,
+    ...sm,
     values: v,
   };
 }
@@ -206,8 +200,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
     dataset: dataset,
     template: t,
     pattern: w,
-    limitoffset: sm.limitoffset,
-    order: sm.order,
+    ...sm,
     location: location(),
   };
 }
@@ -234,8 +227,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
     type: 'construct',
     dataset: dataset,
     pattern: t,
-    limitoffset: sm.limitoffset,
-    order: sm.order,
+    ...sm,
     location: location(),
   };
 }
@@ -257,8 +249,7 @@ DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* gs:DatasetClause* WS* 
     dataset: dataset,
     value: v,
     pattern: w,
-    limitoffset: sm.limitoffset,
-    order: sm.order,
+    ...sm,
     location: location(),
   }
 }
@@ -287,9 +278,7 @@ AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionMod
     type: 'ask',
     dataset: dataset,
     pattern: w,
-    limitoffset: sm.limitoffset,
-    group: sm.group,
-    order: sm.order,
+    ...sm,
     location: location(),
   }
 }
@@ -332,14 +321,23 @@ WhereClause = 'WHERE'i? WS* ggp:GroupGraphPattern
 }
 
 // [18] SolutionModifier ::= GroupClause? HavingClause? OrderClause? LimitOffsetClauses?
-SolutionModifier = gc:GroupClause? h:HavingClause? oc:OrderClause? lo:LimitOffsetClauses?
+SolutionModifier = g:GroupClause? h:HavingClause? o:OrderClause? l:LimitOffsetClauses?
 {
-  return {
-    group: gc,
-    having: h,
-    order: oc,
-    limitoffset: lo,
+  let ret = {};
+  if (g) {
+    ret.group = g;
   }
+  if (h) {
+    ret.having = h;
+  }
+  if (o) {
+    ret.orderBy = o;
+  }
+  if (l) {
+    ret.limitOffset = l;
+  }
+
+  return ret;
 }
 
 // [19] GroupClause ::= 'GROUP' 'BY' GroupCondition+
@@ -395,17 +393,17 @@ OrderClause = 'ORDER'i WS* 'BY'i WS* os:OrderCondition+ WS*
 }
 
 // [24] OrderCondition ::= ( ( 'ASC' | 'DESC' ) BrackettedExpression ) | ( Constraint | Var )
-OrderCondition = direction:( 'ASC'i / 'DESC'i ) WS* e:BrackettedExpression WS*
+OrderCondition = o:( 'ASC'i / 'DESC'i ) WS* e:BrackettedExpression WS*
 {
   return {
-    direction: direction.toUpperCase(),
-    expression: e
+    order: o.toUpperCase(),
+    by: e
   };
 }
 / e:( Constraint / Var ) WS*
 {
   return {
-    expression: e,
+    by: e,
   };
 }
 

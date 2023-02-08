@@ -230,10 +230,7 @@ function peg$parse(input, options) {
           projection: s.vars,
           modifier: s.modifier,
           pattern: w,
-          limitoffset: sm.limitoffset,
-          group: sm.group,
-          having: sm.having,
-          order: sm.order,
+          ...sm,
           location: location(),
         }
       },
@@ -243,10 +240,7 @@ function peg$parse(input, options) {
           projection: s.vars,
           modifier: s.modifier,
           pattern: w,
-          limitoffset: sm.limitoffset,
-          group: sm.group,
-          having: sm.having,
-          order: sm.order,
+          ...sm,
           values: v,
         };
       },
@@ -322,8 +316,7 @@ function peg$parse(input, options) {
           dataset: dataset,
           template: t,
           pattern: w,
-          limitoffset: sm.limitoffset,
-          order: sm.order,
+          ...sm,
           location: location(),
         };
       },
@@ -355,8 +348,7 @@ function peg$parse(input, options) {
           type: 'construct',
           dataset: dataset,
           pattern: t,
-          limitoffset: sm.limitoffset,
-          order: sm.order,
+          ...sm,
           location: location(),
         };
       },
@@ -377,8 +369,7 @@ function peg$parse(input, options) {
           dataset: dataset,
           value: v,
           pattern: w,
-          limitoffset: sm.limitoffset,
-          order: sm.order,
+          ...sm,
           location: location(),
         }
       },
@@ -406,9 +397,7 @@ function peg$parse(input, options) {
           type: 'ask',
           dataset: dataset,
           pattern: w,
-          limitoffset: sm.limitoffset,
-          group: sm.group,
-          order: sm.order,
+          ...sm,
           location: location(),
         }
       },
@@ -438,13 +427,22 @@ function peg$parse(input, options) {
       peg$c49 = function(ggp) {
         return ggp;
       },
-      peg$c50 = function(gc, h, oc, lo) {
-        return {
-          group: gc,
-          having: h,
-          order: oc,
-          limitoffset: lo,
+      peg$c50 = function(g, h, o, l) {
+        let ret = {};
+        if (g) {
+          ret.group = g;
         }
+        if (h) {
+          ret.having = h;
+        }
+        if (o) {
+          ret.orderBy = o;
+        }
+        if (l) {
+          ret.limitOffset = l;
+        }
+
+        return ret;
       },
       peg$c51 = "group",
       peg$c52 = peg$literalExpectation("GROUP", true),
@@ -489,15 +487,15 @@ function peg$parse(input, options) {
       peg$c67 = peg$literalExpectation("ASC", true),
       peg$c68 = "desc",
       peg$c69 = peg$literalExpectation("DESC", true),
-      peg$c70 = function(direction, e) {
+      peg$c70 = function(o, e) {
         return {
-          direction: direction.toUpperCase(),
-          expression: e
+          order: o.toUpperCase(),
+          by: e
         };
       },
       peg$c71 = function(e) {
         return {
-          expression: e,
+          by: e,
         };
       },
       peg$c72 = function(cls) {
