@@ -850,10 +850,10 @@ function peg$parse(input, options) {
       peg$c185 = peg$literalExpectation("a", false),
       peg$c186 = function() {
         return {
-          token: 'uri',
-          prefix: null,
-          suffix: null,
-          value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+          // iri: 'a',
+       'a': true,
+          // token: 'uri',
+          // value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
           location: location(),
         }
       },
@@ -1825,10 +1825,7 @@ function peg$parse(input, options) {
       },
       peg$c447 = function(iri) {
         return {
-          token: 'uri',
-          prefix: null,
-          suffix: null,
-          value: iri,
+          iri: iri,
           location: location(),
         }
       },

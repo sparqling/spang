@@ -884,10 +884,7 @@ Verb = VarOrIri
 / 'a'
 {
   return {
-    token: 'uri',
-    prefix: null,
-    suffix: null,
-    value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+    'a': true,
     location: location(),
   }
 }
@@ -1041,10 +1038,7 @@ PathPrimary = IRIref
 / 'a'
 {
   return {
-    token: 'uri',
-    prefix: null,
-    suffix: null,
-    value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type',
+    'a': true,
     location: location(),
   }
 }
@@ -2063,10 +2057,7 @@ String = STRING_LITERAL_LONG1 / STRING_LITERAL_LONG2 / STRING_LITERAL1 / STRING_
 IRIref = iri:IRIREF
 {
   return {
-    token: 'uri',
-    prefix: null,
-    suffix: null,
-    value: iri,
+    iri: iri,
     location: location(),
   }
 }
@@ -2082,7 +2073,6 @@ PrefixedName = p:PNAME_LN
     token: 'uri',
     prefix: p[0],
     suffix: p[1],
-    value: null,
     location: location(),
   }
 }
@@ -2092,7 +2082,6 @@ PrefixedName = p:PNAME_LN
     token: 'uri',
     prefix: p,
     suffix: '',
-    value: null,
     location: location(),
   }
 }
