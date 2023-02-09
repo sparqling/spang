@@ -99,7 +99,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
     ...ret,
     vars: s.vars,
     modifier: s.modifier,
-    pattern: w,
+    where: w,
     ...sm,
     location: location(),
   };
@@ -114,7 +114,7 @@ SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier v:ValuesCla
     type: 'select',
     vars: s.vars,
     modifier: s.modifier,
-    pattern: w,
+    where: w,
     ...sm,
     values: v,
   };
@@ -167,7 +167,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
   ret = {
     ...ret,
     template: t,
-    pattern: w,
+    where: w,
     ...sm,
     location: location(),
   };
@@ -183,7 +183,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
 
   ret = {
     ...ret,
-    pattern: t,
+    where: { patterns: [ t ] },
     ...sm,
     location: location(),
   };
@@ -202,7 +202,7 @@ DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* gs:DatasetClause* WS* 
   ret = {
     ...ret,
     value: v,
-    pattern: w,
+    where: w,
     ...sm,
     location: location(),
   };
@@ -220,7 +220,7 @@ AskQuery = WS* 'ASK'i WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionMod
 
   ret = {
     ...ret,
-    pattern: w,
+    where: w,
     ...sm,
     location: location(),
   };
@@ -485,8 +485,8 @@ InsertData = 'INSERT'i WS* 'DATA'i WS* qs:QuadData
 {
   return {
     type: 'insertdata',
-    quads: qs,
-  }
+    insert: qs,
+  };
 }
 
 // [39] DeleteData ::= 'DELETE DATA' QuadData
@@ -494,16 +494,16 @@ DeleteData = 'DELETE'i WS* 'DATA'i qs:QuadData
 {
   return {
     type: 'deletedata',
-    quads: qs,
-  }
+    delete: qs,
+  };
 }
 
 // [40] DeleteWhere ::= 'DELETE WHERE' QuadPattern
-DeleteWhere = 'DELETE'i WS* 'WHERE'i WS* p:GroupGraphPattern
+DeleteWhere = 'DELETE'i WS* 'WHERE'i WS* qs:QuadPattern
 {
   return {
     type: 'deletewhere',
-    pattern: p,
+    delete: qs,
   };
 }
 
@@ -531,7 +531,7 @@ Modify = w:( 'WITH'i WS* IRIref WS* )? m:( DeleteClause WS* InsertClause? / Inse
     query.using = u;
   }
 
-  query.pattern = p;
+  query.where = p;
 
   return query;
 }
@@ -618,11 +618,7 @@ Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
     }
   });
 
-  return {
-    token:'quads',
-    triplesblock: quads,
-    location: location(),
-  }
+  return quads;
 }
 
 // [51] QuadsNotTriples ::= 'GRAPH' VarOrIri '{' TriplesTemplate? '}'
@@ -635,14 +631,13 @@ QuadsNotTriples = WS* 'GRAPH'i WS* g:VarOrIri WS* '{' WS* ts:TriplesTemplate? WS
 // [52] TriplesTemplate ::= TriplesSameSubject ( '.' TriplesTemplate? )?
 TriplesTemplate = b:TriplesSameSubject bs:( WS* '.' WS* TriplesTemplate? )?
 {
-  let triplesblock = [b];
+  let triples = [b];
   if (bs && bs[3]) {
-    triplesblock = triplesblock.concat(bs[3].triplesblock);
+    triples = triples.concat(bs[3].triples);
   }
 
   return {
-    token:'triplestemplate',
-    triplesblock: triplesblock,
+    triples: triples,
     location: location(),
   };
 }
@@ -677,14 +672,13 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
 // [55] TriplesBlock ::= TriplesSameSubjectPath ( '.' TriplesBlock? )?
 TriplesBlock = a:TriplesSameSubjectPath b:( WS* '.' WS* TriplesBlock? )?
 {
-  let triplesblock = [a];
+  let triples = [a];
   if (b && b[3]) {
-    triplesblock = triplesblock.concat(b[3].triplesblock);
+    triples = triples.concat(b[3].triples);
   }
 
   return {
-    token: 'triplesblock',
-    triplesblock: triplesblock,
+    triples: triples,
     location: location(),
   }
 }
@@ -859,14 +853,13 @@ ConstructTemplate = '{' WS* ts:ConstructTriples? WS* '}'
 // [74] ConstructTriples ::= TriplesSameSubject ( '.' ConstructTriples? )?
 ConstructTriples = b:TriplesSameSubject bs:( WS* '.' WS* ConstructTriples? )?
 {
-  let triplesblock = [b];
+  let triples = [b];
   if (bs && bs[3]) {
-    triplesblock = triplesblock.concat(bs[3].triplesblock);
+    triples = triples.concat(bs[3].triples);
   }
 
   return {
-    token:'triplestemplate',
-    triplesblock: triplesblock,
+    triples: triples,
     location: location(),
   }
 }
@@ -875,17 +868,15 @@ ConstructTriples = b:TriplesSameSubject bs:( WS* '.' WS* ConstructTriples? )?
 TriplesSameSubject = s:VarOrTerm WS* pairs:PropertyListNotEmpty
 {
   return {
-    token: 'triplessamesubject',
-    chainSubject: s,
-    propertylist: pairs,
+    subject: s,
+    properties: pairs,
   }
 }
 / WS* tn:TriplesNode WS* pairs:PropertyList
 {
   return {
-    token: 'triplessamesubject',
-    chainSubject: tn,
-    propertylist: pairs,
+    subject: tn,
+    properties: pairs,
   }
 }
 
@@ -903,10 +894,7 @@ PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* Ob
     }
   });
 
-  return {
-    token: 'propertylist',
-    pairs: pairs,
-  };
+  return pairs;
 }
 
 // [78] Verb ::= VarOrIri | 'a'
@@ -938,17 +926,15 @@ Object = GraphNode
 TriplesSameSubjectPath = s:VarOrTerm WS* list:PropertyListPathNotEmpty
 {
   return {
-    token: 'triplessamesubject',
-    chainSubject: s,
-    propertylist: list,
+    subject: s,
+    properties: list,
   }
 }
 / WS* tn:TriplesNodePath WS* pairs:PropertyListPath
 {
   return {
-    token: 'triplessamesubject',
-    chainSubject: tn,
-    propertylist: pairs,
+    subject: tn,
+    properties: pairs,
   };
 }
 
@@ -966,10 +952,7 @@ PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath res
     }
   });
 
-  return {
-    token: 'propertylist',
-    pairs: pairs,
-  };
+  return pairs;
 }
 
 // [84] VerbPath ::= Path
@@ -1006,9 +989,7 @@ PathAlternative = first:PathSequence rest:( WS* '|' WS* PathSequence )*
     }
 
     return {
-      token: 'path',
-      kind: 'alternative',
-      value: arr,
+      alternative: arr,
       location: location(),
     };
   } else {
@@ -1026,9 +1007,7 @@ PathSequence = first:PathEltOrInverse rest:( WS* '/' WS* PathEltOrInverse )*
     }
 
     return {
-      token: 'path',
-      kind: 'sequence',
-      value: arr,
+      sequence: arr,
       location: location(),
     };
   } else {
@@ -1039,16 +1018,11 @@ PathSequence = first:PathEltOrInverse rest:( WS* '/' WS* PathEltOrInverse )*
 // [91] PathElt ::= PathPrimary PathMod?
 PathElt = p:PathPrimary m:PathMod?
 {
-  if (p.token === 'path') {
+  if (m) {
     p.modifier = m;
-    return p;
-  } else {
-    return {
-      token: 'path',
-      value: p,
-      modifier: m,
-    }
   }
+
+  return p;
 }
 
 // [92] PathEltOrInverse ::= PathElt | '^' PathElt
@@ -1092,7 +1066,6 @@ Integer = INTEGER
 TriplesNode = c:Collection
 {
   return {
-    token: 'triplesnodecollection',
     collection: c,
     location: location(),
   };
@@ -1104,7 +1077,7 @@ BlankNodePropertyList = WS* '[' WS* pl:PropertyListNotEmpty WS* ']' WS*
 {
   return {
     token: 'triplesnode',
-    pairs: pl,
+    properties: pl,
     location: location(),
   };
 }
@@ -1113,7 +1086,6 @@ BlankNodePropertyList = WS* '[' WS* pl:PropertyListNotEmpty WS* ']' WS*
 TriplesNodePath = c:CollectionPath
 {
   return {
-    token: 'triplesnodecollection',
     collection: c,
     location: location(),
   };
@@ -1125,7 +1097,7 @@ BlankNodePropertyListPath = WS* '[' WS* pl:PropertyListPathNotEmpty WS* ']' WS*
 {
   return {
     token: 'triplesnode',
-    pairs: pl,
+    properties: pl,
     location: location(),
   };
 }
@@ -2350,16 +2322,6 @@ ECHAR = '\\' [tbnrf\\\"\']
 
 // [161] NIL ::= '(' WS* ')'
 NIL = '(' WS* ')'
-{
-  return {
-    token: 'triplesnodecollection',
-    chainSubject: [{
-      token: 'uri',
-      value: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil',
-    }],
-    location: location(),
-  };
-}
 
 // [162] WS ::= #x20 | #x9 | #xD | #xA
 // add COMMENT
