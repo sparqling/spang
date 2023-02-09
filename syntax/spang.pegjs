@@ -1290,7 +1290,6 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
   return {
     token: 'expression',
     expressionType: 'atomic',
-    primaryexpression: 'rdfliteral',
     value: v,
   }
 }
@@ -1299,7 +1298,6 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
   return {
     token: 'expression',
     expressionType: 'atomic',
-    primaryexpression: 'numericliteral',
     value: v,
   }
 }
@@ -1308,7 +1306,6 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
   return {
     token: 'expression',
     expressionType: 'atomic',
-    primaryexpression: 'booleanliteral',
     value: v,
   }
 }
@@ -1317,7 +1314,6 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
   return {
     token: 'expression',
     expressionType: 'atomic',
-    primaryexpression: 'var',
     value: v,
   }
 }
