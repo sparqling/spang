@@ -799,8 +799,7 @@ function peg$parse(input, options) {
       },
       peg$c172 = function(i, args) {
         return {
-          token: 'expression',
-          expressionType: 'functioncall',
+          token: 'functioncall',
           iriref: i,
           args: args.value,
           location: location(),

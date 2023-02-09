@@ -809,8 +809,7 @@ Constraint = BrackettedExpression / BuiltInCall / FunctionCall
 FunctionCall = i:IRIref WS* args:ArgList
 {
   return {
-    token: 'expression',
-    expressionType: 'functioncall',
+    token: 'functioncall',
     iriref: i,
     args: args.value,
     location: location(),
