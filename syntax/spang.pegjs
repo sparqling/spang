@@ -40,10 +40,11 @@ QueryUnit = Query
 // Function is added after Prologue
 Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / DescribeQuery / AskQuery ) v:ValuesClause
 {
-  let ret = {
-    prologue: p,
-    queryBody: q,
-  };
+  let ret = {};
+  if (p.length) {
+    ret.prologue = p;
+  }
+  ret.queryBody = q;
   if (v) {
     ret.values = v;
   }

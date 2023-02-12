@@ -169,10 +169,11 @@ function peg$parse(input, options) {
         return ret;
       },
       peg$c1 = function(p, f, q, v) {
-        let ret = {
-          prologue: p,
-          queryBody: q,
-        };
+        let ret = {};
+        if (p.length) {
+          ret.prologue = p;
+        }
+        ret.queryBody = q;
         if (v) {
           ret.values = v;
         }
