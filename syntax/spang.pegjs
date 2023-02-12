@@ -2067,8 +2067,8 @@ PrefixedName = p:PNAME_LN
 {
   return {
     token: 'uri',
-    prefix: p[0],
-    suffix: p[1],
+    iriPrefix: p[0],
+    iriLocal: p[1],
     location: location(),
   }
 }
@@ -2076,8 +2076,8 @@ PrefixedName = p:PNAME_LN
 {
   return {
     token: 'uri',
-    prefix: p,
-    suffix: '',
+    iriPrefix: p,
+    iriLocal: '',
     location: location(),
   }
 }
