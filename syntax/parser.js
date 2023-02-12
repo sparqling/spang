@@ -1856,7 +1856,7 @@ function peg$parse(input, options) {
       },
       peg$c461 = function(v) {
         return {
-          varName: v,
+          variable: v,
         }
       },
       peg$c462 = "$",
@@ -1864,7 +1864,7 @@ function peg$parse(input, options) {
       peg$c464 = function(v) {
         return {
           varType: '$',
-          varName: v,
+          variable: v,
         }
       },
       peg$c465 = "{{",
@@ -1874,7 +1874,7 @@ function peg$parse(input, options) {
       peg$c469 = function(v) {
         return {
           varType: '{{}}',
-          varName: v,
+          variable: v,
         }
       },
       peg$c470 = "@",

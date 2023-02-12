@@ -2130,7 +2130,7 @@ BLANK_NODE_LABEL = '_:' ( PN_CHARS_U / [0-9] ) (PN_CHARS / '.' PN_CHARS)*
 VAR1 = '?' v:VARNAME 
 {
   return {
-    varName: v,
+    variable: v,
   }
 }
 
@@ -2139,7 +2139,7 @@ VAR2 = '$' v:VARNAME
 {
   return {
     varType: '$',
-    varName: v,
+    variable: v,
   }
 }
 
@@ -2147,7 +2147,7 @@ VAR3 = '{{' v:VARNAME '}}'
 {
   return {
     varType: '{{}}',
-    varName: v,
+    variable: v,
   }
 }
 
