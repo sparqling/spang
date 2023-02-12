@@ -97,7 +97,7 @@ SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:Solu
 
   ret = {
     ...ret,
-    vars: s.vars,
+    select: s.vars,
     modifier: s.modifier,
     where: w,
     ...sm,
@@ -112,7 +112,7 @@ SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier v:ValuesCla
 {
   return {
     type: 'select',
-    vars: s.vars,
+    select: s.vars,
     modifier: s.modifier,
     where: w,
     ...sm,

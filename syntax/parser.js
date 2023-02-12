@@ -213,7 +213,7 @@ function peg$parse(input, options) {
 
         ret = {
           ...ret,
-          vars: s.vars,
+          select: s.vars,
           modifier: s.modifier,
           where: w,
           ...sm,
@@ -225,7 +225,7 @@ function peg$parse(input, options) {
       peg$c10 = function(s, w, sm, v) {
         return {
           type: 'select',
-          vars: s.vars,
+          select: s.vars,
           modifier: s.modifier,
           where: w,
           ...sm,
