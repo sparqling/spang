@@ -668,11 +668,11 @@ function peg$parse(input, options) {
       peg$c143 = function(b, bs) {
         let triples = [b];
         if (bs && bs[3]) {
-          triples = triples.concat(bs[3].triples);
+          triples = triples.concat(bs[3].triplePattern);
         }
 
         return {
-          triples: triples,
+          triplePattern: triples,
           location: location(),
         };
       },
@@ -700,11 +700,11 @@ function peg$parse(input, options) {
       peg$c146 = function(a, b) {
         let triples = [a];
         if (b && b[3]) {
-          triples = triples.concat(b[3].triples);
+          triples = triples.concat(b[3].triplePattern);
         }
 
         return {
-          triples: triples,
+          triplePattern: triples,
           location: location(),
         }
       },
@@ -832,11 +832,11 @@ function peg$parse(input, options) {
       peg$c180 = function(b, bs) {
         let triples = [b];
         if (bs && bs[3]) {
-          triples = triples.concat(bs[3].triples);
+          triples = triples.concat(bs[3].triplePattern);
         }
 
         return {
-          triples: triples,
+          triplePattern: triples,
           location: location(),
         }
       },

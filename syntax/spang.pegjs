@@ -633,11 +633,11 @@ TriplesTemplate = b:TriplesSameSubject bs:( WS* '.' WS* TriplesTemplate? )?
 {
   let triples = [b];
   if (bs && bs[3]) {
-    triples = triples.concat(bs[3].triples);
+    triples = triples.concat(bs[3].triplePattern);
   }
 
   return {
-    triples: triples,
+    triplePattern: triples,
     location: location(),
   };
 }
@@ -674,11 +674,11 @@ TriplesBlock = a:TriplesSameSubjectPath b:( WS* '.' WS* TriplesBlock? )?
 {
   let triples = [a];
   if (b && b[3]) {
-    triples = triples.concat(b[3].triples);
+    triples = triples.concat(b[3].triplePattern);
   }
 
   return {
-    triples: triples,
+    triplePattern: triples,
     location: location(),
   }
 }
@@ -854,11 +854,11 @@ ConstructTriples = b:TriplesSameSubject bs:( WS* '.' WS* ConstructTriples? )?
 {
   let triples = [b];
   if (bs && bs[3]) {
-    triples = triples.concat(bs[3].triples);
+    triples = triples.concat(bs[3].triplePattern);
   }
 
   return {
-    triples: triples,
+    triplePattern: triples,
     location: location(),
   }
 }
