@@ -363,7 +363,7 @@ LimitOffsetClauses = cls:( LimitClause OffsetClause? / OffsetClause LimitClause?
 LimitClause = 'LIMIT'i WS* i:INTEGER WS*
 {
   return {
-    limit: parseInt(i.value)
+    limit: parseInt(i.literal)
   };
 }
 
@@ -371,7 +371,7 @@ LimitClause = 'LIMIT'i WS* i:INTEGER WS*
 OffsetClause = 'OFFSET'i WS* i:INTEGER WS*
 {
   return {
-    offset: parseInt(i.value)
+    offset: parseInt(i.literal)
   };
 }
 
@@ -2002,9 +2002,8 @@ IRIrefOrFunction = i:IRIref WS* args:ArgList?
 RDFLiteral = s:String e:( LANGTAG / ( '^^' IRIref ) )?
 {
   let ret = {
-    token:'literal',
+    literal: s.value,
     quote: s.quote,
-    value: s.value,
   };
 
   if (typeof(e) === 'string') {
@@ -2033,16 +2032,14 @@ NumericLiteralNegative = DOUBLE_NEGATIVE / DECIMAL_NEGATIVE / INTEGER_NEGATIVE
 BooleanLiteral = 'true'i
 {
   return {
-    token: 'literal',
-    value: true,
+    literal: true,
     type: 'http://www.w3.org/2001/XMLSchema#boolean',
   }
 }
 / 'false'i
 {
   return {
-    token: 'literal',
-    value: false,
+    literal: false,
     type: 'http://www.w3.org/2001/XMLSchema#boolean',
   }
 }
@@ -2166,8 +2163,7 @@ LANGTAG = '@' a:[a-zA-Z]+ b:('-' [a-zA-Z0-9]+)*
 INTEGER = [0-9]+
 {
   return {
-    token: 'literal',
-    value: text(),
+    literal: text(),
     type: 'http://www.w3.org/2001/XMLSchema#integer',
   }
 }
@@ -2176,8 +2172,7 @@ INTEGER = [0-9]+
 DECIMAL = [0-9]* '.' [0-9]+
 {
   return {
-    token: 'literal',
-    value: text(),
+    literal: text(),
     type: 'http://www.w3.org/2001/XMLSchema#decimal',
   }
 }
@@ -2186,24 +2181,21 @@ DECIMAL = [0-9]* '.' [0-9]+
 DOUBLE = [0-9]+ '.' [0-9]* EXPONENT
 {
   return {
-    token: 'literal',
-    value: text(),
+    literal: text(),
     type: 'http://www.w3.org/2001/XMLSchema#double',
   }
 }
 / '.' [0-9]+ EXPONENT
 {
   return {
-    token: 'literal',
-    value: text(),
+    literal: text(),
     type: 'http://www.w3.org/2001/XMLSchema#double',
   }
 }
 / [0-9]+ EXPONENT
 {
   return {
-    token: 'literal',
-    value: text(),
+    literal: text(),
     type: 'http://www.w3.org/2001/XMLSchema#double',
   }
 }
@@ -2211,42 +2203,42 @@ DOUBLE = [0-9]+ '.' [0-9]* EXPONENT
 // [149] INTEGER_POSITIVE ::= '+' INTEGER
 INTEGER_POSITIVE = '+' d:INTEGER
 {
-  d.value = '+' + d.value;
+  d.literal = '+' + d.literal;
   return d;
 }
 
 // [150] DECIMAL_POSITIVE ::= '+' DECIMAL
 DECIMAL_POSITIVE = '+' d:DECIMAL
 {
-  d.value = '+' + d.value;
+  d.literal = '+' + d.literal;
   return d;
 }
 
 // [151] DOUBLE_POSITIVE ::= '+' DOUBLE
 DOUBLE_POSITIVE = '+' d:DOUBLE
 {
-  d.value = '+' + d.value;
+  d.literal = '+' + d.literal;
   return d;
 }
 
 // [152] INTEGER_NEGATIVE ::= '-' INTEGER
 INTEGER_NEGATIVE = '-' d:INTEGER
 {
-  d.value = '-' + d.value;
+  d.literal = '-' + d.literal;
   return d;
 }
 
 // [153] DECIMAL_NEGATIVE ::= '-' DECIMAL
 DECIMAL_NEGATIVE = '-' d:DECIMAL
 {
-  d.value = '-' + d.value;
+  d.literal = '-' + d.literal;
   return d;
 }
 
 // [154] DOUBLE_NEGATIVE ::= '-' DOUBLE
 DOUBLE_NEGATIVE = '-' d:DOUBLE
 {
-  d.value = '-' + d.value;
+  d.literal = '-' + d.literal;
   return d;
 }
 

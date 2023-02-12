@@ -451,14 +451,14 @@ function peg$parse(input, options) {
       peg$c74 = peg$literalExpectation("LIMIT", true),
       peg$c75 = function(i) {
         return {
-          limit: parseInt(i.value)
+          limit: parseInt(i.literal)
         };
       },
       peg$c76 = "offset",
       peg$c77 = peg$literalExpectation("OFFSET", true),
       peg$c78 = function(i) {
         return {
-          offset: parseInt(i.value)
+          offset: parseInt(i.literal)
         };
       },
       peg$c79 = "values",
@@ -1768,9 +1768,8 @@ function peg$parse(input, options) {
       peg$c436 = peg$literalExpectation("^^", false),
       peg$c437 = function(s, e) {
         let ret = {
-          token:'literal',
+          literal: s.value,
           quote: s.quote,
-          value: s.value,
         };
 
         if (typeof(e) === 'string') {
@@ -1786,8 +1785,7 @@ function peg$parse(input, options) {
       peg$c439 = peg$literalExpectation("true", true),
       peg$c440 = function() {
         return {
-          token: 'literal',
-          value: true,
+          literal: true,
           type: 'http://www.w3.org/2001/XMLSchema#boolean',
         }
       },
@@ -1795,8 +1793,7 @@ function peg$parse(input, options) {
       peg$c442 = peg$literalExpectation("false", true),
       peg$c443 = function() {
         return {
-          token: 'literal',
-          value: false,
+          literal: false,
           type: 'http://www.w3.org/2001/XMLSchema#boolean',
         }
       },
@@ -1896,31 +1893,28 @@ function peg$parse(input, options) {
       },
       peg$c478 = function() {
         return {
-          token: 'literal',
-          value: text(),
+          literal: text(),
           type: 'http://www.w3.org/2001/XMLSchema#integer',
         }
       },
       peg$c479 = function() {
         return {
-          token: 'literal',
-          value: text(),
+          literal: text(),
           type: 'http://www.w3.org/2001/XMLSchema#decimal',
         }
       },
       peg$c480 = function() {
         return {
-          token: 'literal',
-          value: text(),
+          literal: text(),
           type: 'http://www.w3.org/2001/XMLSchema#double',
         }
       },
       peg$c481 = function(d) {
-        d.value = '+' + d.value;
+        d.literal = '+' + d.literal;
         return d;
       },
       peg$c482 = function(d) {
-        d.value = '-' + d.value;
+        d.literal = '-' + d.literal;
         return d;
       },
       peg$c483 = /^[eE]/,
