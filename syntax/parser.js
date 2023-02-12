@@ -1810,7 +1810,6 @@ function peg$parse(input, options) {
       },
       peg$c446 = function(p) {
         return {
-          token: 'uri',
           iriPrefix: p[0],
           iriLocal: p[1],
           location: location(),
@@ -1818,7 +1817,6 @@ function peg$parse(input, options) {
       },
       peg$c447 = function(p) {
         return {
-          token: 'uri',
           iriPrefix: p,
           iriLocal: '',
           location: location(),

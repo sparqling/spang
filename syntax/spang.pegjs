@@ -2066,7 +2066,6 @@ IRIref = iri:IRIREF
 PrefixedName = p:PNAME_LN 
 {
   return {
-    token: 'uri',
     iriPrefix: p[0],
     iriLocal: p[1],
     location: location(),
@@ -2075,7 +2074,6 @@ PrefixedName = p:PNAME_LN
 / p:PNAME_NS 
 {
   return {
-    token: 'uri',
     iriPrefix: p,
     iriLocal: '',
     location: location(),
