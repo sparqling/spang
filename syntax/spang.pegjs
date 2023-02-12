@@ -2108,7 +2108,7 @@ IRIREF = '<' i:[^<>"{}|^`\\\x00-\x20]* '>'
 // [140] PNAME_NS ::= PN_PREFIX? ':'
 PNAME_NS = p:PN_PREFIX? ':'
 {
-  return p
+  return p || '';
 }
 
 // [141] PNAME_LN ::= PNAME_NS PN_LOCAL
