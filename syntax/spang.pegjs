@@ -90,7 +90,7 @@ PrefixDecl = WS* 'PREFIX'i WS* p:PNAME_NS WS* i:IRIREF
 // [7] SelectQuery ::= SelectClause DatasetClause* WhereClause SolutionModifier
 SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
-  let ret = { type: 'select' };
+  let ret = {};
   if (gs.length) {
     ret.from = gs;
   }

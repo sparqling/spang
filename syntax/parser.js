@@ -206,7 +206,7 @@ function peg$parse(input, options) {
         }
       },
       peg$c9 = function(s, gs, w, sm) {
-        let ret = { type: 'select' };
+        let ret = {};
         if (gs.length) {
           ret.from = gs;
         }
