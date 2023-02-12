@@ -971,8 +971,7 @@ function peg$parse(input, options) {
       },
       peg$c214 = function(v) {
         return {
-          varType: v.varType,
-          varName: v.varName,
+          ...v,
           location: location(),
         }
       },
@@ -1857,7 +1856,6 @@ function peg$parse(input, options) {
       },
       peg$c461 = function(v) {
         return {
-          varType: '?',
           varName: v,
         }
       },
@@ -1875,7 +1873,7 @@ function peg$parse(input, options) {
       peg$c468 = peg$literalExpectation("}}", false),
       peg$c469 = function(v) {
         return {
-          varType: 'mustash',
+          varType: '{{}}',
           varName: v,
         }
       },
