@@ -42,7 +42,7 @@ Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / Desc
 {
   let ret = {
     prologue: p,
-    body: q,
+    queryBody: q,
   };
   if (v) {
     ret.values = v;

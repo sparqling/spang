@@ -171,7 +171,7 @@ function peg$parse(input, options) {
       peg$c1 = function(p, f, q, v) {
         let ret = {
           prologue: p,
-          body: q,
+          queryBody: q,
         };
         if (v) {
           ret.values = v;
