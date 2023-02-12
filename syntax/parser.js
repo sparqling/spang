@@ -1775,7 +1775,7 @@ function peg$parse(input, options) {
         if (typeof(e) === 'string') {
           ret.lang = e;
         } else if (e) {
-          ret.type = e[1];
+          ret.dataType = e[1];
         }
 
         ret.location = location();
@@ -1786,7 +1786,7 @@ function peg$parse(input, options) {
       peg$c440 = function() {
         return {
           literal: true,
-          type: 'http://www.w3.org/2001/XMLSchema#boolean',
+          dataType: 'http://www.w3.org/2001/XMLSchema#boolean',
         }
       },
       peg$c441 = "false",
@@ -1794,7 +1794,7 @@ function peg$parse(input, options) {
       peg$c443 = function() {
         return {
           literal: false,
-          type: 'http://www.w3.org/2001/XMLSchema#boolean',
+          dataType: 'http://www.w3.org/2001/XMLSchema#boolean',
         }
       },
       peg$c444 = function(iri) {
@@ -1894,19 +1894,19 @@ function peg$parse(input, options) {
       peg$c478 = function() {
         return {
           literal: text(),
-          type: 'http://www.w3.org/2001/XMLSchema#integer',
+          dataType: 'http://www.w3.org/2001/XMLSchema#integer',
         }
       },
       peg$c479 = function() {
         return {
           literal: text(),
-          type: 'http://www.w3.org/2001/XMLSchema#decimal',
+          dataType: 'http://www.w3.org/2001/XMLSchema#decimal',
         }
       },
       peg$c480 = function() {
         return {
           literal: text(),
-          type: 'http://www.w3.org/2001/XMLSchema#double',
+          dataType: 'http://www.w3.org/2001/XMLSchema#double',
         }
       },
       peg$c481 = function(d) {

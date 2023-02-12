@@ -2009,7 +2009,7 @@ RDFLiteral = s:String e:( LANGTAG / ( '^^' IRIref ) )?
   if (typeof(e) === 'string') {
     ret.lang = e;
   } else if (e) {
-    ret.type = e[1];
+    ret.dataType = e[1];
   }
 
   ret.location = location();
@@ -2033,14 +2033,14 @@ BooleanLiteral = 'true'i
 {
   return {
     literal: true,
-    type: 'http://www.w3.org/2001/XMLSchema#boolean',
+    dataType: 'http://www.w3.org/2001/XMLSchema#boolean',
   }
 }
 / 'false'i
 {
   return {
     literal: false,
-    type: 'http://www.w3.org/2001/XMLSchema#boolean',
+    dataType: 'http://www.w3.org/2001/XMLSchema#boolean',
   }
 }
 
@@ -2164,7 +2164,7 @@ INTEGER = [0-9]+
 {
   return {
     literal: text(),
-    type: 'http://www.w3.org/2001/XMLSchema#integer',
+    dataType: 'http://www.w3.org/2001/XMLSchema#integer',
   }
 }
 
@@ -2173,7 +2173,7 @@ DECIMAL = [0-9]* '.' [0-9]+
 {
   return {
     literal: text(),
-    type: 'http://www.w3.org/2001/XMLSchema#decimal',
+    dataType: 'http://www.w3.org/2001/XMLSchema#decimal',
   }
 }
 
@@ -2182,21 +2182,21 @@ DOUBLE = [0-9]+ '.' [0-9]* EXPONENT
 {
   return {
     literal: text(),
-    type: 'http://www.w3.org/2001/XMLSchema#double',
+    dataType: 'http://www.w3.org/2001/XMLSchema#double',
   }
 }
 / '.' [0-9]+ EXPONENT
 {
   return {
     literal: text(),
-    type: 'http://www.w3.org/2001/XMLSchema#double',
+    dataType: 'http://www.w3.org/2001/XMLSchema#double',
   }
 }
 / [0-9]+ EXPONENT
 {
   return {
     literal: text(),
-    type: 'http://www.w3.org/2001/XMLSchema#double',
+    dataType: 'http://www.w3.org/2001/XMLSchema#double',
   }
 }
 
