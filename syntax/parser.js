@@ -154,7 +154,7 @@ function peg$parse(input, options) {
 
         if (s.functions) {
           ret.functions = s.functions.concat(f);
-        } else {
+        } else if (f.length) {
           ret.functions = f;
         }
 
@@ -176,7 +176,7 @@ function peg$parse(input, options) {
         if (v) {
           ret.values = v;
         }
-        if (f) {
+        if (f.length) {
           ret.functions = f;
         }
 

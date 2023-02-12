@@ -16,7 +16,7 @@ DOCUMENT = h:(HEADER_LINE*) WS* s:SPARQL WS* f:(Function*) WS*
 
   if (s.functions) {
     ret.functions = s.functions.concat(f);
-  } else {
+  } else if (f.length) {
     ret.functions = f;
   }
 
@@ -47,7 +47,7 @@ Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / Desc
   if (v) {
     ret.values = v;
   }
-  if (f) {
+  if (f.length) {
     ret.functions = f;
   }
 
