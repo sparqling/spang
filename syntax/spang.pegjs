@@ -183,7 +183,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
 
   ret = {
     ...ret,
-    where: { patterns: [ t ] },
+    where: { graphPattern: [ t ] },
     ...sm,
     location: location(),
   };
@@ -664,7 +664,7 @@ GroupGraphPatternSub = tb:TriplesBlock? WS* tbs:( GraphPatternNotTriples WS* '.'
   });
 
   return {
-    patterns: patterns,
+    graphPattern: patterns,
     location: location(),
   }
 }

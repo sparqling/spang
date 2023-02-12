@@ -304,7 +304,7 @@ function peg$parse(input, options) {
 
         ret = {
           ...ret,
-          where: { patterns: [ t ] },
+          where: { graphPattern: [ t ] },
           ...sm,
           location: location(),
         };
@@ -693,7 +693,7 @@ function peg$parse(input, options) {
         });
 
         return {
-          patterns: patterns,
+          graphPattern: patterns,
           location: location(),
         }
       },
