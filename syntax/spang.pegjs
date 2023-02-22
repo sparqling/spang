@@ -91,33 +91,33 @@ PrefixDecl = WS* 'PREFIX'i WS* p:PNAME_NS WS* i:IRIREF
 // [7] SelectQuery ::= SelectClause DatasetClause* WhereClause SolutionModifier
 SelectQuery = s:SelectClause WS* gs:DatasetClause* WS* w:WhereClause WS* sm:SolutionModifier
 {
-  let ret = {};
   if (gs.length) {
-    ret.from = gs;
+    s.from = gs;
   }
 
-  ret = {
-    ...ret,
-    select: s.vars,
-    modifier: s.modifier,
+  s = {
+    ...s,
     where: w,
     ...sm,
-    location: location(),
   };
 
-  return ret;
+  return s;
 }
 
 // [8] SubSelect ::= SelectClause WhereClause SolutionModifier ValuesClause
 SubSelect = s:SelectClause WS* w:WhereClause WS* sm:SolutionModifier v:ValuesClause
 {
-  return {
-    select: s.vars,
-    modifier: s.modifier,
+  let ret = {
+    ...s,
     where: w,
     ...sm,
-    values: v,
   };
+  if (v) {
+    ret.values = v;
+  }
+  ret.location = location();
+
+  return ret;
 }
 
 // [9] SelectClause ::= 'SELECT' ( 'DISTINCT' | 'REDUCED' )? ( ( Var | ( '(' Expression 'AS' Var ')' ) )+ | '*' )
@@ -132,10 +132,7 @@ SelectClause = 'SELECT'i WS* m:( 'DISTINCT'i / 'REDUCED'i )? WS*
 {
   let vars;
   if (vs === '*') {
-    vars = [{
-      kind: '*',
-      location: location(),
-    }];
+    vars = [ '*' ];
   } else {
     vars = vs.map((v) => {
       if (v.length === 2) {
@@ -144,16 +141,23 @@ SelectClause = 'SELECT'i WS* m:( 'DISTINCT'i / 'REDUCED'i )? WS*
         return {
           expression: v[3],
           as: v[7],
-          location: location(),
         };
       }
     });
   }
 
-  return {
-    vars: vars,
-    modifier: m?.toUpperCase(),
-  };
+  let ret = { select: vars };
+  if (m) {
+    const modifier = m.toUpperCase();
+    if (modifier === 'DISTINCT') {
+      ret.distinct = true;
+    } else if (modifier === 'REDUCED') {
+      ret.reduced = true;
+    }
+  }
+  ret.location = location();
+
+  return ret;
 }
 
 // [10] ConstructQuery ::= 'CONSTRUCT' ( ConstructTemplate DatasetClause* WhereClause SolutionModifier | DatasetClause* 'WHERE' '{' TriplesTemplate? '}' SolutionModifier )
@@ -183,7 +187,7 @@ ConstructQuery = 'CONSTRUCT'i WS* t:ConstructTemplate WS* gs:DatasetClause* WS* 
 
   ret = {
     ...ret,
-    where: { graphPattern: [ t ] },
+    where: [ t ],
     ...sm,
     location: location(),
   };
@@ -198,11 +202,13 @@ DescribeQuery = 'DESCRIBE'i WS* v:( VarOrIri+ / '*' ) WS* gs:DatasetClause* WS* 
   if (gs.length) {
     ret.from = gs;
   }
+  ret.describe = v;
+  if (w) {
+    ret.where = w;
+  }
 
   ret = {
     ...ret,
-    value: v,
-    where: w,
     ...sm,
     location: location(),
   };
@@ -258,7 +264,7 @@ SourceSelector = IRIref
 // [17] WhereClause ::= 'WHERE'? GroupGraphPattern
 WhereClause = 'WHERE'i? WS* ggp:GroupGraphPattern
 {
-  return ggp;
+  return ggp.graphPattern || ggp;
 }
 
 // [18] SolutionModifier ::= GroupClause? HavingClause? OrderClause? LimitOffsetClauses?
@@ -306,8 +312,11 @@ GroupCondition = WS* b:BuiltInCall WS*
       location: location(),
     };
   } else {
-    e.bracketted = 'true';
-    return e;
+    let ret = {
+      bracketted: true,
+      ...e,
+    }
+    return ret;
   }
 }
 / WS* v:Var WS*
@@ -336,16 +345,23 @@ OrderClause = 'ORDER'i WS* 'BY'i WS* os:OrderCondition+ WS*
 // [24] OrderCondition ::= ( ( 'ASC' | 'DESC' ) BrackettedExpression ) | ( Constraint | Var )
 OrderCondition = o:( 'ASC'i / 'DESC'i ) WS* e:BrackettedExpression WS*
 {
-  return {
-    order: o.toUpperCase(),
-    by: e
-  };
+  let ret = {};
+  if (o.toUpperCase() === 'ASC') {
+    ret = {
+      asc: true,
+      ...e,
+    };
+  } else if (o.toUpperCase() === 'DESC') {
+    ret = {
+      desc: true,
+      ...e,
+    };
+  }
+  return ret;
 }
 / e:( Constraint / Var ) WS*
 {
-  return {
-    by: e,
-  };
+  return e;
 }
 
 // [25] LimitOffsetClauses ::= LimitClause OffsetClause? | OffsetClause LimitClause?
@@ -387,19 +403,18 @@ ValuesClause = b:( 'VALUES'i DataBlock )?
 // [29] Update ::= Prologue ( Update1 ( ';' Update )? )?
 Update = p:Prologue u:( WS* Update1 ( WS* ';' WS* Update )? )? WS*
 {
-  let query = {
-    prologue: p,
-    units: [],
-  };
-  
+  let arr = [];
   if (u) {
-    query.units = [u[1]];
+    arr = [u[1]];
     if (u[2]) {
-      query.units = query.units.concat(u[2][3].units);
+      arr = arr.concat(u[2][3].update);
     }
   }
 
-  return query;
+  return {
+    prologue: p,
+    update: arr,
+  };
 }
 
 // [30] Update1 ::= Load | Clear | Drop | Add | Move | Copy | Create | InsertData | DeleteData | DeleteWhere | Modify
@@ -531,7 +546,7 @@ Modify = w:( 'WITH'i WS* IRIref WS* )? m:( DeleteClause WS* InsertClause? / Inse
     query.using = u;
   }
 
-  query.where = p;
+  query.where = p.graphPattern;
 
   return query;
 }
@@ -624,8 +639,12 @@ Quads = ts:TriplesTemplate? qs:( QuadsNotTriples '.'? TriplesTemplate? )*
 // [51] QuadsNotTriples ::= 'GRAPH' VarOrIri '{' TriplesTemplate? '}'
 QuadsNotTriples = WS* 'GRAPH'i WS* g:VarOrIri WS* '{' WS* ts:TriplesTemplate? WS* '}' WS*
 {
-  ts.graph = g;
-  return ts;
+  let ret = {
+    graph: g,
+    ...ts,
+  };
+
+  return ret;
 }
 
 // [52] TriplesTemplate ::= TriplesSameSubject ( '.' TriplesTemplate? )?
@@ -690,8 +709,7 @@ GraphPatternNotTriples = GroupOrUnionGraphPattern / OptionalGraphPattern / Minus
 OptionalGraphPattern = WS* 'OPTIONAL'i WS* v:GroupGraphPattern
 {
   return {
-    token: 'optionalgraphpattern',
-    value: v,
+    optional: v.graphPattern || v,
     location: location(),
   }
 }
@@ -699,30 +717,33 @@ OptionalGraphPattern = WS* 'OPTIONAL'i WS* v:GroupGraphPattern
 // [58] GraphGraphPattern ::= 'GRAPH' VarOrIri GroupGraphPattern
 GraphGraphPattern = WS* 'GRAPH'i WS* g:VarOrIri WS* gg:GroupGraphPattern
 {
-  return {
-    token: 'graphgraphpattern',
+  let ret = {
     graph: g,
-    value: gg,
-  }
+    ...gg,
+  };
+  return ret;
 }
 
 // [59] ServiceGraphPattern ::= 'SERVICE' 'SILENT'? VarOrIri GroupGraphPattern
 ServiceGraphPattern = 'SERVICE' WS* s:'SILENT'i? WS* v:VarOrIri WS* ggp:GroupGraphPattern
 {
-  return {
-    token: 'servicegraphpattern',
-    value: [v, ggp],
-    silent: s,
-    location: location(),
+  let ret = {
+    service: v,
+    pattern: ggp.graphPattern || ggp,
+  };
+  if (s) {
+    ret.silent = true;
   }
+  ret.location = location();
+
+  return ret;
 }
 
 // [60] Bind ::= 'BIND' '(' Expression 'AS' Var ')'
 Bind = WS* 'BIND'i WS* '(' WS* ex:Expression WS* 'AS'i WS* v:Var WS* ')'
 {
   return {
-    token: 'bind',
-    expression: ex,
+    bind: ex,
     as: v,
     location: location(),
   };
@@ -772,8 +793,7 @@ DataBlockValue = v:(IRIref / RDFLiteral / NumericLiteral / BooleanLiteral / 'UND
 MinusGraphPattern = 'MINUS'i WS* ggp:GroupGraphPattern
 {
   return {
-    token: 'minusgraphpattern',
-    value: ggp,
+    minus: ggp.graphPattern || ggp,
     location: location(),
   }
 }
@@ -783,8 +803,7 @@ GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* 'UNION'i WS* GroupGraphPa
 {
   if (b.length) {
     return {
-      token: 'unionpattern',
-      value: [a].concat(b.map((elem) => elem[3])),
+      union: [a].concat(b.map((elem) => elem[3])),
       location: location(),
     };
   } else {
@@ -796,8 +815,7 @@ GroupOrUnionGraphPattern = a:GroupGraphPattern b:( WS* 'UNION'i WS* GroupGraphPa
 Filter = WS* 'FILTER'i WS* c:Constraint
 {
   return {
-    token: 'filter',
-    value: c,
+    filter: c,
     location: location(),
   }
 }
@@ -886,10 +904,10 @@ PropertyList = PropertyListNotEmpty?
 PropertyListNotEmpty = v:Verb WS* ol:ObjectList rest:( WS* ';' WS* ( Verb WS* ObjectList )? )*
 {
   let pairs = [];
-  pairs.push([v, ol]);
+  pairs.push({ predicate: v, objects: ol });
   rest.forEach((r) => {
     if (r[3]) {
-      pairs.push([r[3][0], r[3][2]]);
+      pairs.push({ predicate: r[3][0], objects: r[3][2] });
     }
   });
 
@@ -944,10 +962,10 @@ PropertyListPath = PropertyListPathNotEmpty?
 PropertyListPathNotEmpty = v:( VerbPath / VerbSimple ) WS* ol:ObjectListPath rest:( WS* ';' WS* ( ( VerbPath / VerbSimple ) WS* ObjectList )? )*
 {
   let pairs = [];
-  pairs.push([v, ol]);
+  pairs.push({ predicate: v, objects: ol });
   rest.forEach((r) => {
     if (r[3]) {
-      pairs.push([r[3][0], r[3][2]]);
+      pairs.push({ predicate: r[3][0], objects: r[3][2] });
     }
   });
 
@@ -1048,8 +1066,11 @@ PathPrimary = IRIref
 / '!' PathNegatedPropertySet
 / '(' p:Path ')'
 {
-  p.bracketted = true;
-  return p;
+  let ret = {
+    bracketted: true,
+    ...p,
+  };
+  return ret;
 }
 
 // [95] PathNegatedPropertySet ::= PathOneInPropertySet | '(' ( PathOneInPropertySet ( '|' PathOneInPropertySet )* )? ')'
@@ -1075,8 +1096,7 @@ TriplesNode = c:Collection
 BlankNodePropertyList = WS* '[' WS* pl:PropertyListNotEmpty WS* ']' WS*
 {
   return {
-    token: 'triplesnode',
-    properties: pl,
+    blankNodeProperties: pl,
     location: location(),
   };
 }
@@ -1095,8 +1115,7 @@ TriplesNodePath = c:CollectionPath
 BlankNodePropertyListPath = WS* '[' WS* pl:PropertyListPathNotEmpty WS* ']' WS*
 {
   return {
-    token: 'triplesnode',
-    properties: pl,
+    blankNodeProperties: pl,
     location: location(),
   };
 }
@@ -1151,7 +1170,6 @@ ConditionalOrExpression = v:ConditionalAndExpression vs:( WS* '||' WS* Condition
 {
   if (vs.length) {
     return {
-      token: 'expression',
       expressionType: 'conditionalor',
       operands: [v].concat(vs.map(op => op[3])),
     };
@@ -1165,7 +1183,6 @@ ConditionalAndExpression = v:ValueLogical vs:( WS* '&&' WS* ValueLogical )*
 {
   if (vs.length) {
     return {
-      token: 'expression',
       expressionType: 'conditionaland',
       operands: [v].concat(vs.map(op => op[3])),
     };
@@ -1199,7 +1216,6 @@ RelationalExpression = e1:NumericExpression e2:(
     }
 
     return {
-      token: 'expression',
       expressionType: 'relationalexpression',
       operator: op,
       op1: o1,
@@ -1231,7 +1247,6 @@ AdditiveExpression = op1:MultiplicativeExpression ops:( WS* '+' WS* Multiplicati
   });
 
   return {
-    token: 'expression',
     expressionType: 'additiveexpression',
     op1: op1,
     ops: arr,
@@ -1243,10 +1258,9 @@ MultiplicativeExpression = e1:UnaryExpression es:( WS* '*' WS* UnaryExpression /
 {
   if (es.length) {
     return {
-      token: 'expression',
       expressionType: 'multiplicativeexpression',
-      factor: e1,
-      factors: es.map((e) => ({ operator: e[1], expression: e[3] })),
+      first: e1,
+      rest: es.map((e) => ({ operator: e[1], expression: e[3] })),
     };
   } else {
     return e1;
@@ -1257,7 +1271,6 @@ MultiplicativeExpression = e1:UnaryExpression es:( WS* '*' WS* UnaryExpression /
 UnaryExpression = '!' WS* e:PrimaryExpression
 {
   return {
-    token: 'expression',
     expressionType: 'unaryexpression',
     unaryexpression: '!',
     expression: e,
@@ -1266,7 +1279,6 @@ UnaryExpression = '!' WS* e:PrimaryExpression
 / '+' WS* v:PrimaryExpression
 {
   return {
-    token: 'expression',
     expressionType: 'unaryexpression',
     unaryexpression: '+',
     expression: v,
@@ -1275,7 +1287,6 @@ UnaryExpression = '!' WS* e:PrimaryExpression
 / '-' WS* v:PrimaryExpression
 {
   return {
-    token: 'expression',
     expressionType: 'unaryexpression',
     unaryexpression: '-',
     expression: v,
@@ -1287,7 +1298,6 @@ UnaryExpression = '!' WS* e:PrimaryExpression
 PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RDFLiteral
 {
   return {
-    token: 'expression',
     expressionType: 'atomic',
     value: v,
   }
@@ -1295,7 +1305,6 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
 / v:NumericLiteral
 {
   return {
-    token: 'expression',
     expressionType: 'atomic',
     value: v,
   }
@@ -1303,7 +1312,6 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
 / v:BooleanLiteral
 {
   return {
-    token: 'expression',
     expressionType: 'atomic',
     value: v,
   }
@@ -1311,7 +1319,6 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
 / v:Var
 {
   return {
-    token: 'expression',
     expressionType: 'atomic',
     value: v,
   }
@@ -1320,8 +1327,11 @@ PrimaryExpression = BrackettedExpression / BuiltInCall / IRIrefOrFunction / v:RD
 // [120] BrackettedExpression ::= '(' Expression ')'
 BrackettedExpression = '(' WS* e:Expression WS* ')'
 {
-  e.bracketted = 'true';
-  return e;
+  let ret = {
+    bracketted: true,
+    ...e,
+  }
+  return ret;
 }
 
 // [121] BuiltInCall ::= Aggregate
@@ -1384,7 +1394,6 @@ BuiltInCall = Aggregate
 / 'STR'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'str',
     args: [e],
@@ -1393,7 +1402,6 @@ BuiltInCall = Aggregate
 / 'LANG'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'lang',
     args: [e],
@@ -1402,7 +1410,6 @@ BuiltInCall = Aggregate
 / 'LANGMATCHES'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'langMatches',
     args: [e1, e2],
@@ -1411,7 +1418,6 @@ BuiltInCall = Aggregate
 / 'DATATYPE'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'datatype',
     args: [e],
@@ -1420,7 +1426,6 @@ BuiltInCall = Aggregate
 / 'BOUND'i WS* '(' WS* v:Var WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'bound',
     args: [v],
@@ -1429,7 +1434,6 @@ BuiltInCall = Aggregate
 / 'IRI'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'IRI',
     args: [e],
@@ -1438,7 +1442,6 @@ BuiltInCall = Aggregate
 / 'URI'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'URI',
     args: [e],
@@ -1447,7 +1450,6 @@ BuiltInCall = Aggregate
 / 'BNODE'i WS* arg:('(' WS* e:Expression WS* ')' / NIL)
 {
   const ret = {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'BNODE',
     args: null,
@@ -1461,7 +1463,6 @@ BuiltInCall = Aggregate
 / 'RAND'i WS* NIL
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'rand',
   }
@@ -1469,7 +1470,6 @@ BuiltInCall = Aggregate
 / 'ABS'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'abs',
     args: [e],
@@ -1478,7 +1478,6 @@ BuiltInCall = Aggregate
 / 'CEIL'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'ceil',
     args: [e],
@@ -1487,7 +1486,6 @@ BuiltInCall = Aggregate
 / 'FLOOR'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'floor',
     args: [e],
@@ -1496,7 +1494,6 @@ BuiltInCall = Aggregate
 / 'ROUND'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'round',
     args: [e],
@@ -1505,7 +1502,6 @@ BuiltInCall = Aggregate
 / 'CONCAT'i WS* args:ExpressionList
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'CONCAT',
     args: args,
@@ -1515,7 +1511,6 @@ BuiltInCall = Aggregate
 / 'STRLEN'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'STRLEN',
     args: [e],
@@ -1525,7 +1520,6 @@ BuiltInCall = Aggregate
 / 'UCASE'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'UCASE',
     args: [e],
@@ -1534,7 +1528,6 @@ BuiltInCall = Aggregate
 / 'LCASE'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'LCASE',
     args: [e],
@@ -1543,7 +1536,6 @@ BuiltInCall = Aggregate
 / 'ENCODE_FOR_URI'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'ENCODE_FOR_URI',
     args: [e],
@@ -1552,7 +1544,6 @@ BuiltInCall = Aggregate
 / 'CONTAINS'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'CONTAINS',
     args: [e1, e2],
@@ -1561,7 +1552,6 @@ BuiltInCall = Aggregate
 / 'STRBEFORE'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'STRBEFORE',
     args: [e1, e2],
@@ -1570,7 +1560,6 @@ BuiltInCall = Aggregate
 / 'STRSTARTS'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'STRSTARTS',
     args: [e1, e2],
@@ -1579,7 +1568,6 @@ BuiltInCall = Aggregate
 / 'STRENDS'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'STRENDS',
     args: [e1, e2],
@@ -1588,7 +1576,6 @@ BuiltInCall = Aggregate
 / 'STRAFTER'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'STRAFTER',
     args: [e1, e2],
@@ -1597,7 +1584,6 @@ BuiltInCall = Aggregate
 / 'YEAR'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'year',
     args: [e],
@@ -1606,7 +1592,6 @@ BuiltInCall = Aggregate
 / 'MONTH'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'month',
     args: [e],
@@ -1615,7 +1600,6 @@ BuiltInCall = Aggregate
 / 'DAY'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'day',
     args: [e],
@@ -1624,7 +1608,6 @@ BuiltInCall = Aggregate
 / 'HOURS'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'hours',
     args: [e],
@@ -1633,7 +1616,6 @@ BuiltInCall = Aggregate
 / 'MINUTES'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'minutes',
     args: [e],
@@ -1642,7 +1624,6 @@ BuiltInCall = Aggregate
 / 'SECONDS'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'seconds',
     args: [e],
@@ -1651,7 +1632,6 @@ BuiltInCall = Aggregate
 / 'TIMEZONE'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'timezone',
     args: [e],
@@ -1660,7 +1640,6 @@ BuiltInCall = Aggregate
 / 'TZ'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'tz',
     args: [e],
@@ -1669,7 +1648,6 @@ BuiltInCall = Aggregate
 / 'NOW'i WS* NIL
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'now',
   }
@@ -1677,7 +1655,6 @@ BuiltInCall = Aggregate
 / 'UUID'i WS* NIL
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'UUID',
   }
@@ -1685,7 +1662,6 @@ BuiltInCall = Aggregate
 / 'STRUUID'i WS* NIL
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'STRUUID',
   }
@@ -1693,7 +1669,6 @@ BuiltInCall = Aggregate
 / 'MD5'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'MD5',
     args: [e],
@@ -1702,7 +1677,6 @@ BuiltInCall = Aggregate
 / 'SHA1'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'SHA1',
     args: [e],
@@ -1711,7 +1685,6 @@ BuiltInCall = Aggregate
 / 'SHA256'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'SHA256',
     args: [e],
@@ -1720,7 +1693,6 @@ BuiltInCall = Aggregate
 / 'SHA384'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'SHA384',
     args: [e],
@@ -1729,7 +1701,6 @@ BuiltInCall = Aggregate
 / 'SHA512'i WS* '(' WS* e:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'SHA512',
     args: [e],
@@ -1738,7 +1709,6 @@ BuiltInCall = Aggregate
 / 'COALESCE'i WS* args:ExpressionList
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'COALESCE',
     args: args,
@@ -1747,7 +1717,6 @@ BuiltInCall = Aggregate
 / 'IF'i WS* '(' WS* test:Expression WS* ',' WS* trueCond:Expression WS* ',' WS* falseCond:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'IF',
     args: [test, trueCond, falseCond],
@@ -1756,7 +1725,6 @@ BuiltInCall = Aggregate
 / 'STRLANG'i WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'STRLANG',
     args: [e1, e2],
@@ -1765,7 +1733,6 @@ BuiltInCall = Aggregate
 / 'STRDT'i WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'STRDT',
     args: [e1, e2],
@@ -1774,7 +1741,6 @@ BuiltInCall = Aggregate
 / 'sameTerm'i WS*  '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'sameTerm',
     args: [e1, e2],
@@ -1783,7 +1749,6 @@ BuiltInCall = Aggregate
 / ('isURI'i/'isIRI'i) WS* '(' WS* arg:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'isURI',
     args: [arg],
@@ -1792,7 +1757,6 @@ BuiltInCall = Aggregate
 / 'isBLANK'i WS* '(' WS* arg:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'isBlank',
     args: [arg],
@@ -1801,7 +1765,6 @@ BuiltInCall = Aggregate
 / 'isLITERAL'i WS* '(' WS* arg:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'isLiteral',
     args: [arg],
@@ -1810,7 +1773,6 @@ BuiltInCall = Aggregate
 / 'isNUMERIC'i WS* '(' WS* arg:Expression WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'isNumeric',
     args: [arg],
@@ -1819,7 +1781,6 @@ BuiltInCall = Aggregate
 / 'custom:'i fnname:[a-zA-Z0-9_]+ WS* '(' alter:(WS* Expression ',')* WS* finalarg:Expression WS* ')'
 {
   let ret = {
-    token: 'expression',
     expressionType: 'custom',
     name: fnname.join(''),
   };
@@ -1840,20 +1801,22 @@ BuiltInCall = Aggregate
 // [122] RegexExpression ::= 'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'
 RegexExpression = 'REGEX'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* e3:(',' WS* Expression)?  WS* ')'
 {
-  return {
-    token: 'expression',
+  let ret = {
     expressionType: 'regex',
     text: e1,
     pattern: e2,
-    flags: e3 ? e3[2] : null,
   }
+  if (e3) {
+    ret.flags = e3[2];
+  }
+
+  return ret;
 }
 
 // [123] SubstringExpression ::= 'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
 SubstringExpression = 'SUBSTR'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* e3:(',' WS* Expression)? WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'substr',
     args: [
@@ -1868,7 +1831,6 @@ SubstringExpression = 'SUBSTR'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Express
 StrReplaceExpression = 'REPLACE'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expression WS* ',' WS* e3:Expression WS* e4:(',' WS* Expression)? WS* ')'
 {
   return {
-    token: 'expression',
     expressionType: 'builtincall',
     builtincall: 'replace',
     args: [
@@ -1884,22 +1846,16 @@ StrReplaceExpression = 'REPLACE'i WS* '(' WS* e1:Expression WS* ',' WS* e2:Expre
 ExistsFunc = 'EXISTS'i WS* ggp:GroupGraphPattern
 {
   return {
-    token: 'expression',
-    expressionType: 'builtincall',
-    builtincall: 'exists',
-    args: [ggp],
-  }
+    exists: ggp.graphPattern || ggp
+  };
 }
 
 // [126] NotExistsFunc ::= 'NOT' 'EXISTS' GroupGraphPattern
 NotExistsFunc = 'NOT'i WS* 'EXISTS'i WS* ggp:GroupGraphPattern
 {
   return {
-    token: 'expression',
-    expressionType: 'builtincall',
-    builtincall: 'notexists',
-    args: [ggp],
-  }
+    notexists: ggp.graphPattern || ggp
+  };
 }
 
 // [127] Aggregate ::= 'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
@@ -1912,7 +1868,6 @@ NotExistsFunc = 'NOT'i WS* 'EXISTS'i WS* ggp:GroupGraphPattern
 Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')' WS*
 {
   return {
-    token: 'expression',
     expressionType: 'aggregate',
     aggregateType: 'count',
     distinct: Boolean(d),
@@ -1922,7 +1877,6 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 / 'SUM'i WS* '(' WS* d:('DISTINCT'i)? WS*  e:Expression WS* ')' WS*
 {
   return {
-    token: 'expression',
     expressionType: 'aggregate',
     aggregateType: 'sum',
     distinct: Boolean(d),
@@ -1932,7 +1886,6 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 / 'MIN'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {
   return {
-    token: 'expression',
     expressionType: 'aggregate',
     aggregateType: 'min',
     distinct: Boolean(d),
@@ -1942,7 +1895,6 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 / 'MAX'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {
   return {
-    token: 'expression',
     expressionType: 'aggregate',
     aggregateType: 'max',
     distinct: Boolean(d),
@@ -1952,7 +1904,6 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 / 'AVG'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression WS* ')' WS*
 {
   return {
-    token: 'expression',
     expressionType: 'aggregate',
     aggregateType: 'avg',
     distinct: Boolean(d),
@@ -1962,7 +1913,6 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 / 'SAMPLE'i WS* '(' WS* d:('DISTINCT'i)? WS*  e:Expression WS* ')' WS*
 {
   return {
-    token: 'expression',
     expressionType: 'aggregate',
     aggregateType: 'sample',
     distinct: Boolean(d),
@@ -1972,12 +1922,11 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 / 'GROUP_CONCAT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:Expression s:( WS* ';' WS* 'SEPARATOR'i WS* '=' WS* String)? WS* ')' WS*
 {
   let sep = null;
-  if (s.length) {
+  if (s?.length) {
     sep = s[7];
   }
 
   return {
-    token: 'expression',
     expressionType: 'aggregate',
     aggregateType: 'group_concat',
     expression: e,
@@ -1989,30 +1938,27 @@ Aggregate = 'COUNT'i WS* '(' WS* d:('DISTINCT'i)? WS* e:('*'/Expression) WS* ')'
 // [128] IRIrefOrFunction ::= IRIref ArgList?
 IRIrefOrFunction = i:IRIref WS* args:ArgList?
 {
-  return {
-    token: 'expression',
+  let ret = {
     expressionType: 'irireforfunction',
     iriref: i,
-    args: (args != null ? args.value : args),
   };
+  if (args) {
+    ret.args = args.value;
+  }
+  return ret;
 }
 
 // [129] RDFLiteral ::= String ( LANGTAG | ( '^^' IRIref ) )?
 RDFLiteral = s:String e:( LANGTAG / ( '^^' IRIref ) )?
 {
-  let ret = {
-    literal: s.value,
-    quote: s.quote,
-  };
-
   if (typeof(e) === 'string') {
-    ret.lang = e;
+    s.lang = e;
   } else if (e) {
-    ret.dataType = e[1];
+    s.dataType = e[1];
   }
+  s.location = location();
 
-  ret.location = location();
-  return ret;
+  return s;
 }
 
 // [130] NumericLiteral ::= NumericLiteralUnsigned | NumericLiteralPositive | NumericLiteralNegative
@@ -2031,15 +1977,15 @@ NumericLiteralNegative = DOUBLE_NEGATIVE / DECIMAL_NEGATIVE / INTEGER_NEGATIVE
 BooleanLiteral = 'true'i
 {
   return {
-    literal: true,
     dataType: 'http://www.w3.org/2001/XMLSchema#boolean',
+    literal: true,
   }
 }
 / 'false'i
 {
   return {
-    literal: false,
     dataType: 'http://www.w3.org/2001/XMLSchema#boolean',
+    literal: false,
   }
 }
 
@@ -2081,15 +2027,14 @@ PrefixedName = p:PNAME_LN
 BlankNode = l:BLANK_NODE_LABEL
 {
   return {
-    token: 'blank',
-    value: l,
+    blankNode: l,
     location: location(),
   }
 }
 / ANON
 { 
   return {
-    token: 'blank',
+    blankNode: '[]',
     location: location(),
   }
 }
@@ -2162,8 +2107,8 @@ LANGTAG = '@' a:[a-zA-Z]+ b:('-' [a-zA-Z0-9]+)*
 INTEGER = [0-9]+
 {
   return {
-    literal: text(),
     dataType: 'http://www.w3.org/2001/XMLSchema#integer',
+    literal: text(),
   }
 }
 
@@ -2171,8 +2116,8 @@ INTEGER = [0-9]+
 DECIMAL = [0-9]* '.' [0-9]+
 {
   return {
-    literal: text(),
     dataType: 'http://www.w3.org/2001/XMLSchema#decimal',
+    literal: text(),
   }
 }
 
@@ -2180,22 +2125,22 @@ DECIMAL = [0-9]* '.' [0-9]+
 DOUBLE = [0-9]+ '.' [0-9]* EXPONENT
 {
   return {
-    literal: text(),
     dataType: 'http://www.w3.org/2001/XMLSchema#double',
+    literal: text(),
   }
 }
 / '.' [0-9]+ EXPONENT
 {
   return {
-    literal: text(),
     dataType: 'http://www.w3.org/2001/XMLSchema#double',
+    literal: text(),
   }
 }
 / [0-9]+ EXPONENT
 {
   return {
-    literal: text(),
     dataType: 'http://www.w3.org/2001/XMLSchema#double',
+    literal: text(),
   }
 }
 
@@ -2248,9 +2193,8 @@ EXPONENT = [eE] [+-]? [0-9]+
 STRING_LITERAL1 = "'" s:( [^\x27\x5C\x0A\x0D] / ECHAR )* "'"
 {
   return {
-    token: 'string',
     quote: "'",
-    value: s.join(''), // except ' \ LF CR
+    literal: s.join(''), // except ' \ LF CR
   };
 }
 
@@ -2258,9 +2202,8 @@ STRING_LITERAL1 = "'" s:( [^\x27\x5C\x0A\x0D] / ECHAR )* "'"
 STRING_LITERAL2 = '"' s:( [^\x22\x5C\x0A\x0D] / ECHAR )* '"'
 {
   return {
-    token: 'string',
     quote: '"',
-    value: s.join(''), // except " \ LF CR
+    literal: s.join(''), // except " \ LF CR
   };
 }
 
@@ -2268,9 +2211,8 @@ STRING_LITERAL2 = '"' s:( [^\x22\x5C\x0A\x0D] / ECHAR )* '"'
 STRING_LITERAL_LONG1 = "'''" s:( ( "''" / "'" )? ( [^\'\\] / ECHAR ) )* "'''"
 {
   return {
-    token: 'string',
     quote: "'''",
-    value: s.map((c) => {
+    literal: s.map((c) => {
       if (c[0]) {
         return c[0] + c[1];
       } else {
@@ -2285,9 +2227,8 @@ STRING_LITERAL_LONG2 = '"""' s:( ( '""' / '"' )? ( [^\"\\] / ECHAR ) )* '"""'
 {
 
   return {
-    token: 'string',
     quote: '"""',
-    value: s.map((c) => {
+    literal: s.map((c) => {
       if (c[0]) {
         return c[0] + c[1];
       } else {

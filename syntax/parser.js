@@ -207,30 +207,30 @@ function peg$parse(input, options) {
         }
       },
       peg$c9 = function(s, gs, w, sm) {
-        let ret = {};
         if (gs.length) {
-          ret.from = gs;
+          s.from = gs;
         }
 
-        ret = {
-          ...ret,
-          select: s.vars,
-          modifier: s.modifier,
+        s = {
+          ...s,
           where: w,
           ...sm,
-          location: location(),
         };
 
-        return ret;
+        return s;
       },
       peg$c10 = function(s, w, sm, v) {
-        return {
-          select: s.vars,
-          modifier: s.modifier,
+        let ret = {
+          ...s,
           where: w,
           ...sm,
-          values: v,
         };
+        if (v) {
+          ret.values = v;
+        }
+        ret.location = location();
+
+        return ret;
       },
       peg$c11 = "select",
       peg$c12 = peg$literalExpectation("SELECT", true),
@@ -249,10 +249,7 @@ function peg$parse(input, options) {
       peg$c25 = function(m, vs) {
         let vars;
         if (vs === '*') {
-          vars = [{
-            kind: '*',
-            location: location(),
-          }];
+          vars = [ '*' ];
         } else {
           vars = vs.map((v) => {
             if (v.length === 2) {
@@ -261,16 +258,23 @@ function peg$parse(input, options) {
               return {
                 expression: v[3],
                 as: v[7],
-                location: location(),
               };
             }
           });
         }
 
-        return {
-          vars: vars,
-          modifier: m?.toUpperCase(),
-        };
+        let ret = { select: vars };
+        if (m) {
+          const modifier = m.toUpperCase();
+          if (modifier === 'DISTINCT') {
+            ret.distinct = true;
+          } else if (modifier === 'REDUCED') {
+            ret.reduced = true;
+          }
+        }
+        ret.location = location();
+
+        return ret;
       },
       peg$c26 = "construct",
       peg$c27 = peg$literalExpectation("CONSTRUCT", true),
@@ -304,7 +308,7 @@ function peg$parse(input, options) {
 
         ret = {
           ...ret,
-          where: { graphPattern: [ t ] },
+          where: [ t ],
           ...sm,
           location: location(),
         };
@@ -318,11 +322,13 @@ function peg$parse(input, options) {
         if (gs.length) {
           ret.from = gs;
         }
+        ret.describe = v;
+        if (w) {
+          ret.where = w;
+        }
 
         ret = {
           ...ret,
-          value: v,
-          where: w,
           ...sm,
           location: location(),
         };
@@ -366,7 +372,7 @@ function peg$parse(input, options) {
         };
       },
       peg$c49 = function(ggp) {
-        return ggp;
+        return ggp.graphPattern || ggp;
       },
       peg$c50 = function(g, h, o, l) {
         let ret = {};
@@ -407,8 +413,11 @@ function peg$parse(input, options) {
             location: location(),
           };
         } else {
-          e.bracketted = 'true';
-          return e;
+          let ret = {
+            bracketted: true,
+            ...e,
+          }
+          return ret;
         }
       },
       peg$c59 = function(v) {
@@ -429,15 +438,22 @@ function peg$parse(input, options) {
       peg$c68 = "desc",
       peg$c69 = peg$literalExpectation("DESC", true),
       peg$c70 = function(o, e) {
-        return {
-          order: o.toUpperCase(),
-          by: e
-        };
+        let ret = {};
+        if (o.toUpperCase() === 'ASC') {
+          ret = {
+            asc: true,
+            ...e,
+          };
+        } else if (o.toUpperCase() === 'DESC') {
+          ret = {
+            desc: true,
+            ...e,
+          };
+        }
+        return ret;
       },
       peg$c71 = function(e) {
-        return {
-          by: e,
-        };
+        return e;
       },
       peg$c72 = function(cls) {
         let acum = [cls[0]];
@@ -472,19 +488,18 @@ function peg$parse(input, options) {
       peg$c82 = ";",
       peg$c83 = peg$literalExpectation(";", false),
       peg$c84 = function(p, u) {
-        let query = {
-          prologue: p,
-          units: [],
-        };
-        
+        let arr = [];
         if (u) {
-          query.units = [u[1]];
+          arr = [u[1]];
           if (u[2]) {
-            query.units = query.units.concat(u[2][3].units);
+            arr = arr.concat(u[2][3].update);
           }
         }
 
-        return query;
+        return {
+          prologue: p,
+          update: arr,
+        };
       },
       peg$c85 = "load",
       peg$c86 = peg$literalExpectation("LOAD", true),
@@ -608,7 +623,7 @@ function peg$parse(input, options) {
           query.using = u;
         }
 
-        query.where = p;
+        query.where = p.graphPattern;
 
         return query;
       },
@@ -662,8 +677,12 @@ function peg$parse(input, options) {
         return quads;
       },
       peg$c142 = function(g, ts) {
-        ts.graph = g;
-        return ts;
+        let ret = {
+          graph: g,
+          ...ts,
+        };
+
+        return ret;
       },
       peg$c143 = function(b, bs) {
         let triples = [b];
@@ -712,34 +731,36 @@ function peg$parse(input, options) {
       peg$c148 = peg$literalExpectation("OPTIONAL", true),
       peg$c149 = function(v) {
         return {
-          token: 'optionalgraphpattern',
-          value: v,
+          optional: v.graphPattern || v,
           location: location(),
         }
       },
       peg$c150 = function(g, gg) {
-        return {
-          token: 'graphgraphpattern',
+        let ret = {
           graph: g,
-          value: gg,
-        }
+          ...gg,
+        };
+        return ret;
       },
       peg$c151 = "SERVICE",
       peg$c152 = peg$literalExpectation("SERVICE", false),
       peg$c153 = function(s, v, ggp) {
-        return {
-          token: 'servicegraphpattern',
-          value: [v, ggp],
-          silent: s,
-          location: location(),
+        let ret = {
+          service: v,
+          pattern: ggp.graphPattern || ggp,
+        };
+        if (s) {
+          ret.silent = true;
         }
+        ret.location = location();
+
+        return ret;
       },
       peg$c154 = "bind",
       peg$c155 = peg$literalExpectation("BIND", true),
       peg$c156 = function(ex, v) {
         return {
-          token: 'bind',
-          expression: ex,
+          bind: ex,
           as: v,
           location: location(),
         };
@@ -770,8 +791,7 @@ function peg$parse(input, options) {
       peg$c164 = peg$literalExpectation("MINUS", true),
       peg$c165 = function(ggp) {
         return {
-          token: 'minusgraphpattern',
-          value: ggp,
+          minus: ggp.graphPattern || ggp,
           location: location(),
         }
       },
@@ -780,8 +800,7 @@ function peg$parse(input, options) {
       peg$c168 = function(a, b) {
         if (b.length) {
           return {
-            token: 'unionpattern',
-            value: [a].concat(b.map((elem) => elem[3])),
+            union: [a].concat(b.map((elem) => elem[3])),
             location: location(),
           };
         } else {
@@ -792,8 +811,7 @@ function peg$parse(input, options) {
       peg$c170 = peg$literalExpectation("FILTER", true),
       peg$c171 = function(c) {
         return {
-          token: 'filter',
-          value: c,
+          filter: c,
           location: location(),
         }
       },
@@ -854,10 +872,10 @@ function peg$parse(input, options) {
       },
       peg$c183 = function(v, ol, rest) {
         let pairs = [];
-        pairs.push([v, ol]);
+        pairs.push({ predicate: v, objects: ol });
         rest.forEach((r) => {
           if (r[3]) {
-            pairs.push([r[3][0], r[3][2]]);
+            pairs.push({ predicate: r[3][0], objects: r[3][2] });
           }
         });
 
@@ -946,8 +964,11 @@ function peg$parse(input, options) {
       peg$c204 = "!",
       peg$c205 = peg$literalExpectation("!", false),
       peg$c206 = function(p) {
-        p.bracketted = true;
-        return p;
+        let ret = {
+          bracketted: true,
+          ...p,
+        };
+        return ret;
       },
       peg$c207 = function(c) {
         return {
@@ -961,8 +982,7 @@ function peg$parse(input, options) {
       peg$c211 = peg$literalExpectation("]", false),
       peg$c212 = function(pl) {
         return {
-          token: 'triplesnode',
-          properties: pl,
+          blankNodeProperties: pl,
           location: location(),
         };
       },
@@ -980,7 +1000,6 @@ function peg$parse(input, options) {
       peg$c217 = function(v, vs) {
         if (vs.length) {
           return {
-            token: 'expression',
             expressionType: 'conditionalor',
             operands: [v].concat(vs.map(op => op[3])),
           };
@@ -993,7 +1012,6 @@ function peg$parse(input, options) {
       peg$c220 = function(v, vs) {
         if (vs.length) {
           return {
-            token: 'expression',
             expressionType: 'conditionaland',
             operands: [v].concat(vs.map(op => op[3])),
           };
@@ -1028,7 +1046,6 @@ function peg$parse(input, options) {
           }
 
           return {
-            token: 'expression',
             expressionType: 'relationalexpression',
             operator: op,
             op1: o1,
@@ -1056,7 +1073,6 @@ function peg$parse(input, options) {
         });
 
         return {
-          token: 'expression',
           expressionType: 'additiveexpression',
           op1: op1,
           ops: arr,
@@ -1065,10 +1081,9 @@ function peg$parse(input, options) {
       peg$c241 = function(e1, es) {
         if (es.length) {
           return {
-            token: 'expression',
             expressionType: 'multiplicativeexpression',
-            factor: e1,
-            factors: es.map((e) => ({ operator: e[1], expression: e[3] })),
+            first: e1,
+            rest: es.map((e) => ({ operator: e[1], expression: e[3] })),
           };
         } else {
           return e1;
@@ -1076,7 +1091,6 @@ function peg$parse(input, options) {
       },
       peg$c242 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'unaryexpression',
           unaryexpression: '!',
           expression: e,
@@ -1084,7 +1098,6 @@ function peg$parse(input, options) {
       },
       peg$c243 = function(v) {
         return {
-          token: 'expression',
           expressionType: 'unaryexpression',
           unaryexpression: '+',
           expression: v,
@@ -1092,7 +1105,6 @@ function peg$parse(input, options) {
       },
       peg$c244 = function(v) {
         return {
-          token: 'expression',
           expressionType: 'unaryexpression',
           unaryexpression: '-',
           expression: v,
@@ -1100,20 +1112,21 @@ function peg$parse(input, options) {
       },
       peg$c245 = function(v) {
         return {
-          token: 'expression',
           expressionType: 'atomic',
           value: v,
         }
       },
       peg$c246 = function(e) {
-        e.bracketted = 'true';
-        return e;
+        let ret = {
+          bracketted: true,
+          ...e,
+        }
+        return ret;
       },
       peg$c247 = "str",
       peg$c248 = peg$literalExpectation("STR", true),
       peg$c249 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'str',
           args: [e],
@@ -1123,7 +1136,6 @@ function peg$parse(input, options) {
       peg$c251 = peg$literalExpectation("LANG", true),
       peg$c252 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'lang',
           args: [e],
@@ -1133,7 +1145,6 @@ function peg$parse(input, options) {
       peg$c254 = peg$literalExpectation("LANGMATCHES", true),
       peg$c255 = function(e1, e2) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'langMatches',
           args: [e1, e2],
@@ -1143,7 +1154,6 @@ function peg$parse(input, options) {
       peg$c257 = peg$literalExpectation("DATATYPE", true),
       peg$c258 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'datatype',
           args: [e],
@@ -1153,7 +1163,6 @@ function peg$parse(input, options) {
       peg$c260 = peg$literalExpectation("BOUND", true),
       peg$c261 = function(v) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'bound',
           args: [v],
@@ -1163,7 +1172,6 @@ function peg$parse(input, options) {
       peg$c263 = peg$literalExpectation("IRI", true),
       peg$c264 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'IRI',
           args: [e],
@@ -1173,7 +1181,6 @@ function peg$parse(input, options) {
       peg$c266 = peg$literalExpectation("URI", true),
       peg$c267 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'URI',
           args: [e],
@@ -1183,7 +1190,6 @@ function peg$parse(input, options) {
       peg$c269 = peg$literalExpectation("BNODE", true),
       peg$c270 = function(arg) {
         const ret = {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'BNODE',
           args: null,
@@ -1198,7 +1204,6 @@ function peg$parse(input, options) {
       peg$c272 = peg$literalExpectation("RAND", true),
       peg$c273 = function() {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'rand',
         }
@@ -1207,7 +1212,6 @@ function peg$parse(input, options) {
       peg$c275 = peg$literalExpectation("ABS", true),
       peg$c276 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'abs',
           args: [e],
@@ -1217,7 +1221,6 @@ function peg$parse(input, options) {
       peg$c278 = peg$literalExpectation("CEIL", true),
       peg$c279 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'ceil',
           args: [e],
@@ -1227,7 +1230,6 @@ function peg$parse(input, options) {
       peg$c281 = peg$literalExpectation("FLOOR", true),
       peg$c282 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'floor',
           args: [e],
@@ -1237,7 +1239,6 @@ function peg$parse(input, options) {
       peg$c284 = peg$literalExpectation("ROUND", true),
       peg$c285 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'round',
           args: [e],
@@ -1247,7 +1248,6 @@ function peg$parse(input, options) {
       peg$c287 = peg$literalExpectation("CONCAT", true),
       peg$c288 = function(args) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'CONCAT',
           args: args,
@@ -1257,7 +1257,6 @@ function peg$parse(input, options) {
       peg$c290 = peg$literalExpectation("STRLEN", true),
       peg$c291 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'STRLEN',
           args: [e],
@@ -1267,7 +1266,6 @@ function peg$parse(input, options) {
       peg$c293 = peg$literalExpectation("UCASE", true),
       peg$c294 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'UCASE',
           args: [e],
@@ -1277,7 +1275,6 @@ function peg$parse(input, options) {
       peg$c296 = peg$literalExpectation("LCASE", true),
       peg$c297 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'LCASE',
           args: [e],
@@ -1287,7 +1284,6 @@ function peg$parse(input, options) {
       peg$c299 = peg$literalExpectation("ENCODE_FOR_URI", true),
       peg$c300 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'ENCODE_FOR_URI',
           args: [e],
@@ -1297,7 +1293,6 @@ function peg$parse(input, options) {
       peg$c302 = peg$literalExpectation("CONTAINS", true),
       peg$c303 = function(e1, e2) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'CONTAINS',
           args: [e1, e2],
@@ -1307,7 +1302,6 @@ function peg$parse(input, options) {
       peg$c305 = peg$literalExpectation("STRBEFORE", true),
       peg$c306 = function(e1, e2) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'STRBEFORE',
           args: [e1, e2],
@@ -1317,7 +1311,6 @@ function peg$parse(input, options) {
       peg$c308 = peg$literalExpectation("STRSTARTS", true),
       peg$c309 = function(e1, e2) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'STRSTARTS',
           args: [e1, e2],
@@ -1327,7 +1320,6 @@ function peg$parse(input, options) {
       peg$c311 = peg$literalExpectation("STRENDS", true),
       peg$c312 = function(e1, e2) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'STRENDS',
           args: [e1, e2],
@@ -1337,7 +1329,6 @@ function peg$parse(input, options) {
       peg$c314 = peg$literalExpectation("STRAFTER", true),
       peg$c315 = function(e1, e2) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'STRAFTER',
           args: [e1, e2],
@@ -1347,7 +1338,6 @@ function peg$parse(input, options) {
       peg$c317 = peg$literalExpectation("YEAR", true),
       peg$c318 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'year',
           args: [e],
@@ -1357,7 +1347,6 @@ function peg$parse(input, options) {
       peg$c320 = peg$literalExpectation("MONTH", true),
       peg$c321 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'month',
           args: [e],
@@ -1367,7 +1356,6 @@ function peg$parse(input, options) {
       peg$c323 = peg$literalExpectation("DAY", true),
       peg$c324 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'day',
           args: [e],
@@ -1377,7 +1365,6 @@ function peg$parse(input, options) {
       peg$c326 = peg$literalExpectation("HOURS", true),
       peg$c327 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'hours',
           args: [e],
@@ -1387,7 +1374,6 @@ function peg$parse(input, options) {
       peg$c329 = peg$literalExpectation("MINUTES", true),
       peg$c330 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'minutes',
           args: [e],
@@ -1397,7 +1383,6 @@ function peg$parse(input, options) {
       peg$c332 = peg$literalExpectation("SECONDS", true),
       peg$c333 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'seconds',
           args: [e],
@@ -1407,7 +1392,6 @@ function peg$parse(input, options) {
       peg$c335 = peg$literalExpectation("TIMEZONE", true),
       peg$c336 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'timezone',
           args: [e],
@@ -1417,7 +1401,6 @@ function peg$parse(input, options) {
       peg$c338 = peg$literalExpectation("TZ", true),
       peg$c339 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'tz',
           args: [e],
@@ -1427,7 +1410,6 @@ function peg$parse(input, options) {
       peg$c341 = peg$literalExpectation("NOW", true),
       peg$c342 = function() {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'now',
         }
@@ -1436,7 +1418,6 @@ function peg$parse(input, options) {
       peg$c344 = peg$literalExpectation("UUID", true),
       peg$c345 = function() {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'UUID',
         }
@@ -1445,7 +1426,6 @@ function peg$parse(input, options) {
       peg$c347 = peg$literalExpectation("STRUUID", true),
       peg$c348 = function() {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'STRUUID',
         }
@@ -1454,7 +1434,6 @@ function peg$parse(input, options) {
       peg$c350 = peg$literalExpectation("MD5", true),
       peg$c351 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'MD5',
           args: [e],
@@ -1464,7 +1443,6 @@ function peg$parse(input, options) {
       peg$c353 = peg$literalExpectation("SHA1", true),
       peg$c354 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'SHA1',
           args: [e],
@@ -1474,7 +1452,6 @@ function peg$parse(input, options) {
       peg$c356 = peg$literalExpectation("SHA256", true),
       peg$c357 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'SHA256',
           args: [e],
@@ -1484,7 +1461,6 @@ function peg$parse(input, options) {
       peg$c359 = peg$literalExpectation("SHA384", true),
       peg$c360 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'SHA384',
           args: [e],
@@ -1494,7 +1470,6 @@ function peg$parse(input, options) {
       peg$c362 = peg$literalExpectation("SHA512", true),
       peg$c363 = function(e) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'SHA512',
           args: [e],
@@ -1504,7 +1479,6 @@ function peg$parse(input, options) {
       peg$c365 = peg$literalExpectation("COALESCE", true),
       peg$c366 = function(args) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'COALESCE',
           args: args,
@@ -1514,7 +1488,6 @@ function peg$parse(input, options) {
       peg$c368 = peg$literalExpectation("IF", true),
       peg$c369 = function(test, trueCond, falseCond) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'IF',
           args: [test, trueCond, falseCond],
@@ -1524,7 +1497,6 @@ function peg$parse(input, options) {
       peg$c371 = peg$literalExpectation("STRLANG", true),
       peg$c372 = function(e1, e2) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'STRLANG',
           args: [e1, e2],
@@ -1534,7 +1506,6 @@ function peg$parse(input, options) {
       peg$c374 = peg$literalExpectation("STRDT", true),
       peg$c375 = function(e1, e2) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'STRDT',
           args: [e1, e2],
@@ -1544,7 +1515,6 @@ function peg$parse(input, options) {
       peg$c377 = peg$literalExpectation("sameTerm", true),
       peg$c378 = function(e1, e2) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'sameTerm',
           args: [e1, e2],
@@ -1556,7 +1526,6 @@ function peg$parse(input, options) {
       peg$c382 = peg$literalExpectation("isIRI", true),
       peg$c383 = function(arg) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'isURI',
           args: [arg],
@@ -1566,7 +1535,6 @@ function peg$parse(input, options) {
       peg$c385 = peg$literalExpectation("isBLANK", true),
       peg$c386 = function(arg) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'isBlank',
           args: [arg],
@@ -1576,7 +1544,6 @@ function peg$parse(input, options) {
       peg$c388 = peg$literalExpectation("isLITERAL", true),
       peg$c389 = function(arg) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'isLiteral',
           args: [arg],
@@ -1586,7 +1553,6 @@ function peg$parse(input, options) {
       peg$c391 = peg$literalExpectation("isNUMERIC", true),
       peg$c392 = function(arg) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'isNumeric',
           args: [arg],
@@ -1598,7 +1564,6 @@ function peg$parse(input, options) {
       peg$c396 = peg$classExpectation([["a", "z"], ["A", "Z"], ["0", "9"], "_"], false, false),
       peg$c397 = function(fnname, alter, finalarg) {
         let ret = {
-          token: 'expression',
           expressionType: 'custom',
           name: fnname.join(''),
         };
@@ -1615,19 +1580,21 @@ function peg$parse(input, options) {
       peg$c398 = "regex",
       peg$c399 = peg$literalExpectation("REGEX", true),
       peg$c400 = function(e1, e2, e3) {
-        return {
-          token: 'expression',
+        let ret = {
           expressionType: 'regex',
           text: e1,
           pattern: e2,
-          flags: e3 ? e3[2] : null,
         }
+        if (e3) {
+          ret.flags = e3[2];
+        }
+
+        return ret;
       },
       peg$c401 = "substr",
       peg$c402 = peg$literalExpectation("SUBSTR", true),
       peg$c403 = function(e1, e2, e3) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'substr',
           args: [
@@ -1641,7 +1608,6 @@ function peg$parse(input, options) {
       peg$c405 = peg$literalExpectation("REPLACE", true),
       peg$c406 = function(e1, e2, e3, e4) {
         return {
-          token: 'expression',
           expressionType: 'builtincall',
           builtincall: 'replace',
           args: [
@@ -1656,25 +1622,18 @@ function peg$parse(input, options) {
       peg$c408 = peg$literalExpectation("EXISTS", true),
       peg$c409 = function(ggp) {
         return {
-          token: 'expression',
-          expressionType: 'builtincall',
-          builtincall: 'exists',
-          args: [ggp],
-        }
+          exists: ggp.graphPattern || ggp
+        };
       },
       peg$c410 = function(ggp) {
         return {
-          token: 'expression',
-          expressionType: 'builtincall',
-          builtincall: 'notexists',
-          args: [ggp],
-        }
+          notexists: ggp.graphPattern || ggp
+        };
       },
       peg$c411 = "count",
       peg$c412 = peg$literalExpectation("COUNT", true),
       peg$c413 = function(d, e) {
         return {
-          token: 'expression',
           expressionType: 'aggregate',
           aggregateType: 'count',
           distinct: Boolean(d),
@@ -1685,7 +1644,6 @@ function peg$parse(input, options) {
       peg$c415 = peg$literalExpectation("SUM", true),
       peg$c416 = function(d, e) {
         return {
-          token: 'expression',
           expressionType: 'aggregate',
           aggregateType: 'sum',
           distinct: Boolean(d),
@@ -1696,7 +1654,6 @@ function peg$parse(input, options) {
       peg$c418 = peg$literalExpectation("MIN", true),
       peg$c419 = function(d, e) {
         return {
-          token: 'expression',
           expressionType: 'aggregate',
           aggregateType: 'min',
           distinct: Boolean(d),
@@ -1707,7 +1664,6 @@ function peg$parse(input, options) {
       peg$c421 = peg$literalExpectation("MAX", true),
       peg$c422 = function(d, e) {
         return {
-          token: 'expression',
           expressionType: 'aggregate',
           aggregateType: 'max',
           distinct: Boolean(d),
@@ -1718,7 +1674,6 @@ function peg$parse(input, options) {
       peg$c424 = peg$literalExpectation("AVG", true),
       peg$c425 = function(d, e) {
         return {
-          token: 'expression',
           expressionType: 'aggregate',
           aggregateType: 'avg',
           distinct: Boolean(d),
@@ -1729,7 +1684,6 @@ function peg$parse(input, options) {
       peg$c427 = peg$literalExpectation("SAMPLE", true),
       peg$c428 = function(d, e) {
         return {
-          token: 'expression',
           expressionType: 'aggregate',
           aggregateType: 'sample',
           distinct: Boolean(d),
@@ -1742,12 +1696,11 @@ function peg$parse(input, options) {
       peg$c432 = peg$literalExpectation("SEPARATOR", true),
       peg$c433 = function(d, e, s) {
         let sep = null;
-        if (s.length) {
+        if (s?.length) {
           sep = s[7];
         }
 
         return {
-          token: 'expression',
           expressionType: 'aggregate',
           aggregateType: 'group_concat',
           expression: e,
@@ -1756,44 +1709,41 @@ function peg$parse(input, options) {
         }
       },
       peg$c434 = function(i, args) {
-        return {
-          token: 'expression',
+        let ret = {
           expressionType: 'irireforfunction',
           iriref: i,
-          args: (args != null ? args.value : args),
         };
+        if (args) {
+          ret.args = args.value;
+        }
+        return ret;
       },
       peg$c435 = "^^",
       peg$c436 = peg$literalExpectation("^^", false),
       peg$c437 = function(s, e) {
-        let ret = {
-          literal: s.value,
-          quote: s.quote,
-        };
-
         if (typeof(e) === 'string') {
-          ret.lang = e;
+          s.lang = e;
         } else if (e) {
-          ret.dataType = e[1];
+          s.dataType = e[1];
         }
+        s.location = location();
 
-        ret.location = location();
-        return ret;
+        return s;
       },
       peg$c438 = "true",
       peg$c439 = peg$literalExpectation("true", true),
       peg$c440 = function() {
         return {
-          literal: true,
           dataType: 'http://www.w3.org/2001/XMLSchema#boolean',
+          literal: true,
         }
       },
       peg$c441 = "false",
       peg$c442 = peg$literalExpectation("false", true),
       peg$c443 = function() {
         return {
-          literal: false,
           dataType: 'http://www.w3.org/2001/XMLSchema#boolean',
+          literal: false,
         }
       },
       peg$c444 = function(iri) {
@@ -1821,14 +1771,13 @@ function peg$parse(input, options) {
       },
       peg$c448 = function(l) {
         return {
-          token: 'blank',
-          value: l,
+          blankNode: l,
           location: location(),
         }
       },
       peg$c449 = function() { 
         return {
-          token: 'blank',
+          blankNode: '[]',
           location: location(),
         }
       },
@@ -1892,20 +1841,20 @@ function peg$parse(input, options) {
       },
       peg$c478 = function() {
         return {
-          literal: text(),
           dataType: 'http://www.w3.org/2001/XMLSchema#integer',
+          literal: text(),
         }
       },
       peg$c479 = function() {
         return {
-          literal: text(),
           dataType: 'http://www.w3.org/2001/XMLSchema#decimal',
+          literal: text(),
         }
       },
       peg$c480 = function() {
         return {
-          literal: text(),
           dataType: 'http://www.w3.org/2001/XMLSchema#double',
+          literal: text(),
         }
       },
       peg$c481 = function(d) {
@@ -1926,9 +1875,8 @@ function peg$parse(input, options) {
       peg$c490 = peg$classExpectation(["'", "\\", "\n", "\r"], true, false),
       peg$c491 = function(s) {
         return {
-          token: 'string',
           quote: "'",
-          value: s.join(''), // except ' \ LF CR
+          literal: s.join(''), // except ' \ LF CR
         };
       },
       peg$c492 = "\"",
@@ -1937,9 +1885,8 @@ function peg$parse(input, options) {
       peg$c495 = peg$classExpectation(["\"", "\\", "\n", "\r"], true, false),
       peg$c496 = function(s) {
         return {
-          token: 'string',
           quote: '"',
-          value: s.join(''), // except " \ LF CR
+          literal: s.join(''), // except " \ LF CR
         };
       },
       peg$c497 = "'''",
@@ -1950,9 +1897,8 @@ function peg$parse(input, options) {
       peg$c502 = peg$classExpectation(["'", "\\"], true, false),
       peg$c503 = function(s) {
         return {
-          token: 'string',
           quote: "'''",
-          value: s.map((c) => {
+          literal: s.map((c) => {
             if (c[0]) {
               return c[0] + c[1];
             } else {
@@ -1970,9 +1916,8 @@ function peg$parse(input, options) {
       peg$c510 = function(s) {
 
         return {
-          token: 'string',
           quote: '"""',
-          value: s.map((c) => {
+          literal: s.map((c) => {
             if (c[0]) {
               return c[0] + c[1];
             } else {
