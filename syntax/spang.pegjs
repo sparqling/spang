@@ -58,7 +58,7 @@ Query = p:Prologue WS* f:(Function*) WS* q:( SelectQuery / ConstructQuery / Desc
 Function = h:FunctionCall WS* b:GroupGraphPattern WS*
 {
   return {
-    header: h,
+    functionCall: h,
     functionBody: b,
     location: location(),
   }

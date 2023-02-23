@@ -185,7 +185,7 @@ function peg$parse(input, options) {
       },
       peg$c2 = function(h, b) {
         return {
-          header: h,
+          functionCall: h,
           functionBody: b,
           location: location(),
         }
