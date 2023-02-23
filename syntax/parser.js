@@ -816,8 +816,7 @@ function peg$parse(input, options) {
       },
       peg$c172 = function(i, args) {
         return {
-          token: 'functioncall',
-          iriref: i,
+          functionRef: i,
           args: args.value,
           location: location(),
         }

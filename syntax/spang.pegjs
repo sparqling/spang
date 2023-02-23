@@ -702,6 +702,7 @@ TriplesBlock = a:TriplesSameSubjectPath b:( WS* '.' WS* TriplesBlock? )?
 }
 
 // [56] GraphPatternNotTriples ::= GroupOrUnionGraphPattern | OptionalGraphPattern | MinusGraphPattern | GraphGraphPattern | ServiceGraphPattern | Filter | Bind | InlineData
+// add FunctionCall
 GraphPatternNotTriples = GroupOrUnionGraphPattern / OptionalGraphPattern / MinusGraphPattern / GraphGraphPattern / ServiceGraphPattern / Filter / Bind / InlineData / FunctionCall
 
 // [57] OptionalGraphPattern ::= 'OPTIONAL' GroupGraphPattern
@@ -826,8 +827,7 @@ Constraint = BrackettedExpression / BuiltInCall / FunctionCall
 FunctionCall = i:IRIref WS* args:ArgList
 {
   return {
-    token: 'functioncall',
-    iriref: i,
+    functionRef: i,
     args: args.value,
     location: location(),
   }
