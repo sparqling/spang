@@ -828,7 +828,7 @@ FunctionCall = i:IRIref WS* args:ArgList
 {
   return {
     functionRef: i,
-    args: args.value,
+    args: args.list,
     location: location(),
   }
 }
@@ -837,16 +837,14 @@ FunctionCall = i:IRIref WS* args:ArgList
 ArgList = NIL
 {
   return {
-    token: 'args',
-    value: [],
+    list: [],
   }
 }
 / '(' WS* d:'DISTINCT'i? WS* e:Expression WS* es:( ',' WS* Expression)* ')'
 {
   return {
-    token: 'args',
     distinct: Boolean(d),
-    value: [e].concat(es.map((e) => e[2])),
+    list: [e].concat(es.map((e) => e[2])),
   }
 }
 
@@ -1942,7 +1940,7 @@ IRIrefOrFunction = i:IRIref WS* args:ArgList?
     iriref: i,
   };
   if (args) {
-    ret.args = args.value;
+    ret.args = args.list;
   }
   return ret;
 }

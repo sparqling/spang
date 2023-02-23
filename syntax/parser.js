@@ -817,23 +817,21 @@ function peg$parse(input, options) {
       peg$c172 = function(i, args) {
         return {
           functionRef: i,
-          args: args.value,
+          args: args.list,
           location: location(),
         }
       },
       peg$c173 = function() {
         return {
-          token: 'args',
-          value: [],
+          list: [],
         }
       },
       peg$c174 = ",",
       peg$c175 = peg$literalExpectation(",", false),
       peg$c176 = function(d, e, es) {
         return {
-          token: 'args',
           distinct: Boolean(d),
-          value: [e].concat(es.map((e) => e[2])),
+          list: [e].concat(es.map((e) => e[2])),
         }
       },
       peg$c177 = function() {
@@ -1712,7 +1710,7 @@ function peg$parse(input, options) {
           iriref: i,
         };
         if (args) {
-          ret.args = args.value;
+          ret.args = args.list;
         }
         return ret;
       },
