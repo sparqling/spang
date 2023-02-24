@@ -305,9 +305,10 @@ GroupCondition = WS* b:BuiltInCall WS*
 {
   if (as) {
     return {
-      token: 'aliased_expression',
+      expressionType: 'aliasedexpression',
+      bracketted: true,
       expression: e,
-      alias: as[2],
+      as: as[2],
       location: location(),
     };
   } else {
