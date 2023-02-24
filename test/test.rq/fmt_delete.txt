@@ -1,7 +1,0 @@
-#!/usr/bin/env spang2
-# @option --fmt
-
-DELETE DATA
-{
-  ?s ?p ?o .
-}
