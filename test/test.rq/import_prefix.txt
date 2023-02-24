@@ -1,0 +1,13 @@
+<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://semanticscience.org/resource/SIO_000983>
+<http://www.w3.org/2000/01/rdf-schema#label>	"slit guidance ligand 2 [ncbigene:9353] - Renal Cell Carcinoma [umls:C0007134] Association [disgenet:DGN00274e6606ba4ab4767281f531e9d3cc]"@en
+<http://www.w3.org/2000/01/rdf-schema#comment>	"Association between the gene [ncbigene:9353] and the disease [umls:C0007134] integrated into DisGeNET. Gene-disease associations are identified by the DisGeNET ID."@en
+<http://purl.org/dc/terms/title>	"slit guidance ligand 2 [ncbigene:9353] - Renal Cell Carcinoma [umls:C0007134] Association"@en
+<http://purl.org/dc/terms/description>	"[However, there was no significant association between SLIT2 promoter methylation and RASSF1A or CASP8 methylation in NB and RCC.]. Sentence from MEDLINE/PubMed, a database of the U.S. National Library of Medicine."@en
+<http://purl.org/dc/terms/identifier>	"disgenet:DGN00274e6606ba4ab4767281f531e9d3cc"^^<http://www.w3.org/2001/XMLSchema#string>
+<http://purl.org/dc/terms/date>	"2004"^^<http://www.w3.org/2001/XMLSchema#gYear>
+<http://semanticscience.org/resource/SIO_000628>	<http://identifiers.org/ncbigene/9353>
+<http://semanticscience.org/resource/SIO_000628>	<http://linkedlifedata.com/resource/umls/id/C0007134>
+<http://semanticscience.org/resource/SIO_000772>	<http://identifiers.org/pubmed/14735202>
+<http://rdfs.org/ns/void#inDataset>	<http://rdf.disgenet.org/v7.0.0/void/geneDiseaseAssociation>
+<http://semanticscience.org/resource/SIO_000216>	<http://rdf.disgenet.org/resource/gda/ncbigene:9353_umls:C0007134_association_DisGeNETScore>
+<http://semanticscience.org/resource/SIO_000253>	<http://rdf.disgenet.org/v7.0.0/void/BEFREE>

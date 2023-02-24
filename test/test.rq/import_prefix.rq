@@ -1,0 +1,8 @@
+#!/usr/bin/env spang2
+# @prefix https://raw.githubusercontent.com/sparqling/spang/master/prefix/disgenet
+# @endpoint disgenet
+
+SELECT *
+WHERE {
+  gda:DGN00274e6606ba4ab4767281f531e9d3cc ?p ?o .
+}
