@@ -488,6 +488,11 @@ function peg$parse(input, options) {
       peg$c82 = ";",
       peg$c83 = peg$literalExpectation(";", false),
       peg$c84 = function(p, u) {
+        let ret = {};
+        if (p.length) {
+          ret.prologue = p;
+        }
+
         let arr = [];
         if (u) {
           arr = [u[1]];
@@ -495,11 +500,9 @@ function peg$parse(input, options) {
             arr = arr.concat(u[2][3].update);
           }
         }
+        ret.update = arr;
 
-        return {
-          prologue: p,
-          update: arr,
-        };
+        return ret;
       },
       peg$c85 = "load",
       peg$c86 = peg$literalExpectation("LOAD", true),
@@ -633,10 +636,15 @@ function peg$parse(input, options) {
       peg$c125 = "using",
       peg$c126 = peg$literalExpectation("USING", true),
       peg$c127 = function(g) {
-        if (g.length != null) {
-          return { kind: 'named', uri: g[2] };
+        if (g.length === 3) {
+          return {
+            named: true,
+            iri: g[2],
+          };
         } else {
-          return { kind: 'default', uri: g };
+          return {
+            iri: g
+          };
         }
       },
       peg$c128 = "default",
@@ -951,7 +959,7 @@ function peg$parse(input, options) {
       peg$c197 = "^",
       peg$c198 = peg$literalExpectation("^", false),
       peg$c199 = function(elt) {
-        elt.kind = 'inversePath';
+        elt.inverse = true;
         return elt;
       },
       peg$c200 = "?",

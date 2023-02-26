@@ -403,6 +403,11 @@ ValuesClause = b:( 'VALUES'i DataBlock )?
 // [29] Update ::= Prologue ( Update1 ( ';' Update )? )?
 Update = p:Prologue u:( WS* Update1 ( WS* ';' WS* Update )? )? WS*
 {
+  let ret = {};
+  if (p.length) {
+    ret.prologue = p;
+  }
+
   let arr = [];
   if (u) {
     arr = [u[1]];
@@ -410,11 +415,9 @@ Update = p:Prologue u:( WS* Update1 ( WS* ';' WS* Update )? )? WS*
       arr = arr.concat(u[2][3].update);
     }
   }
+  ret.update = arr;
 
-  return {
-    prologue: p,
-    update: arr,
-  };
+  return ret;
 }
 
 // [30] Update1 ::= Load | Clear | Drop | Add | Move | Copy | Create | InsertData | DeleteData | DeleteWhere | Modify
@@ -566,10 +569,15 @@ InsertClause = 'INSERT'i q:QuadPattern
 // [44] UsingClause ::= 'USING' ( IRIref | 'NAMED' IRIref )
 UsingClause = WS* 'USING'i WS* g:( IRIref / 'NAMED'i WS* IRIref )
 {
-  if (g.length != null) {
-    return { kind: 'named', uri: g[2] };
+  if (g.length === 3) {
+    return {
+      named: true,
+      iri: g[2],
+    };
   } else {
-    return { kind: 'default', uri: g };
+    return {
+      iri: g
+    };
   }
 }
 
@@ -1044,7 +1052,7 @@ PathElt = p:PathPrimary m:PathMod?
 PathEltOrInverse = PathElt
 / '^' elt:PathElt
 {
-  elt.kind = 'inversePath';
+  elt.inverse = true;
   return elt;
 }
 
