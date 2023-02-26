@@ -370,8 +370,8 @@ function peg$parse(input, options) {
           location: location(),
         };
       },
-      peg$c49 = function(ggp) {
-        return ggp.graphPattern || ggp;
+      peg$c49 = function(p) {
+        return p.graphPattern || p;
       },
       peg$c50 = function(g, h, o, l) {
         let ret = {};
@@ -737,25 +737,25 @@ function peg$parse(input, options) {
       },
       peg$c147 = "optional",
       peg$c148 = peg$literalExpectation("OPTIONAL", true),
-      peg$c149 = function(v) {
+      peg$c149 = function(p) {
         return {
-          optional: v.graphPattern || v,
+          optional: p.graphPattern || p,
           location: location(),
         }
       },
-      peg$c150 = function(g, gg) {
+      peg$c150 = function(g, p) {
         let ret = {
           graph: g,
-          ...gg,
+          ...p,
         };
         return ret;
       },
       peg$c151 = "SERVICE",
       peg$c152 = peg$literalExpectation("SERVICE", false),
-      peg$c153 = function(s, v, ggp) {
+      peg$c153 = function(s, v, p) {
         let ret = {
           service: v,
-          pattern: ggp.graphPattern || ggp,
+          pattern: p.graphPattern || p,
         };
         if (s) {
           ret.silent = true;
@@ -797,9 +797,9 @@ function peg$parse(input, options) {
       peg$c162 = peg$literalExpectation("UNDEF", false),
       peg$c163 = "minus",
       peg$c164 = peg$literalExpectation("MINUS", true),
-      peg$c165 = function(ggp) {
+      peg$c165 = function(p) {
         return {
-          minus: ggp.graphPattern || ggp,
+          minus: p.graphPattern || p,
           location: location(),
         }
       },
@@ -1625,14 +1625,14 @@ function peg$parse(input, options) {
       },
       peg$c407 = "exists",
       peg$c408 = peg$literalExpectation("EXISTS", true),
-      peg$c409 = function(ggp) {
+      peg$c409 = function(p) {
         return {
-          exists: ggp.graphPattern || ggp
+          exists: p.graphPattern || p
         };
       },
-      peg$c410 = function(ggp) {
+      peg$c410 = function(p) {
         return {
-          notexists: ggp.graphPattern || ggp
+          notexists: p.graphPattern || p
         };
       },
       peg$c411 = "count",
