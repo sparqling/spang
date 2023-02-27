@@ -53,7 +53,7 @@
     "test": "mocha test/index.js",
     "test-all": "mocha test/index_all.js",
     "pegjs": "pegjs -o lib/parser.js lib/spang.pegjs",
-    "browserify": "browserify js/_spang.js > js/spang.js && browserify js/_spfmt.js > js/spfmt.js",
+    "browserify": "browserify js/_spang.js > js/spang.js",
     "prettier": "prettier --single-quote --trailing-comma none --print-width 180"
   }
 }
