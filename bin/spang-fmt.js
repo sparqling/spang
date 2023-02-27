@@ -6,7 +6,7 @@ const program = require('commander');
 const version = require('../package.json').version;
 const util = require('../lib/util.js');
 const formatter = require('../lib/formatter.js');
-const parser = require('../syntax/parser.js');
+const parser = require('../lib/parser.js');
 
 let opts = program
   .option('-i, --indent <DEPTH>', "indent depth", 2)

@@ -17,7 +17,7 @@ const sparql = require('../lib/make_sparql.js');
 const querySparql = require('../lib/query_sparql.js');
 const alias = require('../lib/alias.js');
 const util = require('../lib/util.js');
-const parser = require('../syntax/parser.js');
+const parser = require('../lib/parser.js');
 const initializeConfig = require('../lib/config.js').initialize;
 const jsonToTsv = util.jsonToTsv;
 
