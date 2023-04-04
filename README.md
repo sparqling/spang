@@ -86,12 +86,9 @@ node -v
 
 ## For maintainers
 
-`js/*.js` should be updated for those who call spang functions through their Web applications.
+`js/spang.js` should be updated after modifying codes for those who call spang functions through their Web applications.
 
-* `js/spang.js` should be updated after modifying codes.
-* `js/spfmt.js` should be updated after modifying parser or formatter codes.
-
-Update the `js/*.js` by converting codes using `browserify` as follows.
+Update the `js/spang.js` by converting codes using `browserify` as follows.
 ```
 npm run browserify
 ```
