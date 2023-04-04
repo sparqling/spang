@@ -586,7 +586,7 @@ function peg$parse(input, options) {
         return ret;
       },
       peg$c1 = function(p, f, q, v) {
-        let ret = {};
+        let ret = { type: 'Query' };
         if (p.length) {
           ret.prologue = p;
         }
@@ -611,6 +611,7 @@ function peg$parse(input, options) {
       peg$c4 = peg$literalExpectation("BASE", true),
       peg$c5 = function(i) {
         return {
+          type: 'BaseDecl',
           base: i,
         }
       },
@@ -618,6 +619,7 @@ function peg$parse(input, options) {
       peg$c7 = peg$literalExpectation("PREFIX", true),
       peg$c8 = function(p, i) {
         return {
+          type: 'PrefixDecl',
           prefix: p,
           iri: i,
         }
@@ -1148,6 +1150,7 @@ function peg$parse(input, options) {
         }
 
         return {
+          type: 'TriplesBlock',
           triplePattern: triples,
           location: location(),
         }
@@ -1156,12 +1159,14 @@ function peg$parse(input, options) {
       peg$c148 = peg$literalExpectation("OPTIONAL", true),
       peg$c149 = function(p) {
         return {
+          type: 'OptionalGraphPattern',
           optional: p.graphPattern || p,
           location: location(),
         }
       },
       peg$c150 = function(g, p) {
         let ret = {
+          type: 'GraphGraphPattern',
           graph: g,
           ...p,
         };
@@ -1171,6 +1176,7 @@ function peg$parse(input, options) {
       peg$c152 = peg$literalExpectation("SERVICE", false),
       peg$c153 = function(s, v, p) {
         let ret = {
+          type: 'ServiceGraphPattern',
           service: v,
           pattern: p.graphPattern || p,
         };
@@ -1185,6 +1191,7 @@ function peg$parse(input, options) {
       peg$c155 = peg$literalExpectation("BIND", true),
       peg$c156 = function(ex, v) {
         return {
+          type: 'Bind',
           bind: ex,
           as: v,
           location: location(),
@@ -1216,6 +1223,7 @@ function peg$parse(input, options) {
       peg$c164 = peg$literalExpectation("MINUS", true),
       peg$c165 = function(p) {
         return {
+          type: 'MinusGraphPattern',
           minus: p.graphPattern || p,
           location: location(),
         }
@@ -1236,6 +1244,7 @@ function peg$parse(input, options) {
       peg$c170 = peg$literalExpectation("FILTER", true),
       peg$c171 = function(c) {
         return {
+          type: 'Filter',
           filter: c,
           location: location(),
         }
@@ -29455,7 +29464,7 @@ module.exports={
     "test": "mocha test/index.js",
     "test-all": "mocha test/index_all.js",
     "pegjs": "pegjs -o lib/parser.js lib/spang.pegjs",
-    "browserify": "browserify js/_spang.js > js/spang.js && browserify js/_spfmt.js > js/spfmt.js",
+    "browserify": "browserify js/_spang.js > js/spang.js",
     "prettier": "prettier --single-quote --trailing-comma none --print-width 180"
   }
 }
