@@ -11,6 +11,24 @@
   "keywords": [
     "sparql"
   ],
+  "bin": {
+    "spang2": "./bin/spang.js",
+    "spang-fmt": "./bin/spang-fmt.js",
+    "spang-get": "./bin/spang-get.js",
+    "spang-bench": "./bin/spang-bench.js",
+    "spang-neo": "./bin/spang-neo.js"
+  },
+  "scripts": {
+    "test": "mocha test/index.js",
+    "test-all": "mocha test/index_all.js",
+    "pegjs": "pegjs -o lib/parser.js lib/spang.pegjs",
+    "browserify": "browserify js/_spang.js > js/spang.js",
+    "prettier": "prettier --single-quote --trailing-comma none --print-width 180"
+  },
+  "mocha": {
+    "timeout": 15000,
+    "diff": false
+  },
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
@@ -37,23 +55,5 @@
     "pegjs": "^0.10.0",
     "prettier": "^2.2.1",
     "terser": "^5.7.1"
-  },
-  "bin": {
-    "spang2": "./bin/spang.js",
-    "spang-fmt": "./bin/spang-fmt.js",
-    "spang-get": "./bin/spang-get.js",
-    "spang-bench": "./bin/spang-bench.js",
-    "spang-neo": "./bin/spang-neo.js"
-  },
-  "mocha": {
-    "timeout": 15000,
-    "diff": false
-  },
-  "scripts": {
-    "test": "mocha test/index.js",
-    "test-all": "mocha test/index_all.js",
-    "pegjs": "pegjs -o lib/parser.js lib/spang.pegjs",
-    "browserify": "browserify js/_spang.js > js/spang.js",
-    "prettier": "prettier --single-quote --trailing-comma none --print-width 180"
   }
 }
