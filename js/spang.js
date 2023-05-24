@@ -21260,7 +21260,7 @@ function queryAll(endpoint, proxy, query, format, byGet, currentOffset, pageSize
     if (maxrows) {
       maxrows = parseInt(maxrows);
       console.error(`Querying with OFFSET ${currentOffset + maxrows} LIMIT ${maxrows}`);
-      queryAll(endpoint, proxy, query, format, byGet, currentOffset + maxrows, maxrows, bodies, callback);
+      queryAll(endpoint, proxy, query, format, byGet, currentOffset + maxrows, maxrows, bodies, callbackMain);
     } else {
       callbackMain(bodies);
     }
@@ -29411,7 +29411,7 @@ exports["default"] = handleQs;
 },{"qs":62}],70:[function(require,module,exports){
 module.exports={
   "name": "spang",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "description": "SPARQL client for parameterized queries",
   "repository": {
     "type": "git",
@@ -29422,6 +29422,24 @@ module.exports={
   "keywords": [
     "sparql"
   ],
+  "bin": {
+    "spang2": "./bin/spang.js",
+    "spang-fmt": "./bin/spang-fmt.js",
+    "spang-get": "./bin/spang-get.js",
+    "spang-bench": "./bin/spang-bench.js",
+    "spang-neo": "./bin/spang-neo.js"
+  },
+  "scripts": {
+    "test": "mocha test/index.js",
+    "test-all": "mocha test/index_all.js",
+    "pegjs": "pegjs -o lib/parser.js lib/spang.pegjs",
+    "browserify": "browserify js/_spang.js > js/spang.js",
+    "prettier": "prettier --single-quote --trailing-comma none --print-width 180"
+  },
+  "mocha": {
+    "timeout": 15000,
+    "diff": false
+  },
   "engines": {
     "node": ">=14.0.0",
     "npm": ">=6.0.0"
@@ -29448,24 +29466,6 @@ module.exports={
     "pegjs": "^0.10.0",
     "prettier": "^2.2.1",
     "terser": "^5.7.1"
-  },
-  "bin": {
-    "spang2": "./bin/spang.js",
-    "spang-fmt": "./bin/spang-fmt.js",
-    "spang-get": "./bin/spang-get.js",
-    "spang-bench": "./bin/spang-bench.js",
-    "spang-neo": "./bin/spang-neo.js"
-  },
-  "mocha": {
-    "timeout": 15000,
-    "diff": false
-  },
-  "scripts": {
-    "test": "mocha test/index.js",
-    "test-all": "mocha test/index_all.js",
-    "pegjs": "pegjs -o lib/parser.js lib/spang.pegjs",
-    "browserify": "browserify js/_spang.js > js/spang.js",
-    "prettier": "prettier --single-quote --trailing-comma none --print-width 180"
   }
 }
 
