@@ -115,7 +115,7 @@ if (opts.fmt) {
     sparqlQuery = fs.readFileSync(program.args[0], 'utf8').toString();
   } else if (process.stdin.isTTY) {
     console.error('Format SPARQL query: input is required');
-    process.exit(-1);
+    process.exit(1);
   } else {
     sparqlQuery = input;
   }
@@ -203,7 +203,7 @@ program.args.slice(1).forEach((arg) => {
     paramsArr.push(arg);
   } else {
     console.error(`ERROR: Unnamed '${arg}' specified after named params`);
-    process.exit(-1);
+    process.exit(1);
   }
 });
 
@@ -318,7 +318,7 @@ function queryLocalFile(db) {
     db = tmpFile;
   } else if (!fs.existsSync(db)) {
     console.error(`${db}: no such file or endpoint`);
-    process.exit(-1);
+    process.exit(1);
   }
 
   let outfmt = opts.outfmt;
@@ -383,7 +383,7 @@ function getDB() {
     return dbMap['default'].url;
   } else {
     console.error('Endpoint is required');
-    process.exit(-1);
+    process.exit(1);
   }
 }
 

@@ -109,7 +109,7 @@ parameterArr.forEach((par) => {
   } else {
     if (!inPositional) {
       console.error(`Positional arguments must precede named arguments: ${parameterArr}`);
-      process.exit(-1);
+      process.exit(1);
     }
     positionalArguments.push(par);
   }
@@ -143,21 +143,21 @@ if (opts.endpoint) {
   db = dbMap['default'].url;
 } else {
   console.error('Endpoint is required');
-  process.exit(-1);
+  process.exit(1);
 }
 
 if (/^\w/.test(db)) {
   if (!/^(http|https):\/\//.test(db)) {
     if (!dbMap[db]) {
       console.error(`${db}: no such endpoint`);
-      process.exit(-1);
+      process.exit(1);
     }
     [db, retrieveByGet] = [dbMap[db].url, dbMap[db].byGet];
   }
   queryCypher(db, queryTemplate);
 } else {
   console.error(`${db}: no such file`);
-  process.exit(-1);
+  process.exit(1);
 }
 
 function toTsv(obj, withHeader) {
