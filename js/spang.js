@@ -21506,9 +21506,13 @@ exports.jsonToTsv = (body, withHeader = false, abbreviate = false) => {
     tsv += obj.head.vars.join('\t') + '\n';
   }
 
-  tsv += obj.results.bindings.map((b) => {
-    return getBindings(obj.head.vars, b, abbreviate).join('\t')
-  }).join('\n');
+  if (obj.results) {
+    tsv += obj.results.bindings.map((b) => {
+      return getBindings(obj.head.vars, b, abbreviate).join('\t')
+    }).join('\n');
+  } else {
+    tsv += obj.boolean
+  }
 
   return tsv;
 };
@@ -29411,7 +29415,7 @@ exports["default"] = handleQs;
 },{"qs":62}],70:[function(require,module,exports){
 module.exports={
   "name": "spang",
-  "version": "2.7.1",
+  "version": "2.7.2",
   "description": "SPARQL client for parameterized queries",
   "repository": {
     "type": "git",
