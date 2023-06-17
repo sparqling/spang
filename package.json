@@ -11,6 +11,7 @@
   "keywords": [
     "sparql"
   ],
+  "main": "lib/query_sparql.js",
   "bin": {
     "spang2": "./bin/spang.js",
     "spang-fmt": "./bin/spang-fmt.js",
