@@ -84,15 +84,6 @@ Now you can use `node`. Check the version.
 node -v
 ```
 
-## For maintainers
-
-`js/spang.js` should be updated after modifying codes for those who call spang functions through their Web applications.
-
-Update the `js/spang.js` by converting codes using `browserify` as follows.
-```
-npm run browserify
-```
-
 ### Requirements
 - npm (>= 6.12.0)
 
