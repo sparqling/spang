@@ -2025,28 +2025,29 @@ function peg$parse(input, options) {
       peg$c401 = "substr",
       peg$c402 = peg$literalExpectation("SUBSTR", true),
       peg$c403 = function(e1, e2, e3) {
+        let arr = [e1, e2];
+        if (e3) {
+          arr.push(e3[2]);
+        }
+
         return {
           expressionType: 'builtincall',
           builtincall: 'substr',
-          args: [
-            e1,
-            e2,
-            e3 ? e3[2] : null
-          ]
+          args: arr
         }
       },
       peg$c404 = "replace",
       peg$c405 = peg$literalExpectation("REPLACE", true),
       peg$c406 = function(e1, e2, e3, e4) {
+        let arr = [e1, e2, e3];
+        if (e4) {
+          arr.push(e4[2]);
+        }
+
         return {
           expressionType: 'builtincall',
           builtincall: 'replace',
-          args: [
-            e1,
-            e2,
-            e3,
-            e4 ? e4[2] : null
-          ]
+          args: arr
         }
       },
       peg$c407 = "exists",
@@ -20976,7 +20977,7 @@ module.exports = {
 };
 
 },{}],7:[function(require,module,exports){
-const util = require('../lib/util.js');
+const util = require('./util.js');
 const metadataModule = require('./metadata.js');
 const fs = require('fs');
 const expandHomeDir = require('expand-home-dir');
@@ -21179,7 +21180,7 @@ exports.extractPrefixesAll = (sparql) => {
   return ret;
 }
 
-},{"../lib/util.js":10,"./metadata.js":5,"expand-home-dir":49,"fs":45,"sync-request":68}],8:[function(require,module,exports){
+},{"./metadata.js":5,"./util.js":10,"expand-home-dir":49,"fs":45,"sync-request":68}],8:[function(require,module,exports){
 const axios = require('axios');
 const version = require('../package.json').version;
 const acceptHeaderMap = {
@@ -21322,8 +21323,8 @@ exports.shortcut = (opts) => {
 
 },{"./prefix.js":7}],10:[function(require,module,exports){
 (function (process,Buffer){(function (){
-const prefixModule = require('../lib/prefix.js');
-const parser = require('../lib/parser.js');
+const prefixModule = require('./prefix.js');
+const parser = require('./parser.js');
 
 String.prototype.insert = function (idx, val) {
   return this.substring(0, idx) + val + this.substring(idx);
@@ -21528,7 +21529,7 @@ exports.isValidUrl = (_string) => {
 }
 
 }).call(this)}).call(this,require('_process'),require("buffer").Buffer)
-},{"../lib/parser.js":6,"../lib/prefix.js":7,"_process":60,"buffer":46}],11:[function(require,module,exports){
+},{"./parser.js":6,"./prefix.js":7,"_process":60,"buffer":46}],11:[function(require,module,exports){
 module.exports = require('./lib/axios');
 },{"./lib/axios":13}],12:[function(require,module,exports){
 'use strict';
@@ -29415,7 +29416,7 @@ exports["default"] = handleQs;
 },{"qs":62}],70:[function(require,module,exports){
 module.exports={
   "name": "spang",
-  "version": "2.7.2",
+  "version": "2.7.4",
   "description": "SPARQL client for parameterized queries",
   "repository": {
     "type": "git",
@@ -29426,6 +29427,7 @@ module.exports={
   "keywords": [
     "sparql"
   ],
+  "main": "lib/query_sparql.js",
   "bin": {
     "spang2": "./bin/spang.js",
     "spang-fmt": "./bin/spang-fmt.js",
