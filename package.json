@@ -35,7 +35,7 @@
     "npm": ">=6.0.0"
   },
   "dependencies": {
-    "axios": "^1.6.0",
+    "axios": "^1.7.4",
     "columnify": "^1.5.4",
     "commander": "^7.1.0",
     "csv-parse": "^4.14.0",
