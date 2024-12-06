@@ -21494,7 +21494,7 @@ function getBindings(vars, b, abbreviate) {
     } else if (b[v].type === 'bnode') {
       return `<${b[v].value}>`;
     } else {
-      return `"${b[v].value}"`;
+      return b[v].value;
     }
   });
 }
@@ -29416,7 +29416,7 @@ exports["default"] = handleQs;
 },{"qs":62}],70:[function(require,module,exports){
 module.exports={
   "name": "spang",
-  "version": "2.7.4",
+  "version": "2.7.6",
   "description": "SPARQL client for parameterized queries",
   "repository": {
     "type": "git",
@@ -29451,7 +29451,7 @@ module.exports={
     "npm": ">=6.0.0"
   },
   "dependencies": {
-    "axios": "^0.27.2",
+    "axios": "^1.7.4",
     "columnify": "^1.5.4",
     "commander": "^7.1.0",
     "csv-parse": "^4.14.0",
