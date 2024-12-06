@@ -1,5 +1,5 @@
 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Taxon>
-<http://www.w3.org/2000/01/rdf-schema#label>	"Eukaryota"
+<http://www.w3.org/2000/01/rdf-schema#label>	Eukaryota
 <http://www.w3.org/2000/01/rdf-schema#seeAlso>	<http://purl.uniprot.org/taxonomy/2759>
 <http://www.w3.org/2002/07/owl#sameAs>	<http://purl.obolibrary.org/obo/NCBITaxon_2759>
 <http://www.w3.org/2002/07/owl#sameAs>	<http://purl.org/obo/owl/NCBITaxon#2759>
@@ -8,15 +8,15 @@
 <http://www.w3.org/2002/07/owl#sameAs>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/2759>
 <http://www.w3.org/2000/01/rdf-schema#subClassOf>	<http://identifiers.org/taxonomy/131567>
 <http://purl.org/dc/terms/identifier>	2759
-<http://ddbj.nig.ac.jp/ontologies/taxonomy/blastName>	"eukaryotes"
-<http://ddbj.nig.ac.jp/ontologies/taxonomy/commonName>	"eukaryotes"
-<http://ddbj.nig.ac.jp/ontologies/taxonomy/genbankCommonName>	"eucaryotes"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/blastName>	eukaryotes
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/commonName>	eukaryotes
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/genbankCommonName>	eucaryotes
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCode>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode1>
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/geneticCodeMt>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/GeneticCode1>
 <http://ddbj.nig.ac.jp/ontologies/taxonomy/rank>	<http://ddbj.nig.ac.jp/ontologies/taxonomy/Superkingdom>
-<http://ddbj.nig.ac.jp/ontologies/taxonomy/scientificName>	"Eukaryota"
-<http://ddbj.nig.ac.jp/ontologies/taxonomy/synonym>	"Eucarya"
-<http://ddbj.nig.ac.jp/ontologies/taxonomy/synonym>	"Eucaryotae"
-<http://ddbj.nig.ac.jp/ontologies/taxonomy/synonym>	"Eukarya"
-<http://ddbj.nig.ac.jp/ontologies/taxonomy/synonym>	"Eukaryotae"
-<http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName>	"eukaryotes <blast2759>"
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/scientificName>	Eukaryota
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/synonym>	Eucarya
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/synonym>	Eucaryotae
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/synonym>	Eukarya
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/synonym>	Eukaryotae
+<http://ddbj.nig.ac.jp/ontologies/taxonomy/uniqueName>	eukaryotes <blast2759>

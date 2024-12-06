@@ -1,6 +1,6 @@
-taxid:2	rdfs:label	"Bacteria"
-taxid:2157	rdfs:label	"Archaea"
-taxid:2759	taxon:synonym	"Eucarya"
-taxid:2759	taxon:synonym	"Eucaryotae"
-taxid:2759	taxon:synonym	"Eukarya"
-taxid:2759	taxon:synonym	"Eukaryotae"
+taxid:2	rdfs:label	Bacteria
+taxid:2157	rdfs:label	Archaea
+taxid:2759	taxon:synonym	Eucarya
+taxid:2759	taxon:synonym	Eucaryotae
+taxid:2759	taxon:synonym	Eukarya
+taxid:2759	taxon:synonym	Eukaryotae
