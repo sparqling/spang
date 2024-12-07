@@ -1172,8 +1172,8 @@ function peg$parse(input, options) {
         };
         return ret;
       },
-      peg$c151 = "SERVICE",
-      peg$c152 = peg$literalExpectation("SERVICE", false),
+      peg$c151 = "service",
+      peg$c152 = peg$literalExpectation("SERVICE", true),
       peg$c153 = function(s, v, p) {
         let ret = {
           type: 'ServiceGraphPattern',
@@ -7111,8 +7111,8 @@ function peg$parse(input, options) {
     var s0, s1, s2, s3, s4, s5, s6, s7;
 
     s0 = peg$currPos;
-    if (input.substr(peg$currPos, 7) === peg$c151) {
-      s1 = peg$c151;
+    if (input.substr(peg$currPos, 7).toLowerCase() === peg$c151) {
+      s1 = input.substr(peg$currPos, 7);
       peg$currPos += 7;
     } else {
       s1 = peg$FAILED;
@@ -29416,7 +29416,7 @@ exports["default"] = handleQs;
 },{"qs":62}],70:[function(require,module,exports){
 module.exports={
   "name": "spang",
-  "version": "2.7.6",
+  "version": "2.8.0",
   "description": "SPARQL client for parameterized queries",
   "repository": {
     "type": "git",
